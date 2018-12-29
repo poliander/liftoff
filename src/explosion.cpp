@@ -4,7 +4,7 @@ Explosion::Explosion(State* sptr) {
 	state = sptr;
 
 	particles = new ParticleEngine(state);
-	particles->setup(EMITTER_EXPLOSION, 40, 1.5f, 1.5f, 1.0f, 3.0f, 1.25f);
+	particles->setup(EMITTER_EXPLOSION, 40, .15f, .15f, .1f, 3.0f, 1.25f);
 }
 
 Explosion::~Explosion() {
@@ -95,12 +95,12 @@ void Explosion::draw(int oid) {
 
 	switch(state->objects[oid].id) {
 
-		// green gun impact
+		// green sparky gun fire impact
 		case OBJ_EXPLOSION_1:
 			particles->setAlpha(1.5f - (state->objects[oid].life_time * .0015f));
 			particles->setColor(.5f, 1.0f, .8f);
-			particles->setSize(1.5f);
-			particles->setDrift(state->objects[oid].cnt * 2.0f);
+			particles->setSize(3.0f);
+			particles->setScale(1.0f + state->objects[oid].cnt);
 			particles->setParticleNumber(30);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 			break;
@@ -109,8 +109,8 @@ void Explosion::draw(int oid) {
 		case OBJ_EXPLOSION_2:
 			particles->setAlpha( (.5f - (state->objects[oid].life_time * .0001165f)));
 			particles->setColor(1.0f, 1.0f, 1.0f);
-			particles->setSize(2.0f + state->objects[oid].life_time * .0005f);
-			particles->setDrift(.5f + state->objects[oid].cnt * 6.5f);
+			particles->setSize(6.0f + state->objects[oid].life_time * .0005f);
+			particles->setScale(1.5f + state->objects[oid].cnt * 6.5f);
 			particles->setParticleNumber(20);
 			break;
 
@@ -118,8 +118,8 @@ void Explosion::draw(int oid) {
 		case OBJ_EXPLOSION_3:
 			particles->setAlpha(2.0f - (state->objects[oid].life_time * .001f));
 			particles->setColor(1.0f, .65f - (state->objects[oid].life_time * .000125f), .35f - (state->objects[oid].life_time * .000075f));
-			particles->setSize(3.0f - (state->objects[oid].life_time * .0025f));
-			particles->setDrift(state->objects[oid].cnt * 7.0f);
+			particles->setSize(5.0f - (state->objects[oid].life_time * .005f));
+			particles->setScale(1.0f + state->objects[oid].cnt * 5.0f);
 			particles->setParticleNumber(30);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 			break;
@@ -128,8 +128,8 @@ void Explosion::draw(int oid) {
 		case OBJ_EXPLOSION_4:
 			particles->setAlpha(2.0f - (state->objects[oid].life_time * .002f));
 			particles->setColor(1.0f, .3f, .15f);
-			particles->setSize(.5f);
-			particles->setDrift(state->objects[oid].cnt * 8.0f);
+			particles->setSize(1.5f);
+			particles->setScale(1.0f + state->objects[oid].cnt * 8.0f);
 			particles->setParticleNumber(20);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 			break;

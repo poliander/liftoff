@@ -8,7 +8,7 @@ ParticleEngine::ParticleEngine(State* sptr) {
 	pg = 1.0f;
 	pb = 1.0f;
 	palpha = 1.0f;
-	pdrift = .0f;
+	pscale = 1.0f;
 }
 
 ParticleEngine::~ParticleEngine() {
@@ -56,15 +56,19 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
 			for (i=0; i<pnum; i++) {
 				p[i].active = true;
 				p[i].lifetime = 1.0f;
-				p[i].fading = float(rand() % 100) / 1000.0f + 0.003f;
-
-				p[i].dx = (float(rand() % 50) - 25.0f) * 10.0f;
-				p[i].dy = (float(rand() % 50) - 25.0f) * 10.0f;
-				p[i].dz = (float(rand() % 50) - 25.0f) * 10.0f;
-
-				p[i].px = .0f;
-				p[i].py = .0f;
-				p[i].pz = .0f;
+				p[i].fading = pdec * (float(rand() % 50) * .0001f + .002f);
+				p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
+				p[i].dy = -pdy*.5f + float(rand() % int(pdy*100.0f)) *.01f;
+				p[i].dz = -pdz*.5f + float(rand() % int(pdz*100.0f)) *.01f;
+				if ((p[i].dx < -pdx) || (p[i].dx > pdx)) p[i].dx *= .5f;
+				if ((p[i].dy < -pdy) || (p[i].dy > pdy)) p[i].dy *= .5f;
+				if ((p[i].dz < -pdz) || (p[i].dz > pdz)) p[i].dz *= .5f;
+				if ((p[i].dx > -.05f) && (p[i].dx < .05f)) p[i].dx += -.05f + float(rand() % 20)*.01f;
+				if ((p[i].dy > -.05f) && (p[i].dy < .05f)) p[i].dy += -.05f + float(rand() % 20)*.01f;
+				if ((p[i].dz > -.05f) && (p[i].dz < .05f)) p[i].dz += -.05f + float(rand() % 20)*.01f;
+				p[i].px = -psize*.5f + float(rand() % int(psize*100)) * .01f;
+				p[i].py = -psize*.5f + float(rand() % int(psize*100)) * .01f;
+				p[i].pz = -psize*.5f + float(rand() % int(psize*100)) * .01f;
 			}
 			break;
 	}
@@ -90,8 +94,8 @@ void ParticleEngine::setSize(float size) {
 	psize = size;
 }
 
-void ParticleEngine::setDrift(float drift) {
-	pdrift = drift;
+void ParticleEngine::setScale(float scale) {
+	pscale = scale;
 }
 
 void ParticleEngine::setParticleNumber(short particles) {
@@ -107,20 +111,24 @@ void ParticleEngine::move() {
 
 	if (pemitter == EMITTER_EXPLOSION) {
 		for (i=0; i<pnum_max; i++) {
-			if (p[i].active) {
-				p[i].lifetime -= state->timer_adjustment * p[i].fading;
+			p[i].px += p[i].dx * p[i].lifetime * state->timer_adjustment;
+			p[i].py += p[i].dy * p[i].lifetime * state->timer_adjustment;
+			p[i].pz += p[i].dz * p[i].lifetime * state->timer_adjustment;
 
-				if (p[i].lifetime < .0f) {
-					p[i].active = false;
-				} else {
-					p[i].px += p[i].dx * state->timer_adjustment;
-					p[i].py += p[i].dy * state->timer_adjustment;
-					p[i].pz += p[i].dz * state->timer_adjustment;
+			p[i].lifetime -= p[i].fading * state->timer_adjustment;
 
-					p[i].dx += pdx * state->timer_adjustment;
-					p[i].dy += pdy * state->timer_adjustment;
-					p[i].dz += pdz * state->timer_adjustment;
-				}
+			if (p[i].lifetime < 0) {
+				p[i].px = 0;
+				p[i].py = 0;
+				p[i].pz = 0;
+				p[i].lifetime += .01f * float(66 + rand() % 33);
+				p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
+				p[i].dy = -pdy*.5f + float(rand() % int(pdy*100.0f)) *.01f;
+				p[i].dz = -pdz*.5f + float(rand() % int(pdz*100.0f)) *.01f;
+				if ((p[i].dx < -pdx) || (p[i].dx > pdx)) p[i].dx *= .5f;
+				if ((p[i].dy < -pdy) || (p[i].dy > pdy)) p[i].dy *= .5f;
+				if ((p[i].dx > -.05f) && (p[i].dx < .05f)) p[i].dx += -.05f + float(rand() % 10)*.001f;
+				if ((p[i].dy > -.05f) && (p[i].dy < .05f)) p[i].dy += -.05f + float(rand() % 10)*.001f;
 			}
 		}
 	} else {
@@ -148,7 +156,6 @@ void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, floa
 	glPushMatrix();
 
 	// set up position and rotation
-	glScalef(1.0f, 1.0f, 1.0f);
 	glTranslatef(px, py, pz);
 	glRotatef(rx, 1, 0, 0);
 	glRotatef(ry, 0, 1, 0);
@@ -167,16 +174,16 @@ void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, floa
 
 			glBegin(GL_QUADS);
 			  glTexCoord2d(0, 0);
-			  glVertex3f(p[i].px - psize, p[i].py - psize, p[i].pz);
+			  glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py - psize), pscale * p[i].pz);
 
 			  glTexCoord2d(1, 0);
-			  glVertex3f(p[i].px + psize, p[i].py - psize, p[i].pz);
+			  glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py - psize), pscale * p[i].pz);
 
 			  glTexCoord2d(1, 1);
-			  glVertex3f(p[i].px + psize, p[i].py + psize, p[i].pz);
+			  glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py + psize), pscale * p[i].pz);
 
 			  glTexCoord2d(0, 1);
-			  glVertex3f(p[i].px - psize, p[i].py + psize, p[i].pz);
+			  glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py + psize), pscale * p[i].pz);
 			glEnd();
 		}
 	}

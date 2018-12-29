@@ -502,14 +502,9 @@ void Player::draw() {
 
 		if (state->get() == STATE_GAME_NEXTLEVEL) {
 			particles->setAlpha(.85f + state->title_ypos * .005f);
-			particles->setDrift(30.0f + state->title_ypos * .05f);
+			particles->setScale(30.0f + state->title_ypos * .5f);
 			particles->setSize(.3f + state->title_ypos * .0075f);
 			particles->setDirection(0, 0, .3f + state->title_ypos * .0025f);
-		} else  {
-//			particles->setAlpha(.85f);
-//			particles->setDrift(30.0f);
-//			particles->setSize(.25f);
-//			particles->setDirection(0, 0, .4f);
 		}
 
 		// engine jets

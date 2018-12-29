@@ -44,7 +44,7 @@ void Powerup::draw(int oid) {
 		particles->setAlpha(a);
 		particles->setSize(3.0f * 1.0f / (1.0f + state->objects[oid].cnt2 * .25f));
 		particles->setColor(.6f, .75f, 1.0f);
-		particles->setDrift(25.0f + state->objects[oid].cnt2 * 5.0f);
+		particles->setScale(25.0f + state->objects[oid].cnt2 * 5.0f);
 		particles->draw(
 				.0f, .0f, .0f,
 				state->objects[oid].rot_x, state->objects[oid].rot_y, state->objects[oid].rot_z

@@ -37,7 +37,7 @@ class ParticleEngine {
 		void			setAlpha(float global_alpha);
 		void			setColor(float r, float g, float b);
 		void			setSize(float size);
-		void			setDrift(float drift);
+		void			setScale(float scale);
 		void			setParticleNumber(short particles);
 		void			setDirection(float dx, float dy, float dz);
 		void			setFadeFactor(float f);
@@ -57,7 +57,7 @@ class ParticleEngine {
 		float			palpha;
 
 		float			pfadefactor;
-		float			pdrift;
+		float			pscale;
 		float			pdec;
 		float			psize;
 		float			pdx, pdy, pdz;
