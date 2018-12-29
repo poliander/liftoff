@@ -1,6 +1,6 @@
-Lift Off: Beyond Glaxium
+# Lift Off: Beyond Glaxium
 
-- COMMAND LINE PARAMETERS:
+## Command line options
 
   liftoff -m[2|4|8|16]
   
@@ -22,12 +22,12 @@ Lift Off: Beyond Glaxium
   
     Show command line parameters (Linux console only).
       
-- CONTROLS:
+## Controls
 
-  JOYSTICKS and GAMEPADS are supported.
-  MOUSE works only for menus.
-  CURSOR KEYS or W/A/S/D will move your ship.
-  CTRL will let your ship fire it's little guns.
-  ESCAPE quits the game at any time.
-  F12 toggles displaying current frame rate.
-  CTRL+C can be used as "boss key".
+- JOYSTICKS and GAMEPADS are supported.
+- MOUSE works only for menus.
+- CURSOR KEYS or W/A/S/D will move your ship.
+- CTRL will let your ship fire it's little guns.
+- ESCAPE quits the game at any time.
+- F12 toggles displaying current frame rate.
+- CTRL+C can be used as "boss key".
