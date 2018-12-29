@@ -1,0 +1,8 @@
+.deps/
+*.o
+*.log
+stamp-*
+liftoff
+config.h*
+config.status
+Makefile
