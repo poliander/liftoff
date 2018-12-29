@@ -18,7 +18,7 @@ AC_PREREQ(2.61)
 AC_INIT(liftoff, 0.2, r.pollesch@gmx.net)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([foreign])
 
 # Checks for programs.
 AC_PROG_CXX
