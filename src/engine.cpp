@@ -384,11 +384,7 @@ bool Engine::init(int argc, char **argv) {
 	// load game resources
 	scenery->load();
 
-	if (state->engine_restart || state->engine_debug) {
-		state->set(STATE_MENU);
-	} else {
-		state->set(STATE_INTRO);
-	}
+	state->set(STATE_MENU);
 
 	delete [] msg;
 	return true;

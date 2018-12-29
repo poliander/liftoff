@@ -164,7 +164,7 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
  * load game data
  */
 void Scenery::load() {
-	state->texture[T_LOGO] 			= loadTexture("logo.tga", true);
+//	state->texture[T_LOGO] 			= loadTexture("logo.tga", true);
 	state->texture[T_TITLE] 		= loadTexture("title.tga", true);
 	state->texture[T_FONT] 			= loadTexture("font.tga", true);
 	state->texture[T_CURSOR]		= loadTexture("cursor.tga", true);
@@ -179,7 +179,6 @@ void Scenery::load() {
 	state->texture[T_EXPLOSION_2] 	= loadTexture("explosion_2.tga", false);
 	state->texture[T_EXPLOSION_3] 	= loadTexture("star.tga", false);
 	state->texture[T_EXPLOSION_4] 	= loadTexture("explosion_3.tga", false);
-//	state->texture[T_JET]	 		= loadTexture("jet.tga", false);
 	state->texture[T_JET]	 		= loadTexture("star.tga", false);
 
 	if (state->vid_cfg_lowquality) {
