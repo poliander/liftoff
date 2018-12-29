@@ -1,5 +1,7 @@
 # Lift Off: Beyond Glaxium
 
+This game somehow happened after I looked at the source code of Xavier Hosxe's "Glaxium" and tried to write a small screensaver in OpenGL.
+
 ## Build
 
 ### Prerequisites
