@@ -81,17 +81,17 @@ void ParticleEngine::setColor(float r, float g, float b) {
 }
 
 void ParticleEngine::setDirection(float dx, float dy, float dz) {
-//	pdx = dx;
-//	pdy = dy;
-//	pdz = dz;
+	pdx = dx;
+	pdy = dy;
+	pdz = dz;
 }
 
 void ParticleEngine::setSize(float size) {
-//	psize = size;
+	psize = size;
 }
 
 void ParticleEngine::setDrift(float drift) {
-//	pdrift = drift;
+	pdrift = drift;
 }
 
 void ParticleEngine::setParticleNumber(short particles) {
@@ -144,11 +144,11 @@ void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, floa
 	int i;
 	float m[16];
 	float sf = palpha * state->global_alpha * .005f;
-	float size = psize * .5f;
 
 	glPushMatrix();
 
 	// set up position and rotation
+	glScalef(1.0f, 1.0f, 1.0f);
 	glTranslatef(px, py, pz);
 	glRotatef(rx, 1, 0, 0);
 	glRotatef(ry, 0, 1, 0);
@@ -161,23 +161,22 @@ void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, floa
 	glLoadMatrixf(m);
 
 	// render particles
-	glScalef(15.0f, 15.0f, 1.0f);
 	for (i=0; i<pnum; i++) {
 		if (p[i].active) {
 			glColor4f(pr * sf, pg * sf, pb * sf, p[i].lifetime * sf);
 
 			glBegin(GL_QUADS);
 			  glTexCoord2d(0, 0);
-			  glVertex3f(p[i].px - size, p[i].py - size, p[i].pz);
+			  glVertex3f(p[i].px - psize, p[i].py - psize, p[i].pz);
 
 			  glTexCoord2d(1, 0);
-			  glVertex3f(p[i].px + size, p[i].py - size, p[i].pz);
+			  glVertex3f(p[i].px + psize, p[i].py - psize, p[i].pz);
 
 			  glTexCoord2d(1, 1);
-			  glVertex3f(p[i].px + size, p[i].py + size, p[i].pz);
+			  glVertex3f(p[i].px + psize, p[i].py + psize, p[i].pz);
 
 			  glTexCoord2d(0, 1);
-			  glVertex3f(p[i].px - size, p[i].py + size, p[i].pz);
+			  glVertex3f(p[i].px - psize, p[i].py + psize, p[i].pz);
 			glEnd();
 		}
 	}

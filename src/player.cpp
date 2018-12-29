@@ -5,7 +5,7 @@ Player::Player(State* sptr) : Object(sptr) {
 	memset(&model, 0, sizeof(struct obj_model_t));
 
 	particles = new ParticleEngine(state);
-	particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 1.5f);
+	particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 10.0f);
 
 	jr = 0;
 	j_l = 3;
