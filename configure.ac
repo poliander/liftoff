@@ -59,5 +59,4 @@ AC_C_CONST
 # config.h
 AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
 
-AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
+AC_OUTPUT(Makefile src/Makefile)
