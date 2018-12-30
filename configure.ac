@@ -13,7 +13,6 @@ AC_DEFUN([AC_DEFINE_DIR], [
 	test "$exec_prefix_NONE" && exec_prefix=NONE
 ])
 
-
 AC_PREREQ(2.61)
 AC_INIT(liftoff, 0.2, r.pollesch@gmx.net)
 AC_CONFIG_SRCDIR([config.h.in])
@@ -22,41 +21,38 @@ AM_INIT_AUTOMAKE([foreign])
 
 # Checks for programs.
 AC_PROG_CXX
-AC_PROG_CC
+AC_LANG([C++])
 
-# Checks for standard header files.
+# Checks for standard header files, typedefs, structures etc.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
+AC_C_CONST
 
-# Checks for SDL
-AM_PATH_SDL(1.2.10, ,AC_MSG_ERROR([SDL $SDL_VERSION not found.]))
-
+# Checks for libraries.
+AM_PATH_SDL(1.2.10,, AC_MSG_ERROR([SDL $SDL_VERSION not found.]))
 LIBS="$LIBS $SDL_LIBS"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 
-AC_CHECK_HEADER(SDL.h, ,echo "SDL header file not found!";exit 12)
+AC_CHECK_HEADER([SDL.h],, [AC_MSG_ERROR([SDL.h not found, install libsdl1.2-dev])])
+AC_CHECK_LIB(SDL, SDL_Init,, [AC_MSG_ERROR([libsdl1.2 missing or not usable.])])
 
-AC_CHECK_HEADER(SDL_mixer.h, ,echo "SDL_mixer header file not found!";exit 12)
-AC_CHECK_LIB(SDL_mixer,Mix_PlayMusic)
+AC_CHECK_HEADER([SDL_mixer.h],, [AC_MSG_ERROR([SDL_mixer.h not found, install libsdl-mixer1.2-dev])])
+AC_CHECK_LIB(SDL_mixer, Mix_PlayMusic,, [AC_MSG_ERROR([libsdl-mixer1.2 missing or not usable.])])
 
-AC_CHECK_HEADER(SDL_image.h, ,echo "SDL_image header file not found!";exit 12)
-AC_CHECK_LIB(SDL_image,IMG_LoadTGA_RW)
+AC_CHECK_HEADER([SDL_image.h],, [AC_MSG_ERROR([SDL_image.h not found, install libsdl-image1.2-dev])])
+AC_CHECK_LIB(SDL_image, IMG_LoadTGA_RW,, [AC_MSG_ERROR([libsdl-image1.2 missing or not usable.])])
 
-# Checks for OpenGL
-AC_CHECK_HEADER(GL/gl.h, ,echo "GL/gl.h header file not found!";exit 12)
-AC_CHECK_LIB(GL,glVertex3f)
-AC_CHECK_HEADER(GL/glu.h, ,echo "GL/glu.h header file not found!";exit 12)
-AC_CHECK_LIB(GLU,gluPerspective)
-AC_CHECK_HEADER(GL/glut.h, ,echo "GL/glut.h header file not found!";exit 12)
-AC_CHECK_LIB(glut,glutGet)
+AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install OpenGL header files])])
+AC_CHECK_LIB(GL, glVertex3f,, [AC_MSG_ERROR([OpenGL library missing or not usable.])])
 
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
+AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
+AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not usable.])])
 
-# Checks for library functions.
+AC_CHECK_HEADER([GL/glut.h],, [AC_MSG_ERROR([GL/glut.h not found, install freeglut3-dev])])
+AC_CHECK_LIB(glut, glutGet,, [AC_MSG_ERROR([freeglut3 missing or not usable.])])
 
-# config.h
+AC_CHECK_HEADER([glm/glm.hpp],, [AC_MSG_ERROR([libglm-dev header files not found.])])
+
+# Create output.
 AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
-
 AC_OUTPUT(Makefile src/Makefile)
