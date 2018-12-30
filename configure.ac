@@ -51,8 +51,6 @@ AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not us
 AC_CHECK_HEADER([GL/glut.h],, [AC_MSG_ERROR([GL/glut.h not found, install freeglut3-dev])])
 AC_CHECK_LIB(glut, glutGet,, [AC_MSG_ERROR([freeglut3 missing or not usable.])])
 
-AC_CHECK_HEADER([glm/glm.hpp],, [AC_MSG_ERROR([libglm-dev header files not found.])])
-
 # Create output.
 AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
 AC_OUTPUT(Makefile src/Makefile)
