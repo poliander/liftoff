@@ -47,21 +47,21 @@ class ParticleEngine {
         void            move();
 
     protected:
-        State*            state;
-        particle_t        p[DEFAULT_GFX_PARTICLES];
+        State*          state;
+        particle_t      p[DEFAULT_GFX_PARTICLES];
 
-        short            pemitter;
-        short            pnum_max;
-        short            pnum;
+        short           pemitter;
+        short           pnum_max;
+        short           pnum;
 
-        float            pr, pg, pb;
-        float            palpha;
+        float           pr, pg, pb;
+        float           palpha;
 
-        float            pfadefactor;
-        float            pscale;
-        float            pdec;
-        float            psize;
-        float            pdx, pdy, pdz;
+        float           pfadefactor;
+        float           pscale;
+        float           pdec;
+        float           psize;
+        float           pdx, pdy, pdz;
 
         void            moveJet();
         void            moveExplosion();
