@@ -164,22 +164,22 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
  * load game data
  */
 void Scenery::load() {
-//    state->texture[T_LOGO]             = loadTexture("logo.tga", true);
+//  state->texture[T_LOGO]          = loadTexture("logo.tga", true);
     state->texture[T_TITLE]         = loadTexture("title.tga", true);
-    state->texture[T_FONT]             = loadTexture("font.tga", true);
+    state->texture[T_FONT]          = loadTexture("font.tga", true);
     state->texture[T_CURSOR]        = loadTexture("cursor.tga", true);
     state->texture[T_MENU_1]        = loadTexture("menu_1.tga", false);
     state->texture[T_MENU_2]        = loadTexture("menu_2.tga", false);
     state->texture[T_HUD_1]         = loadTexture("hud_1.tga", true);
     state->texture[T_HUD_2]         = loadTexture("hud_2.tga", true);
     state->texture[T_HUD_3]         = loadTexture("hud_3.tga", true);
-    state->texture[T_STAR]             = loadTexture("star.tga", true);
+    state->texture[T_STAR]          = loadTexture("star.tga", true);
     state->texture[T_MISSILE_1]     = loadTexture("missile_1.tga", false);
-    state->texture[T_EXPLOSION_1]     = loadTexture("explosion_1.tga", false);
-    state->texture[T_EXPLOSION_2]     = loadTexture("explosion_2.tga", false);
-    state->texture[T_EXPLOSION_3]     = loadTexture("star.tga", false);
-    state->texture[T_EXPLOSION_4]     = loadTexture("explosion_3.tga", false);
-    state->texture[T_JET]             = loadTexture("star.tga", false);
+    state->texture[T_EXPLOSION_1]   = loadTexture("explosion_1.tga", false);
+    state->texture[T_EXPLOSION_2]   = loadTexture("explosion_2.tga", false);
+    state->texture[T_EXPLOSION_3]   = loadTexture("star.tga", false);
+    state->texture[T_EXPLOSION_4]   = loadTexture("explosion_3.tga", false);
+    state->texture[T_JET]           = loadTexture("star.tga", false);
 
     if (state->vid_cfg_lowquality) {
         state->texture[T_BACKGROUND_1] = loadTexture("background_1_lq.tga", false);
@@ -874,7 +874,7 @@ void Scenery::drawMenu(bool mouse_recheck) {
 }
 
 /*
- *    draw background and stars
+ * draw background and stars
  */
 void Scenery::drawBackground() {
     unsigned short i;
@@ -1113,8 +1113,8 @@ void Scenery::drawObjects() {
 }
 
 /*
-    Draw HUD (energy, shields, money)
-*/
+ * draw hud (energy, shields, money)
+ */
 void Scenery::drawHUD() {
     int i, s, e;
     static float alpha = 1.0f;
