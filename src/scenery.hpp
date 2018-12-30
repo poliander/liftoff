@@ -20,47 +20,47 @@
 #define ABS(x) ((x>0)?(x):(-x))
 
 class Scenery {
-	public:
-		Scenery(State* sptr);
-		~Scenery();
+    public:
+        Scenery(State* sptr);
+        ~Scenery();
 
-		Player*			player;
+        Player*         player;
 
-		void			load();
-		void			move();
-		void			draw();
+        void            load();
+        void            move();
+        void            draw();
 
-	protected:
-		State*			state;
-		Object*			object;
+    protected:
+        State*          state;
+        Object*         object;
 
-		Object*			asteroid;
-		Object*			debris;
-		Cargo*			cargo;
-		Explosion*		explosion;
-		Powerup*		powerup;
+        Object*         asteroid;
+        Object*         debris;
+        Cargo*          cargo;
+        Explosion*      explosion;
+        Powerup*        powerup;
 
-		float			stars[8000][4];
+        float           stars[8000][4];
 
-		// textures
-		GLuint			loadTexture(const char *filename, bool mipmap);
+        // textures
+        GLuint          loadTexture(const char *filename, bool mipmap);
 
-		// drawing
-		void			drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-		void			drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-		void			drawBackground();
-		void			drawMouse();
-		void			drawFPS();
-		void			drawIntro();
-		void			drawTitle();
-		void			drawMenu(bool mouse_recheck);
-		void			drawHUD();
-		void			drawMessages();
-		void			drawObjects();
+        // draw methods
+        void            drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
+        void            drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
+        void            drawBackground();
+        void            drawMouse();
+        void            drawFPS();
+        void            drawIntro();
+        void            drawTitle();
+        void            drawMenu(bool mouse_recheck);
+        void            drawHUD();
+        void            drawMessages();
+        void            drawObjects();
 
-		// movement
-		void			moveObjects();
-		void 			moveMessages();
+        // movement
+        void            moveObjects();
+        void            moveMessages();
 };
 
 #endif /* SCENERY_HPP_ */

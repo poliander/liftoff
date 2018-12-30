@@ -5,18 +5,18 @@
 #include "particles.hpp"
 
 class Powerup {
-	public:
-		Powerup(State* sptr);
-		~Powerup();
+    public:
+        Powerup(State* sptr);
+        ~Powerup();
 
-		GLuint textures[1];
+        GLuint textures[1];
 
-		void move(int oid);
-		void draw(int oid);
+        void move(int oid);
+        void draw(int oid);
 
-	private:
-		State*			state;
-		ParticleEngine*	particles;
+    private:
+        State*          state;
+        ParticleEngine* particles;
 };
 
 #endif

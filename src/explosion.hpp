@@ -5,17 +5,17 @@
 #include "state.hpp"
 
 class Explosion {
-	public:
-		Explosion(State* sptr);
-		~Explosion();
+    public:
+        Explosion(State* sptr);
+        ~Explosion();
 
-		bool 			add(unsigned short eid, float px, float py, float pz, float sp);
-		void 			move(int oid);
-		void 			draw(int oid);
+        bool            add(unsigned short eid, float px, float py, float pz, float sp);
+        void            move(int oid);
+        void            draw(int oid);
 
-	protected:
-		State*			state;
-		ParticleEngine*		particles;
+    protected:
+        State*          state;
+        ParticleEngine* particles;
 };
 
 #endif

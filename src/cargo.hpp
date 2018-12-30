@@ -6,11 +6,11 @@
 #include "object.hpp"
 
 class Cargo : public Object {
-	public:
-		Cargo(State* sptr);
-		~Cargo();
+    public:
+        Cargo(State* sptr);
+        ~Cargo();
 
-		void draw(int oid);
+        void draw(int oid);
 };
 
 extern Cargo* cargo;
