@@ -4503,15 +4503,6 @@ else
 fi
 
 
-ac_fn_cxx_check_header_mongrel "$LINENO" "glm/glm.hpp" "ac_cv_header_glm_glm_hpp" "$ac_includes_default"
-if test "x$ac_cv_header_glm_glm_hpp" = xyes; then :
-
-else
-  as_fn_error $? "libglm-dev header files not found." "$LINENO" 5
-fi
-
-
-
 # Create output.
 
 	prefix_NONE=
