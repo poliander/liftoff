@@ -2,6 +2,15 @@
 
 This game somehow happened after I looked at the source code of [Xavier Hosxe's "Glaxium"](http://xhosxe.free.fr/glaxium/) and tried to write a small screensaver in OpenGL.
 
+## Controls
+
+- JOYSTICKS and GAMEPADS are supported
+- MOUSE works intentionally only in menu
+- CURSOR KEYS or W/A/S/D will move your ship
+- CTRL will let your ship fire its little guns
+- F12 toggles frame rate display
+- ESCAPE quits the game at any time
+
 ## Build
 
 ### Requirements
@@ -41,14 +50,3 @@ Low quality mode. Half resolution for background texture, disables mip-mapping a
 ```liftoff -m[2|4|8|16]```
 
 Enables multisampling at 2, 4, 8 or 16 samples. If not specified, the highest multisampling mode available on your hardware will be used. Note that multisampling is disabled in low quality mode ("-l").
-
-## Controls
-
-- JOYSTICKS and GAMEPADS are supported
-- MOUSE works intentionally only in menu
-- CURSOR KEYS or W/A/S/D will move your ship
-- CTRL will let your ship fire its little guns
-- ESCAPE quits the game at any time
-- F12 toggles frame rate display
-- CTRL+C can be used as "boss key"
-
