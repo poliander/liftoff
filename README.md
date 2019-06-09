@@ -4,7 +4,7 @@ This game somehow happened after I looked at the source code of [Xavier Hosxe's 
 
 [Download 64-bit Windows ZIP](https://github.com/poliander/liftoff/releases/download/2019%2F06%2F09/liftoff-20190609-win32-x64.zip)
 
-### Controls
+## Controls
 
 - JOYSTICKS and GAMEPADS are supported
 - MOUSE works intentionally only in menu
@@ -13,9 +13,9 @@ This game somehow happened after I looked at the source code of [Xavier Hosxe's 
 - F12 toggles frame rate display
 - ESCAPE quits the game at any time
 
-### Build
+## Build
 
-#### Requirements
+### Requirements
 
 - libgl1-mesa-dev
 - libglu1-mesa-dev
@@ -23,7 +23,7 @@ This game somehow happened after I looked at the source code of [Xavier Hosxe's 
 - libsdl-mixer1.2-dev (with ogg vorbis support)
 - libsdl-image1.2-dev
 
-#### Compilation
+### Compilation
 
 ```
 ./configure && make
@@ -35,7 +35,7 @@ Assuming you have a working cross-compiling environment available (congratulatio
 ./configure --prefix=/usr/x86_64-w64-mingw32 --host=x86_64-w64-mingw32 && make
 ```
 
-### Command line options
+## Command line options
 
 ```liftoff -h```
 
@@ -53,6 +53,6 @@ Low quality mode. Half resolution for background texture, disables mip-mapping a
 
 Enables multisampling at 2, 4, 8 or 16 samples. If not specified, the highest multisampling mode available on your hardware will be used. Note that multisampling is disabled in low quality mode ("-l").
 
-### License
+## License
 
 [GNU GPLv3](https://github.com/poliander/liftoff/blob/master/LICENSE)
