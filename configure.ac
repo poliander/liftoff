@@ -27,35 +27,72 @@ AC_LANG([C++])
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
 AC_C_CONST
+AC_CANONICAL_HOST
+AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
 
-# Checks for libraries.
-AM_PATH_SDL(1.2.10,, AC_MSG_ERROR([SDL $SDL_VERSION not found.]))
+# SDL -------------------------------------------------------------------------
+
+PKG_CHECK_MODULES(
+    [SDL],
+    [SDL >= 1.2.0],
+    [],
+    [SDL_VERSION=1.2.0
+     AM_PATH_SDL($SDL_VERSION, :,
+        AC_MSG_ERROR([SDL version $SDL_VERSION not found! http://www.libsdl.org]))])
+
+CFLAGS="$CFLAGS $SDL_CFLAGS" 
 LIBS="$LIBS $SDL_LIBS"
-CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 
-AC_CHECK_HEADER([SDL.h],, [AC_MSG_ERROR([SDL.h not found, install libsdl1.2-dev])])
-AC_CHECK_HEADER([SDL_image.h],, [AC_MSG_ERROR([SDL_image.h not found, install libsdl-image1.2-dev])])
-AC_CHECK_HEADER([SDL_mixer.h],, [AC_MSG_ERROR([SDL_mixer.h not found, install libsdl-mixer1.2-dev])])
+# SDL_image -------------------------------------------------------------------
+
+PKG_CHECK_MODULES(
+    [SDL_IMAGE],
+    [SDL_image],
+    [],
+    [AC_MSG_NOTICE([SDL_image not located by pkg-config, checking with AC CHECK LIB:])
+     AC_CHECK_LIB([SDL_image],
+        [IMG_Load],
+        [],
+        [AC_MSG_ERROR([SDL_image not found! http://www.libsdl.org/projects/SDL_image])])])
+
+
+CFLAGS="$CFLAGS $SDL_IMAGE"
+LIBS="$LIBS $SDL_IMAGE_LIBS"
+
+# SDL_mixer -------------------------------------------------------------------
+
+PKG_CHECK_MODULES(
+    [SDL_MIXER],
+    [SDL_mixer],
+    [],
+    [AC_MSG_NOTICE([SDL_mixer not located by pkg-config, checking with AC CHECK LIB:])
+     AC_CHECK_LIB([SDL_mixer],
+        [Mix_OpenAudio],
+        [],
+        [AC_MSG_ERROR([SDL_mixer not found! http://www.libsdl.org/projects/SDL_mixer])])])
+
+CFLAGS="$CFLAGS $SDL_MIXER_CFLAGS"
+LIBS="$LIBS $SDL_MIXER_LIBS"
+
+# GL + GLU --------------------------------------------------------------------
+
 AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install OpenGL header files])])
 AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
 
-case "$host" in
-    *mingw32)
-        AC_SUBST([SDL_LIBS], [-lSDL])
-        AC_SUBST([SDL_NET_LIBS], [-lSDL_net])
-        AC_SUBST([SDL_MIXER_LIBS], [-lSDL_mixer])
+case $host_os in
+    *mingw32*)
+        LIBS="$LIBS -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
     ;;
 
     *)
-        AC_CHECK_LIB(SDL, SDL_Init,, [AC_MSG_ERROR([libsdl1.2 missing or not usable.])])
-        AC_CHECK_LIB(SDL_image, IMG_LoadTGA_RW,, [AC_MSG_ERROR([libsdl-image1.2 missing or not usable.])])
-        AC_CHECK_LIB(SDL_mixer, Mix_PlayMusic,, [AC_MSG_ERROR([libsdl-mixer1.2 missing or not usable.])])
         AC_CHECK_LIB(GL, glVertex3f,, [AC_MSG_ERROR([OpenGL library missing or not usable.])])
         AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not usable.])])
     ;;
 esac
 
+AC_CONFIG_FILES([
+    Makefile
+    src/Makefile
+])
 
-# Create output.
-AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
-AC_OUTPUT(Makefile src/Makefile)
+AC_OUTPUT

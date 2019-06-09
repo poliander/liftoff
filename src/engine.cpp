@@ -61,7 +61,7 @@ bool Engine::writeConfiguration() {
     getcwd(cwd, 255);
     sprintf(cfgdir, "%s/.liftoff", getenv("HOME"));
     if (chdir(cfgdir) != 0) {
-#ifdef WINDOWS
+#ifdef _WIN32
         mkdir(cfgdir);
 #else
         mkdir(cfgdir, 0755);

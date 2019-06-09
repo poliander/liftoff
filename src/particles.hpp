@@ -2,7 +2,8 @@
 #define PARTICLES_HPP_
 
 #include <math.h>
-#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "state.hpp"
 

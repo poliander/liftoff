@@ -7,8 +7,9 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-
-#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
 
 #include "object.hpp"
 #include "player.hpp"
