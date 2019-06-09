@@ -29,7 +29,7 @@ This game somehow happened after I looked at the source code of [Xavier Hosxe's 
 ./configure && make
 ```
  
-Assuming you have a working cross-compiling environment available (congratulations), then creating win32 executables is possible:
+Assumed you have a working cross-compiling environment available (congratulations), then creating win32 executables is possible:
 
 ```
 ./configure --prefix=/usr/x86_64-w64-mingw32 --host=x86_64-w64-mingw32 && make
