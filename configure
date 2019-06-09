@@ -5114,7 +5114,7 @@ fi
 
 case $host_os in
     *mingw32*)
-        LIBS="$LIBS -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
+        LIBS="$LIBS -lvorbisfile -lvorbis -logg -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
     ;;
 
     *)
