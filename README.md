@@ -6,7 +6,6 @@ This game somehow happened after I looked at the source code of Xavier Hosxe's "
 
 ### Prerequisites
 
-- freeglut3-dev
 - libglm-dev
 - libglu1-mesa-dev
 - libsdl1.2-dev
