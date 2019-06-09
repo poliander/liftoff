@@ -4,9 +4,9 @@ This game somehow happened after I looked at the source code of Xavier Hosxe's "
 
 ## Build
 
-### Prerequisites
+### Requirements
 
-- libglm-dev
+- libgl1-mesa-dev
 - libglu1-mesa-dev
 - libsdl1.2-dev
 - libsdl-mixer1.2-dev
