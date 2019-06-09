@@ -12,9 +12,6 @@
 /* Define to 1 if you have the `GLU' library (-lGLU). */
 #undef HAVE_LIBGLU
 
-/* Define to 1 if you have the `glut' library (-lglut). */
-#undef HAVE_LIBGLUT
-
 /* Define to 1 if you have the `SDL' library (-lSDL). */
 #undef HAVE_LIBSDL
 

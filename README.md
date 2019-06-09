@@ -15,7 +15,15 @@ This game somehow happened after I looked at the source code of Xavier Hosxe's "
 
 ### Compilation
 
+```
 ./configure && make
+```
+
+Assumed you have a proper cross-compiling environment available, creating win32 executables is also supported:
+
+```
+./configure --prefix=/usr/x86_64-w64-mingw32  --host=x86_64-w64-mingw32
+```
 
 ## Command line options
 

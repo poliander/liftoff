@@ -34,22 +34,27 @@ LIBS="$LIBS $SDL_LIBS"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 
 AC_CHECK_HEADER([SDL.h],, [AC_MSG_ERROR([SDL.h not found, install libsdl1.2-dev])])
-AC_CHECK_LIB(SDL, SDL_Init,, [AC_MSG_ERROR([libsdl1.2 missing or not usable.])])
-
-AC_CHECK_HEADER([SDL_mixer.h],, [AC_MSG_ERROR([SDL_mixer.h not found, install libsdl-mixer1.2-dev])])
-AC_CHECK_LIB(SDL_mixer, Mix_PlayMusic,, [AC_MSG_ERROR([libsdl-mixer1.2 missing or not usable.])])
-
 AC_CHECK_HEADER([SDL_image.h],, [AC_MSG_ERROR([SDL_image.h not found, install libsdl-image1.2-dev])])
-AC_CHECK_LIB(SDL_image, IMG_LoadTGA_RW,, [AC_MSG_ERROR([libsdl-image1.2 missing or not usable.])])
-
+AC_CHECK_HEADER([SDL_mixer.h],, [AC_MSG_ERROR([SDL_mixer.h not found, install libsdl-mixer1.2-dev])])
 AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install OpenGL header files])])
-AC_CHECK_LIB(GL, glVertex3f,, [AC_MSG_ERROR([OpenGL library missing or not usable.])])
-
 AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
-AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not usable.])])
 
-AC_CHECK_HEADER([GL/glut.h],, [AC_MSG_ERROR([GL/glut.h not found, install freeglut3-dev])])
-AC_CHECK_LIB(glut, glutGet,, [AC_MSG_ERROR([freeglut3 missing or not usable.])])
+case "$host" in
+    *mingw32)
+        AC_SUBST([SDL_LIBS], [-lSDL])
+        AC_SUBST([SDL_NET_LIBS], [-lSDL_net])
+        AC_SUBST([SDL_MIXER_LIBS], [-lSDL_mixer])
+    ;;
+
+    *)
+        AC_CHECK_LIB(SDL, SDL_Init,, [AC_MSG_ERROR([libsdl1.2 missing or not usable.])])
+        AC_CHECK_LIB(SDL_image, IMG_LoadTGA_RW,, [AC_MSG_ERROR([libsdl-image1.2 missing or not usable.])])
+        AC_CHECK_LIB(SDL_mixer, Mix_PlayMusic,, [AC_MSG_ERROR([libsdl-mixer1.2 missing or not usable.])])
+        AC_CHECK_LIB(GL, glVertex3f,, [AC_MSG_ERROR([OpenGL library missing or not usable.])])
+        AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not usable.])])
+    ;;
+esac
+
 
 # Create output.
 AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])

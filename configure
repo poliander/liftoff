@@ -627,6 +627,8 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
 GAMEDATA
+SDL_MIXER_LIBS
+SDL_NET_LIBS
 SDL_LIBS
 SDL_CFLAGS
 SDL_CONFIG
@@ -4175,7 +4177,51 @@ else
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_Init in -lSDL" >&5
+ac_fn_cxx_check_header_mongrel "$LINENO" "SDL_image.h" "ac_cv_header_SDL_image_h" "$ac_includes_default"
+if test "x$ac_cv_header_SDL_image_h" = xyes; then :
+
+else
+  as_fn_error $? "SDL_image.h not found, install libsdl-image1.2-dev" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "SDL_mixer.h" "ac_cv_header_SDL_mixer_h" "$ac_includes_default"
+if test "x$ac_cv_header_SDL_mixer_h" = xyes; then :
+
+else
+  as_fn_error $? "SDL_mixer.h not found, install libsdl-mixer1.2-dev" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "GL/gl.h" "ac_cv_header_GL_gl_h" "$ac_includes_default"
+if test "x$ac_cv_header_GL_gl_h" = xyes; then :
+
+else
+  as_fn_error $? "GL/gl.h not found, install OpenGL header files" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glu.h" "ac_cv_header_GL_glu_h" "$ac_includes_default"
+if test "x$ac_cv_header_GL_glu_h" = xyes; then :
+
+else
+  as_fn_error $? "GL/glu.h not found, install libglu1-mesa-dev" "$LINENO" 5
+fi
+
+
+
+case "$host" in
+    *mingw32)
+        SDL_LIBS=-lSDL
+
+        SDL_NET_LIBS=-lSDL_net
+
+        SDL_MIXER_LIBS=-lSDL_mixer
+
+    ;;
+
+    *)
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_Init in -lSDL" >&5
 $as_echo_n "checking for SDL_Init in -lSDL... " >&6; }
 if ${ac_cv_lib_SDL_SDL_Init+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -4222,72 +4268,7 @@ else
   as_fn_error $? "libsdl1.2 missing or not usable." "$LINENO" 5
 fi
 
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "SDL_mixer.h" "ac_cv_header_SDL_mixer_h" "$ac_includes_default"
-if test "x$ac_cv_header_SDL_mixer_h" = xyes; then :
-
-else
-  as_fn_error $? "SDL_mixer.h not found, install libsdl-mixer1.2-dev" "$LINENO" 5
-fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayMusic in -lSDL_mixer" >&5
-$as_echo_n "checking for Mix_PlayMusic in -lSDL_mixer... " >&6; }
-if ${ac_cv_lib_SDL_mixer_Mix_PlayMusic+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_mixer  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char Mix_PlayMusic ();
-int
-main ()
-{
-return Mix_PlayMusic ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_mixer_Mix_PlayMusic=yes
-else
-  ac_cv_lib_SDL_mixer_Mix_PlayMusic=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_mixer_Mix_PlayMusic" >&5
-$as_echo "$ac_cv_lib_SDL_mixer_Mix_PlayMusic" >&6; }
-if test "x$ac_cv_lib_SDL_mixer_Mix_PlayMusic" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL_MIXER 1
-_ACEOF
-
-  LIBS="-lSDL_mixer $LIBS"
-
-else
-  as_fn_error $? "libsdl-mixer1.2 missing or not usable." "$LINENO" 5
-fi
-
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "SDL_image.h" "ac_cv_header_SDL_image_h" "$ac_includes_default"
-if test "x$ac_cv_header_SDL_image_h" = xyes; then :
-
-else
-  as_fn_error $? "SDL_image.h not found, install libsdl-image1.2-dev" "$LINENO" 5
-fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for IMG_LoadTGA_RW in -lSDL_image" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for IMG_LoadTGA_RW in -lSDL_image" >&5
 $as_echo_n "checking for IMG_LoadTGA_RW in -lSDL_image... " >&6; }
 if ${ac_cv_lib_SDL_image_IMG_LoadTGA_RW+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -4334,16 +4315,54 @@ else
   as_fn_error $? "libsdl-image1.2 missing or not usable." "$LINENO" 5
 fi
 
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayMusic in -lSDL_mixer" >&5
+$as_echo_n "checking for Mix_PlayMusic in -lSDL_mixer... " >&6; }
+if ${ac_cv_lib_SDL_mixer_Mix_PlayMusic+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSDL_mixer  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/gl.h" "ac_cv_header_GL_gl_h" "$ac_includes_default"
-if test "x$ac_cv_header_GL_gl_h" = xyes; then :
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char Mix_PlayMusic ();
+int
+main ()
+{
+return Mix_PlayMusic ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_SDL_mixer_Mix_PlayMusic=yes
+else
+  ac_cv_lib_SDL_mixer_Mix_PlayMusic=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_mixer_Mix_PlayMusic" >&5
+$as_echo "$ac_cv_lib_SDL_mixer_Mix_PlayMusic" >&6; }
+if test "x$ac_cv_lib_SDL_mixer_Mix_PlayMusic" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSDL_MIXER 1
+_ACEOF
+
+  LIBS="-lSDL_mixer $LIBS"
 
 else
-  as_fn_error $? "GL/gl.h not found, install OpenGL header files" "$LINENO" 5
+  as_fn_error $? "libsdl-mixer1.2 missing or not usable." "$LINENO" 5
 fi
 
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for glVertex3f in -lGL" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glVertex3f in -lGL" >&5
 $as_echo_n "checking for glVertex3f in -lGL... " >&6; }
 if ${ac_cv_lib_GL_glVertex3f+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -4390,16 +4409,7 @@ else
   as_fn_error $? "OpenGL library missing or not usable." "$LINENO" 5
 fi
 
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glu.h" "ac_cv_header_GL_glu_h" "$ac_includes_default"
-if test "x$ac_cv_header_GL_glu_h" = xyes; then :
-
-else
-  as_fn_error $? "GL/glu.h not found, install libglu1-mesa-dev" "$LINENO" 5
-fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluPerspective in -lGLU" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluPerspective in -lGLU" >&5
 $as_echo_n "checking for gluPerspective in -lGLU... " >&6; }
 if ${ac_cv_lib_GLU_gluPerspective+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -4446,61 +4456,8 @@ else
   as_fn_error $? "libglu1-mesa missing or not usable." "$LINENO" 5
 fi
 
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glut.h" "ac_cv_header_GL_glut_h" "$ac_includes_default"
-if test "x$ac_cv_header_GL_glut_h" = xyes; then :
-
-else
-  as_fn_error $? "GL/glut.h not found, install freeglut3-dev" "$LINENO" 5
-fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for glutGet in -lglut" >&5
-$as_echo_n "checking for glutGet in -lglut... " >&6; }
-if ${ac_cv_lib_glut_glutGet+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lglut  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char glutGet ();
-int
-main ()
-{
-return glutGet ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_glut_glutGet=yes
-else
-  ac_cv_lib_glut_glutGet=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_glut_glutGet" >&5
-$as_echo "$ac_cv_lib_glut_glutGet" >&6; }
-if test "x$ac_cv_lib_glut_glutGet" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGLUT 1
-_ACEOF
-
-  LIBS="-lglut $LIBS"
-
-else
-  as_fn_error $? "freeglut3 missing or not usable." "$LINENO" 5
-fi
+    ;;
+esac
 
 
 # Create output.
