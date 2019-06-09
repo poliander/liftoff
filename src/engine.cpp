@@ -749,8 +749,8 @@ bool Engine::main() {
     SDL_Event event;
 
     // timer adjustment
-    static GLuint otimer = glutGet((GLenum)(GLUT_ELAPSED_TIME));
-    GLuint ntimer = glutGet((GLenum)(GLUT_ELAPSED_TIME));
+    static Uint32 otimer = SDL_GetTicks();
+    GLuint ntimer = SDL_GetTicks();
     state->timer_adjustment = float(ntimer-otimer) * .05f;
     state->timer = ntimer;
     otimer = ntimer;
@@ -769,7 +769,7 @@ bool Engine::main() {
         scenery = new Scenery(state);
 
         bool ok = init(-1, NULL);
-        otimer = glutGet((GLenum)(GLUT_ELAPSED_TIME));
+        otimer = SDL_GetTicks();
         state->timer = otimer;
 
         return ok;

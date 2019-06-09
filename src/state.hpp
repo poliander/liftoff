@@ -2,7 +2,6 @@
 #define STATE_HPP_
 
 #include <SDL.h>
-#include <GL/glut.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -89,10 +88,10 @@ class State {
         // game resources
         config_t        config;
         object_t        objects[E_MAX_OBJECTS];
-        GLuint          texture[17];
+        unsigned int    texture[17];
 
         // timer
-        GLuint          timer;
+        Uint32          timer;
         float           timer_adjustment;
 
         bool            log_stdout;

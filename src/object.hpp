@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <GL/glut.h>
 #include <SDL_image.h>
+#include <GL/gl.h>
 
 #include "state.hpp"
 

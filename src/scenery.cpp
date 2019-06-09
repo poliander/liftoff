@@ -362,7 +362,7 @@ void Scenery::drawFPS() {
     state->fps_frame++;
 
     if (state->fps_frame >= state->fps_count) {
-        int t = glutGet((GLenum)GLUT_ELAPSED_TIME);
+        Uint32 t = SDL_GetTicks();
 
         state->fps_dt = t - state->fps_lt;
         state->fps_lt = t;

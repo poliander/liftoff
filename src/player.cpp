@@ -153,7 +153,7 @@ bool Player::shoot() {
 }
 
 void Player::move() {
-    int t = glutGet((GLenum)GLUT_ELAPSED_TIME);
+    Uint32 t = SDL_GetTicks();
     float countersteering = .00035f;
 
     if (state->objects[state->player].life <= 0) {
@@ -300,7 +300,7 @@ void Player::move() {
         switch(state->objects[state->player].powerup) {
             case OBJ_POWERUP_0:
                 powerup_booster_length += 20;
-                powerup_booster_ltimer = glutGet((GLenum)GLUT_ELAPSED_TIME);
+                powerup_booster_ltimer = SDL_GetTicks();
                 state->objects[state->player].powerup = 0;
                 break;
         }
