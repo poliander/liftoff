@@ -14,7 +14,7 @@ AC_DEFUN([AC_DEFINE_DIR], [
 ])
 
 AC_PREREQ(2.61)
-AC_INIT(liftoff, 0.2, r.pollesch@gmx.net)
+AC_INIT(liftoff, 0.3, poliander@mailbox.org)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([foreign])
