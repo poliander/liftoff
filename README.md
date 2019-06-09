@@ -1,6 +1,6 @@
 <img src="https://github.com/poliander/liftoff/blob/master/dat/screenshot.png" width="100%">
 
-This game somehow happened after I looked at the source code of Xavier Hosxe's "Glaxium" and tried to write a small screensaver in OpenGL.
+This game somehow happened after I looked at the source code of [Xavier Hosxe's "Glaxium"](http://xhosxe.free.fr/glaxium/) and tried to write a small screensaver in OpenGL.
 
 ## Build
 
