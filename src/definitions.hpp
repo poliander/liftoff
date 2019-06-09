@@ -1,7 +1,7 @@
 #ifndef DEFINITIONS_HPP_
 #define DEFINITIONS_HPP_
 
-#define PACKAGE_VERSION         "0.3.0 2019/06/09"
+#define PACKAGE_VERSION         "2019/06/09"
 #define DEFAULT_CFG_FILE        "liftoff.cfg"
 #define GAME_DATA               "."
 
@@ -17,7 +17,7 @@
 #define DEFAULT_GFX_PARTICLES   100
 
 // engine defaults & fine tuning
-#ifdef WINDOWS
+#ifdef _WIN32
   #define E_LOG_STDOUT          false
 #else
   #define E_LOG_STDOUT          true
