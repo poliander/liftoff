@@ -2,7 +2,7 @@
 
 Engine *engine;
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
     engine = new Engine();
 
     if (engine->init(argc, argv)) {
