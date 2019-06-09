@@ -17,11 +17,7 @@
 #define DEFAULT_GFX_PARTICLES   100
 
 // engine defaults & fine tuning
-#ifdef _WIN32
-  #define E_LOG_STDOUT          false
-#else
-  #define E_LOG_STDOUT          true
-#endif
+#define E_LOG_FILE              false
 #define E_RELATIVE_MOVEMENT     2.5
 #define E_BASE_SPEED            25.0
 #define E_MAX_OBJECTS           1024

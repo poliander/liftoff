@@ -115,7 +115,6 @@ bool Engine::init(int argc, char **argv) {
     if (argc >= 0) {
         int cfg_multisampling = 0;
         bool cfg_lowquality = false;
-        bool cfg_debug = false;
 
         for (int i=0; i<argc; i++) {
 
@@ -123,12 +122,9 @@ bool Engine::init(int argc, char **argv) {
             if (strcmp(argv[i], "-h") == 0) {
                 printf("\nLift Off: Beyond Glaxium (%s)\n\n", PACKAGE_VERSION);
                 printf("  -h            Show command line parameters\n");
+                printf("  -d            Write debug information to debug.log\n\n");
                 printf("  -l            Low quality mode\n");
                 printf("  -m[2|4|8|16]  Enable multisampling, use 2/4/8/16 samples\n");
-#ifdef _WIN32
-                printf("  -s            Enable logging to stdout.txt\n");
-#endif
-                printf("\n");
 
                 return false;
             }
@@ -163,29 +159,19 @@ bool Engine::init(int argc, char **argv) {
                 continue;
             }
 
-            if (strcmp(argv[i], "-d") == 0) {
-                cfg_debug = true;
-                continue;
-            }
-
 #ifdef _WIN32
-            if (strcmp(argv[i], "-s") == 0) {
-                            state->log_stdout = true;
-                            continue;
+            if (strcmp(argv[i], "-d") == 0) {
+                state->log_file = true;
+                continue;
             }
 #endif
         }
 
         state->vid_cfg_lowquality = cfg_lowquality;
         state->vid_cfg_multisampling = cfg_multisampling;
-        state->engine_debug = cfg_debug;
     }
 
     scenery = new Scenery(state);
-
-    state->log("\nLift Off: Beyond Glaxium (");
-    state->log(PACKAGE_VERSION);
-    state->log(")\n\n");
 
     // SDL initalization
     state->log("Initializing Simple DirectMedia Layer\n");

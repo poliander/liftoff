@@ -164,7 +164,6 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
  * load game data
  */
 void Scenery::load() {
-//  state->texture[T_LOGO]          = loadTexture("logo.tga", true);
     state->texture[T_TITLE]         = loadTexture("title.tga", true);
     state->texture[T_FONT]          = loadTexture("font.tga", true);
     state->texture[T_CURSOR]        = loadTexture("cursor.tga", true);
@@ -384,60 +383,6 @@ void Scenery::drawFPS() {
         sprintf(txt, "%d", int(round(state->fps)));
         drawTextA(txt, x+.65f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
     }
-
-    if (state->engine_debug && (state->get() == STATE_GAME_LOOP)) {
-        x += 1.7f;
-        sprintf(txt, "%d", (int)state->lvl_pos);
-        drawTextA("POS:", x, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-        drawTextA(txt, x+.7f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-
-        x += 1.7f;
-        sprintf(txt, "%d", (int)state->lvl_entities);
-        drawTextA("OBJ:", x, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-        drawTextA(txt, x+.6f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-    }
-}
-
-/*
- * draw intro logo
- */
-void Scenery::drawIntro() {
-    static float a = 0;
-    static float a1 = 0;
-    static float z = 0;
-
-    z += state->timer_adjustment * .005f;
-    if (a1 < 1.0f) {
-        if (z > .0f) {
-            a1 += (1.4f - a1) * (state->timer_adjustment * .008f);
-            a = a1;
-        }
-    } else {
-        a1 += (2.1f - a1) * (state->timer_adjustment * .01f);
-        a -= a1 * (state->timer_adjustment * .02f);
-        if (a <= .0f) state->set(STATE_MENU);
-    }
-
-    glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_LOGO]);
-
-    glPushMatrix();
-    glTranslatef(0, 0, -150.0f + z * 35.0f);
-    glColor4f(a, a, a, 1.0f);
-    glBegin (GL_QUADS);
-      glTexCoord2f (0, 1);
-      glVertex3f (-75.0f, -20.0f, 0);
-
-      glTexCoord2f (1, 1);
-      glVertex3f (75.0f, -20.0f, 0);
-
-      glTexCoord2f (1, 0);
-      glVertex3f (75.0f, 20.0f, 0);
-
-      glTexCoord2f (0, 0);
-      glVertex3f (-75.0f, 20.0f, 0);
-    glEnd();
-    glPopMatrix();
 }
 
 /*
@@ -1842,11 +1787,6 @@ void Scenery::draw() {
       state->objects[state->player].a_x*.5f, .0f, -10000.0f,
       state->objects[state->player].a_x*.05f, -1.0f, .0f
     );
-
-    if (state->get() == STATE_INTRO) {
-        drawIntro();
-        return;
-    }
 
     drawBackground();
 

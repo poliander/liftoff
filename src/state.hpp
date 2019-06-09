@@ -82,6 +82,8 @@ class State {
         State();
         ~State();
 
+        bool            log_file;
+
         // audio subsystem and resources
         Audio*          audio;
 
@@ -94,7 +96,6 @@ class State {
         Uint32          timer;
         float           timer_adjustment;
 
-        bool            log_stdout;
         int             global_alpha;
         float           title_ypos;
 
@@ -197,7 +198,7 @@ class State {
         bool            set(int s);
         int             get(void);
 
-        bool            log(const char *msg);
+        void            log(const char *msg);
 
     protected:
         int             id;

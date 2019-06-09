@@ -52,7 +52,6 @@ class Scenery {
         void            drawBackground();
         void            drawMouse();
         void            drawFPS();
-        void            drawIntro();
         void            drawTitle();
         void            drawMenu(bool mouse_recheck);
         void            drawHUD();

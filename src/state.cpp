@@ -27,10 +27,9 @@ State::State() {
     vid_cfg_lowquality      = false;
     vid_cfg_multisampling   = 0;
 
-    log_stdout              = E_LOG_STDOUT;
+    log_file                = E_LOG_FILE;
 
     engine_restart          = false;
-    engine_debug            = false;
     engine_stars            = DEFAULT_GFX_STARS;
     engine_stars_warp       = DEFAULT_GFX_STARS_WARP;
 
@@ -60,12 +59,20 @@ State::~State() {
 }
 
 /*
- * print message to stdout
+ * log output
  */
-bool State::log(const char *msg) {
-    if (!log_stdout) return false;
-    printf("%s", msg);
-    return true;
+void State::log(const char *msg) {
+    if (log_file) {
+#ifdef _WIN32
+        FILE *fp;
+
+        fp = fopen("debug.log", "a");
+        fprintf(fp, "%s", msg);
+        fclose(fp);
+#else
+        printf("%s", msg);
+#endif
+    }
 }
 
 /*
@@ -355,11 +362,6 @@ bool State::set(int s) {
     int x, y;
 
     switch(s) {
-        case STATE_INTRO:
-            timer_adjustment = 0;
-            audio->playSample(11, 128, 0);
-            break;
-
         case STATE_MENU:
             timer_adjustment = 0;
 
@@ -447,6 +449,7 @@ bool State::set(int s) {
             break;
 
         case STATE_GAME_LOOP:
+            log("Entering game loop...\n");
             menu = 0;
 
             stars_warp = false;
@@ -483,11 +486,12 @@ bool State::set(int s) {
             cam_y_offset = 35.0f;
             cam_speed = .015f;
 
-            audio->playMusic(1, 1000);
+            /* audio->playMusic(1, 1000); */
             audio->playSampleLoop(3, 1000);
             break;
 
         case STATE_GAME_QUIT:
+            log("Quitting game loop.\n");
             title_ypos = 0;
             audio->stopMusic(1000);
             audio->stopSampleLoop(1000);
