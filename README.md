@@ -1,8 +1,10 @@
 # Lift Off: Beyond Glaxium
 
+<p>
 <img align="right" width="400" height="300" src="https://github.com/poliander/liftoff/blob/master/dat/screenshot.png">
 
 This game somehow happened after I looked at the source code of Xavier Hosxe's "Glaxium" and tried to write a small screensaver in OpenGL.
+</p>
 
 ## Build
 
