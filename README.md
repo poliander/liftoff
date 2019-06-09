@@ -17,8 +17,8 @@ This game somehow happened after I looked at the source code of Xavier Hosxe's "
 ```
 ./configure && make
 ```
-
-Assumed you have a proper cross-compiling environment available, creating win32 executables is also supported:
+ 
+Assuming you have a working cross-compiling environment available (congratulations), then creating win32 executables is possible:
 
 ```
 ./configure --prefix=/usr/x86_64-w64-mingw32 --host=x86_64-w64-mingw32 && make
@@ -44,11 +44,11 @@ Show command line parameters (Linux only).
 
 ## Controls
 
-- JOYSTICKS and GAMEPADS are supported.
-- MOUSE works only for menus.
-- CURSOR KEYS or W/A/S/D will move your ship.
-- CTRL will let your ship fire it's little guns.
-- ESCAPE quits the game at any time.
-- F12 toggles displaying current frame rate.
-- CTRL+C can be used as "boss key".
+- JOYSTICKS and GAMEPADS are supported
+- MOUSE works intentionally only in menu
+- CURSOR KEYS or W/A/S/D will move your ship
+- CTRL will let your ship fire its little guns
+- ESCAPE quits the game at any time
+- F12 toggles frame rate display
+- CTRL+C can be used as "boss key"
 
