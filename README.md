@@ -21,7 +21,7 @@ This game somehow happened after I looked at the source code of Xavier Hosxe's "
 Assumed you have a proper cross-compiling environment available, creating win32 executables is also supported:
 
 ```
-./configure --prefix=/usr/x86_64-w64-mingw32  --host=x86_64-w64-mingw32
+./configure --prefix=/usr/x86_64-w64-mingw32 --host=x86_64-w64-mingw32 && make
 ```
 
 ## Command line options
