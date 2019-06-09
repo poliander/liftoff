@@ -4743,7 +4743,6 @@ $as_echo "yes" >&6; }
 
 fi
 
-CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
 # SDL_image -------------------------------------------------------------------
@@ -4916,8 +4915,6 @@ $as_echo "yes" >&6; }
 
 fi
 
-
-CFLAGS="$CFLAGS $SDL_IMAGE"
 LIBS="$LIBS $SDL_IMAGE_LIBS"
 
 # SDL_mixer -------------------------------------------------------------------
@@ -5090,7 +5087,6 @@ $as_echo "yes" >&6; }
 
 fi
 
-CFLAGS="$CFLAGS $SDL_MIXER_CFLAGS"
 LIBS="$LIBS $SDL_MIXER_LIBS"
 
 # GL + GLU --------------------------------------------------------------------

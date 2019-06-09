@@ -40,7 +40,6 @@ PKG_CHECK_MODULES(
      AM_PATH_SDL($SDL_VERSION, :,
         AC_MSG_ERROR([SDL version $SDL_VERSION not found! http://www.libsdl.org]))])
 
-CFLAGS="$CFLAGS $SDL_CFLAGS" 
 LIBS="$LIBS $SDL_LIBS"
 
 # SDL_image -------------------------------------------------------------------
@@ -55,8 +54,6 @@ PKG_CHECK_MODULES(
         [],
         [AC_MSG_ERROR([SDL_image not found! http://www.libsdl.org/projects/SDL_image])])])
 
-
-CFLAGS="$CFLAGS $SDL_IMAGE"
 LIBS="$LIBS $SDL_IMAGE_LIBS"
 
 # SDL_mixer -------------------------------------------------------------------
@@ -71,7 +68,6 @@ PKG_CHECK_MODULES(
         [],
         [AC_MSG_ERROR([SDL_mixer not found! http://www.libsdl.org/projects/SDL_mixer])])])
 
-CFLAGS="$CFLAGS $SDL_MIXER_CFLAGS"
 LIBS="$LIBS $SDL_MIXER_LIBS"
 
 # GL + GLU --------------------------------------------------------------------
