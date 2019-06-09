@@ -125,7 +125,7 @@ bool Engine::init(int argc, char **argv) {
                 printf("  -h            Show command line parameters\n");
                 printf("  -l            Low quality mode\n");
                 printf("  -m[2|4|8|16]  Enable multisampling, use 2/4/8/16 samples\n");
-#ifdef WINDOWS
+#ifdef _WIN32
                 printf("  -s            Enable logging to stdout.txt\n");
 #endif
                 printf("\n");
@@ -168,7 +168,7 @@ bool Engine::init(int argc, char **argv) {
                 continue;
             }
 
-#ifdef WINDOWS
+#ifdef _WIN32
             if (strcmp(argv[i], "-s") == 0) {
                             state->log_stdout = true;
                             continue;
@@ -213,7 +213,7 @@ bool Engine::init(int argc, char **argv) {
 
     // get location of configuration file
     if (argv != NULL) {
-#ifdef WINDOWS
+#ifdef _WIN32
         int l = strlen(argv[0]);
         char cfgdir[255], cwd[255];
 
