@@ -394,7 +394,12 @@ float Object::getSpinZ(int oid) {
 
 void Object::move(int oid) {
     if (state->objects[oid].type == OBJ_TYPE_SCENERY) {
-        state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed) * .5f;
+        if (state->objects[oid].id == OBJ_POWERUP_1) {
+            state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed);
+            state->objects[oid].cnt2 += state->timer_adjustment;
+        } else {
+            state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed) * .5f;
+        }
     } else {
         state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed);
     }
