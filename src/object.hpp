@@ -56,7 +56,7 @@ struct obj_model_t {
 
 class Object {
     public:
-        Object(State* sptr);
+        Object(State &s);
         ~Object();
 
         GLuint      textures[4];
@@ -86,7 +86,7 @@ class Object {
         float       getSpinZ(int oid);
 
     protected:
-        State*      state;
+        State&      state;
 
         obj_model_t model;
         GLuint      model_list;

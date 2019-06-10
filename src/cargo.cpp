@@ -1,9 +1,7 @@
 #include "cargo.hpp"
 
-Cargo::Cargo(State* sptr) : Object(sptr) {
-    state = sptr;
+Cargo::Cargo(State &s) : Object(s) {
     memset(&model, 0, sizeof(struct obj_model_t));
-
     shininess = 64.0f;
 }
 
@@ -14,17 +12,17 @@ void Cargo::draw(int oid) {
     float a = 1.0f;
     float s = 1.0f, s2;
 
-    if (state->objects[oid].pos_z < -8000.0f) {
-        a = (state->objects[oid].pos_z + 10000.0f) * .0005f;
+    if (state.objects[oid].pos_z < -8000.0f) {
+        a = (state.objects[oid].pos_z + 10000.0f) * .0005f;
     }
 
-    a *= float(state->global_alpha) * .01f;
-    s = (10000.0f + state->objects[oid].pos_z) * .0001f;
-    s2 = (1.0f + sin(state->objects[oid].cnt * (M_PI / 180.0f))) * .5f;
+    a *= float(state.global_alpha) * .01f;
+    s = (10000.0f + state.objects[oid].pos_z) * .0001f;
+    s2 = (1.0f + sin(state.objects[oid].cnt * (M_PI / 180.0f))) * .5f;
 
     glLoadIdentity();
-    glRotatef(-state->tilt_x*.035f, 0, 1, 0);
-    glRotatef(-state->tilt_y*.035f, 1, 0, 0);
+    glRotatef(state.tilt_x * -.035f, 0, 1, 0);
+    glRotatef(state.tilt_y * -.035f, 1, 0, 0);
 
     // light setup
     glEnable(GL_LIGHTING);
@@ -44,9 +42,9 @@ void Cargo::draw(int oid) {
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
     glTranslatef(
-        (state->objects[oid].pos_x - state->cam_x) * E_RELATIVE_MOVEMENT,
-        (state->objects[oid].pos_y - state->cam_y) * E_RELATIVE_MOVEMENT,
-        state->objects[oid].pos_z
+        (state.objects[oid].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (state.objects[oid].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT,
+        (state.objects[oid].pos_z)
     );
 
     glPushMatrix();
@@ -55,14 +53,14 @@ void Cargo::draw(int oid) {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
 
-    glRotatef(state->objects[oid].rot_x, 1, 0, 0);
-    glRotatef(state->objects[oid].rot_y, 0, 1, 0);
-    glRotatef(state->objects[oid].rot_z, 0, 0, 1);
+    glRotatef(state.objects[oid].rot_x, 1, 0, 0);
+    glRotatef(state.objects[oid].rot_y, 0, 1, 0);
+    glRotatef(state.objects[oid].rot_z, 0, 0, 1);
 
     glScalef(
-        state->objects[oid].scale_x*s,
-        state->objects[oid].scale_y*s,
-        state->objects[oid].scale_z*s
+        state.objects[oid].scale_x * s,
+        state.objects[oid].scale_y * s,
+        state.objects[oid].scale_z * s
     );
 
     glCallList(model_list);
@@ -77,7 +75,7 @@ void Cargo::draw(int oid) {
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     s2 += .5f;
-    glColor4f(.5f, .75f, 1.0f, (.15f + .1f * s2) * state->global_alpha * .01f);
+    glColor4f(.5f, .75f, 1.0f, (.15f + .1f * s2) * state.global_alpha * .01f);
     s2 *= 7.5f;
     glBegin(GL_QUADS);
       glTexCoord2f(0, 0);

@@ -2,15 +2,13 @@
 
 Engine *engine;
 
-int main(int argc, char *argv[]) {
-    engine = new Engine();
+int main(int argc, char *argv[])
+{
+    Engine engine;
 
-    if (engine->init(argc, argv)) {
-        while (engine->main());
-        engine->shutdown();
+    if (engine.init(argc, argv)) {
+        while (engine.main());
     }
-
-    delete engine;
 
     return 0;
 }

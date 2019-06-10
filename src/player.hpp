@@ -8,7 +8,7 @@
 
 class Player : public Object {
     public:
-        Player(State* sptr);
+        Player(State &s);
         ~Player();
 
         void            setTarget(int oid);
@@ -33,8 +33,8 @@ class Player : public Object {
 
 
     protected:
-        // jet exhausts
         ParticleEngine* particles;
+
         float           j_l;
         float           jt_l;
         float           jr;

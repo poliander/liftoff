@@ -31,7 +31,7 @@ struct particle_t {
 
 class ParticleEngine {
     public:
-        ParticleEngine(State* sptr);
+        ParticleEngine(State &s);
         ~ParticleEngine();
 
         void            setup(short emitter, short particles, float dx, float dy, float dz, float decay, float size);
@@ -48,7 +48,7 @@ class ParticleEngine {
         void            move();
 
     protected:
-        State*          state;
+        State&          state;
         particle_t      p[DEFAULT_GFX_PARTICLES];
 
         short           pemitter;

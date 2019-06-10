@@ -1,12 +1,12 @@
 #ifndef EXPLOSION_HPP_
 #define EXPLOSION_HPP_
 
+#include "object.hpp"
 #include "particles.hpp"
-#include "state.hpp"
 
-class Explosion {
+class Explosion : public Object {
     public:
-        Explosion(State* sptr);
+        Explosion(State &s);
         ~Explosion();
 
         bool            add(unsigned short eid, float px, float py, float pz, float sp);
@@ -14,8 +14,9 @@ class Explosion {
         void            draw(int oid);
 
     protected:
-        State*          state;
         ParticleEngine* particles;
 };
+
+extern Explosion* explosion;
 
 #endif

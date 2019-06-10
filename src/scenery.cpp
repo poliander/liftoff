@@ -19,13 +19,11 @@ float isqrt(float f) {
     return f;
 }
 
-Scenery::Scenery(State* sptr) {
+Scenery::Scenery(State &s) : state(s) {
     float x, y;
 
-    state = sptr;
-
-    object = new Object(state);
     player = new Player(state);
+    object = new Object(state);
     asteroid = new Object(state);
     debris = new Object(state);
     explosion = new Explosion(state);
@@ -35,7 +33,7 @@ Scenery::Scenery(State* sptr) {
     srand((int)time(NULL));
 
     // generate far stars
-    for (int i=0; i<(state->engine_stars - state->engine_stars_warp); i++) {
+    for (int i=0; i<(state.engine_stars - state.engine_stars_warp); i++) {
         x = 0;
         y = 0;
 
@@ -51,7 +49,7 @@ Scenery::Scenery(State* sptr) {
     }
 
     // generate warp stars
-    for (int i=(state->engine_stars - state->engine_stars_warp); i<state->engine_stars; i++) {
+    for (int i=(state.engine_stars - state.engine_stars_warp); i<state.engine_stars; i++) {
             x = 0;
             y = 0;
 
@@ -75,23 +73,23 @@ Scenery::~Scenery() {
     delete player;
     delete powerup;
 
-    if (state->audio->volume_music) {
+    if (state.audio->volume_music) {
         Mix_HaltMusic();
-        Mix_FreeMusic(state->audio->music[0]);
+        Mix_FreeMusic(state.audio->music[0]);
     }
 
-    if (state->audio->volume_sfx) {
-        Mix_FreeChunk(state->audio->sample[10]);
-        Mix_FreeChunk(state->audio->sample[9]);
-        Mix_FreeChunk(state->audio->sample[8]);
-        Mix_FreeChunk(state->audio->sample[7]);
-        Mix_FreeChunk(state->audio->sample[6]);
-        Mix_FreeChunk(state->audio->sample[5]);
-        Mix_FreeChunk(state->audio->sample[4]);
-        Mix_FreeChunk(state->audio->sample[3]);
-        Mix_FreeChunk(state->audio->sample[2]);
-        Mix_FreeChunk(state->audio->sample[1]);
-        Mix_FreeChunk(state->audio->sample[0]);
+    if (state.audio->volume_sfx) {
+        Mix_FreeChunk(state.audio->sample[10]);
+        Mix_FreeChunk(state.audio->sample[9]);
+        Mix_FreeChunk(state.audio->sample[8]);
+        Mix_FreeChunk(state.audio->sample[7]);
+        Mix_FreeChunk(state.audio->sample[6]);
+        Mix_FreeChunk(state.audio->sample[5]);
+        Mix_FreeChunk(state.audio->sample[4]);
+        Mix_FreeChunk(state.audio->sample[3]);
+        Mix_FreeChunk(state.audio->sample[2]);
+        Mix_FreeChunk(state.audio->sample[1]);
+        Mix_FreeChunk(state.audio->sample[0]);
     }
 }
 
@@ -106,13 +104,13 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
     SDL_RWops *rwop;
 
     sprintf(lmsg, "Loading 'gfx/%s'... ", filename);
-    state->log(lmsg);
+    state.log(lmsg);
 
-    sprintf(fname, "%s/gfx/%s", state->engine_datadir, filename);
+    sprintf(fname, "%s/gfx/%s", state.engine_datadir, filename);
     rwop = SDL_RWFromFile(fname, "rb");
     image = IMG_LoadTGA_RW(rwop);
     if (!image) {
-        state->log("failed\n");
+        state.log("failed\n");
         return false;
     }
 
@@ -145,7 +143,7 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
     SDL_FreeSurface(image);
     SDL_FreeSurface(target);
 
-    state->log("ok\n");
+    state.log("ok\n");
 
     return texture;
 }
@@ -154,64 +152,64 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
  * load game data
  */
 void Scenery::load() {
-    state->texture[T_TITLE]         = loadTexture("title.tga", true);
-    state->texture[T_FONT]          = loadTexture("font.tga", true);
-    state->texture[T_CURSOR]        = loadTexture("cursor.tga", true);
-    state->texture[T_MENU_1]        = loadTexture("menu_1.tga", false);
-    state->texture[T_MENU_2]        = loadTexture("menu_2.tga", false);
-    state->texture[T_HUD_1]         = loadTexture("hud_1.tga", true);
-    state->texture[T_HUD_2]         = loadTexture("hud_2.tga", true);
-    state->texture[T_HUD_3]         = loadTexture("hud_3.tga", true);
-    state->texture[T_STAR]          = loadTexture("star.tga", true);
-    state->texture[T_MISSILE_1]     = loadTexture("missile_1.tga", false);
-    state->texture[T_EXPLOSION_1]   = loadTexture("explosion_1.tga", false);
-    state->texture[T_EXPLOSION_2]   = loadTexture("explosion_2.tga", false);
-    state->texture[T_EXPLOSION_3]   = loadTexture("star.tga", false);
-    state->texture[T_EXPLOSION_4]   = loadTexture("explosion_3.tga", false);
-    state->texture[T_JET]           = loadTexture("star.tga", false);
-    state->texture[T_BACKGROUND_1]  = loadTexture("background_1.tga", false);
+    state.texture[T_TITLE]         = loadTexture("title.tga", true);
+    state.texture[T_FONT]          = loadTexture("font.tga", true);
+    state.texture[T_CURSOR]        = loadTexture("cursor.tga", true);
+    state.texture[T_MENU_1]        = loadTexture("menu_1.tga", false);
+    state.texture[T_MENU_2]        = loadTexture("menu_2.tga", false);
+    state.texture[T_HUD_1]         = loadTexture("hud_1.tga", true);
+    state.texture[T_HUD_2]         = loadTexture("hud_2.tga", true);
+    state.texture[T_HUD_3]         = loadTexture("hud_3.tga", true);
+    state.texture[T_STAR]          = loadTexture("star.tga", true);
+    state.texture[T_MISSILE_1]     = loadTexture("missile_1.tga", false);
+    state.texture[T_EXPLOSION_1]   = loadTexture("explosion_1.tga", false);
+    state.texture[T_EXPLOSION_2]   = loadTexture("explosion_2.tga", false);
+    state.texture[T_EXPLOSION_3]   = loadTexture("star.tga", false);
+    state.texture[T_EXPLOSION_4]   = loadTexture("explosion_3.tga", false);
+    state.texture[T_JET]           = loadTexture("star.tga", false);
+    state.texture[T_BACKGROUND_1]  = loadTexture("background_1.tga", false);
 
     // asteroid
-    state->log("Loading 'obj/asteroid_1.obj'\n");
+    state.log("Loading 'obj/asteroid_1.obj'\n");
     asteroid->textures[0] = loadTexture("asteroid_1.tga", false);
-    asteroid->load(state->engine_datadir, "asteroid_1.obj");
+    asteroid->load(state.engine_datadir, "asteroid_1.obj");
 
     // debris
-    state->log("Loading 'obj/debris_1.obj'\n");
+    state.log("Loading 'obj/debris_1.obj'\n");
     debris->textures[0] = loadTexture("debris_1.tga", false);
-    debris->load(state->engine_datadir, "debris_1.obj");
+    debris->load(state.engine_datadir, "debris_1.obj");
 
     // cargo
-    state->log("Loading 'obj/cargo_1.obj'\n");
+    state.log("Loading 'obj/cargo_1.obj'\n");
     cargo->textures[0] = loadTexture("cargo_1.tga", false);
-    cargo->load(state->engine_datadir, "cargo_1.obj");
+    cargo->load(state.engine_datadir, "cargo_1.obj");
     cargo->textures[1] = loadTexture("glow_1.tga", false);
 
     // player
-    state->log("Loading 'obj/ship_1.obj'\n");
+    state.log("Loading 'obj/ship_1.obj'\n");
     player->textures[0] = loadTexture("ship_1_1.tga", false);
     player->textures[1] = loadTexture("ship_1_2.tga", false);
     player->textures[2] = cargo->textures[1];
-    player->textures[3] = state->texture[T_JET];
-    player->load(state->engine_datadir, "ship_1.obj");
+    player->textures[3] = state.texture[T_JET];
+    player->load(state.engine_datadir, "ship_1.obj");
 
     // powerup
     powerup->textures[0] = cargo->textures[1];
 
     // sfx
-    state->audio->sample[0]  = state->audio->loadSample("menu_1.wav");
-    state->audio->sample[1]  = state->audio->loadSample("menu_2.wav");
-    state->audio->sample[2]  = state->audio->loadSample("gun_1.wav");
-    state->audio->sample[3]  = state->audio->loadSample("engine_1.wav");
-    state->audio->sample[4]  = state->audio->loadSample("explosion_1.wav");
-    state->audio->sample[5]  = state->audio->loadSample("explosion_2.wav");
-    state->audio->sample[6]  = state->audio->loadSample("explosion_3.wav");
-    state->audio->sample[7]  = state->audio->loadSample("shield_1.wav");
-    state->audio->sample[8]  = state->audio->loadSample("engine_2.wav");
-    state->audio->sample[9]  = state->audio->loadSample("powerup_1.wav");
-    state->audio->sample[10] = state->audio->loadSample("engine_3.wav");
-    state->audio->sample[11] = state->audio->loadSample("logo.wav");
-    state->audio->music[0]   = state->audio->loadMusic("music_title.ogg");
+    state.audio->sample[0]  = state.audio->loadSample("menu_1.wav");
+    state.audio->sample[1]  = state.audio->loadSample("menu_2.wav");
+    state.audio->sample[2]  = state.audio->loadSample("gun_1.wav");
+    state.audio->sample[3]  = state.audio->loadSample("engine_1.wav");
+    state.audio->sample[4]  = state.audio->loadSample("explosion_1.wav");
+    state.audio->sample[5]  = state.audio->loadSample("explosion_2.wav");
+    state.audio->sample[6]  = state.audio->loadSample("explosion_3.wav");
+    state.audio->sample[7]  = state.audio->loadSample("shield_1.wav");
+    state.audio->sample[8]  = state.audio->loadSample("engine_2.wav");
+    state.audio->sample[9]  = state.audio->loadSample("powerup_1.wav");
+    state.audio->sample[10] = state.audio->loadSample("engine_3.wav");
+    state.audio->sample[11] = state.audio->loadSample("logo.wav");
+    state.audio->music[0]   = state.audio->loadMusic("music_title.ogg");
 }
 
 /*
@@ -223,7 +221,7 @@ void Scenery::drawText(const char *text, float x, float y, float z, float size, 
     GLfloat x1 = .0f, w, y1, y2, wy;
 
     glColor4f(r, g, b, a);
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_FONT]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_FONT]);
 
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -331,7 +329,7 @@ void Scenery::drawText(const char *text, float x, float y, float z, float size, 
  * draw text using absolute coordinates
  */
 void Scenery::drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a) {
-    drawText(text, (-5.97f*state->vid_cfg_aspect)+x, 5.69f-y, z, size, r, g, b, a);
+    drawText(text, (-5.97f*state.vid_cfg_aspect)+x, 5.69f-y, z, size, r, g, b, a);
 }
 
 /*
@@ -340,29 +338,29 @@ void Scenery::drawTextA(const char *text, float x, float y, float z, float size,
 void Scenery::drawFPS() {
     static char txt[16];
 
-    state->fps_frame++;
+    state.fps_frame++;
 
-    if (state->fps_frame >= state->fps_count) {
+    if (state.fps_frame >= state.fps_count) {
         Uint32 t = SDL_GetTicks();
 
-        state->fps_dt = t - state->fps_lt;
-        state->fps_lt = t;
+        state.fps_dt = t - state.fps_lt;
+        state.fps_lt = t;
 
-        if (state->fps_ready) {
-            state->fps = float(state->fps_frame) / (float(state->fps_dt) * .001f);
+        if (state.fps_ready) {
+            state.fps = float(state.fps_frame) / (float(state.fps_dt) * .001f);
         }
 
-        state->fps_count = int(round(state->fps));
-        state->fps_ready = true;
-        state->fps_frame = 0;
+        state.fps_count = int(round(state.fps));
+        state.fps_ready = true;
+        state.fps_frame = 0;
     }
 
     glLoadIdentity();
 
     float x = -.45f;
     drawTextA("FPS:", x, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-    if ((state->fps > .0f) && state->fps_ready) {
-        sprintf(txt, "%d", int(round(state->fps)));
+    if ((state.fps > .0f) && state.fps_ready) {
+        sprintf(txt, "%d", int(round(state.fps)));
         drawTextA(txt, x+.65f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
     }
 }
@@ -371,12 +369,12 @@ void Scenery::drawFPS() {
  * draw title
  */
 void Scenery::drawTitle() {
-    float sc, a = state->title_ypos * .01f;
+    float sc, a = state.title_ypos * .01f;
 
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_TITLE]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_TITLE]);
     glPushMatrix();
-    if (state->get() == STATE_MENU) {
+    if (state.get() == STATE_MENU) {
         glTranslatef(0, 7.75f-((a*2)*(a*2)), -10.0f);
     } else {
         glTranslatef(-16.0f+((a*4)*(a*4)), 3.75f, -10.0f);
@@ -399,7 +397,7 @@ void Scenery::drawTitle() {
     glPopMatrix();
 
     glPushMatrix();
-    if (state->get() == STATE_MENU) {
+    if (state.get() == STATE_MENU) {
         sc = a*a*1.5f;
         glTranslatef(0, 2.65f, -30+(a*20));
     } else {
@@ -429,14 +427,14 @@ void Scenery::drawTitle() {
 void Scenery::drawMenu(bool mouse_recheck) {
     int i, numentries;
     float mx, my, mh, mf, mo;
-    float m_a = state->global_alpha;
+    float m_a = state.global_alpha;
 
     char *mtxt[5];
     for (i=0; i<5; i++) {
         mtxt[i] = (char*)malloc(sizeof(char)*64);
     }
 
-    switch(state->menu) {
+    switch(state.menu) {
         case 1: // main menu
             numentries = 3;
             mx = -1.26f;
@@ -449,25 +447,25 @@ void Scenery::drawMenu(bool mouse_recheck) {
             strcpy(mtxt[1], "SETTINGS");
             strcpy(mtxt[2], "QUIT");
 
-            if (state->menu_selected) {
-                switch (state->menu_pos) {
+            if (state.menu_selected) {
+                switch (state.menu_pos) {
                     case 0: // launch
-                        state->lvl_id = 1;
-                        state->set(STATE_GAME_START);
+                        state.lvl_id = 1;
+                        state.set(STATE_GAME_START);
                         break;
 
                     case 1: // enter settings
-                        if (state->menu != 2) {
-                            state->menu = 2;
-                            state->menu_pos = 0;
-                            state->menu_selected = false;
+                        if (state.menu != 2) {
+                            state.menu = 2;
+                            state.menu_pos = 0;
+                            state.menu_selected = false;
                             drawMenu(false);
                             return;
                         }
                         break;
 
                     case 2: // quit game
-                        state->set(STATE_QUIT);
+                        state.set(STATE_QUIT);
                         break;
                 }
             }
@@ -486,39 +484,39 @@ void Scenery::drawMenu(bool mouse_recheck) {
             strcpy(mtxt[2], "CANCEL");
             strcpy(mtxt[3], "ACCEPT");
 
-            if (state->menu_selected) {
-                switch (state->menu_pos) {
+            if (state.menu_selected) {
+                switch (state.menu_pos) {
                     case 0: // enter video settings
-                        state->menu = 3;
-                        state->menu_pos = 0;
+                        state.menu = 3;
+                        state.menu_pos = 0;
                         break;
 
                     case 1: // enter audio settings
-                        state->menu = 4;
-                        state->menu_pos = 0;
+                        state.menu = 4;
+                        state.menu_pos = 0;
                         break;
 
                     case 2: // cancel
-                        state->menu = 1;
-                        state->menu_pos = 1;
-                        state->config.aud_sfx = state->audio->volume_sfx;
-                        state->config.aud_music = state->audio->volume_music;
-                        state->config.aud_mixfreq = state->audio->mixer_frequency;
-                        for (int i=0; i<state->vid_sup_modes_count; i++) {
-                            if ( (state->vid_cfg_width  == state->vid_sup_modes[i]->w) &&
-                                 (state->vid_cfg_height == state->vid_sup_modes[i]->h) ) {
-                                 state->vid_cfg_mode = i;
+                        state.menu = 1;
+                        state.menu_pos = 1;
+                        state.config.aud_sfx = state.audio->volume_sfx;
+                        state.config.aud_music = state.audio->volume_music;
+                        state.config.aud_mixfreq = state.audio->mixer_frequency;
+                        for (int i=0; i<state.vid_sup_modes_count; i++) {
+                            if ( (state.vid_cfg_width  == state.vid_sup_modes[i]->w) &&
+                                 (state.vid_cfg_height == state.vid_sup_modes[i]->h) ) {
+                                 state.vid_cfg_mode = i;
                             }
                         }
-                        state->config.vid_aspect = state->vid_cfg_aspect_mode;
-                        state->config.vid_fullscreen = state->vid_cfg_fullscreen;
-                        state->config.vid_vsync = state->vid_cfg_vsync;
+                        state.config.vid_aspect = state.vid_cfg_aspect_mode;
+                        state.config.vid_fullscreen = state.vid_cfg_fullscreen;
+                        state.config.vid_vsync = state.vid_cfg_vsync;
                         break;
 
                     case 3: // accept
-                        state->menu = 1;
-                        state->menu_pos = 1;
-                        state->engine_restart = true;
+                        state.menu = 1;
+                        state.menu_pos = 1;
+                        state.engine_restart = true;
                         break;
                 }
             }
@@ -534,10 +532,10 @@ void Scenery::drawMenu(bool mouse_recheck) {
             mo = .32f;
 
             sprintf(mtxt[0], "VIDEO MODE:\n     %dX%d",
-              state->vid_sup_modes[state->vid_cfg_mode]->w,
-              state->vid_sup_modes[state->vid_cfg_mode]->h);
+              state.vid_sup_modes[state.vid_cfg_mode]->w,
+              state.vid_sup_modes[state.vid_cfg_mode]->h);
 
-            switch(state->config.vid_aspect) {
+            switch(state.config.vid_aspect) {
                 case 1:
                     strcpy(mtxt[1], "ASPECT RATIO:\n     4:3");
                     break;
@@ -551,50 +549,58 @@ void Scenery::drawMenu(bool mouse_recheck) {
                     strcpy(mtxt[1], "ASPECT RATIO:\n     AUTO");
             }
 
-            if (state->config.vid_fullscreen)
+            if (state.config.vid_fullscreen)
                 strcpy(mtxt[2], "FULL SCREEN:\n     ENABLED");
             else
                 strcpy(mtxt[2], "FULL SCREEN:\n     DISABLED");
 
-            if (state->config.vid_vsync)
+            if (state.config.vid_vsync)
                 strcpy(mtxt[3], "VERTICAL SYNC:\n     ENABLED");
             else
                 strcpy(mtxt[3], "VERTICAL SYNC:\n     DISABLED");
 
             strcpy(mtxt[4], "RETURN");
 
-            if (state->menu_selected) {
-                switch (state->menu_pos) {
+            if (state.menu_selected) {
+                switch (state.menu_pos) {
                     case 0: // toggle video mode
-                        state->vid_cfg_mode--;
-                        if (state->vid_cfg_mode < 0)
-                            state->vid_cfg_mode = state->vid_sup_modes_count-1;
-                        while ( (state->vid_sup_modes[state->vid_cfg_mode]->w < 800) ||
-                            (state->vid_sup_modes[state->vid_cfg_mode]->h < 600) ) {
-                            state->vid_cfg_mode--;
-                            if (state->vid_cfg_mode < 0)
-                                state->vid_cfg_mode = state->vid_sup_modes_count-1;
+                        state.vid_cfg_mode--;
+
+                        if (state.vid_cfg_mode < 0) {
+                            state.vid_cfg_mode = state.vid_sup_modes_count-1;
+                        }
+
+                        while (
+                            state.vid_sup_modes[state.vid_cfg_mode]->w < 800 ||
+                            state.vid_sup_modes[state.vid_cfg_mode]->h < 600
+                        ) {
+                            state.vid_cfg_mode--;
+
+                            if (state.vid_cfg_mode < 0) {
+                                state.vid_cfg_mode = state.vid_sup_modes_count-1;
                             }
+                        }
                         break;
 
-                    case 1: // toggle aspect ration
-                        state->config.vid_aspect++;
-                        if (state->config.vid_aspect > 3) {
-                            state->config.vid_aspect = 0;
+                    case 1: // toggle aspect ratio
+                        state.config.vid_aspect++;
+
+                        if (state.config.vid_aspect > 3) {
+                            state.config.vid_aspect = 0;
                         }
                         break;
 
                     case 2: // toggle fullscreen on/off
-                        state->config.vid_fullscreen = !state->config.vid_fullscreen;
+                        state.config.vid_fullscreen = !state.config.vid_fullscreen;
                         break;
 
                     case 3: // toggle vsync on/off
-                        state->config.vid_vsync = !state->config.vid_vsync;
+                        state.config.vid_vsync = !state.config.vid_vsync;
                         break;
 
                     case 4: // return
-                        state->menu_pos = 0;
-                        state->menu = 2;
+                        state.menu_pos = 0;
+                        state.menu = 2;
                         break;
                 }
             }
@@ -608,7 +614,7 @@ void Scenery::drawMenu(bool mouse_recheck) {
             mf = 75;
             mo = .375f;
 
-            switch(state->config.aud_sfx) {
+            switch(state.config.aud_sfx) {
                 case 0:
                     strcpy(mtxt[0], "SOUND FX:\n     MUTED");
                     break;
@@ -629,7 +635,7 @@ void Scenery::drawMenu(bool mouse_recheck) {
                     strcpy(mtxt[0], "SOUND FX:\n     DISABLED");
             }
 
-            switch(state->config.aud_music) {
+            switch(state.config.aud_music) {
                 case 0:
                     strcpy(mtxt[1], "MUSIC:\n     MUTED");
                     break;
@@ -650,38 +656,42 @@ void Scenery::drawMenu(bool mouse_recheck) {
                     strcpy(mtxt[1], "MUSIC:\n     DISABLED");
             }
 
-            sprintf(mtxt[2], "MIXER QUALITY:\n     %d HZ", state->config.aud_mixfreq);
+            sprintf(mtxt[2], "MIXER QUALITY:\n     %d HZ", state.config.aud_mixfreq);
             strcpy(mtxt[3], "RETURN");
 
-            if (state->menu_selected) {
-                switch (state->menu_pos) {
+            if (state.menu_selected) {
+                switch (state.menu_pos) {
                     case 0: // toggle SFX volume
-                        if (state->config.aud_sfx != -1) {
-                            state->config.aud_sfx++;
-                            if (state->config.aud_sfx > 3)
-                                state->config.aud_sfx = 0;
+                        if (state.config.aud_sfx != -1) {
+                            state.config.aud_sfx++;
+
+                            if (state.config.aud_sfx > 3) {
+                                state.config.aud_sfx = 0;
+                            }
                         }
                         break;
 
                     case 1: // toggle music volume
-                        if (state->config.aud_music != -1) {
-                            state->config.aud_music++;
-                            if (state->config.aud_music > 3)
-                                state->config.aud_music = 0;
+                        if (state.config.aud_music != -1) {
+                            state.config.aud_music++;
+
+                            if (state.config.aud_music > 3) {
+                                state.config.aud_music = 0;
+                            }
                         }
                         break;
 
                     case 2: // toggle mixer frequency
-                        if (state->config.aud_mixfreq == 22050) {
-                            state->config.aud_mixfreq = 44100;
+                        if (state.config.aud_mixfreq == 22050) {
+                            state.config.aud_mixfreq = 44100;
                         } else {
-                            state->config.aud_mixfreq = 22050;
+                            state.config.aud_mixfreq = 22050;
                         }
                         break;
 
                     case 3: // return
-                        state->menu = 2;
-                        state->menu_pos = 1;
+                        state.menu = 2;
+                        state.menu_pos = 1;
                         break;
                 }
             }
@@ -692,33 +702,36 @@ void Scenery::drawMenu(bool mouse_recheck) {
             return;
     }
 
-    if (state->menu_selected) {
-        state->menu_selected = false;
-        drawMenu(state->mouse_button & SDL_BUTTON(1));
+    if (state.menu_selected) {
+        state.menu_selected = false;
+        drawMenu(state.mouse_button & SDL_BUTTON(1));
         return;
     }
 
     // check mouse position
-    if (state->mouse_moved || (state->mouse_button & SDL_BUTTON(1)) || mouse_recheck) {
+    if (state.mouse_moved || (state.mouse_button & SDL_BUTTON(1)) || mouse_recheck) {
         for (i=0; i<numentries; i++) {
 
-            if ( (state->mouse_y <= .285f - (float(i)   * mh * .505f)) &&
-                 (state->mouse_y >  .285f - (float(i+1) * mh * .505f)) &&
-                 (state->mouse_x > -2.48f) &&
-                 (state->mouse_x < -.55f) ) {
-
-                state->menu_pos = i;
+            if (
+                (state.mouse_y <= .285f - (float(i)   * mh * .505f)) &&
+                (state.mouse_y >  .285f - (float(i+1) * mh * .505f)) &&
+                (state.mouse_x > -2.48f) &&
+                (state.mouse_x < -.55f)
+            ) {
+                state.menu_pos = i;
 
                 // mouse pressed?
-                if (state->mouse_pressed && !mouse_recheck) {
-                    state->menu_selected = true;
-                    state->mouse_pressed = false;
+                if (state.mouse_pressed && !mouse_recheck) {
+                    state.menu_selected = true;
+                    state.mouse_pressed = false;
 
-                    if ( (state->menu == 1 && state->menu_pos == 2) ||
-                         (state->menu == 2 && state->menu_pos == 2) ) {
-                        state->audio->playSample(1, 128, 0);
+                    if (
+                        (state.menu == 1 && state.menu_pos == 2) ||
+                        (state.menu == 2 && state.menu_pos == 2)
+                    ) {
+                        state.audio->playSample(1, 128, 0);
                     } else {
-                        state->audio->playSample(0, 128, 0);
+                        state.audio->playSample(0, 128, 0);
                     }
 
                     drawMenu(true);
@@ -728,25 +741,25 @@ void Scenery::drawMenu(bool mouse_recheck) {
         }
     }
 
-    if (state->menu_pos >= numentries)
-        state->menu_pos = numentries-1;
+    if (state.menu_pos >= numentries)
+        state.menu_pos = numentries-1;
 
-    if (state->menu_pos < 0)
-        state->menu_pos = 0;
+    if (state.menu_pos < 0)
+        state.menu_pos = 0;
 
-    if (state->get() >= STATE_GAME_START) {
-        m_a = (float)state->title_ypos;
+    if (state.get() >= STATE_GAME_START) {
+        m_a = (float)state.title_ypos;
     }
 
     // draw player's ship
-    player->setPos(state->player, 4.3f, -1.0f, -3.0f);
-    player->setRot(state->player, 20.0f, 0, player->getRotZ(state->player) - (state->timer_adjustment * .2f));
+    player->setPos(state.player, 4.3f, -1.0f, -3.0f);
+    player->setRot(state.player, 20.0f, 0, player->getRotZ(state.player) - (state.timer_adjustment * .2f));
     player->draw();
 
     // draw menu background
     glLoadIdentity();
     glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_MENU_1]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
     glTranslatef(0, -0.8f, -10);
     glColor4f(1, 1, 1, .01f*m_a);
     glBegin (GL_QUADS);
@@ -774,10 +787,10 @@ void Scenery::drawMenu(bool mouse_recheck) {
     for (i=0; i<numentries; i++) {
         drawText(mtxt[i], mx-3.0f, my-(i*mh)+mo, -9.9f, mf, 1, .8f, .55f, .0085f*m_a);
 
-        if (i == state->menu_pos) {
+        if (i == state.menu_pos) {
             glLoadIdentity();
             glPushMatrix();
-            glBindTexture(GL_TEXTURE_2D, state->texture[T_MENU_2]);
+            glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_2]);
             glTranslatef(-4.9f, (my-(i*mh)), -9.95f);
             glColor4f(.01f*m_a, .01f*m_a, .01f*m_a, 0.2f*m_a);
             glBegin (GL_QUADS);
@@ -812,11 +825,11 @@ void Scenery::drawBackground() {
     glDisable(GL_CULL_FACE);
 
     // background
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_BACKGROUND_1]);
-    glRotatef(state->stars_rotation_pos, 0, 0, 1);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_BACKGROUND_1]);
+    glRotatef(state.stars_rotation_pos, 0, 0, 1);
     glPushMatrix();
     glTranslatef(0, 0, 0);
-    glColor4f(.65f, .7f, .8f, state->global_alpha * .01f);
+    glColor4f(.65f, .7f, .8f, state.global_alpha * .01f);
     glBegin (GL_QUADS);
       glTexCoord2i (0, 0);
       glVertex2i (-260, 260);
@@ -832,12 +845,12 @@ void Scenery::drawBackground() {
     glEnd();
     glPopMatrix();
 
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_STAR]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_STAR]);
 
     // far stars
-    for (i=0; i<(state->engine_stars-state->engine_stars_warp); ++i) {
+    for (i=0; i<(state.engine_stars-state.engine_stars_warp); ++i) {
         c = stars[i][3];
-        a = ((500.0f+stars[i][2])/250.0f) * (.0075f * state->global_alpha);
+        a = ((500.0f+stars[i][2])/250.0f) * (.0075f * state.global_alpha);
 
         glPushMatrix();
         glTranslatef(stars[i][0], stars[i][1], stars[i][2]);
@@ -862,13 +875,13 @@ void Scenery::drawBackground() {
     }
 
     // warp stars
-    if (state->stars_warp) {
+    if (state.stars_warp) {
 
-        for (i=(state->engine_stars - state->engine_stars_warp); i<state->engine_stars; ++i) {
+        for (i=(state.engine_stars - state.engine_stars_warp); i<state.engine_stars; ++i) {
             c = stars[i][3];
-            a = ((500.0f+stars[i][2])/250.0f) * (.0075f * state->global_alpha);
-            sl = (a*3.5f) * (a*3.5f) * (state->stars_speed - .3f);
-            sa = .6f * (state->stars_speed - .3f);
+            a = ((500.0f+stars[i][2])/250.0f) * (.0075f * state.global_alpha);
+            sl = (a*3.5f) * (a*3.5f) * (state.stars_speed - .3f);
+            sa = .6f * (state.stars_speed - .3f);
 
             glPushMatrix();
             glTranslatef(stars[i][0], stars[i][1], stars[i][2]);
@@ -905,11 +918,11 @@ void Scenery::drawBackground() {
 void Scenery::drawMouse() {
     glLoadIdentity();
 
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_CURSOR]);
-    glColor4f(1, 1, 1, .01f*state->global_alpha);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_CURSOR]);
+    glColor4f(1, 1, 1, .01f * state.global_alpha);
 
     glPushMatrix();
-    glTranslatef(state->mouse_x, state->mouse_y, -5.0f);
+    glTranslatef(state.mouse_x, state.mouse_y, -5.0f);
     glBegin (GL_QUADS);
       glTexCoord2f (0, 0);
       glVertex3f (-.1f, .1f, 0);
@@ -933,25 +946,25 @@ void Scenery::drawObjects() {
     int i;
     float alpha;
 
-    state->objects[state->player].target = -1;
+    state.objects[state.player].target = -1;
 
-    for (i=0; i<state->lvl_entities; i++) {
-        if (state->objects[i].state == OBJ_STATE_IDLE) {
+    for (i = 0; i < state.lvl_entities; i++) {
+        if (state.objects[i].state == OBJ_STATE_IDLE) {
             continue;
         }
 
-        if (state->objects[i].type == OBJ_TYPE_COLLIDER ||
-            state->objects[i].type == OBJ_TYPE_POWERUP) {
+        if (state.objects[i].type == OBJ_TYPE_COLLIDER ||
+            state.objects[i].type == OBJ_TYPE_POWERUP) {
             player->getTarget(i);
         }
     }
 
-    for (i=0; i<state->lvl_entities; i++) {
-        if (state->objects[i].state == OBJ_STATE_IDLE) {
+    for (i=0; i<state.lvl_entities; i++) {
+        if (state.objects[i].state == OBJ_STATE_IDLE) {
             continue;
         }
 
-        switch(state->objects[i].id) {
+        switch(state.objects[i].id) {
             case OBJ_PLAYER:
                 player->draw();
                 break;
@@ -970,48 +983,49 @@ void Scenery::drawObjects() {
                 break;
             case OBJ_EXPLOSION_1:
                 glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state->texture[T_EXPLOSION_1]);
+                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_1]);
                 explosion->draw(i);
                 break;
             case OBJ_EXPLOSION_2:
                 glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state->texture[T_EXPLOSION_2]);
+                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_2]);
                 explosion->draw(i);
                 break;
             case OBJ_EXPLOSION_3:
                 glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state->texture[T_EXPLOSION_2]);
+                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_2]);
                 explosion->draw(i);
                 break;
             case OBJ_EXPLOSION_4:
                 glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state->texture[T_STAR]);
+                glBindTexture(GL_TEXTURE_2D, state.texture[T_STAR]);
                 explosion->draw(i);
                 break;
             case OBJ_EXPLOSION_5:
                 glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state->texture[T_EXPLOSION_4]);
+                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_4]);
                 explosion->draw(i);
                 break;
             case OBJ_MISSILE_1:
                 glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state->texture[T_MISSILE_1]);
+                glBindTexture(GL_TEXTURE_2D, state.texture[T_MISSILE_1]);
 
-                alpha = (state->global_alpha * .005f) + ((state->objects[i].pos_z+200.0f)*.00002f);
+                alpha = (state.global_alpha * .005f) + ((state.objects[i].pos_z+200.0f)*.00002f);
+
                 if (alpha < 0) {
-                    state->remove(i);
+                    state.remove(i);
                     break;
                 }
 
                 glColor4f(.5f, 1.0f, .8f, alpha);
                 glPushMatrix();
                 glTranslatef(
-                  (state->objects[i].pos_x - state->cam_x) * E_RELATIVE_MOVEMENT,
-                  (state->objects[i].pos_y - state->cam_y) * E_RELATIVE_MOVEMENT,
-                  state->objects[i].pos_z
+                  (state.objects[i].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+                  (state.objects[i].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT,
+                  (state.objects[i].pos_z)
                 );
                 glRotatef(270, 0, 0, 1);
-                glScalef(state->objects[i].scale_x, state->objects[i].scale_y, state->objects[i].scale_z);
+                glScalef(state.objects[i].scale_x, state.objects[i].scale_y, state.objects[i].scale_z);
                 glBegin (GL_QUADS);
                   glTexCoord2f (0, 0);
                   glVertex3f (-3.0f, 0, 0);
@@ -1054,45 +1068,45 @@ void Scenery::drawHUD() {
     float t;
     char msg[16];
 
-    switch(state->get()) {
+    switch(state.get()) {
         case STATE_GAME_START:
-            t = (-6.413f * state->vid_cfg_aspect - state->hud_x) * .055f * state->timer_adjustment;
-            state->hud_x += t;
-            t = (4.905f + state->hud_y) * .055f * state->timer_adjustment;
-            state->hud_y -= t;
-            alpha = (100-state->title_ypos)*.01f;
+            t = (-6.413f * state.vid_cfg_aspect - state.hud_x) * .055f * state.timer_adjustment;
+            state.hud_x += t;
+            t = (4.905f + state.hud_y) * .055f * state.timer_adjustment;
+            state.hud_y -= t;
+            alpha = (100-state.title_ypos)*.01f;
             break;
         case STATE_GAME_NEXTLEVEL:
         case STATE_GAME_QUIT:
-            if (state->title_ypos > 0) {
-                state->hud_x -= state->title_ypos * .001f;
-                state->hud_y -= state->title_ypos * .001f;
+            if (state.title_ypos > 0) {
+                state.hud_x -= state.title_ypos * .001f;
+                state.hud_y -= state.title_ypos * .001f;
             }
-            alpha = (100-state->title_ypos)*.01f;
+            alpha = (100-state.title_ypos)*.01f;
             break;
         case STATE_GAME_LOOP:
-            if (state->objects[state->player].life <= 0) {
-                state->hud_x -= state->timer_adjustment * .01f;
-                state->hud_y -= state->timer_adjustment * .01f;
-                alpha -= state->timer_adjustment * .01f;
+            if (state.objects[state.player].life <= 0) {
+                state.hud_x -= state.timer_adjustment * .01f;
+                state.hud_y -= state.timer_adjustment * .01f;
+                alpha -= state.timer_adjustment * .01f;
             } else {
-                state->hud_x = -6.413f * state->vid_cfg_aspect;
-                state->hud_y = -4.905f;
-                alpha = (100.0f-float(state->title_ypos))*.01f;
+                state.hud_x = -6.413f * state.vid_cfg_aspect;
+                state.hud_y = -4.905f;
+                alpha = .01f * (100.0f - float(state.title_ypos));
             }
             break;
         default:
-            state->hud_x = .0f;
-            state->hud_y = -.8f;
-            alpha = (100.0f-float(state->title_ypos))*.01f;
+            state.hud_x = .0f;
+            state.hud_y = -.8f;
+            alpha = .01f * (100.0f - float(state.title_ypos));
     }
 
     glLoadIdentity();
 
     // lower right screen
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_MENU_1]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
     glPushMatrix();
-    glTranslatef(-state->hud_x - state->tilt_x * .01f, state->hud_y - state->tilt_y * .01f, -10);
+    glTranslatef(-state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glBegin (GL_QUADS);
       glColor4f(1, 1, 1, alpha * .5f);
       glTexCoord2i(0, 0);
@@ -1112,16 +1126,16 @@ void Scenery::drawHUD() {
     glEnd();
 
     // money
-    sprintf(msg, "%d $", state->objects[state->player].money);
+    sprintf(msg, "%d $", state.objects[state.player].money);
     drawText(msg, -4.6f, -1.2f, 0, 130, 1.0f, 1.0f, .3f, alpha * .85f);
     glPopMatrix();
 
     glLoadIdentity();
 
     // lower left screen
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_MENU_1]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
     glPushMatrix();
-    glTranslatef(state->hud_x - state->tilt_x * .01f, state->hud_y - state->tilt_y * .01f, -10);
+    glTranslatef(state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glColor4f(1, 1, 1, alpha * .5f);
     glBegin (GL_QUADS);
       glTexCoord2i(0, 0);
@@ -1141,9 +1155,9 @@ void Scenery::drawHUD() {
     glLoadIdentity();
 
     // life symbol
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_HUD_1]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_1]);
     glPushMatrix();
-    glTranslatef(state->hud_x + .5f - state->tilt_x*.01f, state->hud_y - .7f - state->tilt_y*.01f, -9.9f);
+    glTranslatef(state.hud_x + .5f - state.tilt_x*.01f, state.hud_y - .7f - state.tilt_y*.01f, -9.9f);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
       glTexCoord2i (0, 0);
@@ -1160,13 +1174,13 @@ void Scenery::drawHUD() {
     glEnd();
 
     // life bar
-    s = int(50.0f / ( (float(player->shield_max + 1) / float(state->objects[state->player].life + 1)) ));
+    s = int(50.0f / ( (float(player->shield_max + 1) / float(state.objects[state.player].life + 1)) ));
     for (i=0; i<s; i++) {
         drawText("I", .32f+.077f*i, -.15f, 0, 80, 1.0f, .4f, .2f, .85f*(1.0f-(.02f*((s+1)-i)))*alpha);
     }
 
     // energy symbol
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_HUD_2]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_2]);
     glTranslatef(0, -.375f, 0);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
@@ -1184,7 +1198,7 @@ void Scenery::drawHUD() {
     glEnd();
 
     // energy bar
-    e = int(50.0f/(((float)player->energy_max+1) / (float(state->objects[state->player].energy+1))));
+    e = int(50.0f/(((float)player->energy_max+1) / (float(state.objects[state.player].energy+1))));
     for (i=0; i<e; i++) {
         drawText("I", .32f+.077f*i, -.11f, 0, 80, .2f, .65f, 1.0f, .85f*(1.0f-(.02f*((e+1)-i)))*alpha);
     }
@@ -1202,25 +1216,25 @@ void Scenery::drawMessages() {
         .0f, -1.75f, -10.0f
     );
 
-    for (i=0; i<state->msg_num; i++) {
+    for (i=0; i<state.msg_num; i++) {
 
-        switch(state->msg[i].type) {
+        switch(state.msg[i].type) {
 
             case MSG_DAMAGE:
                 r = 1.0f;
-                g = .25f + state->msg[i].counter * .0055f;
-                b = .15f + state->msg[i].counter * .004f;
+                g = .25f + state.msg[i].counter * .0055f;
+                b = .15f + state.msg[i].counter * .004f;
                 break;
 
             case MSG_MONEY:
                 r = 1.0f;
-                g = 1.0f - state->msg[i].counter * .002f;
-                b = .3f + state->msg[i].counter * .0025f;
+                g = 1.0f - state.msg[i].counter * .002f;
+                b = .3f + state.msg[i].counter * .0025f;
                 break;
 
             case MSG_ENERGY:
-                r = .3f + state->msg[i].counter * .0025f;
-                g = .75f - state->msg[i].counter * .002f;
+                r = .3f + state.msg[i].counter * .0025f;
+                g = .75f - state.msg[i].counter * .002f;
                 b = 1.0f;
                 break;
 
@@ -1229,21 +1243,22 @@ void Scenery::drawMessages() {
 
         }
 
-        if (state->msg[i].direction_x > 0) {
-            x = state->msg[i].direction_x * (state->msg[i].counter * state->msg[i].counter * state->vid_cfg_aspect * .0003f);
+        if (state.msg[i].direction_x > 0) {
+            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_cfg_aspect * .0003f);
         } else {
-            x = state->msg[i].direction_x * (state->msg[i].counter * state->msg[i].counter * state->vid_cfg_aspect * .0004f);
+            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_cfg_aspect * .0004f);
         }
-        x += state->msg[i].direction_x * 1.0f;
-        y = -1.5f + state->msg[i].direction_y * (state->msg[i].counter * .0265f);
-        z = state->msg[i].counter * .01f;
+
+        x += state.msg[i].direction_x * 1.0f;
+        y = -1.5f + state.msg[i].direction_y * (state.msg[i].counter * .0265f);
+        z = state.msg[i].counter * .01f;
 
         drawText(
-            state->msg[i].text,
+            state.msg[i].text,
             x, y, z,
-            75.0f + state->msg[i].counter * .75f,
+            75.0f + state.msg[i].counter * .75f,
             r, g, b,
-            1.0f - state->msg[i].counter * .01f
+            1.0f - state.msg[i].counter * .01f
         );
     }
 
@@ -1258,10 +1273,10 @@ void Scenery::moveObjects() {
     int sangle = 0;
     float dx, dy, dz, da, dd, ix, iy, s;
     float mx, my, mz, ox, oy, oz;
-    static GLuint nextdebris = state->timer;
+    static GLuint nextdebris = state.timer;
 
-    if ((state->timer > nextdebris) && (state->lvl_pos < float(state->lvl_length-1000))) {
-        nextdebris = state->timer + 150 + rand() % 150;
+    if ((state.timer > nextdebris) && (state.lvl_pos < float(state.lvl_length-1000))) {
+        nextdebris = state.timer + 150 + rand() % 150;
 
         object_t new_debris;
 
@@ -1291,28 +1306,28 @@ void Scenery::moveObjects() {
         new_debris.scale_y   = 25.0f + float(rand() % 500) * .2f;
         new_debris.scale_z   = 25.0f + float(rand() % 500) * .2f;
 
-        state->add(&new_debris);
+        state.add(&new_debris);
     }
 
     explosion->move(-1);
     powerup->move(-1);
 
-    state->audio->updatePosition(state->objects[state->player].pos_x - state->cam_x);
+    state.audio->updatePosition(state.objects[state.player].pos_x - state.cam_x);
 
-    for (i=0; i<state->lvl_entities; i++) {
+    for (i = 0; i < state.lvl_entities; i++) {
 
         // activate idle object
-        if (state->objects[i].state == OBJ_STATE_IDLE) {
-            if (state->lvl_pos > state->objects[i].pos_z) {
-                state->objects[i].state = OBJ_STATE_ACTIVE;
-                state->objects[i].pos_z = -9999.0f;
+        if (state.objects[i].state == OBJ_STATE_IDLE) {
+            if (state.lvl_pos > state.objects[i].pos_z) {
+                state.objects[i].state = OBJ_STATE_ACTIVE;
+                state.objects[i].pos_z = -9999.0f;
             } else {
                 continue;
             }
         }
 
         // move object
-        switch (state->objects[i].id) {
+        switch (state.objects[i].id) {
             case OBJ_PLAYER:
                 player->move();
                 break;
@@ -1326,11 +1341,12 @@ void Scenery::moveObjects() {
                 break;
 
             case OBJ_MISSILE_1:
-                state->objects[i].pos_x += state->timer_adjustment * state->objects[i].rsp_x;
-                state->objects[i].pos_y += state->timer_adjustment * state->objects[i].rsp_y;
-                state->objects[i].pos_z += state->timer_adjustment * state->objects[i].speed;
-                if (state->objects[i].pos_z < -10000.0f) {
-                    state->remove(i);
+                state.objects[i].pos_x += state.timer_adjustment * state.objects[i].rsp_x;
+                state.objects[i].pos_y += state.timer_adjustment * state.objects[i].rsp_y;
+                state.objects[i].pos_z += state.timer_adjustment * state.objects[i].speed;
+
+                if (state.objects[i].pos_z < -10000.0f) {
+                    state.remove(i);
                     continue;
                 }
                 break;
@@ -1340,28 +1356,28 @@ void Scenery::moveObjects() {
         }
 
         // collision detection
-        switch (state->objects[i].type) {
+        switch (state.objects[i].type) {
 
             // missiles are checked against colliders and obstacles
             case OBJ_TYPE_MISSILE:
-                for (j=0; j<state->lvl_entities; j++) {
+                for (j = 0; j < state.lvl_entities; j++) {
 
                     // missiles only hit colliders
-                    if ( (state->objects[j].state == OBJ_STATE_IDLE) ||
-                         (state->objects[j].type != OBJ_TYPE_COLLIDER) ) continue;
+                    if ( (state.objects[j].state == OBJ_STATE_IDLE) ||
+                         (state.objects[j].type != OBJ_TYPE_COLLIDER) ) continue;
 
                     // colliders have already passed by
-                    if (state->objects[i].pos_z < state->objects[j].pos_z) continue;
+                    if (state.objects[i].pos_z < state.objects[j].pos_z) continue;
 
                     // missile's position in next frame
-                    mx = state->objects[i].pos_x;
-                    my = state->objects[i].pos_y;
-                    mz = state->objects[i].pos_z + (state->objects[i].speed * state->timer_adjustment);
+                    mx = state.objects[i].pos_x;
+                    my = state.objects[i].pos_y;
+                    mz = state.objects[i].pos_z + (state.objects[i].speed * state.timer_adjustment);
 
                     // object's position in next frame
-                    ox = state->objects[j].pos_x;
-                    oy = state->objects[j].pos_y;
-                    oz = state->objects[j].pos_z + (state->objects[j].speed * state->timer_adjustment);
+                    ox = state.objects[j].pos_x;
+                    oy = state.objects[j].pos_y;
+                    oz = state.objects[j].pos_z + (state.objects[j].speed * state.timer_adjustment);
 
                     // distance between object and missile in next frame
                     dx = fabs(mx - ox);
@@ -1370,62 +1386,62 @@ void Scenery::moveObjects() {
 
                     // object's size
                     s = ((10000.0f + oz) * .0001f) /
-                           isqrt( state->objects[j].scale_x * state->objects[j].scale_x +
-                                  state->objects[j].scale_y * state->objects[j].scale_y +
-                                  state->objects[j].scale_z * state->objects[j].scale_z
+                           isqrt( state.objects[j].scale_x * state.objects[j].scale_x +
+                                  state.objects[j].scale_y * state.objects[j].scale_y +
+                                  state.objects[j].scale_z * state.objects[j].scale_z
                             );
 
                     if ( (dx < s*.5f) && (dy < s*.5f) && (dz < s) ) {
 
-                        if (state->objects[i].pos_x < 0) {
-                            sangle = 360 + (int)(state->objects[j].pos_x / 2.8f);
+                        if (state.objects[i].pos_x < 0) {
+                            sangle = 360 + (int)(state.objects[j].pos_x / 2.8f);
                         } else {
-                            sangle = (int)(state->objects[j].pos_x / 2.8f);
+                            sangle = (int)(state.objects[j].pos_x / 2.8f);
                         }
-                        state->audio->playSample(4, 255, sangle);
+                        state.audio->playSample(4, 255, sangle);
 
-                        state->objects[j].life -= player->gun_power;
+                        state.objects[j].life -= player->gun_power;
 
-                        if (state->objects[j].life > 0) {
+                        if (state.objects[j].life > 0) {
                             // gun impact
                             explosion->add(
                                 OBJ_EXPLOSION_1,
-                                state->objects[i].pos_x,
-                                state->objects[i].pos_y,
-                                state->objects[j].pos_z + s,
-                                state->objects[j].speed
+                                state.objects[i].pos_x,
+                                state.objects[i].pos_y,
+                                state.objects[j].pos_z + s,
+                                state.objects[j].speed
                             );
                         } else {
-                            if (state->objects[j].id == OBJ_ASTEROID_1) {
+                            if (state.objects[j].id == OBJ_ASTEROID_1) {
                                 // smoke
                                 explosion->add(
                                     OBJ_EXPLOSION_2,
-                                    state->objects[j].pos_x,
-                                    state->objects[j].pos_y,
-                                    state->objects[j].pos_z + .2f,
-                                    state->objects[j].speed
+                                    state.objects[j].pos_x,
+                                    state.objects[j].pos_y,
+                                    state.objects[j].pos_z + .2f,
+                                    state.objects[j].speed
                                 );
                             } else {
                                 explosion->add(
                                     // nova
                                     OBJ_EXPLOSION_5,
-                                    state->objects[j].pos_x,
-                                    state->objects[j].pos_y,
-                                    state->objects[j].pos_z,
-                                    state->objects[j].speed
+                                    state.objects[j].pos_x,
+                                    state.objects[j].pos_y,
+                                    state.objects[j].pos_z,
+                                    state.objects[j].speed
                                 );
                             }
 
                             explosion->add(
                                 OBJ_EXPLOSION_3,
-                                state->objects[j].pos_x,
-                                state->objects[j].pos_y,
-                                state->objects[j].pos_z,
-                                state->objects[j].speed
+                                state.objects[j].pos_x,
+                                state.objects[j].pos_y,
+                                state.objects[j].pos_z,
+                                state.objects[j].speed
                             );
 
                             // nearby explosion causes impulse and camera tilt
-                            dz = fabs(state->objects[state->player].pos_z - state->objects[j].pos_z - s);
+                            dz = fabs(state.objects[state.player].pos_z - state.objects[j].pos_z - s);
                             dd = 1.0f / isqrt(dx*dx + dy*dy + dz*dz);
                             if (dd < 2000.0f) {
                                 player->tilt((2000.0f - dd) * .01f);
@@ -1436,37 +1452,41 @@ void Scenery::moveObjects() {
                                 // calculate horizontal crash impulse
                                 ix = dd * cos(da);
                                 if (ix > .25f) ix = .25f;
-                                if (state->objects[state->player].pos_x > state->objects[i].pos_x) {
+                                if (state.objects[state.player].pos_x > state.objects[i].pos_x) {
                                     ix *= -1.0f;
                                 }
 
                                 // calculate vertical crash impulse
                                 iy = dd * sin(da);
                                 if (iy > .25f) iy = .25f;
-                                if (state->objects[state->player].pos_y > state->objects[i].pos_y) {
+                                if (state.objects[state.player].pos_y > state.objects[i].pos_y) {
                                     iy *= -1.0f;
                                 }
 
                                 // transmit impulse to ship
-                                player->addSpeed(state->player, ix, iy, .0f);
+                                player->addSpeed(state.player, ix, iy, .0f);
 
                                 dmg = 20 - int((fabs(ix)+fabs(iy))*40.0f);
                                 if (dmg > 0) {
-                                    state->addMessage(dmg, MSG_DAMAGE);
-                                    state->objects[state->player].life -= dmg;
-                                    if (state->objects[state->player].life <= 0) {
-                                        player->setSpin(state->player, ix, iy, 0);
-                                        state->audio->stopSampleLoop(1000);
-                                        if (state->config.aud_music > 0) state->audio->stopMusic(5000);
+                                    state.addMessage(dmg, MSG_DAMAGE);
+                                    state.objects[state.player].life -= dmg;
+
+                                    if (state.objects[state.player].life <= 0) {
+                                        player->setSpin(state.player, ix, iy, 0);
+                                        state.audio->stopSampleLoop(1000);
+
+                                        if (state.config.aud_music > 0) {
+                                            state.audio->stopMusic(5000);
+                                        }
                                     }
                                 }
                             }
 
-                            state->explode(j);
+                            state.explode(j);
                         }
 
                         // remove missile after collision
-                        state->remove(i);
+                        state.remove(i);
                         break;
                     }
                 }
@@ -1476,14 +1496,14 @@ void Scenery::moveObjects() {
             case OBJ_TYPE_COLLIDER:
             case OBJ_TYPE_POWERUP:
                 // players's position in next frame
-                mx = state->objects[state->player].pos_x;
-                my = state->objects[state->player].pos_y;
-                mz = state->objects[state->player].pos_z - (state->objects[state->player].speed * state->timer_adjustment);
+                mx = state.objects[state.player].pos_x;
+                my = state.objects[state.player].pos_y;
+                mz = state.objects[state.player].pos_z - (state.objects[state.player].speed * state.timer_adjustment);
 
                 // object's position in next frame
-                ox = state->objects[i].pos_x;
-                oy = state->objects[i].pos_y;
-                oz = state->objects[i].pos_z + (state->objects[i].speed * state->timer_adjustment);
+                ox = state.objects[i].pos_x;
+                oy = state.objects[i].pos_y;
+                oz = state.objects[i].pos_z + (state.objects[i].speed * state.timer_adjustment);
 
                 // distance between player and object in next frame
                 dx = fabs(mx - ox);
@@ -1492,21 +1512,21 @@ void Scenery::moveObjects() {
 
                 // object's size
                 s = ((10000.0f + oz) * .0000625f) /
-                        isqrt( state->objects[i].scale_x * state->objects[i].scale_x +
-                               state->objects[i].scale_y * state->objects[i].scale_y +
-                               state->objects[i].scale_z * state->objects[i].scale_z );
+                        isqrt( state.objects[i].scale_x * state.objects[i].scale_x +
+                               state.objects[i].scale_y * state.objects[i].scale_y +
+                               state.objects[i].scale_z * state.objects[i].scale_z );
 
                 if ( (dx < s) && (dy < s) && (dz < s * 1.75f) ) {
 
                     // pick up powerup
-                    if (state->objects[i].type == OBJ_TYPE_POWERUP) {
-                        state->explode(i);
+                    if (state.objects[i].type == OBJ_TYPE_POWERUP) {
+                        state.explode(i);
                         break;
                     }
 
-                    static float lastcrash = state->timer - 201;
-                    if ( (state->timer - lastcrash) <= 200) break;
-                    lastcrash = state->timer;
+                    static float lastcrash = state.timer - 201;
+                    if ( (state.timer - lastcrash) <= 200) break;
+                    lastcrash = state.timer;
 
                     // calculate object's absolute distance and angle
                     dd = 1.0f / isqrt(dx*dx + dy*dy);
@@ -1515,84 +1535,84 @@ void Scenery::moveObjects() {
                     // calculate horizontal crash impulse
                     ix = (s/dd) * cos(da);
                     if (ix > .65f) ix = .65f;
-                    if (state->objects[state->player].pos_x > state->objects[i].pos_x) {
+                    if (state.objects[state.player].pos_x > state.objects[i].pos_x) {
                         ix *= -1.0f;
                     }
 
                     // calculate vertical crash impulse
                     iy = (s/dd) * sin(da);
                     if (iy > .65f) iy = .65f;
-                    if (state->objects[state->player].pos_y > state->objects[i].pos_y) {
+                    if (state.objects[state.player].pos_y > state.objects[i].pos_y) {
                         iy *= -1.0f;
                     }
 
                     // transmit impulse to ship and tilt camera
-                    player->addSpeed(state->player, ix, iy, 0);
+                    player->addSpeed(state.player, ix, iy, 0);
                     player->tilt((fabs(ix)+fabs(iy)) * 15.0f );
 
                     // calculate damage
-                    dmg = 25 + int(float(da)*.75f*float(state->objects[i].life));
-                    if (dmg > state->objects[i].life) dmg = state->objects[i].life;
+                    dmg = 25 + int(float(da)*.75f*float(state.objects[i].life));
+                    if (dmg > state.objects[i].life) dmg = state.objects[i].life;
                     if (dmg == 0) break;
 
                     // collision noise
-                    state->audio->playSample(7, 192, 180);
-                    if (state->objects[state->player].life <= 0) break;
+                    state.audio->playSample(7, 192, 180);
+                    if (state.objects[state.player].life <= 0) break;
 
                     // damage ship & colliding object
-                    state->objects[i].life -= dmg;
-                    state->objects[state->player].life -= dmg;
-                    state->addMessage(dmg, MSG_DAMAGE);
+                    state.objects[i].life -= dmg;
+                    state.objects[state.player].life -= dmg;
+                    state.addMessage(dmg, MSG_DAMAGE);
 
                     // colliding object destroyed?
-                    if (state->objects[i].life < 1) {
+                    if (state.objects[i].life < 1) {
                         explosion->add(
                             OBJ_EXPLOSION_2,
-                            state->objects[i].pos_x,
-                            state->objects[i].pos_y,
-                            state->objects[i].pos_z + .2f,
-                            state->objects[i].speed
+                            state.objects[i].pos_x,
+                            state.objects[i].pos_y,
+                            state.objects[i].pos_z + .2f,
+                            state.objects[i].speed
                         );
 
                         explosion->add(
                             OBJ_EXPLOSION_3,
-                            state->objects[i].pos_x,
-                            state->objects[i].pos_y,
-                            state->objects[i].pos_z,
-                            state->objects[i].speed
+                            state.objects[i].pos_x,
+                            state.objects[i].pos_y,
+                            state.objects[i].pos_z,
+                            state.objects[i].speed
                         );
 
                         explosion->add(
                             OBJ_EXPLOSION_4,
-                            state->objects[i].pos_x,
-                            state->objects[i].pos_y,
-                            state->objects[i].pos_z + .1f,
-                            state->objects[i].speed
+                            state.objects[i].pos_x,
+                            state.objects[i].pos_y,
+                            state.objects[i].pos_z + .1f,
+                            state.objects[i].speed
                         );
 
-                        state->explode(i);
+                        state.explode(i);
                     } else {
                         // collision sparks
                         explosion->add(
                             OBJ_EXPLOSION_4,
-                            state->objects[i].pos_x + (state->objects[state->player].pos_x - state->objects[i].pos_x),
-                            state->objects[i].pos_y + (state->objects[state->player].pos_y - state->objects[i].pos_y),
-                            state->objects[i].pos_z + (state->objects[state->player].pos_z - state->objects[i].pos_z),
-                            state->objects[i].speed
+                            state.objects[i].pos_x + (state.objects[state.player].pos_x - state.objects[i].pos_x),
+                            state.objects[i].pos_y + (state.objects[state.player].pos_y - state.objects[i].pos_y),
+                            state.objects[i].pos_z + (state.objects[state.player].pos_z - state.objects[i].pos_z),
+                            state.objects[i].speed
                         );
                     }
 
                     // player's ship was destroyed
-                    if (state->objects[state->player].life <= 0) {
-                        state->engine_boundary = false;
+                    if (state.objects[state.player].life <= 0) {
+                        state.engine_boundary = false;
 
-                        state->audio->playSample(6, 200, 180);
-                        state->audio->playSample(7, 160, 180);
-                        state->audio->playSample(8, 255, 180);
+                        state.audio->playSample(6, 200, 180);
+                        state.audio->playSample(7, 160, 180);
+                        state.audio->playSample(8, 255, 180);
 
-                        player->setSpin(state->player, ix, iy, 0);
-                        state->audio->stopSampleLoop(1000);
-                        state->audio->stopMusic(5000);
+                        player->setSpin(state.player, ix, iy, 0);
+                        state.audio->stopSampleLoop(1000);
+                        state.audio->stopMusic(5000);
                     }
                 }
                 break;
@@ -1600,7 +1620,7 @@ void Scenery::moveObjects() {
         }
     }
 
-    state->sort();
+    state.sort();
 }
 
 /*
@@ -1609,14 +1629,14 @@ void Scenery::moveObjects() {
 void Scenery::moveMessages() {
     int i;
 
-    for (i=0; i<state->msg_num; i++) {
-        state->msg[i].counter += state->timer_adjustment * (.5f + state->msg[i].counter * .035f);
+    for (i=0; i<state.msg_num; i++) {
+        state.msg[i].counter += state.timer_adjustment * (.5f + state.msg[i].counter * .035f);
 
-        if (state->msg[i].counter > 100.0f) {
-            state->msg_num--;
+        if (state.msg[i].counter > 100.0f) {
+            state.msg_num--;
 
-            if (i < state->msg_num) {
-                memcpy(&state->msg[i], &state->msg[state->msg_num], sizeof(message_t));
+            if (i < state.msg_num) {
+                memcpy(&state.msg[i], &state.msg[state.msg_num], sizeof(message_t));
                 i--;
             }
         }
@@ -1630,116 +1650,135 @@ void Scenery::move() {
     int i;
 
     // move, rotate stars
-    for (i=0; i<state->engine_stars; i++) {
-        stars[i][2] += state->timer_adjustment * state->stars_speed;
+    for (i=0; i<state.engine_stars; i++) {
+        stars[i][2] += state.timer_adjustment * state.stars_speed;
         if (stars[i][2] > 300) stars[i][2] -= 1000;
     }
 
-    if (state->stars_rotation) {
-        state->stars_rotation_pos -= state->timer_adjustment * state->stars_rotation_speed;
+    if (state.stars_rotation) {
+        state.stars_rotation_pos -= state.timer_adjustment * state.stars_rotation_speed;
     }
 
-    switch (state->get()) {
+    switch (state.get()) {
         case STATE_MENU:
-            if (state->title_ypos < 99.85f) {
-                state->title_ypos += (100.1f-state->title_ypos)*state->timer_adjustment * .025f;
-                state->global_alpha = (int)state->title_ypos;
+            if (state.title_ypos < 99.85f) {
+                state.title_ypos += (100.1f-state.title_ypos) * state.timer_adjustment * .025f;
+                state.global_alpha = (int)state.title_ypos;
             }
             break;
 
         case STATE_QUIT:
-            if (state->title_ypos > 0) {
-                state->title_ypos -= (100.1f-state->title_ypos)*state->timer_adjustment * .15f;
-                state->global_alpha = (int)state->title_ypos;
+            if (state.title_ypos > 0) {
+                state.title_ypos -= (100.1f-state.title_ypos) * state.timer_adjustment * .15f;
+                state.global_alpha = (int)state.title_ypos;
             } else {
-                state->set(STATE_CLOSE);
+                state.set(STATE_CLOSE);
             }
             break;
 
         case STATE_GAME_START:
-            if (state->title_ypos > 0) {
-                state->title_ypos -= (100.1f-state->title_ypos)*state->timer_adjustment*.15f;
-                state->stars_rotation_speed = .05f * state->title_ypos * .01f;
+            if (state.title_ypos > 0) {
+                state.title_ypos -= (100.1f-state.title_ypos) * state.timer_adjustment * .15f;
+                state.stars_rotation_speed = .05f * state.title_ypos * .01f;
             }
-            if (state->stars_speed > .3f) {
-                state->stars_speed -= (state->stars_speed - .2f) * .02f * state->timer_adjustment;
-            } else if (state->lvl_loaded) {
-                state->set(STATE_GAME_LOOP);
+
+            if (state.stars_speed > .3f) {
+                state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
+            } else if (state.lvl_loaded) {
+                state.set(STATE_GAME_LOOP);
             } else {
-                state->set(STATE_QUIT);
+                state.set(STATE_QUIT);
             }
             break;
 
         case STATE_GAME_LOOP:
-            state->lvl_pos += state->timer_adjustment * 1.5f;
-            if ( (state->lvl_pos > state->lvl_length) &&
-                 (state->objects[state->player].life > 0) ) {
-                state->set(STATE_GAME_NEXTLEVEL);
+            state.lvl_pos += state.timer_adjustment * 1.5f;
+
+            if (
+                state.lvl_pos > state.lvl_length &&
+                state.objects[state.player].life > 0
+            ) {
+                state.set(STATE_GAME_NEXTLEVEL);
             }
+
             moveObjects();
             moveMessages();
 
-            if (state->lvl_pos < 50) {
-                player->accelerateZ(state->player, 17.5f);
+            if (state.lvl_pos < 50) {
+                player->accelerateZ(state.player, 17.5f);
             } else {
-                if (state->objects[state->player].life > 0) {
-                    player->accelerateZ(state->player, .0f);
+                if (state.objects[state.player].life > 0) {
+                    player->accelerateZ(state.player, .0f);
                 } else {
-                    player->accelerateZ(state->player, -4.0f);
+                    player->accelerateZ(state.player, -4.0f);
                 }
             }
 
             // update chasecam position
-            if (state->objects[state->player].life <= 0) {
-                if (state->cam_speed > .01f) {
-                    state->cam_speed -= (state->cam_speed + .015f) * .015f * state->timer_adjustment;
-                } else state->cam_speed = 0;
-                if (state->objects[state->player].pos_z > .0f) state->set(STATE_GAME_QUIT);
+            if (state.objects[state.player].life <= 0) {
+                if (state.cam_speed > .01f) {
+                    state.cam_speed -= (state.cam_speed + .015f) * .015f * state.timer_adjustment;
+                } else {
+                    state.cam_speed = 0;
+                }
+
+                if (state.objects[state.player].pos_z > .0f) {
+                    state.set(STATE_GAME_QUIT);
+                }
             } else {
-                if (state->cam_speed < .5f) {
-                    state->cam_speed += (.5f - state->cam_speed) * .01f * state->timer_adjustment;
+                if (state.cam_speed < .5f) {
+                    state.cam_speed += (.5f - state.cam_speed) * .01f * state.timer_adjustment;
                 }
             }
-            if (state->cam_speed > 0) {
-                state->cam_x += state->timer_adjustment * ( (state->objects[state->player].pos_x * state->cam_speed) - (state->cam_x * state->cam_speed)) * .15f;
-                state->cam_y += state->timer_adjustment * ( (state->objects[state->player].pos_y * state->cam_speed) - ((state->cam_y - state->cam_y_offset) * state->cam_speed)) * .175f;
+
+            if (state.cam_speed > 0) {
+                state.cam_x += state.timer_adjustment * ( (state.objects[state.player].pos_x * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
+                state.cam_y += state.timer_adjustment * ( (state.objects[state.player].pos_y * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
             }
             break;
 
         case STATE_GAME_NEXTLEVEL:
             moveObjects();
             moveMessages();
-            if (state->title_ypos < 99.85f) {
-                state->title_ypos += state->timer_adjustment * .375;
-                state->cam_y_offset = 35.0f + state->title_ypos * .85f;
-                if (state->title_ypos > 80.0f) {
-                    // jump!
-                    state->global_alpha = int(99.85f - (state->title_ypos - 80.0f) * 5.0f);
-                    player->accelerateZ(state->player, 350.0f);
+
+            if (state.title_ypos < 99.85f) {
+                state.title_ypos += state.timer_adjustment * .375;
+                state.cam_y_offset = 35.0f + state.title_ypos * .85f;
+
+                if (state.title_ypos > 80.0f) {
+                    state.global_alpha = int(99.85f - (state.title_ypos - 80.0f) * 5.0f);
+                    player->accelerateZ(state.player, 350.0f);
                 } else {
-                    state->global_alpha = 100;
-                    player->accelerateZ(state->player, state->title_ypos * state->title_ypos * -.0001f);
-                    player->tilt(state->title_ypos * .05f);
+                    state.global_alpha = 100;
+                    player->accelerateZ(state.player, state.title_ypos * state.title_ypos * -.0001f);
+                    player->tilt(state.title_ypos * .05f);
                 }
-                if (state->stars_speed < 1.75f) {
-                    state->stars_speed += (state->stars_speed - .1f) * .03f * state->timer_adjustment;
+
+                if (state.stars_speed < 1.75f) {
+                    state.stars_speed += (state.stars_speed - .1f) * .03f * state.timer_adjustment;
                 }
-                state->cam_x += state->timer_adjustment * ((state->objects[state->player].pos_x * state->cam_speed) - ((state->tilt_x * 2.0f + state->cam_x) * state->cam_speed)) * .15f;
-                state->cam_y += state->timer_adjustment * ((state->objects[state->player].pos_y * state->cam_speed) - ((state->tilt_y * 2.0f + state->cam_y - state->cam_y_offset) * state->cam_speed)) * .15f;
+
+                state.cam_x += state.timer_adjustment * ((state.objects[state.player].pos_x * state.cam_speed) - ((state.tilt_x * 2.0f + state.cam_x) * state.cam_speed)) * .15f;
+
+                state.cam_y += state.timer_adjustment * ((state.objects[state.player].pos_y * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
             } else {
-                state->set(STATE_MENU);
+                state.set(STATE_MENU);
             }
             break;
 
         case STATE_GAME_QUIT:
             moveObjects();
             moveMessages();
-            if (state->title_ypos < 99.85f) {
-                if (state->objects[state->player].life > 0) player->accelerateZ(state->player, -25.0f);
-                state->title_ypos += (100.1f - state->title_ypos) * state->timer_adjustment * .075f;
-                state->global_alpha = (int)(100.1f - state->title_ypos);
+
+            if (state.title_ypos < 99.85f) {
+                if (state.objects[state.player].life > 0) {
+                    player->accelerateZ(state.player, -25.0f);
+                }
+
+                state.title_ypos += (100.1f - state.title_ypos) * state.timer_adjustment * .075f;
+                state.global_alpha = (int)(100.1f - state.title_ypos);
             } else {
-                state->set(STATE_MENU);
+                state.set(STATE_MENU);
             }
             break;
     }
@@ -1751,11 +1790,11 @@ void Scenery::move() {
 void Scenery::draw() {
     float p_x, p_y;
 
-    if ( (state->get() >  STATE_GAME_START) &&
-         (state->get() <= STATE_GAME_QUIT) ) {
+    if ( (state.get() >  STATE_GAME_START) &&
+         (state.get() <= STATE_GAME_QUIT) ) {
 
-        p_x = state->objects[state->player].pos_x;
-        p_y = state->objects[state->player].pos_y;
+        p_x = state.objects[state.player].pos_x;
+        p_y = state.objects[state.player].pos_y;
 
         if (p_x < -600.0f) p_x = -600.0f;
         if (p_x >  600.0f) p_x =  600.0f;
@@ -1769,26 +1808,29 @@ void Scenery::draw() {
     // set up view
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     gluLookAt(
-      -p_x*.01f + state->tilt_x*.4f, -p_y*.01f + state->objects[state->player].s_y*10.0f + state->tilt_y*.4f, 200.0f,
-      state->objects[state->player].s_x*.5f, .0f, -10000.0f,
-      state->objects[state->player].s_x*.05f, -1.0f, .0f
+      -p_x*.01f + state.tilt_x*.4f, -p_y*.01f + state.objects[state.player].s_y*10.0f + state.tilt_y*.4f, 200.0f,
+      state.objects[state.player].s_x * .5f, .0f, -10000.0f,
+      state.objects[state.player].s_x * .05f, -1.0f, .0f
     );
 
     drawBackground();
 
-    if (state->get() >= STATE_GAME_START) {
+    if (state.get() >= STATE_GAME_START) {
         drawObjects();
         drawHUD();
         drawMessages();
     }
 
-    if (state->menu) {
+    if (state.menu) {
         drawMenu(false);
         drawTitle();
-        if (state->get() == STATE_MENU) drawMouse();
+
+        if (state.get() == STATE_MENU) {
+            drawMouse();
+        }
     }
 
-    if (state->fps_visible) {
+    if (state.fps_visible) {
         drawFPS();
     }
 }

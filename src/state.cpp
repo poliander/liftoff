@@ -360,6 +360,9 @@ bool State::set(int s) {
     char msg[255];
     int x, y;
 
+    sprintf(msg, "Setting global state %d\n", s);
+    log(msg);
+
     switch(s) {
         case STATE_MENU:
             timer_adjustment = 0;

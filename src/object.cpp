@@ -1,13 +1,12 @@
 #include "object.hpp"
 #include "state.hpp"
 
-Object::Object(State* sptr) {
-    memset(&model, 0, sizeof(struct obj_model_t));
-    state = sptr;
-
+Object::Object(State &s) : state(s) {
     alpha = 1.0f;
     shininess = 4.0f;
     brightness = 1.0f;
+
+    memset(&model, 0, sizeof(struct obj_model_t));
 }
 
 Object::~Object() {
@@ -333,91 +332,91 @@ bool Object::load(const char *datadir, const char *filename) {
 }
 
 void Object::setPos(int oid, float px, float py, float pz) {
-    state->objects[oid].pos_x = px;
-    state->objects[oid].pos_y = py;
-    state->objects[oid].pos_z = pz;
+    state.objects[oid].pos_x = px;
+    state.objects[oid].pos_y = py;
+    state.objects[oid].pos_z = pz;
 }
 
 void Object::addSpeed(int oid, float sx, float sy, float sz) {
-    state->objects[oid].s_x += sx;
-    state->objects[oid].s_y += sy;
-    state->objects[oid].s_z += sz;
+    state.objects[oid].s_x += sx;
+    state.objects[oid].s_y += sy;
+    state.objects[oid].s_z += sz;
 }
 
 void Object::accelerateX(int oid, float ax) {
-    state->objects[oid].a_x = ax;
+    state.objects[oid].a_x = ax;
 }
 
 void Object::accelerateY(int oid, float ay) {
-    state->objects[oid].a_y = ay;
+    state.objects[oid].a_y = ay;
 }
 
 void Object::accelerateZ(int oid, float az) {
-    state->objects[oid].a_z = az;
+    state.objects[oid].a_z = az;
 }
 
 void Object::setRot(int oid, float rx, float ry, float rz) {
-    state->objects[oid].rot_x = rx;
-    state->objects[oid].rot_y = ry;
-    state->objects[oid].rot_z = rz;
+    state.objects[oid].rot_x = rx;
+    state.objects[oid].rot_y = ry;
+    state.objects[oid].rot_z = rz;
 }
 
 float Object::getRotX(int oid) {
-    return state->objects[oid].rot_x;
+    return state.objects[oid].rot_x;
 }
 
 float Object::getRotY(int oid) {
-    return state->objects[oid].rot_y;
+    return state.objects[oid].rot_y;
 }
 
 float Object::getRotZ(int oid) {
-    return state->objects[oid].rot_z;
+    return state.objects[oid].rot_z;
 }
 
 void Object::setSpin(int oid, float sx, float sy, float sz) {
-    state->objects[oid].rsp_x = sx;
-    state->objects[oid].rsp_y = sy;
-    state->objects[oid].rsp_z = sz;
+    state.objects[oid].rsp_x = sx;
+    state.objects[oid].rsp_y = sy;
+    state.objects[oid].rsp_z = sz;
 }
 
 float Object::getSpinX(int oid) {
-    return state->objects[oid].rsp_x;
+    return state.objects[oid].rsp_x;
 }
 
 float Object::getSpinY(int oid) {
-    return state->objects[oid].rsp_y;
+    return state.objects[oid].rsp_y;
 }
 
 float Object::getSpinZ(int oid) {
-    return state->objects[oid].rsp_z;
+    return state.objects[oid].rsp_z;
 }
 
 void Object::move(int oid) {
-    if (state->objects[oid].type == OBJ_TYPE_SCENERY) {
-        if (state->objects[oid].id == OBJ_POWERUP_1) {
-            state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed);
-            state->objects[oid].cnt2 += state->timer_adjustment;
+    if (state.objects[oid].type == OBJ_TYPE_SCENERY) {
+        if (state.objects[oid].id == OBJ_POWERUP_1) {
+            state.objects[oid].pos_z += state.timer_adjustment * (state.objects[oid].speed + state.objects[state.player].speed);
+            state.objects[oid].cnt2 += state.timer_adjustment;
         } else {
-            state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed) * .5f;
+            state.objects[oid].pos_z += state.timer_adjustment * (state.objects[oid].speed + state.objects[state.player].speed) * .5f;
         }
     } else {
-        state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed);
+        state.objects[oid].pos_z += state.timer_adjustment * (state.objects[oid].speed + state.objects[state.player].speed);
     }
 
-    state->objects[oid].rot_x += state->objects[oid].rsp_x * state->timer_adjustment * .1f;
-    if (state->objects[oid].rot_x > 360.0f)
-        state->objects[oid].rot_x -= 360.0f;
+    state.objects[oid].rot_x += state.objects[oid].rsp_x * state.timer_adjustment * .1f;
+    if (state.objects[oid].rot_x > 360.0f)
+        state.objects[oid].rot_x -= 360.0f;
 
-    state->objects[oid].rot_y += state->objects[oid].rsp_y * state->timer_adjustment * .1f;
-    if (state->objects[oid].rot_y > 360.0f)
-        state->objects[oid].rot_y -= 360.0f;
+    state.objects[oid].rot_y += state.objects[oid].rsp_y * state.timer_adjustment * .1f;
+    if (state.objects[oid].rot_y > 360.0f)
+        state.objects[oid].rot_y -= 360.0f;
 
-    state->objects[oid].rot_z += state->objects[oid].rsp_z * state->timer_adjustment * .1f;
-    if (state->objects[oid].rot_z > 360.0f)
-        state->objects[oid].rot_z -= 360.0f;
+    state.objects[oid].rot_z += state.objects[oid].rsp_z * state.timer_adjustment * .1f;
+    if (state.objects[oid].rot_z > 360.0f)
+        state.objects[oid].rot_z -= 360.0f;
 
-    if (state->objects[oid].pos_z > 100.0f)
-        state->remove(oid);
+    if (state.objects[oid].pos_z > 100.0f)
+        state.remove(oid);
 }
 
 void Object::drawCrosshair(int oid, float r, float g, float b) {
@@ -425,15 +424,15 @@ void Object::drawCrosshair(int oid, float r, float g, float b) {
     float alpha = 1.0f;
     float s, rot;
 
-    if (state->objects[oid].type == OBJ_TYPE_SCENERY) return;
+    if (state.objects[oid].type == OBJ_TYPE_SCENERY) return;
 
     // in radar range?
-    if (state->objects[oid].pos_z < -8000.0f) return;
+    if (state.objects[oid].pos_z < -8000.0f) return;
 
     // cross-hairs fade out after player died
-    if (state->objects[state->player].life <= 0) {
+    if (state.objects[state.player].life <= 0) {
         if (da > .01f) {
-            da -= state->timer_adjustment * .01f;
+            da -= state.timer_adjustment * .01f;
         } else {
             da = .0f;
         }
@@ -441,29 +440,29 @@ void Object::drawCrosshair(int oid, float r, float g, float b) {
         da = .85f;
     }
 
-    s = 150.0f + (state->objects[oid].pos_z + 12500.0f) * .00005f;
+    s = 150.0f + (state.objects[oid].pos_z + 12500.0f) * .00005f;
 
     // cross-hair fades out when too near
-    if (state->objects[oid].pos_z > -1000.0f) {
-        alpha -= .001f * (1000.0f + state->objects[oid].pos_z);
+    if (state.objects[oid].pos_z > -1000.0f) {
+        alpha -= .001f * (1000.0f + state.objects[oid].pos_z);
     }
 
-    alpha *= alpha * float(state->global_alpha) * .01f * da;
+    alpha *= alpha * float(state.global_alpha) * .01f * da;
     if (alpha > 1.0f) alpha = 1.0f;
 
     glLoadIdentity();
 
-    glRotatef(-state->tilt_x*.025f, 0, 1, 0);
-    glRotatef(-state->tilt_y*.025f, 1, 0, 0);
+    glRotatef(state.tilt_x * -.025f, 0, 1, 0);
+    glRotatef(state.tilt_y * -.025f, 1, 0, 0);
 
-    glBindTexture(GL_TEXTURE_2D, state->texture[T_HUD_3]);
+    glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_3]);
     glTranslatef(
-        (state->objects[oid].pos_x - state->cam_x) * E_RELATIVE_MOVEMENT,
-        (state->objects[oid].pos_y - state->cam_y) * E_RELATIVE_MOVEMENT,
-        state->objects[oid].pos_z
+        (state.objects[oid].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (state.objects[oid].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT,
+        (state.objects[oid].pos_z)
     );
     glPushMatrix();
-    if (oid == state->objects[state->player].target) {
+    if (oid == state.objects[state.player].target) {
         // target locked, colored cross-hair
         glColor4f(r, g, b, alpha);
         glBegin (GL_QUADS);
@@ -481,8 +480,8 @@ void Object::drawCrosshair(int oid, float r, float g, float b) {
         glEnd();
     } else {
         // target is NOT locked, grey color
-        rot = (180.0f/M_PI) * atan( (state->objects[state->player].pos_y - state->objects[oid].pos_y) / (state->objects[state->player].pos_x - state->objects[oid].pos_x) );
-        if (state->objects[state->player].pos_x < state->objects[oid].pos_x) {
+        rot = (180.0f/M_PI) * atan( (state.objects[state.player].pos_y - state.objects[oid].pos_y) / (state.objects[state.player].pos_x - state.objects[oid].pos_x) );
+        if (state.objects[state.player].pos_x < state.objects[oid].pos_x) {
             rot += 180.0f;
         }
 
@@ -522,17 +521,17 @@ void Object::drawCrosshair(int oid, float r, float g, float b) {
 }
 
 void Object::draw(int oid) {
-    float a = float(state->global_alpha) * .01f;
+    float a = float(state.global_alpha) * .01f;
     float s = 1.0f;
 
-    float x = state->objects[oid].pos_x;
-    float y = state->objects[oid].pos_y;
-    float z = state->objects[oid].pos_z;
+    float x = state.objects[oid].pos_x;
+    float y = state.objects[oid].pos_y;
+    float z = state.objects[oid].pos_z;
 
-    if (state->objects[oid].type == OBJ_TYPE_SCENERY) {
-        s = (10000.0f + state->objects[oid].pos_z) * .000033f;
+    if (state.objects[oid].type == OBJ_TYPE_SCENERY) {
+        s = (10000.0f + state.objects[oid].pos_z) * .000033f;
     } else {
-        s = (10000.0f + state->objects[oid].pos_z) * .0001f;
+        s = (10000.0f + state.objects[oid].pos_z) * .0001f;
     }
 
     glLoadIdentity();
@@ -567,10 +566,10 @@ void Object::draw(int oid) {
 
     glPushMatrix();
 
-    x -= state->cam_x;
-    y -= state->cam_y;
+    x -= state.cam_x;
+    y -= state.cam_y;
 
-    if (state->objects[oid].type == OBJ_TYPE_SCENERY) {
+    if (state.objects[oid].type == OBJ_TYPE_SCENERY) {
         x *= E_RELATIVE_MOVEMENT * .85f;
         y *= E_RELATIVE_MOVEMENT * .85f;
     } else {
@@ -578,19 +577,19 @@ void Object::draw(int oid) {
         y *= E_RELATIVE_MOVEMENT;
     }
 
-    glRotatef(-state->tilt_x*.035f, .0f, 1.0f, .0f);
-    glRotatef(-state->tilt_y*.035f, 1.0f, .0f, .0f);
+    glRotatef(state.tilt_x * -.035f,  .0f, 1.0f, .0f);
+    glRotatef(state.tilt_y * -.035f, 1.0f,  .0f, .0f);
 
     glTranslatef(x, y, z);
 
-    glRotatef(state->objects[oid].rot_x, 1.0f, .0f, .0f);
-    glRotatef(state->objects[oid].rot_y, .0f, 1.0f, .0f);
-    glRotatef(state->objects[oid].rot_z, .0f, .0f, 1.0f);
+    glRotatef(state.objects[oid].rot_x, 1.0f, .0f, .0f);
+    glRotatef(state.objects[oid].rot_y, .0f, 1.0f, .0f);
+    glRotatef(state.objects[oid].rot_z, .0f, .0f, 1.0f);
 
     glScalef(
-        state->objects[oid].scale_x * s,
-        state->objects[oid].scale_y * s,
-        state->objects[oid].scale_z * s
+        state.objects[oid].scale_x * s,
+        state.objects[oid].scale_y * s,
+        state.objects[oid].scale_z * s
     );
 
     glCallList(model_list);

@@ -1,8 +1,6 @@
 #include "explosion.hpp"
 
-Explosion::Explosion(State* sptr) {
-    state = sptr;
-
+Explosion::Explosion(State &s) : Object(s) {
     particles = new ParticleEngine(state);
     particles->setup(EMITTER_EXPLOSION, 40, .15f, .15f, .1f, 3.0f, 1.25f);
 }
@@ -67,7 +65,7 @@ bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp) 
     new_explosion.scale_y   = .0f;
     new_explosion.scale_z   = .0f;
 
-    return state->add(&new_explosion);
+    return state.add(&new_explosion);
 }
 
 void Explosion::move(int oid) {
@@ -76,60 +74,62 @@ void Explosion::move(int oid) {
         return;
     }
 
-    state->objects[oid].life_time += int(state->timer_adjustment*22.5f);
+    state.objects[oid].life_time += int(state.timer_adjustment*22.5f);
 
-    if (state->objects[oid].life_time >= state->objects[oid].life_max) {
-        state->remove(oid);
+    if (state.objects[oid].life_time >= state.objects[oid].life_max) {
+        state.remove(oid);
         return;
     }
 
-    state->objects[oid].cnt += (7.0f - state->objects[oid].cnt * 1.5f) * state->timer_adjustment * .1f;
+    state.objects[oid].cnt += (7.0f - state.objects[oid].cnt * 1.5f) * state.timer_adjustment * .1f;
 
-    state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed);
-    if (state->objects[oid].pos_z > 100)
-        state->remove(oid);
+    state.objects[oid].pos_z += state.timer_adjustment * (state.objects[oid].speed + state.objects[state.player].speed);
+
+    if (state.objects[oid].pos_z > 100) {
+        state.remove(oid);
+    }
 }
 
 void Explosion::draw(int oid) {
     bool use_particles = true;
 
-    switch(state->objects[oid].id) {
+    switch(state.objects[oid].id) {
 
         // green gun fire impact
         case OBJ_EXPLOSION_1:
-            particles->setAlpha(1.4f - (state->objects[oid].life_time * .002f));
+            particles->setAlpha(1.4f - (state.objects[oid].life_time * .002f));
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(2.5f + (state->objects[oid].life_time * .005f));
-            particles->setScale(2.75f + (state->objects[oid].life_time * .005f));
+            particles->setSize(2.5f + (state.objects[oid].life_time * .005f));
+            particles->setScale(2.75f + (state.objects[oid].life_time * .005f));
             particles->setParticleNumber(25);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
         // explosion smoke
         case OBJ_EXPLOSION_2:
-            particles->setAlpha( (.5f - (state->objects[oid].life_time * .0001165f)));
+            particles->setAlpha( (.5f - (state.objects[oid].life_time * .0001165f)));
             particles->setColor(1.0f, 1.0f, 1.0f);
-            particles->setSize(6.0f + state->objects[oid].life_time * .0005f);
-            particles->setScale(1.5f + state->objects[oid].cnt * 6.5f);
+            particles->setSize(6.0f + state.objects[oid].life_time * .0005f);
+            particles->setScale(1.5f + state.objects[oid].cnt * 6.5f);
             particles->setParticleNumber(20);
             break;
 
         // explosion fireball
         case OBJ_EXPLOSION_3:
-            particles->setAlpha(2.0f - (state->objects[oid].life_time * .001f));
-            particles->setColor(1.0f, .65f - (state->objects[oid].life_time * .000125f), .35f - (state->objects[oid].life_time * .000075f));
-            particles->setSize(5.0f - (state->objects[oid].life_time * .005f));
-            particles->setScale(1.0f + state->objects[oid].cnt * 5.0f);
+            particles->setAlpha(2.0f - (state.objects[oid].life_time * .001f));
+            particles->setColor(1.0f, .65f - (state.objects[oid].life_time * .000125f), .35f - (state.objects[oid].life_time * .000075f));
+            particles->setSize(5.0f - (state.objects[oid].life_time * .005f));
+            particles->setScale(1.0f + state.objects[oid].cnt * 5.0f);
             particles->setParticleNumber(30);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
         // collision sparks
         case OBJ_EXPLOSION_4:
-            particles->setAlpha(2.0f - (state->objects[oid].life_time * .002f));
+            particles->setAlpha(2.0f - (state.objects[oid].life_time * .002f));
             particles->setColor(1.0f, .3f, .15f);
             particles->setSize(1.5f);
-            particles->setScale(1.0f + state->objects[oid].cnt * 8.0f);
+            particles->setScale(1.0f + state.objects[oid].cnt * 8.0f);
             particles->setParticleNumber(20);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
@@ -140,26 +140,28 @@ void Explosion::draw(int oid) {
             break;
     }
 
-    glRotatef(-state->tilt_x*.035f, 0, 1, 0);
-    glRotatef(-state->tilt_y*.035f, 1, 0, 0);
+    glRotatef(state.tilt_x * -.035f, 0, 1, 0);
+    glRotatef(state.tilt_y * -.035f, 1, 0, 0);
 
     glShadeModel(GL_FLAT);
     glPushMatrix();
     if (use_particles) {
         particles->draw(
-            (state->objects[oid].pos_x - state->cam_x) * E_RELATIVE_MOVEMENT,
-            (state->objects[oid].pos_y - state->cam_y) * E_RELATIVE_MOVEMENT,
-            state->objects[oid].pos_z,
-            0, 0, state->objects[oid].rot_z);
+            (state.objects[oid].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+            (state.objects[oid].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT,
+            (state.objects[oid].pos_z),
+            0, 0, state.objects[oid].rot_z);
     } else {
         // nova/halo effect without particles
         glTranslatef(
-            (state->objects[oid].pos_x - state->cam_x) * E_RELATIVE_MOVEMENT,
-            (state->objects[oid].pos_y - state->cam_y) * E_RELATIVE_MOVEMENT,
-            state->objects[oid].pos_z
+            (state.objects[oid].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+            (state.objects[oid].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT,
+            (state.objects[oid].pos_z)
         );
-        float s = 20.0f + state->objects[oid].cnt * 50.0f;
-        glColor4f(1.0f, 1.0f, 1.0f, .5f - state->objects[oid].life_time * .001f);
+
+        float s = 20.0f + state.objects[oid].cnt * 50.0f;
+
+        glColor4f(1.0f, 1.0f, 1.0f, .5f - state.objects[oid].life_time * .001f);
         glScalef(1.0f, 1.0f, 1.0f);
         glBegin (GL_QUADS);
           glTexCoord2f (0, 1);

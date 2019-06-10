@@ -7,7 +7,7 @@
 
 class Cargo : public Object {
     public:
-        Cargo(State* sptr);
+        Cargo(State &s);
         ~Cargo();
 
         void draw(int oid);

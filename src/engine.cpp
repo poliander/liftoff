@@ -2,45 +2,43 @@
 #include "state.hpp"
 
 Engine::Engine() {
-    state = new State();
-    scenery = NULL;
-    srand(time(NULL));
 }
 
 Engine::~Engine() {
-    if (scenery != NULL) delete scenery;
-    delete state;
+    delete scenery;
 }
 
 /*
  * load video & audio settings from file
  */
 bool Engine::loadConfiguration() {
-    bool result = true;
+    bool result = false;
     char cfgdir[255], cwd[255];
     FILE *fp = NULL;
 
     getcwd(cwd, 255);
 
-    // game resources located in ./dat ?
-    if (chdir(state->engine_datadir) != 0) {
+    // look for game resources in "./resource"
+    if (chdir(state.engine_datadir) != 0) {
 
-        // no, so use compiled-in game data path
+        // use path defined at compile-time
         sprintf(cfgdir, "%s/games/liftoff", GAME_DATA);
 
         if (chdir(cfgdir) == 0) {
-            sprintf(state->engine_datadir, "%s", cfgdir);
+            sprintf(state.engine_datadir, "%s", cfgdir);
         } else {
-            sprintf(state->engine_datadir, "%s", "");
+            sprintf(state.engine_datadir, "%s", "");
         }
     }
+
     chdir(cwd);
 
-    fp = fopen(state->engine_cfgfile, "rb");
-    if (fp == NULL) {
-        result = false;
-    } else {
-        if (fread(&state->config, sizeof(config_t), 1, fp) != 1) {
+    fp = fopen(state.engine_cfgfile, "rb");
+
+    if (fp != NULL) {
+        result = true;
+
+        if (fread(&state.config, sizeof(config_t), 1, fp) != 1) {
             result = false;
         }
 
@@ -68,12 +66,12 @@ bool Engine::writeConfiguration() {
 #endif
     } else chdir(cwd);
 
-    fp = fopen(state->engine_cfgfile, "wb");
+    fp = fopen(state.engine_cfgfile, "wb");
 
     if (fp == NULL) {
         result = false;
     } else {
-        if (fwrite(&state->config, sizeof(config_t), 1, fp) != 1) {
+        if (fwrite(&state.config, sizeof(config_t), 1, fp) != 1) {
             result = false;
         }
 
@@ -87,12 +85,15 @@ bool Engine::writeConfiguration() {
  * get video mode ID
  */
 void Engine::getVideoModeID() {
-    state->vid_cfg_mode = -1;
+    state.vid_cfg_mode = -1;
 
-    for (int i=0; i<state->vid_sup_modes_count; i++) {
-        if ( (state->config.vid_width == state->vid_sup_modes[i]->w) &&
-             (state->config.vid_height == state->vid_sup_modes[i]->h) )
-                 state->vid_cfg_mode = i;
+    for (int i=0; i<state.vid_sup_modes_count; i++) {
+        if (
+            state.config.vid_width  == state.vid_sup_modes[i]->w &&
+            state.config.vid_height == state.vid_sup_modes[i]->h
+        ) {
+            state.vid_cfg_mode = i;
+        }
     }
 }
 
@@ -114,43 +115,41 @@ bool Engine::init(int argc, char **argv) {
     if (argc >= 0) {
         for (int i=0; i<argc; i++) {
             if (strcmp(argv[i], "-noms") == 0) {
-                state->vid_cfg_multisampling = 0;
+                state.vid_cfg_multisampling = 0;
                 continue;
             }
 
             if (strcmp(argv[i], "-d") == 0) {
-                state->log_file = true;
+                state.log_file = true;
                 continue;
             }
         }
     }
 
-    scenery = new Scenery(state);
-
-    state->log("Initializing SDL... ");
+    state.log("Initializing SDL... ");
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK)) {
         sprintf(msg, "%s\n", SDL_GetError());
-        state->log(msg);
+        state.log(msg);
 
         delete [] msg;
         return false;
     } else {
-        state->log("ok\n");
+        state.log("ok\n");
     }
 
-    state->log("Detecting input devices... ");
+    state.log("Detecting input devices... ");
 
     if (SDL_NumJoysticks() > 0) {
-        state->joystick = SDL_JoystickOpen(0);
+        state.joystick = SDL_JoystickOpen(0);
 
-        if (state->joystick) {
-            state->log("joystick/gamepad found\n");
+        if (state.joystick) {
+            state.log("joystick/gamepad found\n");
         } else {
-            state->log("failed to initialize joystick/gamepad\n");
+            state.log("failed to initialize joystick/gamepad\n");
         }
     } else {
-        state->log("none found\n");
+        state.log("none found\n");
     }
 
     // get location of configuration file
@@ -166,96 +165,96 @@ bool Engine::init(int argc, char **argv) {
             // AppData directory exists
             mkdir("Lift Off");
             if (chdir("Lift Off") == 0) {
-                sprintf(state->engine_cfgfile, "%s\\Lift Off\\%s", cfgdir, DEFAULT_CFG_FILE);
+                sprintf(state.engine_cfgfile, "%s\\Lift Off\\%s", cfgdir, DEFAULT_CFG_FILE);
             }
         } else {
             // Store liftoff.cfg in same directory as binary
             while ((l>0) && (argv[0][l] != '\\')) l--;
             strncpy(cfgdir, argv[0], l);
             cfgdir[l] = 0;
-            sprintf(state->engine_cfgfile, "%s\\%s", cfgdir, DEFAULT_CFG_FILE);
+            sprintf(state.engine_cfgfile, "%s\\%s", cfgdir, DEFAULT_CFG_FILE);
         }
 
         chdir(cwd);
 #else
-        sprintf(state->engine_cfgfile, "%s/.liftoff/%s", getenv("HOME"), DEFAULT_CFG_FILE);
+        sprintf(state.engine_cfgfile, "%s/.liftoff/%s", getenv("HOME"), DEFAULT_CFG_FILE);
 #endif
     }
 
     // load configuration
-    state->log("Loading configuration... ");
+    state.log("Loading configuration... ");
     if (!loadConfiguration()) {
-        state->log("failed (using defaults)\n");
+        state.log("failed (using defaults)\n");
     } else {
-        state->log("ok\n");
+        state.log("ok\n");
     }
-    defmodes[0][0] = state->config.vid_width;
-    defmodes[0][1] = state->config.vid_height;
+    defmodes[0][0] = state.config.vid_width;
+    defmodes[0][1] = state.config.vid_height;
 
     // check for OpenGL/screen capabilities
-    state->log("Validating display configuration...\n");
+    state.log("Validating display configuration...\n");
     vidinfo = SDL_GetVideoInfo();
     sprintf(msg, "- %dx%d screen found\n", vidinfo->current_w, vidinfo->current_h);
-    state->log(msg);
+    state.log(msg);
     for (i=0; i<2; i++) {
         if (defmodes[i][0] == -1) {
             defmodes[i][0] = vidinfo->current_w;
             defmodes[i][1] = vidinfo->current_h;
         }
     }
-    state->vid_cfg_depth = vidinfo->vfmt->BitsPerPixel;
+    state.vid_cfg_depth = vidinfo->vfmt->BitsPerPixel;
     vidmodes = SDL_ListModes(NULL, SDL_FULLSCREEN);
-    state->vid_sup_fullscreen = true;
+    state.vid_sup_fullscreen = true;
     if (vidmodes == (SDL_Rect **)0) {
-        state->vid_sup_window = false;
+        state.vid_sup_window = false;
     }
     vidmodes = SDL_ListModes(NULL, SDL_RESIZABLE);
-    state->vid_sup_window = true;
+    state.vid_sup_window = true;
     if (vidmodes == (SDL_Rect **)0) {
-        state->vid_sup_fullscreen = false;
+        state.vid_sup_fullscreen = false;
     }
-    if ( (state->vid_sup_window == false) &&
-         (state->config.vid_fullscreen == 0) ) {
-        state->config.vid_fullscreen = 1;
+    if ( (state.vid_sup_window == false) &&
+         (state.config.vid_fullscreen == 0) ) {
+        state.config.vid_fullscreen = 1;
     }
-    if ( (state->vid_sup_fullscreen == false) &&
-         (state->config.vid_fullscreen == 1) ) {
-        state->config.vid_fullscreen = 0;
+    if ( (state.vid_sup_fullscreen == false) &&
+         (state.config.vid_fullscreen == 1) ) {
+        state.config.vid_fullscreen = 0;
     }
     vidmodes = SDL_ListModes(NULL, SDL_RESIZABLE | SDL_FULLSCREEN);
     if (vidmodes == (SDL_Rect **)0) {
-        state->log("No valid video mode found\n");
+        state.log("No valid video mode found\n");
         return false;
     }
 
     for (i = 0; vidmodes[i]; ++i);
 
-    state->vid_sup_modes_count = i;
-    state->vid_sup_modes = vidmodes;
+    state.vid_sup_modes_count = i;
+    state.vid_sup_modes = vidmodes;
 
     if (i > 0) {
-        defmodes[2][0] = state->vid_sup_modes[i-1]->w;
-        defmodes[2][1] = state->vid_sup_modes[i-1]->h;
+        defmodes[2][0] = state.vid_sup_modes[i-1]->w;
+        defmodes[2][1] = state.vid_sup_modes[i-1]->h;
     } else {
-        state->log("No valid video mode found\n");
+        state.log("No valid video mode found\n");
 
         delete [] msg;
         return false;
     }
 
     for (i = 0; i < 3; i++) {
-        if (state->config.vid_fullscreen) {
-            modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state->vid_cfg_depth, SDL_FULLSCREEN);
+        if (state.config.vid_fullscreen) {
+            modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state.vid_cfg_depth, SDL_FULLSCREEN);
             if (modeok) {
-                state->config.vid_width = defmodes[i][0];
-                state->config.vid_height = defmodes[i][1];
+                state.config.vid_width = defmodes[i][0];
+                state.config.vid_height = defmodes[i][1];
                 break;
             }
         } else {
-            modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state->vid_cfg_depth, SDL_RESIZABLE);
+            modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state.vid_cfg_depth, SDL_RESIZABLE);
             if (modeok) {
-                state->config.vid_width = defmodes[i][0];
-                state->config.vid_height = defmodes[i][1];
+                state.config.vid_width = defmodes[i][0];
+                state.config.vid_height = defmodes[i][1];
                 break;
             }
         }
@@ -264,67 +263,67 @@ bool Engine::init(int argc, char **argv) {
     if (modeok) {
         getVideoModeID();
     } else {
-        state->log("No valid video mode found\n");
+        state.log("No valid video mode found\n");
 
         delete [] msg;
         return false;
     }
 
     sprintf(msg, "- %dx%d @ %d bpp ",
-        state->config.vid_width,
-        state->config.vid_height,
-        state->vid_cfg_depth
+        state.config.vid_width,
+        state.config.vid_height,
+        state.vid_cfg_depth
     );
 
-    state->log(msg);
+    state.log(msg);
 
-    if (state->config.vid_fullscreen == 0) {
-        state->log("window mode\n");
+    if (state.config.vid_fullscreen == 0) {
+        state.log("window mode\n");
     } else {
-        state->log("fullscreen mode selected\n");
+        state.log("fullscreen mode selected\n");
     }
 
-    state->log("- vsync ");
+    state.log("- vsync ");
 
-    if (state->config.vid_vsync == 0) {
-        state->log("off\n");
+    if (state.config.vid_vsync == 0) {
+        state.log("off\n");
     } else {
-        state->log("on\n");
+        state.log("on\n");
     }
 
-    state->log("Initializing OpenGL display\n");
+    state.log("Initializing OpenGL display\n");
 
     if (!initDisplay()) {
-        state->log(SDL_GetError());
-        state->log("\n\n");
+        state.log(SDL_GetError());
+        state.log("\n\n");
 
         delete [] msg;
         return false;
     }
 
-    if (state->config.aud_sfx || state->config.aud_music) {
-        sprintf(msg, "Initializing audio device at %d Hz... ", state->config.aud_mixfreq);
-        state->log(msg);
+    if (state.config.aud_sfx || state.config.aud_music) {
+        sprintf(msg, "Initializing audio device at %d Hz... ", state.config.aud_mixfreq);
+        state.log(msg);
 
-        if (Mix_OpenAudio(state->config.aud_mixfreq, DEFAULT_AUD_FORMAT, 2, 1024) == -1) {
-            state->log("failed\n");
-            state->config.aud_sfx = -1;
-            state->config.aud_music = -1;
+        if (Mix_OpenAudio(state.config.aud_mixfreq, DEFAULT_AUD_FORMAT, 2, 1024) == -1) {
+            state.log("failed\n");
+            state.config.aud_sfx = -1;
+            state.config.aud_music = -1;
         } else {
-            state->log("ok\n");
-            state->audio->init(
-                    state->engine_datadir,
-                    state->config.aud_sfx,
-                    state->config.aud_music,
-                    state->config.aud_mixfreq
+            state.log("ok\n");
+            state.audio->init(
+                    state.engine_datadir,
+                    state.config.aud_sfx,
+                    state.config.aud_music,
+                    state.config.aud_mixfreq
             );
         }
     }
 
-    // load game resources
+    scenery = new Scenery(state);
     scenery->load();
 
-    state->set(STATE_MENU);
+    state.set(STATE_MENU);
 
     delete [] msg;
     return true;
@@ -334,36 +333,36 @@ bool Engine::init(int argc, char **argv) {
  * engine shutdown
  */
 void Engine::shutdown() {
-    if (state->config.vid_fullscreen == 0) {
+    if (state.config.vid_fullscreen == 0) {
         SDL_ShowCursor(1);
     }
 
-    if (state->joystick != NULL) {
-        SDL_JoystickClose(state->joystick);
+    if (state.joystick != NULL) {
+        SDL_JoystickClose(state.joystick);
     }
 
-    if ( (state->config.aud_sfx != -1) ||
-         (state->config.aud_music != -1) ) {
-        state->log("Closing audio device\n");
+    if ( (state.config.aud_sfx != -1) ||
+         (state.config.aud_music != -1) ) {
+        state.log("Closing audio device\n");
         Mix_CloseAudio();
         SDL_CloseAudio();
     }
 
-    state->log("Closing OpenGL display\n");
-    if (state->vid_cfg_multisampling > 0) {
+    state.log("Closing OpenGL display\n");
+    if (state.vid_cfg_multisampling > 0) {
         glDisable(GL_MULTISAMPLE);
     }
 
     SDL_Quit();
 
-    state->log("Saving configuration... ");
+    state.log("Saving configuration... ");
     if (writeConfiguration()) {
-        state->log("ok\n");
+        state.log("ok\n");
     } else {
-        state->log("failed\n");
+        state.log("failed\n");
     }
 
-    if (!state->engine_restart) state->log("\n");
+    if (!state.engine_restart) state.log("\n");
 }
 
 /*
@@ -373,24 +372,24 @@ bool Engine::initDisplay() {
     int cfg_multisampling, sdl_mode;
     char msg[255];
 
-    switch (state->config.vid_aspect) {
+    switch (state.config.vid_aspect) {
         case 1:
-            state->vid_cfg_aspect = 4.0f/3.0f;
+            state.vid_cfg_aspect = 4.0f/3.0f;
             break;
 
         case 2:
-            state->vid_cfg_aspect = 16.0f/9.0f;
+            state.vid_cfg_aspect = 16.0f/9.0f;
             break;
 
         case 3:
-            state->vid_cfg_aspect = 1.6f;
+            state.vid_cfg_aspect = 1.6f;
             break;
 
         default:
-            state->vid_cfg_aspect = (float)state->config.vid_width/(float)state->config.vid_height;
+            state.vid_cfg_aspect = (float)state.config.vid_width/(float)state.config.vid_height;
     }
 
-    if (state->config.vid_fullscreen) {
+    if (state.config.vid_fullscreen) {
         sdl_mode = SDL_OPENGL | SDL_FULLSCREEN;
     } else {
         sdl_mode = SDL_OPENGL;
@@ -402,43 +401,43 @@ bool Engine::initDisplay() {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    if (state->vid_cfg_multisampling > 0) {
+    if (state.vid_cfg_multisampling > 0) {
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_cfg_multisampling);
     }
 
-    if (state->config.vid_vsync) {
+    if (state.config.vid_vsync) {
         SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
     } else {
         SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
     }
 
-    screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, sdl_mode);
+    screen = SDL_SetVideoMode(state.config.vid_width, state.config.vid_height, state.vid_cfg_depth, sdl_mode);
 
     SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
 
-    while (screen == NULL && state->vid_cfg_multisampling != cfg_multisampling) {
-        switch (state->vid_cfg_multisampling) {
+    while (screen == NULL && state.vid_cfg_multisampling != cfg_multisampling) {
+        switch (state.vid_cfg_multisampling) {
             case 16:
-                state->vid_cfg_multisampling = 8;
+                state.vid_cfg_multisampling = 8;
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_cfg_multisampling);
                 break;
 
             case 8:
-                state->vid_cfg_multisampling = 4;
+                state.vid_cfg_multisampling = 4;
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_cfg_multisampling);
                 break;
 
             case 4:
-                state->vid_cfg_multisampling = 2;
+                state.vid_cfg_multisampling = 2;
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_cfg_multisampling);
                 break;
 
             case 2:
-                state->vid_cfg_multisampling = 0;
+                state.vid_cfg_multisampling = 0;
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
                 break;
 
@@ -446,7 +445,7 @@ bool Engine::initDisplay() {
                return false;
         }
 
-        screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, sdl_mode);
+        screen = SDL_SetVideoMode(state.config.vid_width, state.config.vid_height, state.vid_cfg_depth, sdl_mode);
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
     }
 
@@ -456,21 +455,21 @@ bool Engine::initDisplay() {
         sprintf(msg, "Multisampling enabled (%d spp)\n", cfg_multisampling);
     }
 
-    state->log(msg);
+    state.log(msg);
 
     SDL_ShowCursor(0);
     SDL_WM_SetCaption("Lift Off: Beyond Glaxium", NULL);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, state->config.vid_width, state->config.vid_height);
-    glFrustum(-400.0f*state->vid_cfg_aspect, 400.0f*state->vid_cfg_aspect, -300.0f, 300.0f, .1f, 10000.0f);
+    glViewport(0, 0, state.config.vid_width, state.config.vid_height);
+    glFrustum(-400.0f*state.vid_cfg_aspect, 400.0f*state.vid_cfg_aspect, -300.0f, 300.0f, .1f, 10000.0f);
     glLoadIdentity();
-    gluPerspective(65, state->vid_cfg_aspect, .1f, 10000.0f);
+    gluPerspective(65, state.vid_cfg_aspect, .1f, 10000.0f);
     glMatrixMode(GL_MODELVIEW);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    if (state->vid_cfg_multisampling > 0) glEnable(GL_MULTISAMPLE);
+    if (state.vid_cfg_multisampling > 0) glEnable(GL_MULTISAMPLE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
@@ -479,11 +478,11 @@ bool Engine::initDisplay() {
     glClearDepth(1.0f);
     glLoadIdentity();
 
-    state->vid_cfg_width = state->config.vid_width;
-    state->vid_cfg_height = state->config.vid_height;
-    state->vid_cfg_aspect_mode = state->config.vid_aspect;
-    state->vid_cfg_fullscreen = state->config.vid_fullscreen;
-    state->vid_cfg_vsync = state->config.vid_vsync;
+    state.vid_cfg_width = state.config.vid_width;
+    state.vid_cfg_height = state.config.vid_height;
+    state.vid_cfg_aspect_mode = state.config.vid_aspect;
+    state.vid_cfg_fullscreen = state.config.vid_fullscreen;
+    state.vid_cfg_vsync = state.config.vid_vsync;
 
     return true;
 }
@@ -494,60 +493,60 @@ bool Engine::initDisplay() {
 bool Engine::keyHandler() {
     Uint8 *keys = SDL_GetKeyState(NULL);
 
-    static GLuint timer = state->timer - 51;
-    static GLuint nextrelease = state->timer - 100;
+    static GLuint timer = state.timer - 51;
+    static GLuint nextrelease = state.timer - 100;
 
     bool moved = false;
 
-    if ((state->get() < 11) && ((state->timer - timer) < 50)) {
+    if ((state.get() < 11) && ((state.timer - timer) < 50)) {
         return moved;
     }
 
     // STRG+C: Quit immediately
     if (keys[SDLK_LCTRL] && keys[SDLK_c]) {
-        state->set(STATE_CLOSE);
+        state.set(STATE_CLOSE);
         return moved;
     }
 
     // F12: toggle FPS display
     if (keys[SDLK_F12]) {
-        if (state->timer > nextrelease) {
-            state->fps_visible =! state->fps_visible;
-            nextrelease = state->timer + 100;
-            if (state->fps_visible) {
-                state->fps = 0;
-                state->fps_frame = 0;
-                state->fps_count = 100;
-                state->fps_ready = false;
+        if (state.timer > nextrelease) {
+            state.fps_visible =! state.fps_visible;
+            nextrelease = state.timer + 100;
+            if (state.fps_visible) {
+                state.fps = 0;
+                state.fps_frame = 0;
+                state.fps_count = 100;
+                state.fps_ready = false;
             }
-        } else nextrelease = state->timer + 100;
+        } else nextrelease = state.timer + 100;
     }
 
-    timer = state->timer;
+    timer = state.timer;
 
-    switch(state->get()) {
+    switch (state.get()) {
 
         case STATE_GAME_LOOP:
             if (keys[SDLK_ESCAPE])
-                state->set(STATE_GAME_QUIT);
+                state.set(STATE_GAME_QUIT);
 
-            if (state->objects[state->player].life > 0) {
+            if (state.objects[state.player].life > 0) {
 
                 // Keyboard LEFT, RIGHT
                 if (keys[SDLK_LEFT] || keys[SDLK_a]) {
-                    scenery->player->accelerateX(state->player, 1.0f);
+                    scenery->player->accelerateX(state.player, 1.0f);
                     moved = true;
                 } else if (keys[SDLK_RIGHT] || keys[SDLK_d]) {
-                    scenery->player->accelerateX(state->player, -1.0f);
+                    scenery->player->accelerateX(state.player, -1.0f);
                     moved = true;
                 }
 
                 // Keyboard UP, DOWN
                 if (keys[SDLK_UP] || keys[SDLK_w]) {
-                    scenery->player->accelerateY(state->player, -1.0f);
+                    scenery->player->accelerateY(state.player, -1.0f);
                     moved = true;
                 } else if (keys[SDLK_DOWN] || keys[SDLK_s]) {
-                    scenery->player->accelerateY(state->player, 1.0f);
+                    scenery->player->accelerateY(state.player, 1.0f);
                     moved = true;
                 }
 
@@ -560,57 +559,61 @@ bool Engine::keyHandler() {
 
         case STATE_MENU:
             if (keys[SDLK_ESCAPE]) {
-                state->audio->playSample(1, 128, 0);
+                state.audio->playSample(1, 128, 0);
 
-                switch(state->menu) {
+                switch(state.menu) {
                     case 4: // audio
-                        state->menu_pos = 3;
-                        state->menu_selected = true;
-                        state->config.aud_sfx = state->audio->volume_sfx;
-                        state->config.aud_music = state->audio->volume_music;
-                        state->config.aud_mixfreq = state->audio->mixer_frequency;
+                        state.menu_pos = 3;
+                        state.menu_selected = true;
+                        state.config.aud_sfx = state.audio->volume_sfx;
+                        state.config.aud_music = state.audio->volume_music;
+                        state.config.aud_mixfreq = state.audio->mixer_frequency;
                         break;
 
                     case 3: // video
-                        state->menu_pos = 4;
-                        state->menu_selected = true;
-                        for (int i=0; i<state->vid_sup_modes_count; i++) {
-                            if ( (state->vid_cfg_width  == state->vid_sup_modes[i]->w) &&
-                                 (state->vid_cfg_height == state->vid_sup_modes[i]->h) ) {
-                                 state->vid_cfg_mode = i;
+                        state.menu_pos = 4;
+                        state.menu_selected = true;
+
+                        for (int i=0; i<state.vid_sup_modes_count; i++) {
+                            if ( (state.vid_cfg_width  == state.vid_sup_modes[i]->w) &&
+                                 (state.vid_cfg_height == state.vid_sup_modes[i]->h) ) {
+                                 state.vid_cfg_mode = i;
                             }
                         }
-                        state->config.vid_aspect = state->vid_cfg_aspect_mode;
-                        state->config.vid_fullscreen = state->vid_cfg_fullscreen;
-                        state->config.vid_vsync = state->vid_cfg_vsync;
+
+                        state.config.vid_aspect = state.vid_cfg_aspect_mode;
+                        state.config.vid_fullscreen = state.vid_cfg_fullscreen;
+                        state.config.vid_vsync = state.vid_cfg_vsync;
                         break;
 
                     default: // main menu
-                        state->menu_pos = 2;
-                        state->menu_selected = true;
+                        state.menu_pos = 2;
+                        state.menu_selected = true;
                 }
 
                 return moved;
             }
 
             if (keys[SDLK_RETURN]) {
-                state->menu_selected = true;
-                if ( (state->menu == 1 && state->menu_pos == 2) ||
-                     (state->menu == 2 && state->menu_pos == 2) ) {
-                    state->audio->playSample(1, 128, 0); // cancel
+                state.menu_selected = true;
+
+                if ( (state.menu == 1 && state.menu_pos == 2) ||
+                     (state.menu == 2 && state.menu_pos == 2) ) {
+                    state.audio->playSample(1, 128, 0); // cancel
                 } else {
-                    state->audio->playSample(0, 128, 0); // ok
+                    state.audio->playSample(0, 128, 0); // ok
                 }
+
                 return moved;
             }
 
             if (keys[SDLK_UP] || keys[SDLK_w]) {
-                state->menu_pos--;
+                state.menu_pos--;
                 return moved;
             }
 
             if (keys[SDLK_DOWN] || keys[SDLK_s]) {
-                state->menu_pos++;
+                state.menu_pos++;
                 return moved;
             }
     }
@@ -626,19 +629,19 @@ void Engine::joyHandler() {
 
     SDL_JoystickUpdate();
 
-    if (state->objects[state->player].life <= 0) return;
+    if (state.objects[state.player].life <= 0) return;
 
-    v = float(SDL_JoystickGetAxis(state->joystick, 0) * .00003f);
+    v = float(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
     if (fabs(v) > .01f) {
-        scenery->player->accelerateX(state->player, float(scenery->player->acceleration) * -.0075f * v);
+        scenery->player->accelerateX(state.player, float(scenery->player->acceleration) * -.0075f * v);
     }
 
-    v = float(SDL_JoystickGetAxis(state->joystick, 1) * .00003f);
+    v = float(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
     if (fabs(v) > .01f) {
-        scenery->player->accelerateY(state->player, float(scenery->player->acceleration) * .0075f * v);
+        scenery->player->accelerateY(state.player, float(scenery->player->acceleration) * .0075f * v);
     }
 
-    if (SDL_JoystickGetButton(state->joystick, 0) != 0) {
+    if (SDL_JoystickGetButton(state.joystick, 0) != 0) {
         scenery->player->shoot();
     }
 }
@@ -649,32 +652,32 @@ void Engine::joyHandler() {
 void Engine::mouseHandler() {
     int x, y;
 
-    if (state->config.vid_fullscreen == 0) {
+    if (state.config.vid_fullscreen == 0) {
         if (!(SDL_GetAppState()&SDL_APPMOUSEFOCUS)) return;
     }
 
-    state->mouse_button = SDL_GetMouseState(&x, &y);
+    state.mouse_button = SDL_GetMouseState(&x, &y);
 
-    if (state->mouse_button & SDL_BUTTON(1)) {
-        if (!state->mouse_pressed) {
-            state->mouse_button = SDL_GetMouseState(&x, &y);
-            if (state->mouse_released) {
-                state->mouse_pressed = true;
+    if (state.mouse_button & SDL_BUTTON(1)) {
+        if (!state.mouse_pressed) {
+            state.mouse_button = SDL_GetMouseState(&x, &y);
+            if (state.mouse_released) {
+                state.mouse_pressed = true;
             }
         } else {
-            state->mouse_button = 0;
+            state.mouse_button = 0;
         }
-        state->mouse_released = false;
+        state.mouse_released = false;
     } else {
-        state->mouse_pressed = false;
-        state->mouse_released = true;
+        state.mouse_pressed = false;
+        state.mouse_released = true;
         SDL_GetMouseState(&x, &y);
     }
 
-    if (state->get() == STATE_MENU) {
-        state->mouse_moved = true;
-        state->mouse_x = (-3.1f * state->vid_cfg_aspect) + (1 / float(state->config.vid_width)) * x * (6.35f * state->vid_cfg_aspect);
-        state->mouse_y = 3.1f + (-1 / float(state->config.vid_height)) * y * 6.35f;
+    if (state.get() == STATE_MENU) {
+        state.mouse_moved = true;
+        state.mouse_x = (-3.1f * state.vid_cfg_aspect) + (1 / float(state.config.vid_width)) * x * (6.35f * state.vid_cfg_aspect);
+        state.mouse_y = 3.1f + (-1 / float(state.config.vid_height)) * y * 6.35f;
     }
 }
 
@@ -687,17 +690,17 @@ bool Engine::main() {
     // timer adjustment
     static Uint32 otimer = SDL_GetTicks();
     GLuint ntimer = SDL_GetTicks();
-    state->timer_adjustment = float(ntimer-otimer) * .05f;
-    state->timer = ntimer;
+    state.timer_adjustment = float(ntimer-otimer) * .05f;
+    state.timer = ntimer;
     otimer = ntimer;
 
     // complete restart of game engine
-    if (state->engine_restart) {
-        state->log("Restarting game engine.\n");
+    if (state.engine_restart) {
+        state.log("Restarting game engine.\n");
 
-        state->config.vid_width = state->vid_sup_modes[state->vid_cfg_mode]->w;
-        state->config.vid_height = state->vid_sup_modes[state->vid_cfg_mode]->h;
-        state->set(STATE_QUIT);
+        state.config.vid_width = state.vid_sup_modes[state.vid_cfg_mode]->w;
+        state.config.vid_height = state.vid_sup_modes[state.vid_cfg_mode]->h;
+        state.set(STATE_QUIT);
 
         shutdown();
 
@@ -706,17 +709,17 @@ bool Engine::main() {
 
         bool ok = init(-1, NULL);
         otimer = SDL_GetTicks();
-        state->timer = otimer;
+        state.timer = otimer;
 
         return ok;
     }
 
-    state->mouse_moved = false;
+    state.mouse_moved = false;
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
-                state->set(STATE_QUIT);
+                state.set(STATE_QUIT);
                 break;
 
             case SDL_KEYDOWN:
@@ -731,8 +734,8 @@ bool Engine::main() {
         }
     }
 
-    if (state->get() == STATE_GAME_LOOP) {
-        if (!keyHandler() && (state->joystick != NULL)) joyHandler();
+    if (state.get() == STATE_GAME_LOOP) {
+        if (!keyHandler() && (state.joystick != NULL)) joyHandler();
     }
 
     scenery->move();
@@ -740,5 +743,5 @@ bool Engine::main() {
 
     SDL_GL_SwapBuffers();
 
-    return (state->get() != STATE_CLOSE);
+    return (state.get() != STATE_CLOSE);
 }

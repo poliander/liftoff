@@ -20,7 +20,7 @@ class Engine {
         bool main();
 
     protected:
-        State* state;
+        State state;
         Scenery* scenery;
 
         SDL_Surface* screen;

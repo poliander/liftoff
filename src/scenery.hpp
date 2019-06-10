@@ -24,7 +24,7 @@
 
 class Scenery {
     public:
-        Scenery(State* sptr);
+        Scenery(State &s);
         ~Scenery();
 
         Player*         player;
@@ -34,9 +34,9 @@ class Scenery {
         void            draw();
 
     protected:
-        State*          state;
-        Object*         object;
+        State&          state;
 
+        Object*         object;
         Object*         asteroid;
         Object*         debris;
         Cargo*          cargo;
