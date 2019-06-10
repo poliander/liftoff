@@ -14,7 +14,7 @@ AC_DEFUN([AC_DEFINE_DIR], [
 ])
 
 AC_PREREQ(2.61)
-AC_INIT(liftoff, [2019/06/09], poliander@mailbox.org)
+AC_INIT(liftoff, [2019/06/10], poliander@mailbox.org)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([foreign])
@@ -34,7 +34,7 @@ AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
 
 PKG_CHECK_MODULES(
     [SDL],
-    [SDL >= 1.2.0],
+    [sdl >= 1.2.0],
     [],
     [SDL_VERSION=1.2.0
      AM_PATH_SDL($SDL_VERSION, :,
@@ -46,7 +46,7 @@ LIBS="$LIBS $SDL_LIBS"
 
 PKG_CHECK_MODULES(
     [SDL_IMAGE],
-    [SDL_image],
+    [SDL_image >= 1.2.0],
     [],
     [AC_MSG_NOTICE([SDL_image not located by pkg-config, checking with AC CHECK LIB:])
      AC_CHECK_LIB([SDL_image],
@@ -60,7 +60,7 @@ LIBS="$LIBS $SDL_IMAGE_LIBS"
 
 PKG_CHECK_MODULES(
     [SDL_MIXER],
-    [SDL_mixer],
+    [SDL_mixer >= 1.2.0],
     [],
     [AC_MSG_NOTICE([SDL_mixer not located by pkg-config, checking with AC CHECK LIB:])
      AC_CHECK_LIB([SDL_mixer],
@@ -72,7 +72,7 @@ LIBS="$LIBS $SDL_MIXER_LIBS"
 
 # GL + GLU --------------------------------------------------------------------
 
-AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install OpenGL header files])])
+AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install libgl1-mesa-dev])])
 AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
 
 case $host_os in
