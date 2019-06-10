@@ -41,7 +41,7 @@ Assumed you have a working cross-compiling environment available (congratulation
 
 Write debug information to "debug.log"
 
-```liftoff -msoff```
+```liftoff -noms```
 
 Disable multisampling
 
