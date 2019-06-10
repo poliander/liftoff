@@ -111,10 +111,9 @@ bool Engine::init(int argc, char **argv) {
         { 800, 600 }
     };
 
-    // parse command line parameters
     if (argc >= 0) {
         for (int i=0; i<argc; i++) {
-            if (strcmp(argv[i], "-msoff") == 0) {
+            if (strcmp(argv[i], "-noms") == 0) {
                 state->vid_cfg_multisampling = 0;
                 continue;
             }
@@ -128,28 +127,30 @@ bool Engine::init(int argc, char **argv) {
 
     scenery = new Scenery(state);
 
-    // SDL initalization
-    state->log("Initializing Simple DirectMedia Layer\n");
+    state->log("Initializing SDL... ");
+
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK)) {
         sprintf(msg, "%s\n", SDL_GetError());
         state->log(msg);
 
         delete [] msg;
         return false;
+    } else {
+        state->log("ok\n");
     }
 
-    // SDL joystick/gamepad initialization
-    state->log("Initializing joystick or gamepad... ");
+    state->log("Detecting input devices... ");
+
     if (SDL_NumJoysticks() > 0) {
         state->joystick = SDL_JoystickOpen(0);
 
         if (state->joystick) {
-            state->log("ok\n");
+            state->log("joystick/gamepad found\n");
         } else {
-            state->log("failed\n");
+            state->log("failed to initialize joystick/gamepad\n");
         }
     } else {
-        state->log("failed\n");
+        state->log("none found\n");
     }
 
     // get location of configuration file
@@ -226,10 +227,13 @@ bool Engine::init(int argc, char **argv) {
         state->log("No valid video mode found\n");
         return false;
     }
-    for(i=0; vidmodes[i]; ++i);
+
+    for (i = 0; vidmodes[i]; ++i);
+
     state->vid_sup_modes_count = i;
     state->vid_sup_modes = vidmodes;
-    if (i>0) {
+
+    if (i > 0) {
         defmodes[2][0] = state->vid_sup_modes[i-1]->w;
         defmodes[2][1] = state->vid_sup_modes[i-1]->h;
     } else {
@@ -238,7 +242,8 @@ bool Engine::init(int argc, char **argv) {
         delete [] msg;
         return false;
     }
-    for (i=0; i<3; i++) {
+
+    for (i = 0; i < 3; i++) {
         if (state->config.vid_fullscreen) {
             modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state->vid_cfg_depth, SDL_FULLSCREEN);
             if (modeok) {
@@ -255,13 +260,14 @@ bool Engine::init(int argc, char **argv) {
             }
         }
     }
-    if (!modeok) {
+
+    if (modeok) {
+        getVideoModeID();
+    } else {
         state->log("No valid video mode found\n");
 
         delete [] msg;
         return false;
-    } else {
-        getVideoModeID();
     }
 
     sprintf(msg, "- %dx%d @ %d bpp ",
@@ -269,23 +275,25 @@ bool Engine::init(int argc, char **argv) {
         state->config.vid_height,
         state->vid_cfg_depth
     );
+
     state->log(msg);
 
     if (state->config.vid_fullscreen == 0) {
-        state->log("window mode selected\n");
+        state->log("window mode\n");
     } else {
         state->log("fullscreen mode selected\n");
     }
 
     state->log("- vsync ");
+
     if (state->config.vid_vsync == 0) {
         state->log("off\n");
     } else {
         state->log("on\n");
     }
 
-    // OpenGL initialization
     state->log("Initializing OpenGL display\n");
+
     if (!initDisplay()) {
         state->log(SDL_GetError());
         state->log("\n\n");
@@ -294,16 +302,16 @@ bool Engine::init(int argc, char **argv) {
         return false;
     }
 
-    // audio initalization
     if (state->config.aud_sfx || state->config.aud_music) {
-        sprintf(msg, "Initializing audio device (%d Hz)\n", state->config.aud_mixfreq);
+        sprintf(msg, "Initializing audio device at %d Hz... ", state->config.aud_mixfreq);
         state->log(msg);
 
         if (Mix_OpenAudio(state->config.aud_mixfreq, DEFAULT_AUD_FORMAT, 2, 1024) == -1) {
-            state->log("Couldn't initialize audio device, SFX and music disabled\n");
+            state->log("failed\n");
             state->config.aud_sfx = -1;
             state->config.aud_music = -1;
         } else {
+            state->log("ok\n");
             state->audio->init(
                     state->engine_datadir,
                     state->config.aud_sfx,
@@ -362,21 +370,30 @@ void Engine::shutdown() {
  * OpenGL screen initalization
  */
 bool Engine::initDisplay() {
-    int result;
+    int cfg_multisampling, sdl_mode;
     char msg[255];
 
     switch (state->config.vid_aspect) {
         case 1:
             state->vid_cfg_aspect = 4.0f/3.0f;
             break;
+
         case 2:
             state->vid_cfg_aspect = 16.0f/9.0f;
             break;
+
         case 3:
             state->vid_cfg_aspect = 1.6f;
             break;
+
         default:
             state->vid_cfg_aspect = (float)state->config.vid_width/(float)state->config.vid_height;
+    }
+
+    if (state->config.vid_fullscreen) {
+        sdl_mode = SDL_OPENGL | SDL_FULLSCREEN;
+    } else {
+        sdl_mode = SDL_OPENGL;
     }
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
@@ -396,56 +413,47 @@ bool Engine::initDisplay() {
         SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
     }
 
-    if (state->config.vid_fullscreen) {
-        screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, SDL_OPENGL | SDL_FULLSCREEN);
-    } else {
-        screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, SDL_OPENGL);
-    }
+    screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, sdl_mode);
 
-    // catch multisampling failure
-    while ((screen == NULL) && (state->vid_cfg_multisampling > 0)) {
-        SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &result);
+    SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
 
-        if (result != state->vid_cfg_multisampling) {
-            switch (state->vid_cfg_multisampling) {
-                case 16:
-                    state->vid_cfg_multisampling = 8;
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
-                    break;
-                case 8:
-                    state->vid_cfg_multisampling = 4;
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
-                    break;
-                case 4:
-                    state->vid_cfg_multisampling = 2;
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
-                    break;
-                case 2:
-                    state->vid_cfg_multisampling = 0;
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-                    break;
-            }
+    while (screen == NULL && state->vid_cfg_multisampling != cfg_multisampling) {
+        switch (state->vid_cfg_multisampling) {
+            case 16:
+                state->vid_cfg_multisampling = 8;
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+                break;
+
+            case 8:
+                state->vid_cfg_multisampling = 4;
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+                break;
+
+            case 4:
+                state->vid_cfg_multisampling = 2;
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state->vid_cfg_multisampling);
+                break;
+
+            case 2:
+                state->vid_cfg_multisampling = 0;
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+                break;
+
+            case 0:
+               return false;
         }
 
-        if (state->config.vid_fullscreen) {
-            screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, SDL_OPENGL | SDL_FULLSCREEN);
-        } else {
-            screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, SDL_OPENGL);
-        }
+        screen = SDL_SetVideoMode(state->config.vid_width, state->config.vid_height, state->vid_cfg_depth, sdl_mode);
+        SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
     }
 
-    if (screen == NULL) {
-        // failed to create OpenGL window
-        return false;
-    }
-
-    if (state->vid_cfg_multisampling == 0) {
+    if (cfg_multisampling == 0) {
         sprintf(msg, "Multisampling disabled\n");
     } else {
-        sprintf(msg, "Multisampling enabled (%d spp)\n", state->vid_cfg_multisampling);
+        sprintf(msg, "Multisampling enabled (%d spp)\n", cfg_multisampling);
     }
 
     state->log(msg);
