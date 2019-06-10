@@ -8,7 +8,7 @@ State::State() {
 
     if ((buf = (char *)malloc((size_t)psize)) != NULL) {
         getcwd(buf, (size_t)psize);
-        sprintf(engine_datadir, "%s/dat", buf);
+        sprintf(engine_datadir, "%s/resources", buf);
         delete [] buf;
     }
 
