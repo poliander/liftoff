@@ -1,7 +1,6 @@
 #ifndef DEFINITIONS_HPP_
 #define DEFINITIONS_HPP_
 
-#define PACKAGE_VERSION         "2019/06/09"
 #define DEFAULT_CFG_FILE        "liftoff.cfg"
 #define GAME_DATA               "."
 

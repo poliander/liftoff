@@ -11,6 +11,8 @@
 #include <GL/glu.h>
 #include <GL/glext.h>
 
+#include "../config.h"
+
 #include "object.hpp"
 #include "player.hpp"
 #include "state.hpp"
