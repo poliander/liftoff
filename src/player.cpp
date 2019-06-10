@@ -164,76 +164,83 @@ void Player::move() {
     if (state->engine_boundary) {
         if (state->objects[state->player].pos_x < -600.0f) {
             state->objects[state->player].pos_x = -600.0f;
-            if (state->objects[state->player].t_x > 0) {
-                state->objects[state->player].t_x = 0;
+
+            if (state->objects[state->player].a_x > 0) {
+                state->objects[state->player].a_x = 0;
             }
         }
 
         if (state->objects[state->player].pos_x > 600.0f) {
             state->objects[state->player].pos_x = 600.0f;
-            if (state->objects[state->player].t_x < 0) {
-                state->objects[state->player].t_x = 0;
+
+            if (state->objects[state->player].a_x < 0) {
+                state->objects[state->player].a_x = 0;
             }
         }
 
         if (state->objects[state->player].pos_y < -400.0f) {
             state->objects[state->player].pos_y = -400.0f;
-            if (state->objects[state->player].t_y > 0) {
-                state->objects[state->player].t_y = 0;
+
+            if (state->objects[state->player].a_y > 0) {
+                state->objects[state->player].a_y = 0;
             }
         }
 
         if (state->objects[state->player].pos_y > 400.0f) {
             state->objects[state->player].pos_y = 400.0f;
-            if (state->objects[state->player].t_y < 0) {
-                state->objects[state->player].t_y = 0;
+
+            if (state->objects[state->player].a_y < 0) {
+                state->objects[state->player].a_y = 0;
             }
         }
     }
 
     // horizontal acceleration limit
-    if (fabs(state->objects[state->player].t_x) > acceleration * .005f) {
-        if (state->objects[state->player].t_x > 0) {
-            state->objects[state->player].t_x = acceleration * .005f;
+    if (fabs(state->objects[state->player].a_x) > acceleration * .005f) {
+        if (state->objects[state->player].a_x > 0) {
+            state->objects[state->player].a_x = acceleration * .005f;
         } else {
-            state->objects[state->player].t_x = -acceleration * .005f;
+            state->objects[state->player].a_x = -acceleration * .005f;
         }
     }
 
     // vertical acceleration limit
-    if (fabs(state->objects[state->player].t_y) > acceleration * .005f) {
-        if (state->objects[state->player].t_y > 0) {
-            state->objects[state->player].t_y = acceleration * .005f;
+    if (fabs(state->objects[state->player].a_y) > acceleration * .005f) {
+        if (state->objects[state->player].a_y > 0) {
+            state->objects[state->player].a_y = acceleration * .005f;
         } else {
-            state->objects[state->player].t_y = -acceleration * .005f;
+            state->objects[state->player].a_y = -acceleration * .005f;
         }
     }
 
-    // accelerate and move left/right
-    if ((state->objects[state->player].t_x - state->objects[state->player].a_x) > .0005f) {
-        state->objects[state->player].a_x += (state->objects[state->player].t_x - state->objects[state->player].a_x) * state->timer_adjustment * acceleration * countersteering;
-    } else if ((state->objects[state->player].a_x - state->objects[state->player].t_x) > .0005f) {
-        state->objects[state->player].a_x -= (state->objects[state->player].a_x - state->objects[state->player].t_x) * state->timer_adjustment * acceleration * countersteering;
+    // move left/right
+    if ((state->objects[state->player].a_x - state->objects[state->player].s_x) > .0005f) {
+        state->objects[state->player].s_x += (state->objects[state->player].a_x - state->objects[state->player].s_x) * state->timer_adjustment * acceleration * countersteering;
+    } else if ((state->objects[state->player].s_x - state->objects[state->player].a_x) > .0005f) {
+        state->objects[state->player].s_x -= (state->objects[state->player].s_x - state->objects[state->player].a_x) * state->timer_adjustment * acceleration * countersteering;
     }
-    state->objects[state->player].t_x = 0;
-    state->objects[state->player].pos_x -= state->objects[state->player].a_x * state->timer_adjustment * 10.0f;
 
-    // accelerate and move up/down
-    if ((state->objects[state->player].t_y - state->objects[state->player].a_y) > .0005f) {
-        state->objects[state->player].a_y += (state->objects[state->player].t_y - state->objects[state->player].a_y) * state->timer_adjustment * acceleration * countersteering;
-    } else if ((state->objects[state->player].a_y - state->objects[state->player].t_y) > .0005f) {
-        state->objects[state->player].a_y -= (state->objects[state->player].a_y - state->objects[state->player].t_y) * state->timer_adjustment * acceleration * countersteering;
+    state->objects[state->player].a_x = 0;
+    state->objects[state->player].pos_x -= state->objects[state->player].s_x * state->timer_adjustment * 10.0f;
+
+    // move up/down
+    if ((state->objects[state->player].a_y - state->objects[state->player].s_y) > .0005f) {
+        state->objects[state->player].s_y += (state->objects[state->player].a_y - state->objects[state->player].s_y) * state->timer_adjustment * acceleration * countersteering;
+    } else if ((state->objects[state->player].s_y - state->objects[state->player].a_y) > .0005f) {
+        state->objects[state->player].s_y -= (state->objects[state->player].s_y - state->objects[state->player].a_y) * state->timer_adjustment * acceleration * countersteering;
     }
-    state->objects[state->player].t_y = 0;
-    state->objects[state->player].pos_y -= state->objects[state->player].a_y * state->timer_adjustment * 10.0f;
+
+    state->objects[state->player].a_y = 0;
+    state->objects[state->player].pos_y -= state->objects[state->player].s_y * state->timer_adjustment * 10.0f;
 
     // accelerate and move forward/backward
-    if (state->objects[state->player].a_z < state->objects[state->player].t_z) {
-        state->objects[state->player].a_z += .04f * ((state->objects[state->player].t_z - state->objects[state->player].a_z)+.01f) * state->timer_adjustment;
-    } else if (state->objects[state->player].a_z > state->objects[state->player].t_z) {
-        state->objects[state->player].a_z -= .04f * ((state->objects[state->player].a_z - state->objects[state->player].t_z)+.01f) * state->timer_adjustment;
+    if (state->objects[state->player].s_z < state->objects[state->player].a_z) {
+        state->objects[state->player].s_z += .04f * ((state->objects[state->player].a_z - state->objects[state->player].s_z)+.01f) * state->timer_adjustment;
+    } else if (state->objects[state->player].s_z > state->objects[state->player].a_z) {
+        state->objects[state->player].s_z -= .04f * ((state->objects[state->player].s_z - state->objects[state->player].a_z)+.01f) * state->timer_adjustment;
     }
-    state->objects[state->player].pos_z -= state->objects[state->player].a_z * state->timer_adjustment;
+
+    state->objects[state->player].pos_z -= state->objects[state->player].s_z * state->timer_adjustment;
 
     // engine exhausts
     jr += state->timer_adjustment * .2f;
@@ -430,10 +437,10 @@ void Player::draw() {
     }
 
     // roll
-    glRotatef(270.0f + (state->objects[state->player].a_x * 50.0f), 0, 0, 1);
+    glRotatef(270.0f + (state->objects[state->player].s_x * 50.0f), 0, 0, 1);
 
     // pitch
-    glRotatef(state->objects[state->player].a_y * -20.0f, 0, 1, 0);
+    glRotatef(state->objects[state->player].s_y * -20.0f, 0, 1, 0);
 
     glRotatef(getRotX(state->player), 0, 1, 0);
     glRotatef(getRotY(state->player), 0, 0, 1);

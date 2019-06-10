@@ -1442,7 +1442,7 @@ void Scenery::moveObjects() {
                                 }
 
                                 // transmit impulse to ship
-                                player->impulse(state->player, ix, iy, .0f);
+                                player->addSpeed(state->player, ix, iy, .0f);
 
                                 dmg = 20 - int((fabs(ix)+fabs(iy))*40.0f);
                                 if (dmg > 0) {
@@ -1521,7 +1521,7 @@ void Scenery::moveObjects() {
                     }
 
                     // transmit impulse to ship and tilt camera
-                    player->impulse(state->player, ix, iy, 0);
+                    player->addSpeed(state->player, ix, iy, 0);
                     player->tilt((fabs(ix)+fabs(iy)) * 15.0f );
 
                     // calculate damage
@@ -1763,9 +1763,9 @@ void Scenery::draw() {
     // set up view
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     gluLookAt(
-      -p_x*.01f + state->tilt_x*.4f, -p_y*.01f + state->objects[state->player].a_y*10.0f + state->tilt_y*.4f, 200.0f,
-      state->objects[state->player].a_x*.5f, .0f, -10000.0f,
-      state->objects[state->player].a_x*.05f, -1.0f, .0f
+      -p_x*.01f + state->tilt_x*.4f, -p_y*.01f + state->objects[state->player].s_y*10.0f + state->tilt_y*.4f, 200.0f,
+      state->objects[state->player].s_x*.5f, .0f, -10000.0f,
+      state->objects[state->player].s_x*.05f, -1.0f, .0f
     );
 
     drawBackground();

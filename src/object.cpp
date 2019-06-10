@@ -338,30 +338,24 @@ void Object::setPos(int oid, float px, float py, float pz) {
     state->objects[oid].pos_z = pz;
 }
 
+void Object::addSpeed(int oid, float sx, float sy, float sz) {
+    state->objects[oid].s_x += sx;
+    state->objects[oid].s_y += sy;
+    state->objects[oid].s_z += sz;
+}
+
 void Object::accelerateX(int oid, float ax) {
-    state->objects[oid].t_x = ax;
+    state->objects[oid].a_x = ax;
 }
 
 void Object::accelerateY(int oid, float ay) {
-    state->objects[oid].t_y = ay;
+    state->objects[oid].a_y = ay;
 }
 
 void Object::accelerateZ(int oid, float az) {
-    state->objects[oid].t_z = az;
+    state->objects[oid].a_z = az;
 }
 
-/*
- *     object receives impulse
- */
-void Object::impulse(int oid, float ix, float iy, float iz) {
-    state->objects[oid].a_x += ix;
-    state->objects[oid].a_y += iy;
-    state->objects[oid].a_z += iz;
-}
-
-/*
- * set object rotation
- */
 void Object::setRot(int oid, float rx, float ry, float rz) {
     state->objects[oid].rot_x = rx;
     state->objects[oid].rot_y = ry;
@@ -400,12 +394,7 @@ float Object::getSpinZ(int oid) {
 
 void Object::move(int oid) {
     if (state->objects[oid].type == OBJ_TYPE_SCENERY) {
-        if (state->objects[oid].id == OBJ_POWERUP_1) {
-            state->objects[oid].cnt2 += state->timer_adjustment;
-            state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed) * .25f;
-        } else {
-            state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed) * .5f;
-        }
+        state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed) * .5f;
     } else {
         state->objects[oid].pos_z += state->timer_adjustment * (state->objects[oid].speed + state->objects[state->player].speed);
     }
@@ -422,7 +411,8 @@ void Object::move(int oid) {
     if (state->objects[oid].rot_z > 360.0f)
         state->objects[oid].rot_z -= 360.0f;
 
-    if (state->objects[oid].pos_z > 100.0f) state->remove(oid);
+    if (state->objects[oid].pos_z > 100.0f)
+        state->remove(oid);
 }
 
 void Object::drawCrosshair(int oid, float r, float g, float b) {

@@ -46,11 +46,11 @@ struct object_t {
     float               pos_y;
     float               pos_z;
 
-    float               t_x;        // thrusters
-    float               t_y;
-    float               t_z;
+    float               s_x;        // speed
+    float               s_y;
+    float               s_z;
 
-    float               a_x;        // speed
+    float               a_x;        // acceleration
     float               a_y;
     float               a_z;
 

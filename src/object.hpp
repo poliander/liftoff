@@ -69,12 +69,11 @@ class Object {
         void        drawCrosshair(int oid, float r, float g, float b);
 
         void        setPos(int oid, float px, float py, float pz);
+        void        addSpeed(int oid, float sx, float sy, float sz);
 
         void        accelerateX(int oid, float ax);
         void        accelerateY(int oid, float ay);
         void        accelerateZ(int oid, float az);
-
-        void        impulse(int oid, float ix, float iy, float iz);
 
         void        setRot(int oid, float rx, float ry, float rz);
         float       getRotX(int oid);

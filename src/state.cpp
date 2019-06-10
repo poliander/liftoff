@@ -381,16 +381,20 @@ bool State::set(int s) {
 
             objects[player].type = OBJ_TYPE_PLAYER;
             objects[player].id = OBJ_PLAYER;
-            objects[player].waiting    = false;
+            objects[player].waiting = false;
+
             objects[player].rot_x = .0f;
             objects[player].rot_y = .0f;
             objects[player].rot_z = 250.0f;
+
             objects[player].rsp_x = .0f;
             objects[player].rsp_y = .0f;
             objects[player].rsp_z = .0f;
-            objects[player].t_x = .0f;
-            objects[player].t_y = .0f;
-            objects[player].t_z = .0f;
+
+            objects[player].s_x = .0f;
+            objects[player].s_y = .0f;
+            objects[player].s_z = .0f;
+
             objects[player].a_x = .0f;
             objects[player].a_y = .0f;
             objects[player].a_z = .0f;
@@ -462,18 +466,19 @@ bool State::set(int s) {
             objects[player].pos_x = .0f;
             objects[player].pos_y = -90.0f;
             objects[player].pos_z = 50.0f;
+
             objects[player].rot_x = .0f;
             objects[player].rot_y = .0f;
             objects[player].rot_z = .0f;
-            objects[player].rot_x = .0f;
-            objects[player].rot_y = .0f;
-            objects[player].rot_z = .0f;
+
             objects[player].rsp_x = .0f;
             objects[player].rsp_y = .0f;
             objects[player].rsp_z = .0f;
-            objects[player].t_x = .0f;
-            objects[player].t_y = .0f;
-            objects[player].t_z = .0f;
+
+            objects[player].s_x = .0f;
+            objects[player].s_y = .0f;
+            objects[player].s_z = .0f;
+
             objects[player].a_x = .0f;
             objects[player].a_y = .0f;
             objects[player].a_z = .0f;
