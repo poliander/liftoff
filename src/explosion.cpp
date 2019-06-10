@@ -42,30 +42,30 @@ bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp) 
             break;
     }
 
-    new_explosion.type        = OBJ_TYPE_EXPLOSION;
+    new_explosion.type      = OBJ_TYPE_EXPLOSION;
     new_explosion.id        = eid;
-    new_explosion.waiting    = 0;
-    new_explosion.life        = 0;
-    new_explosion.life_time    = 0;
-    new_explosion.life_max    = life_time;
-    new_explosion.cnt        = .0f;
-    new_explosion.speed        = sp;
+    new_explosion.waiting   = 0;
+    new_explosion.life      = 0;
+    new_explosion.life_time = 0;
+    new_explosion.life_max  = life_time;
+    new_explosion.cnt       = .0f;
+    new_explosion.speed     = sp;
 
-    new_explosion.pos_x        = px;
-    new_explosion.pos_y        = py;
-    new_explosion.pos_z        = pz;
+    new_explosion.pos_x     = px;
+    new_explosion.pos_y     = py;
+    new_explosion.pos_z     = pz;
 
-    new_explosion.rot_x        = float(rand()%360);
-    new_explosion.rot_y        = float(rand()%360);
-    new_explosion.rot_z        = float(rand()%360);
+    new_explosion.rot_x     = float(rand()%360);
+    new_explosion.rot_y     = float(rand()%360);
+    new_explosion.rot_z     = float(rand()%360);
 
-    new_explosion.rsp_x        = .0f;
-    new_explosion.rsp_y        = .0f;
-    new_explosion.rsp_z        = .0f;
+    new_explosion.rsp_x     = .0f;
+    new_explosion.rsp_y     = .0f;
+    new_explosion.rsp_z     = .0f;
 
-    new_explosion.scale_x    = .0f;
-    new_explosion.scale_y    = .0f;
-    new_explosion.scale_z    = .0f;
+    new_explosion.scale_x   = .0f;
+    new_explosion.scale_y   = .0f;
+    new_explosion.scale_z   = .0f;
 
     return state->add(&new_explosion);
 }
@@ -97,11 +97,11 @@ void Explosion::draw(int oid) {
 
         // green sparky gun fire impact
         case OBJ_EXPLOSION_1:
-            particles->setAlpha(1.5f - (state->objects[oid].life_time * .0015f));
+            particles->setAlpha(1.0f - (state->objects[oid].life_time * .001f));
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(3.0f);
-            particles->setScale(1.0f + state->objects[oid].cnt);
-            particles->setParticleNumber(30);
+            particles->setSize(2.5f);
+            particles->setScale(.75f + state->objects[oid].cnt);
+            particles->setParticleNumber(25);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
