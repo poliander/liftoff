@@ -149,7 +149,7 @@ bool State::load() {
                 // colliding object, obstacle
                 if (!strcmp(cmd, "collider")) {
                     nobj.type = OBJ_TYPE_COLLIDER;
-                    nobj.waiting = 1;
+                    nobj.state = OBJ_STATE_IDLE;
                     nobj.speed = 0;
                     nobj.cnt = 0;
                     nobj.life_time = -1;
@@ -180,7 +180,7 @@ bool State::load() {
                 // scenery object
                 if (!strcmp(cmd, "scenery")) {
                     nobj.type = OBJ_TYPE_SCENERY;
-                    nobj.waiting = 1;
+                    nobj.state = OBJ_STATE_IDLE;
                     nobj.speed = 0;
                     nobj.cnt = 0;
                     nobj.life_time = -1;
@@ -299,10 +299,10 @@ void State::sort() {
     object_t tmpobj;
 
     for (i=0; i<lvl_entities-1; i++) {
-        if (objects[i].waiting) continue;
+        if (objects[i].state == OBJ_STATE_IDLE) continue;
 
         for (j=i+1; j<lvl_entities; j++) {
-            if (objects[j].waiting) continue;
+            if (objects[j].state == OBJ_STATE_IDLE) continue;
 
             if (objects[i].pos_z > objects[j].pos_z) {
                 if (i == player) {
@@ -379,9 +379,9 @@ bool State::set(int s) {
             player = 0;
             engine_restart = false;
 
-            objects[player].type = OBJ_TYPE_PLAYER;
-            objects[player].id = OBJ_PLAYER;
-            objects[player].waiting = false;
+            objects[player].type  = OBJ_TYPE_PLAYER;
+            objects[player].state = OBJ_STATE_ACTIVE;
+            objects[player].id    = OBJ_PLAYER;
 
             objects[player].rot_x = .0f;
             objects[player].rot_y = .0f;
@@ -391,13 +391,13 @@ bool State::set(int s) {
             objects[player].rsp_y = .0f;
             objects[player].rsp_z = .0f;
 
-            objects[player].s_x = .0f;
-            objects[player].s_y = .0f;
-            objects[player].s_z = .0f;
+            objects[player].s_x   = .0f;
+            objects[player].s_y   = .0f;
+            objects[player].s_z   = .0f;
 
-            objects[player].a_x = .0f;
-            objects[player].a_y = .0f;
-            objects[player].a_z = .0f;
+            objects[player].a_x   = .0f;
+            objects[player].a_y   = .0f;
+            objects[player].a_z   = .0f;
 
             audio->playMusic(0, 1000);
             audio->stopSampleLoop(0);

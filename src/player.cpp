@@ -118,8 +118,8 @@ bool Player::shoot() {
     object_t new_missile;
 
     new_missile.type        = OBJ_TYPE_MISSILE;
+    new_missile.state       = OBJ_STATE_ACTIVE;
     new_missile.id          = OBJ_MISSILE_1;
-    new_missile.waiting     = false;
 
     new_missile.life        = -1;
     new_missile.life_max    = -1;

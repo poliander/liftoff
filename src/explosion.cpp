@@ -43,8 +43,8 @@ bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp) 
     }
 
     new_explosion.type      = OBJ_TYPE_EXPLOSION;
+    new_explosion.state     = OBJ_STATE_ACTIVE;
     new_explosion.id        = eid;
-    new_explosion.waiting   = 0;
     new_explosion.life      = 0;
     new_explosion.life_time = 0;
     new_explosion.life_max  = life_time;

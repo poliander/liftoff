@@ -25,9 +25,8 @@ struct config_t {
 // object
 struct object_t {
     int                 type;       // OBJ_TYPE_*
+    int                 state;      // OBJ_STATE_*
     int                 id;         // OBJ_*
-
-    bool                waiting;
 
     int                 life;
     int                 life_max;

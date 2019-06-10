@@ -40,6 +40,10 @@
 #define OBJ_TYPE_EXPLOSION      5
 #define OBJ_TYPE_POWERUP        6
 
+// object states
+#define OBJ_STATE_IDLE          0
+#define OBJ_STATE_ACTIVE        1
+
 // object IDs
 #define OBJ_PLAYER              101 // player
 #define OBJ_CARGO_1             201 // cargo

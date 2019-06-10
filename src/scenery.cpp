@@ -934,16 +934,22 @@ void Scenery::drawObjects() {
     float alpha;
 
     state->objects[state->player].target = -1;
+
     for (i=0; i<state->lvl_entities; i++) {
-        if ( (state->objects[i].waiting == 0) &&
-             (state->objects[i].type == OBJ_TYPE_COLLIDER) ||
-             (state->objects[i].type == OBJ_TYPE_POWERUP) ) {
+        if (state->objects[i].state == OBJ_STATE_IDLE) {
+            continue;
+        }
+
+        if (state->objects[i].type == OBJ_TYPE_COLLIDER ||
+            state->objects[i].type == OBJ_TYPE_POWERUP) {
             player->getTarget(i);
         }
     }
 
     for (i=0; i<state->lvl_entities; i++) {
-        if (state->objects[i].waiting) continue;
+        if (state->objects[i].state == OBJ_STATE_IDLE) {
+            continue;
+        }
 
         switch(state->objects[i].id) {
             case OBJ_PLAYER:
@@ -1259,31 +1265,31 @@ void Scenery::moveObjects() {
 
         object_t new_debris;
 
-        new_debris.type            = OBJ_TYPE_SCENERY;
-        new_debris.id            = OBJ_DEBRIS_1;
-        new_debris.waiting        = false;
+        new_debris.type      = OBJ_TYPE_SCENERY;
+        new_debris.state     = OBJ_STATE_ACTIVE;
+        new_debris.id        = OBJ_DEBRIS_1;
 
-        new_debris.life            = -1;
-        new_debris.life_max        = -1;
-        new_debris.life_time    = -1;
-        new_debris.cnt            = .0f;
-        new_debris.speed        = .0f;
+        new_debris.life      = -1;
+        new_debris.life_max  = -1;
+        new_debris.life_time = -1;
+        new_debris.cnt       = .0f;
+        new_debris.speed     = .0f;
 
-        new_debris.pos_x        = -600.0f + float(rand() % 1200);
-        new_debris.pos_y        = -400.0f + float(rand() % 800);
-        new_debris.pos_z        = -8000.0f;
+        new_debris.pos_x     = -600.0f + float(rand() % 1200);
+        new_debris.pos_y     = -400.0f + float(rand() % 800);
+        new_debris.pos_z     = -8000.0f;
 
-        new_debris.rot_x        = .0f;
-        new_debris.rot_y        = .0f;
-        new_debris.rot_z        = .0f;
+        new_debris.rot_x     = .0f;
+        new_debris.rot_y     = .0f;
+        new_debris.rot_z     = .0f;
 
-        new_debris.rsp_x        = float(rand() % 100) * .1f;
-        new_debris.rsp_y        = float(rand() % 100) * .1f;
-        new_debris.rsp_z        = float(rand() % 100) * .1f;
+        new_debris.rsp_x     = float(rand() % 100) * .1f;
+        new_debris.rsp_y     = float(rand() % 100) * .1f;
+        new_debris.rsp_z     = float(rand() % 100) * .1f;
 
-        new_debris.scale_x        = 25.0f + float(rand() % 500) * .2f;
-        new_debris.scale_y        = 25.0f + float(rand() % 500) * .2f;
-        new_debris.scale_z        = 25.0f + float(rand() % 500) * .2f;
+        new_debris.scale_x   = 25.0f + float(rand() % 500) * .2f;
+        new_debris.scale_y   = 25.0f + float(rand() % 500) * .2f;
+        new_debris.scale_z   = 25.0f + float(rand() % 500) * .2f;
 
         state->add(&new_debris);
     }
@@ -1295,10 +1301,10 @@ void Scenery::moveObjects() {
 
     for (i=0; i<state->lvl_entities; i++) {
 
-        // activate waiting object?
-        if (state->objects[i].waiting) {
+        // activate idle object
+        if (state->objects[i].state == OBJ_STATE_IDLE) {
             if (state->lvl_pos > state->objects[i].pos_z) {
-                state->objects[i].waiting = false;
+                state->objects[i].state = OBJ_STATE_ACTIVE;
                 state->objects[i].pos_z = -9999.0f;
             } else {
                 continue;
@@ -1341,7 +1347,7 @@ void Scenery::moveObjects() {
                 for (j=0; j<state->lvl_entities; j++) {
 
                     // missiles only hit colliders
-                    if ( (state->objects[j].waiting) ||
+                    if ( (state->objects[j].state == OBJ_STATE_IDLE) ||
                          (state->objects[j].type != OBJ_TYPE_COLLIDER) ) continue;
 
                     // colliders have already passed by
