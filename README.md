@@ -17,11 +17,11 @@ This game somehow happened after I looked at the source code of [Xavier Hosxe's 
 
 ### Requirements
 
-- libgl1-mesa-dev
-- libglu1-mesa-dev
-- libsdl1.2-dev
-- libsdl-mixer1.2-dev (with ogg vorbis support)
-- libsdl-image1.2-dev
+- libGL
+- libGLU
+- SDL 1.2
+- SDL\_mixer 1.2 (with ogg vorbis support)
+- SDL\_image 1.2
 
 ### Compilation
 
