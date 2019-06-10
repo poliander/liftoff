@@ -24,8 +24,7 @@ State::State() {
     config.aud_music        = 2;
     config.aud_mixfreq      = DEFAULT_AUD_MIXFREQ;
 
-    vid_cfg_lowquality      = false;
-    vid_cfg_multisampling   = 0;
+    vid_cfg_multisampling   = 8;
 
     log_file                = E_LOG_FILE;
 

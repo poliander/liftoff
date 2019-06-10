@@ -23,10 +23,6 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
         pnum = particles;
     }
 
-    if (state->vid_cfg_lowquality) {
-        pnum /= 2;
-    }
-
     pdec = decay;
     psize = size;
     pdx = dx;

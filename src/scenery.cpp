@@ -32,11 +32,6 @@ Scenery::Scenery(State* sptr) {
     cargo = new Cargo(state);
     powerup = new Powerup(state);
 
-    if (state->vid_cfg_lowquality) {
-        state->engine_stars /= 2;
-        state->engine_stars_warp /= 2;
-    }
-
     srand((int)time(NULL));
 
     // generate far stars
@@ -141,14 +136,9 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap) {
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    if (mipmap && !state->vid_cfg_lowquality) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-    } else {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, target->pixels);
 
@@ -179,57 +169,49 @@ void Scenery::load() {
     state->texture[T_EXPLOSION_3]   = loadTexture("star.tga", false);
     state->texture[T_EXPLOSION_4]   = loadTexture("explosion_3.tga", false);
     state->texture[T_JET]           = loadTexture("star.tga", false);
-
-    if (state->vid_cfg_lowquality) {
-        state->texture[T_BACKGROUND_1] = loadTexture("background_1_lq.tga", false);
-    } else {
-        state->texture[T_BACKGROUND_1] = loadTexture("background_1.tga", false);
-    }
+    state->texture[T_BACKGROUND_1]  = loadTexture("background_1.tga", false);
 
     // asteroid
     state->log("Loading 'obj/asteroid_1.obj'\n");
-      asteroid->textures[0] = loadTexture("asteroid_1.tga", false);
-      asteroid->load(state->engine_datadir, "asteroid_1.obj");
+    asteroid->textures[0] = loadTexture("asteroid_1.tga", false);
+    asteroid->load(state->engine_datadir, "asteroid_1.obj");
 
     // debris
-    if (!state->vid_cfg_lowquality) {
-        state->log("Loading 'obj/debris_1.obj'\n");
-          debris->textures[0] = loadTexture("debris_1.tga", false);
-          debris->load(state->engine_datadir, "debris_1.obj");
-    }
+    state->log("Loading 'obj/debris_1.obj'\n");
+    debris->textures[0] = loadTexture("debris_1.tga", false);
+    debris->load(state->engine_datadir, "debris_1.obj");
 
     // cargo
     state->log("Loading 'obj/cargo_1.obj'\n");
-      cargo->textures[0] = loadTexture("cargo_1.tga", false);
-      cargo->load(state->engine_datadir, "cargo_1.obj");
-      cargo->textures[1] = loadTexture("glow_1.tga", false);
+    cargo->textures[0] = loadTexture("cargo_1.tga", false);
+    cargo->load(state->engine_datadir, "cargo_1.obj");
+    cargo->textures[1] = loadTexture("glow_1.tga", false);
 
     // player
     state->log("Loading 'obj/ship_1.obj'\n");
-      player->textures[0] = loadTexture("ship_1_1.tga", false);
-      player->textures[1] = loadTexture("ship_1_2.tga", false);
-      player->textures[2] = cargo->textures[1];
-      player->textures[3] = state->texture[T_JET];
-      player->load(state->engine_datadir, "ship_1.obj");
+    player->textures[0] = loadTexture("ship_1_1.tga", false);
+    player->textures[1] = loadTexture("ship_1_2.tga", false);
+    player->textures[2] = cargo->textures[1];
+    player->textures[3] = state->texture[T_JET];
+    player->load(state->engine_datadir, "ship_1.obj");
 
     // powerup
     powerup->textures[0] = cargo->textures[1];
 
-    // samples and music
-    state->audio->sample[0] = state->audio->loadSample("menu_1.wav");
-    state->audio->sample[1] = state->audio->loadSample("menu_2.wav");
-    state->audio->sample[2] = state->audio->loadSample("gun_1.wav");
-    state->audio->sample[3] = state->audio->loadSample("engine_1.wav");
-    state->audio->sample[4] = state->audio->loadSample("explosion_1.wav");
-    state->audio->sample[5] = state->audio->loadSample("explosion_2.wav");
-    state->audio->sample[6] = state->audio->loadSample("explosion_3.wav");
-    state->audio->sample[7] = state->audio->loadSample("shield_1.wav");
-    state->audio->sample[8] = state->audio->loadSample("engine_2.wav");
-    state->audio->sample[9] = state->audio->loadSample("powerup_1.wav");
+    // sfx
+    state->audio->sample[0]  = state->audio->loadSample("menu_1.wav");
+    state->audio->sample[1]  = state->audio->loadSample("menu_2.wav");
+    state->audio->sample[2]  = state->audio->loadSample("gun_1.wav");
+    state->audio->sample[3]  = state->audio->loadSample("engine_1.wav");
+    state->audio->sample[4]  = state->audio->loadSample("explosion_1.wav");
+    state->audio->sample[5]  = state->audio->loadSample("explosion_2.wav");
+    state->audio->sample[6]  = state->audio->loadSample("explosion_3.wav");
+    state->audio->sample[7]  = state->audio->loadSample("shield_1.wav");
+    state->audio->sample[8]  = state->audio->loadSample("engine_2.wav");
+    state->audio->sample[9]  = state->audio->loadSample("powerup_1.wav");
     state->audio->sample[10] = state->audio->loadSample("engine_3.wav");
     state->audio->sample[11] = state->audio->loadSample("logo.wav");
-
-    state->audio->music[0] = state->audio->loadMusic("music_title.ogg");
+    state->audio->music[0]   = state->audio->loadMusic("music_title.ogg");
 }
 
 /*
@@ -971,7 +953,7 @@ void Scenery::drawObjects() {
                 asteroid->draw(i);
                 break;
             case OBJ_DEBRIS_1:
-                if (!state->vid_cfg_lowquality) debris->draw(i);
+                debris->draw(i);
                 break;
             case OBJ_CARGO_1:
                 cargo->draw(i);
@@ -1272,40 +1254,38 @@ void Scenery::moveObjects() {
     float mx, my, mz, ox, oy, oz;
     static GLuint nextdebris = state->timer;
 
-    if (!state->vid_cfg_lowquality) {
-        if ((state->timer > nextdebris) && (state->lvl_pos < float(state->lvl_length-1000))) {
-            nextdebris = state->timer + 150 + rand() % 150;
+    if ((state->timer > nextdebris) && (state->lvl_pos < float(state->lvl_length-1000))) {
+        nextdebris = state->timer + 150 + rand() % 150;
 
-            object_t new_debris;
+        object_t new_debris;
 
-            new_debris.type            = OBJ_TYPE_SCENERY;
-            new_debris.id            = OBJ_DEBRIS_1;
-            new_debris.waiting        = false;
+        new_debris.type            = OBJ_TYPE_SCENERY;
+        new_debris.id            = OBJ_DEBRIS_1;
+        new_debris.waiting        = false;
 
-            new_debris.life            = -1;
-            new_debris.life_max        = -1;
-            new_debris.life_time    = -1;
-            new_debris.cnt            = .0f;
-            new_debris.speed        = .0f;
+        new_debris.life            = -1;
+        new_debris.life_max        = -1;
+        new_debris.life_time    = -1;
+        new_debris.cnt            = .0f;
+        new_debris.speed        = .0f;
 
-            new_debris.pos_x        = -600.0f + float(rand() % 1200);
-            new_debris.pos_y        = -400.0f + float(rand() % 800);
-            new_debris.pos_z        = -8000.0f;
+        new_debris.pos_x        = -600.0f + float(rand() % 1200);
+        new_debris.pos_y        = -400.0f + float(rand() % 800);
+        new_debris.pos_z        = -8000.0f;
 
-            new_debris.rot_x        = .0f;
-            new_debris.rot_y        = .0f;
-            new_debris.rot_z        = .0f;
+        new_debris.rot_x        = .0f;
+        new_debris.rot_y        = .0f;
+        new_debris.rot_z        = .0f;
 
-            new_debris.rsp_x        = float(rand() % 100) * .1f;
-            new_debris.rsp_y        = float(rand() % 100) * .1f;
-            new_debris.rsp_z        = float(rand() % 100) * .1f;
+        new_debris.rsp_x        = float(rand() % 100) * .1f;
+        new_debris.rsp_y        = float(rand() % 100) * .1f;
+        new_debris.rsp_z        = float(rand() % 100) * .1f;
 
-            new_debris.scale_x        = 25.0f + float(rand() % 500) * .2f;
-            new_debris.scale_y        = 25.0f + float(rand() % 500) * .2f;
-            new_debris.scale_z        = 25.0f + float(rand() % 500) * .2f;
+        new_debris.scale_x        = 25.0f + float(rand() % 500) * .2f;
+        new_debris.scale_y        = 25.0f + float(rand() % 500) * .2f;
+        new_debris.scale_z        = 25.0f + float(rand() % 500) * .2f;
 
-            state->add(&new_debris);
-        }
+        state->add(&new_debris);
     }
 
     explosion->move(-1);

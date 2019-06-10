@@ -37,21 +37,13 @@ Assumed you have a working cross-compiling environment available (congratulation
 
 ## Command line options
 
-```liftoff -h```
-
-Show command line parameters (Linux only).
-
 ```liftoff -d```
 
-Write debug information to "debug.log".
+Write debug information to "debug.log"
 
-```liftoff -l```
+```liftoff -msoff```
 
-Low quality mode. Half resolution for background texture, disables mip-mapping and multisampling and reduces the number of background stars and particles to 50%.
-
-```liftoff -m[2|4|8|16]```
-
-Enables multisampling at 2, 4, 8 or 16 samples. If not specified, the highest multisampling mode available on your hardware will be used. Note that multisampling is disabled in low quality mode ("-l").
+Disable multisampling
 
 ## License
 

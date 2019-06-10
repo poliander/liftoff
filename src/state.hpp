@@ -126,7 +126,6 @@ class State {
         unsigned short  vid_cfg_vsync;
         int             vid_cfg_depth;
         unsigned short  vid_cfg_multisampling;
-        bool            vid_cfg_lowquality;
 
         // money/damage messages
         unsigned short  msg_num;

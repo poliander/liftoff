@@ -113,62 +113,17 @@ bool Engine::init(int argc, char **argv) {
 
     // parse command line parameters
     if (argc >= 0) {
-        int cfg_multisampling = 0;
-        bool cfg_lowquality = false;
-
         for (int i=0; i<argc; i++) {
-
-            // show command line parameters
-            if (strcmp(argv[i], "-h") == 0) {
-                printf("\nLift Off: Beyond Glaxium (%s)\n\n", PACKAGE_VERSION);
-                printf("  -h            Show command line parameters\n");
-                printf("  -d            Write debug information to debug.log\n\n");
-                printf("  -l            Low quality mode\n");
-                printf("  -m[2|4|8|16]  Enable multisampling, use 2/4/8/16 samples\n");
-
-                return false;
-            }
-
-            if (strcmp(argv[i], "-m2") == 0) {
-                cfg_multisampling = 2;
+            if (strcmp(argv[i], "-msoff") == 0) {
+                state->vid_cfg_multisampling = 0;
                 continue;
             }
 
-            if (strcmp(argv[i], "-m4") == 0) {
-                cfg_multisampling = 4;
-                continue;
-            }
-
-            if (strcmp(argv[i], "-m8") == 0) {
-                cfg_multisampling = 8;
-                continue;
-            }
-
-            if (strcmp(argv[i], "-m16") == 0) {
-                cfg_multisampling = 16;
-                continue;
-            }
-
-            if (strcmp(argv[i], "-m") == 0) {
-                cfg_multisampling = 16;
-                continue;
-            }
-
-            if (strcmp(argv[i], "-l") == 0) {
-                cfg_lowquality = true;
-                continue;
-            }
-
-#ifdef _WIN32
             if (strcmp(argv[i], "-d") == 0) {
                 state->log_file = true;
                 continue;
             }
-#endif
         }
-
-        state->vid_cfg_lowquality = cfg_lowquality;
-        state->vid_cfg_multisampling = cfg_multisampling;
     }
 
     scenery = new Scenery(state);
@@ -324,18 +279,9 @@ bool Engine::init(int argc, char **argv) {
 
     state->log("- vsync ");
     if (state->config.vid_vsync == 0) {
-        state->log("disabled\n");
+        state->log("off\n");
     } else {
-        state->log("enabled\n");
-    }
-
-    state->log("- multisampling ");
-    if (state->vid_cfg_multisampling > 0) {
-        sprintf(msg, "enabled (%d samples)\n",
-            state->vid_cfg_multisampling);
-        state->log(msg);
-    } else {
-        state->log("disabled\n");
+        state->log("on\n");
     }
 
     // OpenGL initialization
@@ -417,7 +363,6 @@ void Engine::shutdown() {
  */
 bool Engine::initDisplay() {
     int result;
-    bool throttle_multisampling = false;
     char msg[255];
 
     switch (state->config.vid_aspect) {
@@ -462,8 +407,6 @@ bool Engine::initDisplay() {
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &result);
 
         if (result != state->vid_cfg_multisampling) {
-            throttle_multisampling = true;
-
             switch (state->vid_cfg_multisampling) {
                 case 16:
                     state->vid_cfg_multisampling = 8;
@@ -494,19 +437,18 @@ bool Engine::initDisplay() {
         }
     }
 
-    // not possible to initialize OpenGL screen
-    if (screen == NULL) return false;
-
-    // had to throttle multisampling...
-    if (throttle_multisampling) {
-        if (state->vid_cfg_multisampling > 0) {
-            sprintf(msg, "Multisampling throttled to %d samples\n", state->vid_cfg_multisampling);
-        } else {
-            sprintf(msg, "Could not enable multisampling!\n");
-        }
-
-        state->log(msg);
+    if (screen == NULL) {
+        // failed to create OpenGL window
+        return false;
     }
+
+    if (state->vid_cfg_multisampling == 0) {
+        sprintf(msg, "Multisampling disabled\n");
+    } else {
+        sprintf(msg, "Multisampling enabled (%d spp)\n", state->vid_cfg_multisampling);
+    }
+
+    state->log(msg);
 
     SDL_ShowCursor(0);
     SDL_WM_SetCaption("Lift Off: Beyond Glaxium", NULL);
