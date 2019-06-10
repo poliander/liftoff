@@ -58,9 +58,7 @@ class ParticleEngine {
         float           pr, pg, pb;
         float           palpha;
 
-        float           pfadefactor;
         float           pscale;
-        float           pdec;
         float           psize;
         float           pdx, pdy, pdz;
 

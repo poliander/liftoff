@@ -502,10 +502,11 @@ void Player::draw() {
         glBindTexture(GL_TEXTURE_2D, textures[3]);
 
         if (state->get() == STATE_GAME_NEXTLEVEL) {
-            particles->setAlpha(.85f + state->title_ypos * .005f);
-            particles->setScale(30.0f + state->title_ypos * .5f);
-            particles->setSize(.3f + state->title_ypos * .0075f);
-            particles->setDirection(0, 0, .3f + state->title_ypos * .0025f);
+            particles->setSize(10.0f + state->title_ypos * .025f);
+            particles->setScale(1.0f + state->title_ypos * .015f);
+        } else {
+            particles->setSize(10.0f);
+            particles->setScale(1.0f);
         }
 
         // engine jets

@@ -23,7 +23,6 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
         pnum = particles;
     }
 
-    pdec = decay;
     psize = size;
     pdx = dx;
     pdy = dy;
@@ -52,7 +51,7 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
             for (i=0; i<pnum; i++) {
                 p[i].active = true;
                 p[i].lifetime = 1.0f;
-                p[i].fading = pdec * (float(rand() % 50) * .0001f + .002f);
+                p[i].fading = decay * (float(rand() % 50) * .0001f + .002f);
                 p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
                 p[i].dy = -pdy*.5f + float(rand() % int(pdy*100.0f)) *.01f;
                 p[i].dz = -pdz*.5f + float(rand() % int(pdz*100.0f)) *.01f;

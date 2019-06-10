@@ -6,6 +6,7 @@ autom4te.cache/
 stamp-*
 liftoff
 liftoff.exe
+liftoff.cfg
 config.h*
 config.status
 Makefile
