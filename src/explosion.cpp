@@ -18,7 +18,7 @@ bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp) 
     switch(eid) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            life_time = 1000;
+            life_time = 500;
             break;
 
         // explosion smoke
@@ -95,12 +95,12 @@ void Explosion::draw(int oid) {
 
     switch(state->objects[oid].id) {
 
-        // green sparky gun fire impact
+        // green gun fire impact
         case OBJ_EXPLOSION_1:
-            particles->setAlpha(1.0f - (state->objects[oid].life_time * .001f));
+            particles->setAlpha(1.4f - (state->objects[oid].life_time * .002f));
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(2.5f);
-            particles->setScale(.75f + state->objects[oid].cnt);
+            particles->setSize(2.5f + (state->objects[oid].life_time * .005f));
+            particles->setScale(2.75f + (state->objects[oid].life_time * .005f));
             particles->setParticleNumber(25);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
