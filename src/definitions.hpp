@@ -38,8 +38,6 @@
 #define OBJ_TYPE_PLAYER         1
 #define OBJ_TYPE_SCENERY        2
 #define OBJ_TYPE_COLLIDER       3
-#define OBJ_TYPE_MISSILE        4
-#define OBJ_TYPE_EXPLOSION      5
 
 // object states
 #define OBJ_STATE_IDLE          0
