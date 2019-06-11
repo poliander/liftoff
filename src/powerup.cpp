@@ -8,6 +8,7 @@ Powerup::Powerup(State &s) : Object(s)
 
 Powerup::~Powerup()
 {
+    delete particles;
 }
 
 void Powerup::draw(int oid)
