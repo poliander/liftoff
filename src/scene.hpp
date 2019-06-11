@@ -1,9 +1,12 @@
 #ifndef SCENE_HPP_
 #define SCENE_HPP_
 
-#include <time.h>
+using namespace std;
+
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
+#include <vector>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -13,6 +16,7 @@
 
 #include "../config.h"
 
+#include "entity.hpp"
 #include "object.hpp"
 #include "player.hpp"
 #include "state.hpp"
@@ -26,39 +30,40 @@ class Scene
         Scene(State &s);
         ~Scene();
 
-        Player*         player;
+        Player*        player;
 
-        void            load();
-        void            move();
-        void            draw();
+        void           load();
+        void           move();
+        void           draw();
 
     private:
-        State&          state;
+        State&         state;
+        vector<Entity> entities;
 
-        Object*         object;
-        Object*         asteroid;
-        Object*         debris;
-        Cargo*          cargo;
-        Explosion*      explosion;
-        Powerup*        powerup;
+        Object*        object;
+        Object*        asteroid;
+        Object*        debris;
+        Cargo*         cargo;
+        Explosion*     explosion;
+        Powerup*       powerup;
 
-        float           stars[8000][4];
-        GLuint          loadTexture(const char *filename, bool mipmap);
+        float          stars[8000][4];
+        GLuint         loadTexture(const char *filename, bool mipmap);
 
-        void            drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void            drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void            drawBackground();
-        void            drawMouse();
-        void            drawFPS();
-        void            drawTitle();
-        void            drawMenu(bool mouse_recheck);
+        void           drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
+        void           drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
+        void           drawBackground();
+        void           drawMouse();
+        void           drawFPS();
+        void           drawTitle();
+        void           drawMenu(bool mouse_recheck);
 
-        void            drawScene();
-        void            drawDisplay();
-        void            drawMessages();
+        void           drawScene();
+        void           drawDisplay();
+        void           drawMessages();
 
-        void            moveScene();
-        void            moveMessages();
+        void           moveScene();
+        void           moveMessages();
 };
 
 #endif

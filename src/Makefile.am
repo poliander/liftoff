@@ -4,6 +4,7 @@ __top_builddir__liftoff_CPPFLAGS = $(SDL_CFLAGS) $(SDL_IMAGE_CFLAGS) $(SDL_MIXER
 __top_builddir__liftoff_LDADD = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     audio.cpp \
+    entity.cpp \
     state.cpp \
     object.cpp \
     powerup.cpp \
