@@ -19,9 +19,12 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 
 - libGL
 - libGLU
+- libogg
+- libvorbis
+- libvorbisfile
 - SDL 1.2
-- SDL\_mixer 1.2 (with ogg vorbis support)
 - SDL\_image 1.2
+- SDL\_mixer 1.2 (with ogg vorbis support)
 
 ### Compilation
 
