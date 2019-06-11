@@ -265,34 +265,31 @@ void State::explode(int oid)
         objects[player].money += objects[oid].money;
     }
 
-    switch(objects[oid].id) {
-
-        // cargo pod -> power up
+    switch (objects[oid].id) {
         case OBJ_CARGO_1:
+            // cargo pod explodes and leaves a power up
             audio->playSample(5, 192, sangle);
-
-            objects[oid].type        = OBJ_TYPE_POWERUP;
-            objects[oid].id            = OBJ_POWERUP_1;
-            objects[oid].energy        = 250 + rand() % 250;
-            objects[oid].money        = 0;
-            objects[oid].life        = 999;
-            objects[oid].life_time    = 500;
-            objects[oid].life_max    = 0;
-            objects[oid].cnt        = .0f;
-            objects[oid].cnt2        = .0f;
+            objects[oid].id        = OBJ_POWERUP_1;
+            objects[oid].energy    = 250 + rand() % 250;
+            objects[oid].life      = 999;
+            objects[oid].life_time = 500;
+            objects[oid].life_max  = 0;
+            objects[oid].cnt       = 0;
+            objects[oid].money     = 0;
             return;
 
-        // power up -> scenery
         case OBJ_POWERUP_1:
+            // power up was picked up and turns into a non-colliding object
             audio->playSample(9, 255, sangle);
+            addMessage(objects[oid].energy, MSG_ENERGY);
             objects[player].powerup = objects[oid].id;
             objects[player].energy += objects[oid].energy;
-            addMessage(objects[oid].energy, MSG_ENERGY);
             objects[oid].type = OBJ_TYPE_SCENERY;
+            objects[oid].state = OBJ_STATE_FADING;
             return;
 
-        // explosion
         default:
+            // explosion
             audio->playSample(6, 192, sangle);
             remove(oid);
     }

@@ -25,7 +25,6 @@ Scene::Scene(State &s) : state(s)
     float x, y;
 
     player = new Player(state);
-    object = new Object(state);
     asteroid = new Object(state);
     debris = new Object(state);
     explosion = new Explosion(state);
@@ -966,8 +965,7 @@ void Scene::drawScene()
             continue;
         }
 
-        if (state.objects[i].type == OBJ_TYPE_COLLIDER ||
-            state.objects[i].type == OBJ_TYPE_POWERUP) {
+        if (state.objects[i].type == OBJ_TYPE_COLLIDER) {
             player->getTarget(i);
         }
     }
@@ -979,46 +977,57 @@ void Scene::drawScene()
 
         switch(state.objects[i].id) {
             case OBJ_PLAYER:
-                player->draw(-1);
+                player->draw(i);
                 break;
+
             case OBJ_ASTEROID_1:
                 asteroid->draw(i);
                 break;
+
             case OBJ_DEBRIS_1:
                 debris->draw(i);
                 break;
+
             case OBJ_CARGO_1:
                 cargo->draw(i);
+                cargo->drawCrosshair(i, 1.0f, .55f, .3f);
                 break;
+
             case OBJ_POWERUP_1:
                 powerup->draw(i);
-                object->drawCrosshair(i, .3f, .55f, 1.0f);
+                powerup->drawCrosshair(i, .3f, .55f, 1.0f);
                 break;
+
             case OBJ_EXPLOSION_1:
                 glLoadIdentity();
                 glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_1]);
                 explosion->draw(i);
+
                 break;
             case OBJ_EXPLOSION_2:
                 glLoadIdentity();
                 glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_2]);
                 explosion->draw(i);
                 break;
+
             case OBJ_EXPLOSION_3:
                 glLoadIdentity();
                 glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_2]);
                 explosion->draw(i);
                 break;
+
             case OBJ_EXPLOSION_4:
                 glLoadIdentity();
                 glBindTexture(GL_TEXTURE_2D, state.texture[T_STAR]);
                 explosion->draw(i);
                 break;
+
             case OBJ_EXPLOSION_5:
                 glLoadIdentity();
                 glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_4]);
                 explosion->draw(i);
                 break;
+
             case OBJ_MISSILE_1:
                 glLoadIdentity();
                 glBindTexture(GL_TEXTURE_2D, state.texture[T_MISSILE_1]);
@@ -1083,21 +1092,24 @@ void Scene::drawDisplay()
     char msg[16];
 
     switch(state.get()) {
+
         case STATE_GAME_START:
             t = (-6.413f * state.vid_cfg_aspect - state.hud_x) * .055f * state.timer_adjustment;
             state.hud_x += t;
             t = (4.905f + state.hud_y) * .055f * state.timer_adjustment;
             state.hud_y -= t;
-            alpha = (100-state.title_ypos)*.01f;
+            alpha = float(100 - state.title_ypos) * .01f;
             break;
+
         case STATE_GAME_NEXTLEVEL:
         case STATE_GAME_QUIT:
             if (state.title_ypos > 0) {
                 state.hud_x -= state.title_ypos * .001f;
                 state.hud_y -= state.title_ypos * .001f;
             }
-            alpha = (100-state.title_ypos)*.01f;
+            alpha = float(100 - state.title_ypos) * .01f;
             break;
+
         case STATE_GAME_LOOP:
             if (state.objects[state.player].life <= 0) {
                 state.hud_x -= state.timer_adjustment * .01f;
@@ -1106,9 +1118,9 @@ void Scene::drawDisplay()
             } else {
                 state.hud_x = -6.413f * state.vid_cfg_aspect;
                 state.hud_y = -4.905f;
-                alpha = .01f * (100.0f - float(state.title_ypos));
             }
             break;
+
         default:
             state.hud_x = .0f;
             state.hud_y = -.8f;
@@ -1326,7 +1338,6 @@ void Scene::moveScene()
     }
 
     explosion->move(-1);
-    powerup->move(-1);
 
     state.audio->updatePosition(state.objects[state.player].pos_x - state.cam_x);
 
@@ -1334,18 +1345,18 @@ void Scene::moveScene()
 
         // activate idle object
         if (state.objects[i].state == OBJ_STATE_IDLE) {
-            if (state.lvl_pos > state.objects[i].pos_z) {
-                state.objects[i].state = OBJ_STATE_ACTIVE;
-                state.objects[i].pos_z = -9999.0f;
-            } else {
+            if (state.lvl_pos < state.objects[i].pos_z) {
                 continue;
             }
+
+            state.objects[i].state = OBJ_STATE_ACTIVE;
+            state.objects[i].pos_z = -9999.0f;
         }
 
         // move object
         switch (state.objects[i].id) {
             case OBJ_PLAYER:
-                player->move(-1);
+                player->move(i);
                 break;
 
             case OBJ_EXPLOSION_1:
@@ -1367,8 +1378,21 @@ void Scene::moveScene()
                 }
                 break;
 
-            default:
-                object->move(i);
+            case OBJ_CARGO_1:
+                cargo->move(i);
+                break;
+
+            case OBJ_POWERUP_1:
+                powerup->move(i);
+                break;
+
+            case OBJ_ASTEROID_1:
+                asteroid->move(i);
+                break;
+
+            case OBJ_DEBRIS_1:
+                debris->move(i);
+                break;
         }
 
         // collision detection
@@ -1382,15 +1406,15 @@ void Scene::moveScene()
                     if ( (state.objects[j].state == OBJ_STATE_IDLE) ||
                          (state.objects[j].type != OBJ_TYPE_COLLIDER) ) continue;
 
-                    // colliders have already passed by
+                    // whether collider has already passed by
                     if (state.objects[i].pos_z < state.objects[j].pos_z) continue;
 
-                    // missile's position in next frame
+                    // missile position in next frame
                     mx = state.objects[i].pos_x;
                     my = state.objects[i].pos_y;
                     mz = state.objects[i].pos_z + (state.objects[i].speed * state.timer_adjustment);
 
-                    // object's position in next frame
+                    // object position in next frame
                     ox = state.objects[j].pos_x;
                     oy = state.objects[j].pos_y;
                     oz = state.objects[j].pos_z + (state.objects[j].speed * state.timer_adjustment);
@@ -1400,7 +1424,7 @@ void Scene::moveScene()
                     dy = fabs(my - oy);
                     dz = mz - oz;
 
-                    // object's size
+                    // bounding sphere radius
                     s = ((10000.0f + oz) * .0001f) /
                            isqrt( state.objects[j].scale_x * state.objects[j].scale_x +
                                   state.objects[j].scale_y * state.objects[j].scale_y +
@@ -1438,8 +1462,8 @@ void Scene::moveScene()
                                     state.objects[j].speed
                                 );
                             } else {
+                                // halo
                                 explosion->add(
-                                    // nova
                                     OBJ_EXPLOSION_5,
                                     state.objects[j].pos_x,
                                     state.objects[j].pos_y,
@@ -1510,7 +1534,6 @@ void Scene::moveScene()
 
             // check player's ship against colliding objects
             case OBJ_TYPE_COLLIDER:
-            case OBJ_TYPE_POWERUP:
                 // players's position in next frame
                 mx = state.objects[state.player].pos_x;
                 my = state.objects[state.player].pos_y;
@@ -1535,7 +1558,7 @@ void Scene::moveScene()
                 if ( (dx < s) && (dy < s) && (dz < s * 1.75f) ) {
 
                     // pick up powerup
-                    if (state.objects[i].type == OBJ_TYPE_POWERUP) {
+                    if (state.objects[i].id == OBJ_POWERUP_1) {
                         state.explode(i);
                         break;
                     }
@@ -1842,7 +1865,7 @@ void Scene::draw()
     drawBackground();
 
     if (
-        state.get() >  STATE_GAME_START &&
+        state.get() >= STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
     ) {
         drawScene();

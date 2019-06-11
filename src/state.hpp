@@ -40,7 +40,6 @@ struct object_t
     unsigned short      powerup;
 
     float               cnt;
-    float               cnt2;
     float               speed;
 
     float               pos_x;      // position

@@ -40,7 +40,6 @@ class Scene
         State&         state;
         vector<Entity> entities;
 
-        Object*        object;
         Object*        asteroid;
         Object*        debris;
         Cargo*         cargo;

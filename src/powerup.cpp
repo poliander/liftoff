@@ -30,24 +30,20 @@ void Powerup::draw(int oid)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_3]);
 
-    a = 1.25f - state.objects[oid].cnt2 * .03f;
+    a = 1.5f - state.objects[oid].cnt * 1.5f;
 
-    if (a > 0) {
-        particles->setAlpha(a * float(state.global_alpha) * .01f);
-        particles->setSize(3.0f * 1.0f / (1.0f + state.objects[oid].cnt2 * .25f));
-        particles->setColor(.6f, .75f, 1.0f);
-        particles->setScale(25.0f + state.objects[oid].cnt2 * 5.0f);
-        particles->draw(
-            .0f,
-            .0f,
-            .0f,
-            state.objects[oid].rot_x,
-            state.objects[oid].rot_y,
-            state.objects[oid].rot_z
-        );
-    } else {
-        state.remove(oid);
-    }
+    particles->setAlpha(a * float(state.global_alpha) * .01f);
+    particles->setSize(3.0f / (1.0f + state.objects[oid].cnt * 5.0f));
+    particles->setColor(.6f, .75f, 1.0f);
+    particles->setScale(25.0f + state.objects[oid].cnt * 100.0f);
+    particles->draw(
+        .0f,
+        .0f,
+        .0f,
+        state.objects[oid].rot_x,
+        state.objects[oid].rot_y,
+        state.objects[oid].rot_z
+    );
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glShadeModel(GL_SMOOTH);
@@ -58,4 +54,16 @@ void Powerup::draw(int oid)
 void Powerup::move(int oid)
 {
     particles->move();
+
+    if (state.objects[oid].state == OBJ_STATE_FADING) {
+        state.objects[oid].cnt += state.timer_adjustment * .05f;
+
+        if (state.objects[oid].cnt > 1.0f) {
+            state.remove(oid);
+        }
+
+        state.objects[oid].pos_z += state.timer_adjustment * state.objects[state.player].speed * .25f;
+    } else {
+        state.objects[oid].pos_z += state.timer_adjustment * state.objects[state.player].speed;
+    }
 }

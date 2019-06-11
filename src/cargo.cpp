@@ -126,6 +126,4 @@ void Cargo::draw(int oid)
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPopMatrix();
-
-    drawCrosshair(oid, 1.0f, .55f, .3f);
 }
