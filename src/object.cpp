@@ -1,7 +1,8 @@
 #include "object.hpp"
 #include "state.hpp"
 
-Object::Object(State &s) : state(s) {
+Object::Object(State &s) : state(s)
+{
     alpha = 1.0f;
     shininess = 4.0f;
     brightness = 1.0f;
@@ -9,11 +10,13 @@ Object::Object(State &s) : state(s) {
     memset(&model, 0, sizeof(struct obj_model_t));
 }
 
-Object::~Object() {
+Object::~Object()
+{
     _load_OBJ_freemem();
 }
 
-bool Object::_load_OBJ_firstPass(FILE *fp) {
+bool Object::_load_OBJ_firstPass(FILE *fp)
+{
     int v, t, n;
     char buf[256];
 
@@ -77,7 +80,8 @@ bool Object::_load_OBJ_firstPass(FILE *fp) {
     return true;
 }
 
-bool Object::_load_OBJ_secondPass(FILE *fp) {
+bool Object::_load_OBJ_secondPass(FILE *fp)
+{
     struct obj_vertex_t *pvert = model.vertices;
     struct obj_texCoord_t *puvw = model.texCoords;
     struct obj_normal_t *pnorm = model.normals;
@@ -210,7 +214,8 @@ bool Object::_load_OBJ_secondPass(FILE *fp) {
     return true;
 }
 
-bool Object::_load_OBJ_malloc() {
+bool Object::_load_OBJ_malloc()
+{
     if (model.num_verts) {
         model.vertices = (struct obj_vertex_t *)
         malloc (sizeof (struct obj_vertex_t) * model.num_verts);
@@ -242,7 +247,8 @@ bool Object::_load_OBJ_malloc() {
     return true;
 }
 
-void Object::_load_OBJ_freemem() {
+void Object::_load_OBJ_freemem()
+{
     int i;
 
     if (model.vertices) {
@@ -277,7 +283,8 @@ void Object::_load_OBJ_freemem() {
     }
 }
 
-bool Object::load(const char *datadir, const char *filename) {
+bool Object::load(const char *datadir, const char *filename)
+{
     FILE *fp;
     int i, j;
 
@@ -331,67 +338,81 @@ bool Object::load(const char *datadir, const char *filename) {
     return true;
 }
 
-void Object::setPos(int oid, float px, float py, float pz) {
+void Object::setPos(int oid, float px, float py, float pz)
+{
     state.objects[oid].pos_x = px;
     state.objects[oid].pos_y = py;
     state.objects[oid].pos_z = pz;
 }
 
-void Object::addSpeed(int oid, float sx, float sy, float sz) {
+void Object::addSpeed(int oid, float sx, float sy, float sz)
+{
     state.objects[oid].s_x += sx;
     state.objects[oid].s_y += sy;
     state.objects[oid].s_z += sz;
 }
 
-void Object::accelerateX(int oid, float ax) {
+void Object::accelerateX(int oid, float ax)
+{
     state.objects[oid].a_x = ax;
 }
 
-void Object::accelerateY(int oid, float ay) {
+void Object::accelerateY(int oid, float ay)
+{
     state.objects[oid].a_y = ay;
 }
 
-void Object::accelerateZ(int oid, float az) {
+void Object::accelerateZ(int oid, float az)
+{
     state.objects[oid].a_z = az;
 }
 
-void Object::setRot(int oid, float rx, float ry, float rz) {
+void Object::setRot(int oid, float rx, float ry, float rz)
+{
     state.objects[oid].rot_x = rx;
     state.objects[oid].rot_y = ry;
     state.objects[oid].rot_z = rz;
 }
 
-float Object::getRotX(int oid) {
+float Object::getRotX(int oid)
+{
     return state.objects[oid].rot_x;
 }
 
-float Object::getRotY(int oid) {
+float Object::getRotY(int oid)
+{
     return state.objects[oid].rot_y;
 }
 
-float Object::getRotZ(int oid) {
+float Object::getRotZ(int oid)
+{
     return state.objects[oid].rot_z;
 }
 
-void Object::setSpin(int oid, float sx, float sy, float sz) {
+void Object::setSpin(int oid, float sx, float sy, float sz)
+{
     state.objects[oid].rsp_x = sx;
     state.objects[oid].rsp_y = sy;
     state.objects[oid].rsp_z = sz;
 }
 
-float Object::getSpinX(int oid) {
+float Object::getSpinX(int oid)
+{
     return state.objects[oid].rsp_x;
 }
 
-float Object::getSpinY(int oid) {
+float Object::getSpinY(int oid)
+{
     return state.objects[oid].rsp_y;
 }
 
-float Object::getSpinZ(int oid) {
+float Object::getSpinZ(int oid)
+{
     return state.objects[oid].rsp_z;
 }
 
-void Object::move(int oid) {
+void Object::move(int oid)
+{
     if (state.objects[oid].type == OBJ_TYPE_SCENERY) {
         if (state.objects[oid].id == OBJ_POWERUP_1) {
             state.objects[oid].pos_z += state.timer_adjustment * (state.objects[oid].speed + state.objects[state.player].speed);
@@ -419,7 +440,8 @@ void Object::move(int oid) {
         state.remove(oid);
 }
 
-void Object::drawCrosshair(int oid, float r, float g, float b) {
+void Object::drawCrosshair(int oid, float r, float g, float b)
+{
     static float da = .85f;
     float alpha = 1.0f;
     float s, rot;
@@ -520,7 +542,8 @@ void Object::drawCrosshair(int oid, float r, float g, float b) {
     glPopMatrix();
 }
 
-void Object::draw(int oid) {
+void Object::draw(int oid)
+{
     float a = float(state.global_alpha) * .01f;
     float s = 1.0f;
 

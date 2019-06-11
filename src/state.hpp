@@ -10,7 +10,8 @@
 #include "definitions.hpp"
 
 // configuration
-struct config_t {
+struct config_t
+{
     short               vid_width;
     short               vid_height;
     unsigned short      vid_aspect;
@@ -23,7 +24,8 @@ struct config_t {
 };
 
 // object
-struct object_t {
+struct object_t
+{
     int                 type;       // OBJ_TYPE_*
     int                 state;      // OBJ_STATE_*
     int                 id;         // OBJ_*
@@ -67,7 +69,8 @@ struct object_t {
 };
 
 // money/damage messages
-struct message_t {
+struct message_t
+{
     short   type;
     char    text[64];
 
@@ -76,7 +79,8 @@ struct message_t {
     short   direction_y;
 };
 
-class State {
+class State
+{
     public:
         State();
         ~State();
@@ -198,11 +202,9 @@ class State {
 
         void            log(const char *msg);
 
-    protected:
+    private:
         int             id;
         bool            load();
 };
-
-extern State* state;
 
 #endif

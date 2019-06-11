@@ -10,16 +10,17 @@
 
 #include "scenery.hpp"
 
-class Engine {
+class Engine
+{
     public:
         Engine();
         ~Engine();
 
         bool init(int argc, char **argv);
-        void shutdown();
         bool main();
+        void halt();
 
-    protected:
+    private:
         State state;
         Scenery* scenery;
 
@@ -28,15 +29,11 @@ class Engine {
         bool loadConfiguration();
         bool writeConfiguration();
 
-        void getVideoModeID();
         bool initDisplay();
 
-        // input handlers
-        bool keyHandler();
-        void joyHandler();
-        void mouseHandler();
+        bool handleKeyboard();
+        void handleJoystick();
+        void handleMouse();
 };
 
-extern Engine* engine;
-
-#endif /* ENGINE_HPP_ */
+#endif

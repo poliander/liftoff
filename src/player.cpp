@@ -37,7 +37,8 @@ Player::~Player()
     delete particles;
 }
 
-int Player::getTarget(int oid) {
+int Player::getTarget(int oid)
+{
     if (oid != -1) {
         if (
             (state.objects[state.player].pos_x < (state.objects[oid].pos_x + (state.objects[oid].scale_x*1.25f))) &&
@@ -61,23 +62,26 @@ int Player::getTarget(int oid) {
     return state.objects[state.player].target;
 }
 
-void Player::setTarget(int oid) {
+void Player::setTarget(int oid)
+{
     state.objects[state.player].target = oid;
 }
 
 /*
  * camera shaking ("tilt")
  */
-void Player::tilt(float t) {
+void Player::tilt(float t)
+{
     if (state.tilt_factor < fabs(t)) {
         state.tilt_factor = fabs(t);
     }
 }
 
 /*
- *     fire primary weapons
+ * fire primary weapons
  */
-bool Player::shoot() {
+bool Player::shoot()
+{
     static int m_alt = 0;
     static GLuint m_next_shot = state.timer;
     float drift_x = .0f, drift_y = .0f, delta_z;
@@ -158,7 +162,8 @@ bool Player::shoot() {
     return true;
 }
 
-void Player::move() {
+void Player::move(int oid)
+{
     Uint32 t = SDL_GetTicks();
     float countersteering = .00035f;
 
@@ -372,7 +377,8 @@ void Player::move() {
     }
 }
 
-void Player::draw() {
+void Player::draw(int oid)
+{
     float alpha, jlen;
     GLfloat lightpos[] = { 100.0f, 0, 0, 1.0f };
 

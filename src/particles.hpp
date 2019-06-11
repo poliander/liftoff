@@ -10,7 +10,8 @@
 #define EMITTER_JET       1
 #define EMITTER_EXPLOSION 2
 
-struct particle_t {
+struct particle_t
+{
     bool active;
 
     float lifetime;
@@ -29,7 +30,8 @@ struct particle_t {
     float dz;
 };
 
-class ParticleEngine {
+class ParticleEngine
+{
     public:
         ParticleEngine(State &s);
         ~ParticleEngine();
@@ -47,7 +49,7 @@ class ParticleEngine {
         void            draw(float px, float py, float pz, float rx, float ry, float rz);
         void            move();
 
-    protected:
+    private:
         State&          state;
         particle_t      p[DEFAULT_GFX_PARTICLES];
 
@@ -65,7 +67,5 @@ class ParticleEngine {
         void            moveJet();
         void            moveExplosion();
 };
-
-extern ParticleEngine* particles;
 
 #endif

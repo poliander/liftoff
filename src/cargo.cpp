@@ -1,14 +1,17 @@
 #include "cargo.hpp"
 
-Cargo::Cargo(State &s) : Object(s) {
+Cargo::Cargo(State &s) : Object(s)
+{
     memset(&model, 0, sizeof(struct obj_model_t));
     shininess = 64.0f;
 }
 
-Cargo::~Cargo() {
+Cargo::~Cargo()
+{
 }
 
-void Cargo::draw(int oid) {
+void Cargo::draw(int oid)
+{
     float a = 1.0f;
     float s = 1.0f, s2;
 

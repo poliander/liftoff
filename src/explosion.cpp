@@ -1,15 +1,18 @@
 #include "explosion.hpp"
 
-Explosion::Explosion(State &s) : Object(s) {
+Explosion::Explosion(State &s) : Object(s)
+{
     particles = new ParticleEngine(state);
     particles->setup(EMITTER_EXPLOSION, 40, .15f, .15f, .1f, 3.0f, 1.25f);
 }
 
-Explosion::~Explosion() {
+Explosion::~Explosion()
+{
     delete particles;
 }
 
-bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp) {
+bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp)
+{
     int life_time = 0;
     object_t new_explosion;
 
@@ -68,7 +71,8 @@ bool Explosion::add(unsigned short eid, float px, float py, float pz, float sp) 
     return state.add(&new_explosion);
 }
 
-void Explosion::move(int oid) {
+void Explosion::move(int oid)
+{
     if (oid == -1) {
         particles->move();
         return;
@@ -90,7 +94,8 @@ void Explosion::move(int oid) {
     }
 }
 
-void Explosion::draw(int oid) {
+void Explosion::draw(int oid)
+{
     bool use_particles = true;
 
     switch(state.objects[oid].id) {

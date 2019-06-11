@@ -6,19 +6,11 @@
 #include "object.hpp"
 #include "particles.hpp"
 
-class Player : public Object {
+class Player : public Object
+{
     public:
         Player(State &s);
         ~Player();
-
-        void            setTarget(int oid);
-        int             getTarget(int oid);
-
-        bool            shoot();
-        void            tilt(float t);
-
-        void            move();
-        void            draw();
 
         int             acceleration;
 
@@ -31,10 +23,23 @@ class Player : public Object {
         
         unsigned short  gun_power;
 
+        void            move(int oid);
+        void            draw(int oid);
 
-    protected:
+        void            setTarget(int oid);
+        int             getTarget(int oid);
+
+        bool            shoot();
+        void            tilt(float t);
+
+    private:
         ParticleEngine* particles;
 
+        unsigned short  powerup_booster_length;
+        int             powerup_booster_timer;
+        int             powerup_booster_ltimer;
+
+        // jet exhaust animation
         float           j_l;
         float           jt_l;
         float           jr;
@@ -42,12 +47,6 @@ class Player : public Object {
         // gun fire flashes
         float           gun_flash[2];
         float           gun_flash_rot[2];
-
-        unsigned short  powerup_booster_length;
-        int             powerup_booster_timer;
-        int             powerup_booster_ltimer;
 };
-
-extern Player* player;
 
 #endif

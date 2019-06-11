@@ -5,14 +5,13 @@
 
 #include "object.hpp"
 
-class Cargo : public Object {
+class Cargo : public Object
+{
     public:
         Cargo(State &s);
         ~Cargo();
 
         void draw(int oid);
 };
-
-extern Cargo* cargo;
 
 #endif

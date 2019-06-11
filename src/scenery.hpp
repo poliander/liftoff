@@ -22,7 +22,8 @@
 
 #define ABS(x) ((x>0)?(x):(-x))
 
-class Scenery {
+class Scenery
+{
     public:
         Scenery(State &s);
         ~Scenery();
@@ -33,7 +34,7 @@ class Scenery {
         void            move();
         void            draw();
 
-    protected:
+    private:
         State&          state;
 
         Object*         object;
@@ -44,11 +45,8 @@ class Scenery {
         Powerup*        powerup;
 
         float           stars[8000][4];
-
-        // textures
         GLuint          loadTexture(const char *filename, bool mipmap);
 
-        // draw methods
         void            drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
         void            drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
         void            drawBackground();
@@ -60,9 +58,8 @@ class Scenery {
         void            drawMessages();
         void            drawObjects();
 
-        // movement
         void            moveObjects();
         void            moveMessages();
 };
 
-#endif /* SCENERY_HPP_ */
+#endif
