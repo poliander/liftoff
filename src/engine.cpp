@@ -120,7 +120,6 @@ bool Engine::init(int argc, char **argv)
         sprintf(msg, "%s\n", SDL_GetError());
         state.log(msg);
 
-        delete [] msg;
         return false;
     } else {
         state.log("ok\n");
@@ -226,7 +225,6 @@ bool Engine::init(int argc, char **argv)
     } else {
         state.log("No valid video mode found\n");
 
-        delete [] msg;
         return false;
     }
 
@@ -253,7 +251,6 @@ bool Engine::init(int argc, char **argv)
     if (!modeok) {
         state.log("No valid video mode found\n");
 
-        delete [] msg;
         return false;
     }
 
@@ -297,7 +294,6 @@ bool Engine::init(int argc, char **argv)
         state.log(SDL_GetError());
         state.log("\n\n");
 
-        delete [] msg;
         return false;
     }
 
@@ -325,7 +321,6 @@ bool Engine::init(int argc, char **argv)
 
     state.set(STATE_MENU);
 
-    delete [] msg;
     return true;
 }
 
