@@ -1792,7 +1792,7 @@ void Scene::move()
                 } else {
                     state.global_alpha = 100;
                     player->accelerateZ(state.player, state.title_ypos * state.title_ypos * -.0001f);
-                    player->tilt(state.title_ypos * .05f);
+                    player->tilt(state.title_ypos * .1f);
                 }
 
                 if (state.stars_speed < 1.75f) {
