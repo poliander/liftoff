@@ -23,6 +23,11 @@ bool Entity::isGone()
     return e_state == OBJ_STATE_GONE;
 }
 
+bool Entity::isFocusable()
+{
+    return focusable;
+}
+
 void Entity::setActive()
 {
     e_state = OBJ_STATE_ACTIVE;

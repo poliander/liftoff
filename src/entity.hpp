@@ -11,9 +11,10 @@ class Entity
 {
     public:
         Entity();
-        ~Entity();
+        virtual ~Entity();
 
         bool           isCollider();
+        bool           isFocusable();
         bool           isIdle();
         bool           isGone();
 
@@ -41,6 +42,8 @@ class Entity
         float          v_x, v_y, v_z;        // velocity
         float          s_x, s_y, s_z;        // scale
         float          c_r, c_g, c_b, c_a;   // color
+
+        bool           focusable = false;
 };
 
 #endif
