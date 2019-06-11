@@ -44,7 +44,8 @@
 // object states
 #define OBJ_STATE_IDLE          0
 #define OBJ_STATE_ACTIVE        1
-#define OBJ_STATE_FADING        9
+#define OBJ_STATE_FADING        8
+#define OBJ_STATE_GONE          9
 
 // object IDs
 #define OBJ_PLAYER              101 // player
