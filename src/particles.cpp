@@ -1,6 +1,7 @@
 #include "particles.hpp"
 
-ParticleEngine::ParticleEngine(State &s) : state(s) {
+ParticleEngine::ParticleEngine(State &s) : state(s)
+{
     pemitter = EMITTER_JET;
     pr = 1.0f;
     pg = 1.0f;
@@ -9,10 +10,12 @@ ParticleEngine::ParticleEngine(State &s) : state(s) {
     pscale = 1.0f;
 }
 
-ParticleEngine::~ParticleEngine() {
+ParticleEngine::~ParticleEngine()
+{
 }
 
-void ParticleEngine::setup(short emitter, short particles, float dx, float dy, float dz, float decay, float size) {
+void ParticleEngine::setup(short emitter, short particles, float dx, float dy, float dz, float decay, float size)
+{
     int i;
 
     if (particles > DEFAULT_GFX_PARTICLES) {
@@ -67,31 +70,37 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
     }
 }
 
-void ParticleEngine::setAlpha(float global_alpha) {
+void ParticleEngine::setAlpha(float global_alpha)
+{
     palpha = global_alpha;
 }
 
-void ParticleEngine::setColor(float r, float g, float b) {
+void ParticleEngine::setColor(float r, float g, float b)
+{
     pr = r;
     pg = g;
     pb = b;
 }
 
-void ParticleEngine::setDirection(float dx, float dy, float dz) {
+void ParticleEngine::setDirection(float dx, float dy, float dz)
+{
     pdx = dx;
     pdy = dy;
     pdz = dz;
 }
 
-void ParticleEngine::setSize(float size) {
+void ParticleEngine::setSize(float size)
+{
     psize = size;
 }
 
-void ParticleEngine::setScale(float scale) {
+void ParticleEngine::setScale(float scale)
+{
     pscale = scale;
 }
 
-void ParticleEngine::setParticleNumber(short particles) {
+void ParticleEngine::setParticleNumber(short particles)
+{
     if (particles > pnum_max) {
         pnum = pnum_max;
     } else {
@@ -99,7 +108,8 @@ void ParticleEngine::setParticleNumber(short particles) {
     }
 }
 
-void ParticleEngine::move() {
+void ParticleEngine::move()
+{
     int i;
 
     if (pemitter == EMITTER_EXPLOSION) {
@@ -141,7 +151,8 @@ void ParticleEngine::move() {
     }
 }
 
-void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz) {
+void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz)
+{
     int i;
     float m[16];
     float sf = palpha * state.global_alpha * .005f;

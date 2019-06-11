@@ -4,6 +4,8 @@
 #define DEFAULT_CFG_FILE        "liftoff.cfg"
 #define GAME_DATA               "."
 
+#define ABS(x) ((x>0)?(x):(-x))
+
 // video, audio, quality defaults
 #define DEFAULT_VID_FULLSCREEN  true
 #define DEFAULT_VID_WIDTH       -1

@@ -2,7 +2,8 @@
 
 #include "state.hpp"
 
-State::State() {
+State::State()
+{
     char *buf;
     long psize = 255;
 
@@ -53,14 +54,16 @@ State::State() {
     id                      = 0;
 }
 
-State::~State() {
+State::~State()
+{
     delete audio;
 }
 
 /*
  * log output
  */
-void State::log(const char *msg) {
+void State::log(const char *msg)
+{
     if (log_file) {
 #ifdef _WIN32
         FILE *fp;
@@ -77,7 +80,8 @@ void State::log(const char *msg) {
 /*
  * load level data file
  */
-bool State::load() {
+bool State::load()
+{
     FILE *fp = NULL;
     char fname[255], buf[1024], cmd[16], par[255];
     int m, p = 0;
@@ -216,7 +220,8 @@ bool State::load() {
 /*
  * add new entity to scenery
  */
-bool State::add(object_t *n_obj) {
+bool State::add(object_t *n_obj)
+{
 
     if (lvl_entities == E_MAX_OBJECTS) {
         return false;
@@ -231,7 +236,8 @@ bool State::add(object_t *n_obj) {
 /*
  * remove entity from scenery
  */
-void State::remove(int oid) {
+void State::remove(int oid)
+{
     lvl_entities--;
 
     if (oid < lvl_entities) {
@@ -243,7 +249,8 @@ void State::remove(int oid) {
 /*
  * object destroyed, remove it and possibly spawn a new one
  */
-void State::explode(int oid) {
+void State::explode(int oid)
+{
     int sangle;
 
     sangle = int(objects[oid].pos_x / 2.8f);
@@ -294,7 +301,8 @@ void State::explode(int oid) {
 /*
  * sort objects by Z position
  */
-void State::sort() {
+void State::sort()
+{
     int i, j;
     object_t tmpobj;
 
@@ -322,7 +330,8 @@ void State::sort() {
 /*
  * add money/energy message
  */
-void State::addMessage(int value, unsigned short type) {
+void State::addMessage(int value, unsigned short type)
+{
     if (msg_num >= E_MAX_MESSAGES-1) return;
 
     switch(type) {
@@ -354,7 +363,8 @@ void State::addMessage(int value, unsigned short type) {
 /*
  * set or change engine state
  */
-bool State::set(int s) {
+bool State::set(int s)
+{
     if (id == s) return false;
 
     char msg[255];
@@ -521,6 +531,7 @@ bool State::set(int s) {
 /*
  * return current state id
  */
-int State::get(void) {
+int State::get(void)
+{
     return id;
 }

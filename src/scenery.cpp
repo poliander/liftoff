@@ -952,9 +952,9 @@ void Scenery::drawMouse()
 }
 
 /*
- * draw objects
+ * draw game scene
  */
-void Scenery::drawObjects()
+void Scenery::drawScene()
 {
     int i;
     float alpha;
@@ -1073,9 +1073,9 @@ void Scenery::drawObjects()
 }
 
 /*
- * draw hud (energy, shields, money)
+ * draw head-up-display (energy, shields, money)
  */
-void Scenery::drawHUD()
+void Scenery::drawDisplay()
 {
     int i, s, e;
     static float alpha = 1.0f;
@@ -1281,9 +1281,9 @@ void Scenery::drawMessages()
 }
 
 /*
- * move objects
+ * move game scene
  */
-void Scenery::moveObjects()
+void Scenery::moveScene()
 {
     int i, j, dmg;
     int sangle = 0;
@@ -1719,7 +1719,7 @@ void Scenery::move()
                 state.set(STATE_GAME_NEXTLEVEL);
             }
 
-            moveObjects();
+            moveScene();
             moveMessages();
 
             if (state.lvl_pos < 50) {
@@ -1756,7 +1756,7 @@ void Scenery::move()
             break;
 
         case STATE_GAME_NEXTLEVEL:
-            moveObjects();
+            moveScene();
             moveMessages();
 
             if (state.title_ypos < 99.85f) {
@@ -1785,7 +1785,7 @@ void Scenery::move()
             break;
 
         case STATE_GAME_QUIT:
-            moveObjects();
+            moveScene();
             moveMessages();
 
             if (state.title_ypos < 99.85f) {
@@ -1807,11 +1807,13 @@ void Scenery::move()
  */
 void Scenery::draw()
 {
-    float p_x, p_y;
+    float p_x = .0f;
+    float p_y = -90.0f;
 
-    if ( (state.get() >  STATE_GAME_START) &&
-         (state.get() <= STATE_GAME_QUIT) ) {
-
+    if (
+        state.get() >  STATE_GAME_START &&
+        state.get() <= STATE_GAME_QUIT
+    ) {
         p_x = state.objects[state.player].pos_x;
         p_y = state.objects[state.player].pos_y;
 
@@ -1819,24 +1821,32 @@ void Scenery::draw()
         if (p_x >  600.0f) p_x =  600.0f;
         if (p_y < -400.0f) p_y = -400.0f;
         if (p_y >  400.0f) p_y =  400.0f;
-    } else {
-        p_x = .0f;
-        p_y = -90.0f;
     }
 
-    // set up view
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     gluLookAt(
-      -p_x*.01f + state.tilt_x*.4f, -p_y*.01f + state.objects[state.player].s_y*10.0f + state.tilt_y*.4f, 200.0f,
-      state.objects[state.player].s_x * .5f, .0f, -10000.0f,
-      state.objects[state.player].s_x * .05f, -1.0f, .0f
+        p_x * -.01f + state.tilt_x * .4f,
+        p_y * -.01f + state.objects[state.player].s_y * 10.0f + state.tilt_y * .4f,
+        200.0f,
+
+        state.objects[state.player].s_x * .5f,
+        .0f,
+        -10000.0f,
+
+        state.objects[state.player].s_x * .05f,
+        -1.0f,
+        .0f
     );
 
     drawBackground();
 
-    if (state.get() >= STATE_GAME_START) {
-        drawObjects();
-        drawHUD();
+    if (
+        state.get() >  STATE_GAME_START &&
+        state.get() <= STATE_GAME_QUIT
+    ) {
+        drawScene();
+        drawDisplay();
         drawMessages();
     }
 

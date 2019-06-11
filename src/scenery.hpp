@@ -20,8 +20,6 @@
 #include "cargo.hpp"
 #include "powerup.hpp"
 
-#define ABS(x) ((x>0)?(x):(-x))
-
 class Scenery
 {
     public:
@@ -54,11 +52,12 @@ class Scenery
         void            drawFPS();
         void            drawTitle();
         void            drawMenu(bool mouse_recheck);
-        void            drawHUD();
-        void            drawMessages();
-        void            drawObjects();
 
-        void            moveObjects();
+        void            drawScene();
+        void            drawDisplay();
+        void            drawMessages();
+
+        void            moveScene();
         void            moveMessages();
 };
 
