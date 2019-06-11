@@ -378,12 +378,6 @@ bool Engine::initDisplay()
 
     while (screen == NULL && state.vid_cfg_multisampling != cfg_multisampling) {
         switch (state.vid_cfg_multisampling) {
-            case 16:
-                state.vid_cfg_multisampling = 8;
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_cfg_multisampling);
-                break;
-
             case 8:
                 state.vid_cfg_multisampling = 4;
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
