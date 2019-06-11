@@ -30,21 +30,21 @@ class Scene
         Scene(State &s);
         ~Scene();
 
-        Player*        player;
-
         void           load();
         void           move();
         void           draw();
+
+        Player*        player = nullptr;
 
     private:
         State&         state;
         vector<Entity> entities;
 
-        Object*        asteroid;
-        Object*        debris;
-        Cargo*         cargo;
-        Explosion*     explosion;
-        Powerup*       powerup;
+        Object*        asteroid = nullptr;
+        Object*        debris = nullptr;
+        Cargo*         cargo = nullptr;
+        Explosion*     explosion = nullptr;
+        Powerup*       powerup = nullptr;
 
         float          stars[8000][4];
         GLuint         loadTexture(const char *filename, bool mipmap);

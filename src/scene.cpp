@@ -24,13 +24,6 @@ Scene::Scene(State &s) : state(s)
 {
     float x, y;
 
-    player = new Player(state);
-    asteroid = new Object(state);
-    debris = new Object(state);
-    explosion = new Explosion(state);
-    cargo = new Cargo(state);
-    powerup = new Powerup(state);
-
     srand((int)time(NULL));
 
     // generate far stars
@@ -68,13 +61,6 @@ Scene::Scene(State &s) : state(s)
 
 Scene::~Scene()
 {
-    delete cargo;
-    delete explosion;
-    delete debris;
-    delete asteroid;
-    delete player;
-    delete powerup;
-
     if (state.audio->volume_music) {
         Mix_HaltMusic();
         Mix_FreeMusic(state.audio->music[0]);
@@ -93,6 +79,13 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio->sample[1]);
         Mix_FreeChunk(state.audio->sample[0]);
     }
+
+    delete cargo;
+    delete explosion;
+    delete debris;
+    delete asteroid;
+    delete player;
+    delete powerup;
 }
 
 /*
@@ -156,41 +149,45 @@ GLuint Scene::loadTexture(const char *filename, bool mipmap)
  */
 void Scene::load()
 {
-    state.texture[T_TITLE]         = loadTexture("title.tga", true);
-    state.texture[T_FONT]          = loadTexture("font.tga", true);
-    state.texture[T_CURSOR]        = loadTexture("cursor.tga", true);
-    state.texture[T_MENU_1]        = loadTexture("menu_1.tga", false);
-    state.texture[T_MENU_2]        = loadTexture("menu_2.tga", false);
-    state.texture[T_HUD_1]         = loadTexture("hud_1.tga", true);
-    state.texture[T_HUD_2]         = loadTexture("hud_2.tga", true);
-    state.texture[T_HUD_3]         = loadTexture("hud_3.tga", true);
-    state.texture[T_STAR]          = loadTexture("star.tga", true);
-    state.texture[T_MISSILE_1]     = loadTexture("missile_1.tga", false);
-    state.texture[T_EXPLOSION_1]   = loadTexture("explosion_1.tga", false);
-    state.texture[T_EXPLOSION_2]   = loadTexture("explosion_2.tga", false);
-    state.texture[T_EXPLOSION_3]   = loadTexture("star.tga", false);
-    state.texture[T_EXPLOSION_4]   = loadTexture("explosion_3.tga", false);
-    state.texture[T_JET]           = loadTexture("star.tga", false);
-    state.texture[T_BACKGROUND_1]  = loadTexture("background_1.tga", false);
+    state.texture[T_TITLE]        = loadTexture("title.tga", true);
+    state.texture[T_FONT]         = loadTexture("font.tga", true);
+    state.texture[T_CURSOR]       = loadTexture("cursor.tga", true);
+    state.texture[T_MENU_1]       = loadTexture("menu_1.tga", false);
+    state.texture[T_MENU_2]       = loadTexture("menu_2.tga", false);
+    state.texture[T_HUD_1]        = loadTexture("hud_1.tga", true);
+    state.texture[T_HUD_2]        = loadTexture("hud_2.tga", true);
+    state.texture[T_HUD_3]        = loadTexture("hud_3.tga", true);
+    state.texture[T_STAR]         = loadTexture("star.tga", true);
+    state.texture[T_MISSILE_1]    = loadTexture("missile_1.tga", false);
+    state.texture[T_EXPLOSION_1]  = loadTexture("explosion_1.tga", false);
+    state.texture[T_EXPLOSION_2]  = loadTexture("explosion_2.tga", false);
+    state.texture[T_EXPLOSION_3]  = loadTexture("star.tga", false);
+    state.texture[T_EXPLOSION_4]  = loadTexture("explosion_3.tga", false);
+    state.texture[T_JET]          = loadTexture("star.tga", false);
+    state.texture[T_BACKGROUND_1] = loadTexture("background_1.tga", false);
 
     // asteroid
     state.log("Loading 'obj/asteroid_1.obj'\n");
+    asteroid = new Object(state);
     asteroid->textures[0] = loadTexture("asteroid_1.tga", false);
     asteroid->load(state.engine_datadir, "asteroid_1.obj");
 
     // debris
     state.log("Loading 'obj/debris_1.obj'\n");
+    debris = new Object(state);
     debris->textures[0] = loadTexture("debris_1.tga", false);
     debris->load(state.engine_datadir, "debris_1.obj");
 
     // cargo
     state.log("Loading 'obj/cargo_1.obj'\n");
+    cargo = new Cargo(state);
     cargo->textures[0] = loadTexture("cargo_1.tga", false);
     cargo->load(state.engine_datadir, "cargo_1.obj");
     cargo->textures[1] = loadTexture("glow_1.tga", false);
 
     // player
     state.log("Loading 'obj/ship_1.obj'\n");
+    player = new Player(state);
     player->textures[0] = loadTexture("ship_1_1.tga", false);
     player->textures[1] = loadTexture("ship_1_2.tga", false);
     player->textures[2] = cargo->textures[1];
@@ -198,7 +195,14 @@ void Scene::load()
     player->load(state.engine_datadir, "ship_1.obj");
 
     // powerup
+    powerup = new Powerup(state);
     powerup->textures[0] = cargo->textures[1];
+
+    // explosion
+    explosion = new Explosion(state);
+
+    // music
+    state.audio->music[0]   = state.audio->loadMusic("music_title.ogg");
 
     // sfx
     state.audio->sample[0]  = state.audio->loadSample("menu_1.wav");
@@ -213,7 +217,6 @@ void Scene::load()
     state.audio->sample[9]  = state.audio->loadSample("powerup_1.wav");
     state.audio->sample[10] = state.audio->loadSample("engine_3.wav");
     state.audio->sample[11] = state.audio->loadSample("logo.wav");
-    state.audio->music[0]   = state.audio->loadMusic("music_title.ogg");
 }
 
 /*
