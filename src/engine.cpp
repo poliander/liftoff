@@ -307,7 +307,7 @@ bool Engine::init(int argc, char **argv)
             state.config.aud_music = -1;
         } else {
             state.log("ok\n");
-            state.audio->init(
+            state.audio.init(
                     state.engine_datadir,
                     state.config.aud_sfx,
                     state.config.aud_music,
@@ -514,15 +514,15 @@ bool Engine::handleKeyboard()
 
         case STATE_MENU:
             if (keys[SDLK_ESCAPE]) {
-                state.audio->playSample(1, 128, 0);
+                state.audio.playSample(1, 128, 0);
 
                 switch(state.menu) {
                     case 4: // audio
                         state.menu_pos = 3;
                         state.menu_selected = true;
-                        state.config.aud_sfx = state.audio->volume_sfx;
-                        state.config.aud_music = state.audio->volume_music;
-                        state.config.aud_mixfreq = state.audio->mixer_frequency;
+                        state.config.aud_sfx = state.audio.volume_sfx;
+                        state.config.aud_music = state.audio.volume_music;
+                        state.config.aud_mixfreq = state.audio.mixer_frequency;
                         break;
 
                     case 3: // video
@@ -554,9 +554,9 @@ bool Engine::handleKeyboard()
 
                 if ( (state.menu == 1 && state.menu_pos == 2) ||
                      (state.menu == 2 && state.menu_pos == 2) ) {
-                    state.audio->playSample(1, 128, 0); // cancel
+                    state.audio.playSample(1, 128, 0); // cancel
                 } else {
-                    state.audio->playSample(0, 128, 0); // ok
+                    state.audio.playSample(0, 128, 0); // ok
                 }
 
                 return moved;

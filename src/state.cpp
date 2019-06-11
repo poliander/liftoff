@@ -13,8 +13,6 @@ State::State()
         delete [] buf;
     }
 
-    audio = new Audio();
-
     config.vid_width        = DEFAULT_VID_WIDTH;
     config.vid_height       = DEFAULT_VID_HEIGHT;
     config.vid_fullscreen   = DEFAULT_VID_FULLSCREEN;
@@ -56,7 +54,6 @@ State::State()
 
 State::~State()
 {
-    delete audio;
 }
 
 /*
@@ -268,7 +265,7 @@ void State::explode(int oid)
     switch (objects[oid].id) {
         case OBJ_CARGO_1:
             // cargo pod explodes and leaves a power up
-            audio->playSample(5, 192, sangle);
+            audio.playSample(5, 192, sangle);
             objects[oid].id        = OBJ_POWERUP_1;
             objects[oid].energy    = 250 + rand() % 250;
             objects[oid].life      = 999;
@@ -280,7 +277,7 @@ void State::explode(int oid)
 
         case OBJ_POWERUP_1:
             // power up was picked up and turns into a non-colliding object
-            audio->playSample(9, 255, sangle);
+            audio.playSample(9, 255, sangle);
             addMessage(objects[oid].energy, MSG_ENERGY);
             objects[player].powerup = objects[oid].id;
             objects[player].energy += objects[oid].energy;
@@ -290,7 +287,7 @@ void State::explode(int oid)
 
         default:
             // explosion
-            audio->playSample(6, 192, sangle);
+            audio.playSample(6, 192, sangle);
             remove(oid);
     }
 }
@@ -409,8 +406,8 @@ bool State::set(int s)
             objects[player].a_y   = .0f;
             objects[player].a_z   = .0f;
 
-            audio->playMusic(0, 1000);
-            audio->stopSampleLoop(0);
+            audio.playMusic(0, 1000);
+            audio.stopSampleLoop(0);
 
             SDL_GetMouseState(&x, &y);
             mouse_x = (-3.1f * vid_cfg_aspect) + (1 / float(config.vid_width)) * x * (6.35f * vid_cfg_aspect);
@@ -420,7 +417,7 @@ bool State::set(int s)
 
         case STATE_QUIT:
             title_ypos = 99.85f;
-            audio->stopMusic(1000);
+            audio.stopMusic(1000);
             break;
 
         case STATE_GAME_START:
@@ -451,9 +448,9 @@ bool State::set(int s)
                 objects[player].energy = 0;
                 objects[player].powerup = OBJ_POWERUP_0;
 
-                audio->stopMusic(1000);
+                audio.stopMusic(1000);
                 if (strlen(lvl_music)) {
-                    audio->music[1] = audio->loadMusic(lvl_music);
+                    audio.music[1] = audio.loadMusic(lvl_music);
                 }
             } else {
                 log("failed\n");
@@ -500,23 +497,22 @@ bool State::set(int s)
             cam_y_offset = 35.0f;
             cam_speed = .015f;
 
-            /* audio->playMusic(1, 1000); */
-            audio->playSampleLoop(3, 1000);
+            audio.playSampleLoop(3, 1000);
             break;
 
         case STATE_GAME_QUIT:
             log("Quitting game loop.\n");
             title_ypos = 0;
-            audio->stopMusic(1000);
-            audio->stopSampleLoop(1000);
+            audio.stopMusic(1000);
+            audio.stopSampleLoop(1000);
             break;
 
         case STATE_GAME_NEXTLEVEL:
             stars_warp = true;
             engine_boundary = false;
-            audio->playSample(10, 255, 0);
-            audio->stopSampleLoop(1000);
-            audio->stopMusic(2500);
+            audio.playSample(10, 255, 0);
+            audio.stopSampleLoop(1000);
+            audio.stopMusic(2500);
             break;
     }
 

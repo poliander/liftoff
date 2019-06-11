@@ -87,7 +87,7 @@ class State
         bool            log_file;
 
         // audio subsystem and resources
-        Audio*          audio;
+        Audio           audio;
 
         // game resources
         config_t        config;

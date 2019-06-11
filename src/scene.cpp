@@ -61,23 +61,23 @@ Scene::Scene(State &s) : state(s)
 
 Scene::~Scene()
 {
-    if (state.audio->volume_music) {
+    if (state.audio.volume_music) {
         Mix_HaltMusic();
-        Mix_FreeMusic(state.audio->music[0]);
+        Mix_FreeMusic(state.audio.music[0]);
     }
 
-    if (state.audio->volume_sfx) {
-        Mix_FreeChunk(state.audio->sample[10]);
-        Mix_FreeChunk(state.audio->sample[9]);
-        Mix_FreeChunk(state.audio->sample[8]);
-        Mix_FreeChunk(state.audio->sample[7]);
-        Mix_FreeChunk(state.audio->sample[6]);
-        Mix_FreeChunk(state.audio->sample[5]);
-        Mix_FreeChunk(state.audio->sample[4]);
-        Mix_FreeChunk(state.audio->sample[3]);
-        Mix_FreeChunk(state.audio->sample[2]);
-        Mix_FreeChunk(state.audio->sample[1]);
-        Mix_FreeChunk(state.audio->sample[0]);
+    if (state.audio.volume_sfx) {
+        Mix_FreeChunk(state.audio.sample[10]);
+        Mix_FreeChunk(state.audio.sample[9]);
+        Mix_FreeChunk(state.audio.sample[8]);
+        Mix_FreeChunk(state.audio.sample[7]);
+        Mix_FreeChunk(state.audio.sample[6]);
+        Mix_FreeChunk(state.audio.sample[5]);
+        Mix_FreeChunk(state.audio.sample[4]);
+        Mix_FreeChunk(state.audio.sample[3]);
+        Mix_FreeChunk(state.audio.sample[2]);
+        Mix_FreeChunk(state.audio.sample[1]);
+        Mix_FreeChunk(state.audio.sample[0]);
     }
 
     delete cargo;
@@ -202,21 +202,21 @@ void Scene::load()
     explosion = new Explosion(state);
 
     // music
-    state.audio->music[0]   = state.audio->loadMusic("music_title.ogg");
+    state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
 
     // sfx
-    state.audio->sample[0]  = state.audio->loadSample("menu_1.wav");
-    state.audio->sample[1]  = state.audio->loadSample("menu_2.wav");
-    state.audio->sample[2]  = state.audio->loadSample("gun_1.wav");
-    state.audio->sample[3]  = state.audio->loadSample("engine_1.wav");
-    state.audio->sample[4]  = state.audio->loadSample("explosion_1.wav");
-    state.audio->sample[5]  = state.audio->loadSample("explosion_2.wav");
-    state.audio->sample[6]  = state.audio->loadSample("explosion_3.wav");
-    state.audio->sample[7]  = state.audio->loadSample("shield_1.wav");
-    state.audio->sample[8]  = state.audio->loadSample("engine_2.wav");
-    state.audio->sample[9]  = state.audio->loadSample("powerup_1.wav");
-    state.audio->sample[10] = state.audio->loadSample("engine_3.wav");
-    state.audio->sample[11] = state.audio->loadSample("logo.wav");
+    state.audio.sample[0]  = state.audio.loadSample("menu_1.wav");
+    state.audio.sample[1]  = state.audio.loadSample("menu_2.wav");
+    state.audio.sample[2]  = state.audio.loadSample("gun_1.wav");
+    state.audio.sample[3]  = state.audio.loadSample("engine_1.wav");
+    state.audio.sample[4]  = state.audio.loadSample("explosion_1.wav");
+    state.audio.sample[5]  = state.audio.loadSample("explosion_2.wav");
+    state.audio.sample[6]  = state.audio.loadSample("explosion_3.wav");
+    state.audio.sample[7]  = state.audio.loadSample("shield_1.wav");
+    state.audio.sample[8]  = state.audio.loadSample("engine_2.wav");
+    state.audio.sample[9]  = state.audio.loadSample("powerup_1.wav");
+    state.audio.sample[10] = state.audio.loadSample("engine_3.wav");
+    state.audio.sample[11] = state.audio.loadSample("logo.wav");
 }
 
 /*
@@ -511,9 +511,9 @@ void Scene::drawMenu(bool mouse_recheck)
                     case 2: // cancel
                         state.menu = 1;
                         state.menu_pos = 1;
-                        state.config.aud_sfx = state.audio->volume_sfx;
-                        state.config.aud_music = state.audio->volume_music;
-                        state.config.aud_mixfreq = state.audio->mixer_frequency;
+                        state.config.aud_sfx = state.audio.volume_sfx;
+                        state.config.aud_music = state.audio.volume_music;
+                        state.config.aud_mixfreq = state.audio.mixer_frequency;
                         for (int i=0; i<state.vid_sup_modes_count; i++) {
                             if ( (state.vid_cfg_width  == state.vid_sup_modes[i]->w) &&
                                  (state.vid_cfg_height == state.vid_sup_modes[i]->h) ) {
@@ -741,9 +741,9 @@ void Scene::drawMenu(bool mouse_recheck)
                         (state.menu == 1 && state.menu_pos == 2) ||
                         (state.menu == 2 && state.menu_pos == 2)
                     ) {
-                        state.audio->playSample(1, 128, 0);
+                        state.audio.playSample(1, 128, 0);
                     } else {
-                        state.audio->playSample(0, 128, 0);
+                        state.audio.playSample(0, 128, 0);
                     }
 
                     drawMenu(true);
@@ -1342,7 +1342,7 @@ void Scene::moveScene()
 
     explosion->move(-1);
 
-    state.audio->updatePosition(state.objects[state.player].pos_x - state.cam_x);
+    state.audio.updatePosition(state.objects[state.player].pos_x - state.cam_x);
 
     for (i = 0; i < state.lvl_entities; i++) {
 
@@ -1441,7 +1441,7 @@ void Scene::moveScene()
                         } else {
                             sangle = (int)(state.objects[j].pos_x / 2.8f);
                         }
-                        state.audio->playSample(4, 255, sangle);
+                        state.audio.playSample(4, 255, sangle);
 
                         state.objects[j].life -= player->gun_power;
 
@@ -1516,10 +1516,10 @@ void Scene::moveScene()
 
                                     if (state.objects[state.player].life <= 0) {
                                         player->setSpin(state.player, ix, iy, 0);
-                                        state.audio->stopSampleLoop(1000);
+                                        state.audio.stopSampleLoop(1000);
 
                                         if (state.config.aud_music > 0) {
-                                            state.audio->stopMusic(5000);
+                                            state.audio.stopMusic(5000);
                                         }
                                     }
                                 }
@@ -1598,7 +1598,7 @@ void Scene::moveScene()
                     if (dmg == 0) break;
 
                     // collision noise
-                    state.audio->playSample(7, 192, 180);
+                    state.audio.playSample(7, 192, 180);
                     if (state.objects[state.player].life <= 0) break;
 
                     // damage ship & colliding object
@@ -1648,13 +1648,13 @@ void Scene::moveScene()
                     if (state.objects[state.player].life <= 0) {
                         state.engine_boundary = false;
 
-                        state.audio->playSample(6, 200, 180);
-                        state.audio->playSample(7, 160, 180);
-                        state.audio->playSample(8, 255, 180);
+                        state.audio.playSample(6, 200, 180);
+                        state.audio.playSample(7, 160, 180);
+                        state.audio.playSample(8, 255, 180);
 
                         player->setSpin(state.player, ix, iy, 0);
-                        state.audio->stopSampleLoop(1000);
-                        state.audio->stopMusic(5000);
+                        state.audio.stopSampleLoop(1000);
+                        state.audio.stopMusic(5000);
                     }
                 }
                 break;

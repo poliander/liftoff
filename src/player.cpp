@@ -157,7 +157,7 @@ bool Player::shoot()
         angle += 360;
     }
 
-    state.audio->playSample(2, 255, angle);
+    state.audio.playSample(2, 255, angle);
 
     return true;
 }
