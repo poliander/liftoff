@@ -1,4 +1,4 @@
-#include "scenery.hpp"
+#include "scene.hpp"
 
 float isqrt(float f)
 {
@@ -20,7 +20,7 @@ float isqrt(float f)
     return f;
 }
 
-Scenery::Scenery(State &s) : state(s)
+Scene::Scene(State &s) : state(s)
 {
     float x, y;
 
@@ -67,7 +67,7 @@ Scenery::Scenery(State &s) : state(s)
     }
 }
 
-Scenery::~Scenery()
+Scene::~Scene()
 {
     delete cargo;
     delete explosion;
@@ -99,7 +99,7 @@ Scenery::~Scenery()
 /*
  * load texture from file
  */
-GLuint Scenery::loadTexture(const char *filename, bool mipmap)
+GLuint Scene::loadTexture(const char *filename, bool mipmap)
 {
     char fname[255], lmsg[255];
     GLuint texture = 0;
@@ -155,7 +155,7 @@ GLuint Scenery::loadTexture(const char *filename, bool mipmap)
 /*
  * load game data
  */
-void Scenery::load()
+void Scene::load()
 {
     state.texture[T_TITLE]         = loadTexture("title.tga", true);
     state.texture[T_FONT]          = loadTexture("font.tga", true);
@@ -220,7 +220,7 @@ void Scenery::load()
 /*
  * draw text
  */
-void Scenery::drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
+void Scene::drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
 {
     int strLenth = strlen(text);
     char letter, lastletter = 0;
@@ -334,7 +334,7 @@ void Scenery::drawText(const char *text, float x, float y, float z, float size, 
 /*
  * draw text using absolute coordinates
  */
-void Scenery::drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
+void Scene::drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
 {
     drawText(text, (-5.97f*state.vid_cfg_aspect)+x, 5.69f-y, z, size, r, g, b, a);
 }
@@ -342,7 +342,7 @@ void Scenery::drawTextA(const char *text, float x, float y, float z, float size,
 /*
  * display frame rate
  */
-void Scenery::drawFPS()
+void Scene::drawFPS()
 {
     static char txt[16];
 
@@ -376,7 +376,7 @@ void Scenery::drawFPS()
 /*
  * draw title
  */
-void Scenery::drawTitle()
+void Scene::drawTitle()
 {
     float sc, a = state.title_ypos * .01f;
 
@@ -433,7 +433,7 @@ void Scenery::drawTitle()
 /*
  * draw menu
  */
-void Scenery::drawMenu(bool mouse_recheck)
+void Scene::drawMenu(bool mouse_recheck)
 {
     int i, numentries;
     float mx, my, mh, mf, mo;
@@ -826,7 +826,7 @@ void Scenery::drawMenu(bool mouse_recheck)
 /*
  * draw background and stars
  */
-void Scenery::drawBackground()
+void Scene::drawBackground()
 {
     unsigned short i;
     float a, c, sl, sa;
@@ -926,7 +926,7 @@ void Scenery::drawBackground()
 /*
  * draw mouse cursor
  */
-void Scenery::drawMouse()
+void Scene::drawMouse()
 {
     glLoadIdentity();
 
@@ -954,7 +954,7 @@ void Scenery::drawMouse()
 /*
  * draw game scene
  */
-void Scenery::drawScene()
+void Scene::drawScene()
 {
     int i;
     float alpha;
@@ -1075,7 +1075,7 @@ void Scenery::drawScene()
 /*
  * draw head-up-display (energy, shields, money)
  */
-void Scenery::drawDisplay()
+void Scene::drawDisplay()
 {
     int i, s, e;
     static float alpha = 1.0f;
@@ -1219,7 +1219,7 @@ void Scenery::drawDisplay()
     glPopMatrix();
 }
 
-void Scenery::drawMessages()
+void Scene::drawMessages()
 {
     int i;
     float r = 1.0f, g = .8f, b = .55f;
@@ -1283,7 +1283,7 @@ void Scenery::drawMessages()
 /*
  * move game scene
  */
-void Scenery::moveScene()
+void Scene::moveScene()
 {
     int i, j, dmg;
     int sangle = 0;
@@ -1642,7 +1642,7 @@ void Scenery::moveScene()
 /*
  * move money/damage messages
  */
-void Scenery::moveMessages()
+void Scene::moveMessages()
 {
     int i;
 
@@ -1663,7 +1663,7 @@ void Scenery::moveMessages()
 /*
  * move everything
  */
-void Scenery::move()
+void Scene::move()
 {
     int i;
 
@@ -1805,7 +1805,7 @@ void Scenery::move()
 /*
  * draw everything
  */
-void Scenery::draw()
+void Scene::draw()
 {
     float p_x = .0f;
     float p_y = -90.0f;

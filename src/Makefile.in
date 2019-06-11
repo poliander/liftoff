@@ -108,7 +108,7 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-powerup.$(OBJEXT) \
 	__top_builddir__liftoff-player.$(OBJEXT) \
 	__top_builddir__liftoff-cargo.$(OBJEXT) \
-	__top_builddir__liftoff-scenery.$(OBJEXT) \
+	__top_builddir__liftoff-scene.$(OBJEXT) \
 	__top_builddir__liftoff-engine.$(OBJEXT) \
 	__top_builddir__liftoff-particles.$(OBJEXT) \
 	__top_builddir__liftoff-explosion.$(OBJEXT) \
@@ -295,7 +295,7 @@ __top_builddir__liftoff_SOURCES = \
     powerup.cpp \
     player.cpp \
     cargo.cpp \
-    scenery.cpp \
+    scene.cpp \
     engine.cpp \
     particles.cpp \
     explosion.cpp \
@@ -399,7 +399,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-particles.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-powerup.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-scenery.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-scene.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-state.Po@am__quote@
 
 .cpp.o:
@@ -500,19 +500,19 @@ __top_builddir__liftoff-cargo.obj: cargo.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-cargo.obj `if test -f 'cargo.cpp'; then $(CYGPATH_W) 'cargo.cpp'; else $(CYGPATH_W) '$(srcdir)/cargo.cpp'; fi`
 
-__top_builddir__liftoff-scenery.o: scenery.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-scenery.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-scenery.Tpo -c -o __top_builddir__liftoff-scenery.o `test -f 'scenery.cpp' || echo '$(srcdir)/'`scenery.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-scenery.Tpo $(DEPDIR)/__top_builddir__liftoff-scenery.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='scenery.cpp' object='__top_builddir__liftoff-scenery.o' libtool=no @AMDEPBACKSLASH@
+__top_builddir__liftoff-scene.o: scene.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-scene.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-scene.Tpo -c -o __top_builddir__liftoff-scene.o `test -f 'scene.cpp' || echo '$(srcdir)/'`scene.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-scene.Tpo $(DEPDIR)/__top_builddir__liftoff-scene.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='scene.cpp' object='__top_builddir__liftoff-scene.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-scenery.o `test -f 'scenery.cpp' || echo '$(srcdir)/'`scenery.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-scene.o `test -f 'scene.cpp' || echo '$(srcdir)/'`scene.cpp
 
-__top_builddir__liftoff-scenery.obj: scenery.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-scenery.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-scenery.Tpo -c -o __top_builddir__liftoff-scenery.obj `if test -f 'scenery.cpp'; then $(CYGPATH_W) 'scenery.cpp'; else $(CYGPATH_W) '$(srcdir)/scenery.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-scenery.Tpo $(DEPDIR)/__top_builddir__liftoff-scenery.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='scenery.cpp' object='__top_builddir__liftoff-scenery.obj' libtool=no @AMDEPBACKSLASH@
+__top_builddir__liftoff-scene.obj: scene.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-scene.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-scene.Tpo -c -o __top_builddir__liftoff-scene.obj `if test -f 'scene.cpp'; then $(CYGPATH_W) 'scene.cpp'; else $(CYGPATH_W) '$(srcdir)/scene.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-scene.Tpo $(DEPDIR)/__top_builddir__liftoff-scene.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='scene.cpp' object='__top_builddir__liftoff-scene.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-scenery.obj `if test -f 'scenery.cpp'; then $(CYGPATH_W) 'scenery.cpp'; else $(CYGPATH_W) '$(srcdir)/scenery.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-scene.obj `if test -f 'scene.cpp'; then $(CYGPATH_W) 'scene.cpp'; else $(CYGPATH_W) '$(srcdir)/scene.cpp'; fi`
 
 __top_builddir__liftoff-engine.o: engine.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-engine.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-engine.Tpo -c -o __top_builddir__liftoff-engine.o `test -f 'engine.cpp' || echo '$(srcdir)/'`engine.cpp

@@ -320,8 +320,8 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
-    scenery = new Scenery(state);
-    scenery->load();
+    scene = new Scene(state);
+    scene->load();
 
     state.set(STATE_MENU);
 
@@ -500,25 +500,25 @@ bool Engine::handleKeyboard()
 
                 // Keyboard LEFT, RIGHT
                 if (keys[SDLK_LEFT] || keys[SDLK_a]) {
-                    scenery->player->accelerateX(state.player, 1.0f);
+                    scene->player->accelerateX(state.player, 1.0f);
                     moved = true;
                 } else if (keys[SDLK_RIGHT] || keys[SDLK_d]) {
-                    scenery->player->accelerateX(state.player, -1.0f);
+                    scene->player->accelerateX(state.player, -1.0f);
                     moved = true;
                 }
 
                 // Keyboard UP, DOWN
                 if (keys[SDLK_UP] || keys[SDLK_w]) {
-                    scenery->player->accelerateY(state.player, -1.0f);
+                    scene->player->accelerateY(state.player, -1.0f);
                     moved = true;
                 } else if (keys[SDLK_DOWN] || keys[SDLK_s]) {
-                    scenery->player->accelerateY(state.player, 1.0f);
+                    scene->player->accelerateY(state.player, 1.0f);
                     moved = true;
                 }
 
                 // Keyboard CTRL
                 if (keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) {
-                    scenery->player->shoot();
+                    scene->player->shoot();
                 }
             }
             break;
@@ -606,17 +606,17 @@ void Engine::handleJoystick()
     v = float(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
 
     if (fabs(v) > .01f) {
-        scenery->player->accelerateX(state.player, float(scenery->player->acceleration) * -.0075f * v);
+        scene->player->accelerateX(state.player, float(scene->player->acceleration) * -.0075f * v);
     }
 
     v = float(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
 
     if (fabs(v) > .01f) {
-        scenery->player->accelerateY(state.player, float(scenery->player->acceleration) * .0075f * v);
+        scene->player->accelerateY(state.player, float(scene->player->acceleration) * .0075f * v);
     }
 
     if (SDL_JoystickGetButton(state.joystick, 0) != 0) {
-        scenery->player->shoot();
+        scene->player->shoot();
     }
 }
 
@@ -692,7 +692,7 @@ void Engine::halt()
         state.log("failed\n");
     }
 
-    delete scenery;
+    delete scene;
 }
 
 /*
@@ -749,8 +749,8 @@ bool Engine::main()
         handleJoystick();
     }
 
-    scenery->move();
-    scenery->draw();
+    scene->move();
+    scene->draw();
 
     SDL_GL_SwapBuffers();
 

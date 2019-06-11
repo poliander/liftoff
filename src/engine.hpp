@@ -8,7 +8,8 @@
 #include <unistd.h>
 #include <time.h>
 
-#include "scenery.hpp"
+#include "scene.hpp"
+#include "state.hpp"
 
 class Engine
 {
@@ -16,24 +17,23 @@ class Engine
         Engine();
         ~Engine();
 
-        bool init(int argc, char **argv);
-        bool main();
-        void halt();
+        bool         init(int argc, char **argv);
+        bool         main();
+        void         halt();
 
     private:
-        State state;
-        Scenery* scenery;
+        State        state;
+        Scene*       scene;
 
         SDL_Surface* screen;
 
-        bool loadConfiguration();
-        bool writeConfiguration();
+        bool         initDisplay();
+        bool         loadConfiguration();
+        bool         writeConfiguration();
 
-        bool initDisplay();
-
-        bool handleKeyboard();
-        void handleJoystick();
-        void handleMouse();
+        bool         handleKeyboard();
+        void         handleJoystick();
+        void         handleMouse();
 };
 
 #endif

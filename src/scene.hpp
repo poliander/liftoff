@@ -1,5 +1,5 @@
-#ifndef SCENERY_HPP_
-#define SCENERY_HPP_
+#ifndef SCENE_HPP_
+#define SCENE_HPP_
 
 #include <time.h>
 #include <math.h>
@@ -20,11 +20,11 @@
 #include "cargo.hpp"
 #include "powerup.hpp"
 
-class Scenery
+class Scene
 {
     public:
-        Scenery(State &s);
-        ~Scenery();
+        Scene(State &s);
+        ~Scene();
 
         Player*         player;
 

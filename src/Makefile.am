@@ -9,7 +9,7 @@ __top_builddir__liftoff_SOURCES = \
     powerup.cpp \
     player.cpp \
     cargo.cpp \
-    scenery.cpp \
+    scene.cpp \
     engine.cpp \
     particles.cpp \
     explosion.cpp \
