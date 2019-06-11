@@ -594,8 +594,6 @@ void Engine::handleJoystick()
 {
     float v;
 
-    SDL_JoystickUpdate();
-
     if (
         state.objects[state.player].life <= 0 ||
         state.joystick == NULL
@@ -603,12 +601,16 @@ void Engine::handleJoystick()
         return;
     }
 
+    SDL_JoystickUpdate();
+
     v = float(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
+
     if (fabs(v) > .01f) {
         scenery->player->accelerateX(state.player, float(scenery->player->acceleration) * -.0075f * v);
     }
 
     v = float(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
+
     if (fabs(v) > .01f) {
         scenery->player->accelerateY(state.player, float(scenery->player->acceleration) * .0075f * v);
     }
