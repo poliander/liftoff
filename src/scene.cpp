@@ -1,30 +1,8 @@
 #include "scene.hpp"
 
-float isqrt(float f)
-{
-    float fhalf = 0.5f * f;
-
-    asm (
-        "mov %1, %%eax;"
-        "sar %%eax;"
-        "mov $0x5F3759DF, %%ebx;"
-        "sub %%eax, %%ebx;"
-        "mov %%ebx, %0"
-        :"=g"(f)
-        :"g"(f)
-        : "%eax", "%ebx"
-    );
-
-    f *= 1.5f - fhalf*f*f;
-
-    return f;
-}
-
 Scene::Scene(State &s) : state(s)
 {
     float x, y;
-
-    srand((int)time(NULL));
 
     // generate far stars
     for (int i=0; i<(state.engine_stars - state.engine_stars_warp); i++) {
@@ -81,9 +59,7 @@ Scene::~Scene()
     }
 
     delete cargo;
-    delete explosion;
     delete debris;
-    delete asteroid;
     delete player;
     delete powerup;
 }
@@ -166,17 +142,15 @@ void Scene::load()
     state.texture[T_JET]          = loadTexture("star.tga", false);
     state.texture[T_BACKGROUND_1] = loadTexture("background_1.tga", false);
 
-    // asteroid
-    state.log("Loading 'obj/asteroid_1.obj'\n");
-    asteroid = new Object(state);
-    asteroid->textures[0] = loadTexture("asteroid_1.tga", false);
-    asteroid->load(state.engine_datadir, "asteroid_1.obj");
+    state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
+        "resources/gfx/asteroid_1.tga",
+        "resources/obj/asteroid_1.obj"
+    )));
 
-    // debris
-    state.log("Loading 'obj/debris_1.obj'\n");
-    debris = new Object(state);
-    debris->textures[0] = loadTexture("debris_1.tga", false);
-    debris->load(state.engine_datadir, "debris_1.obj");
+    state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
+        "resources/gfx/debris_1.tga",
+        "resources/obj/debris_1.obj"
+    )));
 
     // cargo
     state.log("Loading 'obj/cargo_1.obj'\n");
@@ -198,9 +172,6 @@ void Scene::load()
     powerup = new Powerup(state);
     powerup->textures[0] = cargo->textures[1];
 
-    // explosion
-    explosion = new Explosion(state);
-
     // music
     state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
 
@@ -217,6 +188,159 @@ void Scene::load()
     state.audio.sample[9]  = state.audio.loadSample("powerup_1.wav");
     state.audio.sample[10] = state.audio.loadSample("engine_3.wav");
     state.audio.sample[11] = state.audio.loadSample("logo.wav");
+}
+
+/*
+ * load level data file
+ */
+bool Scene::loadLevel()
+{
+    FILE *fp = NULL;
+    char msg[255], fname[255], buf[1024], cmd[16], par[255];
+    int m, p = 0;
+    unsigned int i;
+    object_t nobj;
+
+    state.lvl_entities = 1;
+    state.lvl_loaded = false;
+
+    sprintf(fname, "%s/lvl/mission_%d.dat", state.engine_datadir, state.lvl_id);
+    fp = fopen(fname, "r");
+
+    if (fp == NULL) {
+        return false;
+    }
+
+    while (!feof(fp)) {
+        if (fgets(buf, 1024, fp) != NULL) {
+            strcpy(cmd, "");
+            strcpy(par, "");
+            i = 0;
+            m = 0;
+            while ( (i < strlen(buf)) && (m < 4) ) {
+                // forget the rest of the line
+                if (buf[i] == ';') break;
+
+                // remove unnecessary characters
+                if ( buf[i] < 33 ) {
+                    if (m == 0) { i++; continue; }
+                    if (m == 1) { m++; continue; }
+                    if (m == 2) { i++; continue; }
+                    if (m == 3) { m++; continue; }
+                } else {
+                    if (m == 0) { p = 0; m = 1; }
+                    if (m == 2) { p = 0; m = 3; }
+                }
+
+                if (m == 1) {
+                    cmd[p] = buf[i];
+                    p++;
+                    cmd[p] = 0;
+                }
+
+                if (m == 3) {
+                    if (buf[i] == '{') {
+                        i++;
+                        while ( (buf[i] != '}') && (i < strlen(buf)) ) {
+                            par[p] = buf[i];
+                            p++;
+                            par[p] = 0;
+                            i++;
+                        }
+                    } else {
+                        par[p] = buf[i];
+                        p++;
+                        par[p] = 0;
+                    }
+                }
+
+                i++;
+            }
+
+            if (cmd[0] && par[0]) {
+                // music
+                if (!strcmp(cmd, "soundtrack")) strcpy(state.lvl_music, par);
+
+                // length
+                if (!strcmp(cmd, "length")) sscanf(par, "%d", &state.lvl_length);
+
+                // colliding object, obstacle
+                if (!strcmp(cmd, "collider")) {
+                    nobj.type = OBJ_TYPE_COLLIDER;
+                    nobj.state = OBJ_STATE_IDLE;
+                    nobj.speed = 0;
+                    nobj.cnt = 0;
+                    nobj.life_time = -1;
+
+                    nobj.rot_x = float(rand() % 3600) * .1f;
+                    nobj.rot_y = float(rand() % 3600) * .1f;
+                    nobj.rot_z = float(rand() % 3600) * .1f;
+
+                    sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u,%u",
+                        (float *)&nobj.pos_z,
+                        (int *)&nobj.id,
+                        (float *)&nobj.pos_x,
+                        (float *)&nobj.pos_y,
+                        (float *)&nobj.scale_x,
+                        (float *)&nobj.scale_y,
+                        (float *)&nobj.scale_z,
+                        (float *)&nobj.rsp_x,
+                        (float *)&nobj.rsp_y,
+                        (float *)&nobj.rsp_z,
+                        (int *)&nobj.life_max,
+                        (int *)&nobj.money
+                    );
+
+                    nobj.life = nobj.life_max;
+
+                    if (nobj.id == OBJ_ASTEROID_1) {
+                        auto asteroid = make_shared<Asteroid>();
+
+                        asteroid->setPos(nobj.pos_x, nobj.pos_y, nobj.pos_z);
+                        asteroid->setScale(nobj.scale_x, nobj.scale_y, nobj.scale_z);
+                        asteroid->setSpin(nobj.rsp_x, nobj.rsp_y, nobj.rsp_z);
+                        asteroid->setLife(nobj.life_max);
+
+                        state.entities.push_back(asteroid);
+                    } else {
+                        state.add(&nobj);
+                    }
+                }
+
+                // scenery object
+                if (!strcmp(cmd, "scenery")) {
+                    nobj.type = OBJ_TYPE_SCENERY;
+                    nobj.state = OBJ_STATE_IDLE;
+                    nobj.speed = 0;
+                    nobj.cnt = 0;
+                    nobj.life_time = -1;
+
+                    nobj.rot_x = float(rand() % 3600) * .1f;
+                    nobj.rot_y = float(rand() % 3600) * .1f;
+                    nobj.rot_z = float(rand() % 3600) * .1f;
+
+                    sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
+                        (float *)&nobj.pos_z,
+                        (int *)&nobj.id,
+                        (float *)&nobj.pos_x,
+                        (float *)&nobj.pos_y,
+                        (float *)&nobj.scale_x,
+                        (float *)&nobj.scale_y,
+                        (float *)&nobj.scale_z,
+                        (float *)&nobj.rsp_x,
+                        (float *)&nobj.rsp_y,
+                        (float *)&nobj.rsp_z,
+                        (int *)&nobj.life_max
+                    );
+
+                    nobj.life = nobj.life_max;
+                    state.add(&nobj);
+                }
+            }
+        }
+    }
+    
+    return true;
 }
 
 /*
@@ -440,8 +564,9 @@ void Scene::drawMenu(bool mouse_recheck)
     int i, numentries;
     float mx, my, mh, mf, mo;
     float m_a = state.global_alpha;
-
     char *mtxt[5];
+    char msg[255];
+
     for (i=0; i<5; i++) {
         mtxt[i] = (char*)malloc(sizeof(char)*64);
     }
@@ -462,8 +587,18 @@ void Scene::drawMenu(bool mouse_recheck)
             if (state.menu_selected) {
                 switch (state.menu_pos) {
                     case 0: // launch
-                        state.lvl_id = 1;
-                        state.set(STATE_GAME_START);
+                        sprintf(msg, "Loading 'lvl/mission_%d.dat'... ", state.lvl_id);
+                        state.log(msg);
+
+                        if (loadLevel()) {
+                            sprintf(msg, "ok (%d objects)\n", state.lvl_entities);
+                            state.log(msg);
+
+                            state.set(STATE_GAME_START);
+                        } else {
+                            state.log("failed\n");
+                        }
+
                         break;
 
                     case 1: // enter settings
@@ -963,14 +1098,16 @@ void Scene::drawScene()
 
     state.objects[state.player].target = -1;
 
-    for (i = 0; i < state.lvl_entities; i++) {
-        if (state.objects[i].state == OBJ_STATE_IDLE) {
+    for (auto &entity: state.entities) {
+        if (entity->isIdle()) {
             continue;
         }
 
-        if (state.objects[i].type == OBJ_TYPE_COLLIDER) {
-            player->getTarget(i);
+        if (entity->isFocusable()) {
+            //player->getTarget(i);
         }
+
+        entity->draw(state);
     }
 
     for (i=0; i<state.lvl_entities; i++) {
@@ -981,10 +1118,6 @@ void Scene::drawScene()
         switch(state.objects[i].id) {
             case OBJ_PLAYER:
                 player->draw(i);
-                break;
-
-            case OBJ_ASTEROID_1:
-                asteroid->draw(i);
                 break;
 
             case OBJ_DEBRIS_1:
@@ -999,86 +1132,6 @@ void Scene::drawScene()
             case OBJ_POWERUP_1:
                 powerup->draw(i);
                 powerup->drawCrosshair(i, .3f, .55f, 1.0f);
-                break;
-
-            case OBJ_EXPLOSION_1:
-                glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_1]);
-                explosion->draw(i);
-
-                break;
-            case OBJ_EXPLOSION_2:
-                glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_2]);
-                explosion->draw(i);
-                break;
-
-            case OBJ_EXPLOSION_3:
-                glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_2]);
-                explosion->draw(i);
-                break;
-
-            case OBJ_EXPLOSION_4:
-                glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state.texture[T_STAR]);
-                explosion->draw(i);
-                break;
-
-            case OBJ_EXPLOSION_5:
-                glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state.texture[T_EXPLOSION_4]);
-                explosion->draw(i);
-                break;
-
-            case OBJ_MISSILE_1:
-                glLoadIdentity();
-                glBindTexture(GL_TEXTURE_2D, state.texture[T_MISSILE_1]);
-
-                alpha = (state.global_alpha * .005f) + ((state.objects[i].pos_z+200.0f)*.00002f);
-
-                if (alpha < 0) {
-                    state.remove(i);
-                    break;
-                }
-
-                glColor4f(.5f, 1.0f, .8f, alpha);
-                glPushMatrix();
-                glTranslatef(
-                  (state.objects[i].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT,
-                  (state.objects[i].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT,
-                  (state.objects[i].pos_z)
-                );
-                glRotatef(270, 0, 0, 1);
-                glScalef(state.objects[i].scale_x, state.objects[i].scale_y, state.objects[i].scale_z);
-                glBegin (GL_QUADS);
-                  glTexCoord2f (0, 0);
-                  glVertex3f (-3.0f, 0, 0);
-
-                  glTexCoord2f (1, 0);
-                  glVertex3f (3.0f, 0, 0);
-
-                  glTexCoord2f (1, .95f);
-                  glVertex3f (3.0f, 0, 150.0f);
-
-                  glTexCoord2f (0, .95f);
-                  glVertex3f (-3.0f, 0, 150.0f);
-                glEnd();
-                glRotatef(90, 0, 0, 1);
-                glBegin (GL_QUADS);
-                  glTexCoord2f (0, 0);
-                  glVertex3f (-3.0f, 0, 0);
-
-                  glTexCoord2f (1, 0);
-                  glVertex3f (3.0f, 0, 0);
-
-                  glTexCoord2f (1, .95f);
-                  glVertex3f (3.0f, 0, 150.0f);
-
-                  glTexCoord2f (0, .95f);
-                  glVertex3f (-3.0f, 0, 150.0f);
-                glEnd();
-                glPopMatrix();
                 break;
         }
     }
@@ -1300,47 +1353,50 @@ void Scene::drawMessages()
  */
 void Scene::moveScene()
 {
+    auto e = state.entities.begin();
+
+    while (e != state.entities.end()) {
+        if ((*e)->isIdle()) {
+            if ((*e)->getPosZ() < state.lvl_pos) {
+                (*e)->setPosZ(-9999.0f);
+                (*e)->activate();
+            } else {
+                ++e;
+                continue;
+            }
+        }
+
+        (*e)->move(state);
+
+        if ((*e)->isGone()) {
+            e = state.entities.erase(e);
+            continue;
+        }
+
+        if ((*e)->isCollider()) {
+            auto f = next(e);
+
+            while (f != state.entities.end()) {
+
+                if (
+                    (*f)->isCollider() &&
+                    (*f)->isColliding(*e)
+                ) {
+                    (*e)->collide(state, *f);
+                    (*f)->collide(state, *e);
+                }
+
+                ++f;
+            }
+        }
+
+        ++e;
+    }
+
     int i, j, dmg;
     int sangle = 0;
     float dx, dy, dz, da, dd, ix, iy, s;
     float mx, my, mz, ox, oy, oz;
-    static GLuint nextdebris = state.timer;
-
-    if ((state.timer > nextdebris) && (state.lvl_pos < float(state.lvl_length-1000))) {
-        nextdebris = state.timer + 150 + rand() % 150;
-
-        object_t new_debris;
-
-        new_debris.type      = OBJ_TYPE_SCENERY;
-        new_debris.state     = OBJ_STATE_ACTIVE;
-        new_debris.id        = OBJ_DEBRIS_1;
-
-        new_debris.life      = -1;
-        new_debris.life_max  = -1;
-        new_debris.life_time = -1;
-        new_debris.cnt       = .0f;
-        new_debris.speed     = .0f;
-
-        new_debris.pos_x     = -600.0f + float(rand() % 1200);
-        new_debris.pos_y     = -400.0f + float(rand() % 800);
-        new_debris.pos_z     = -8000.0f;
-
-        new_debris.rot_x     = .0f;
-        new_debris.rot_y     = .0f;
-        new_debris.rot_z     = .0f;
-
-        new_debris.rsp_x     = float(rand() % 100) * .1f;
-        new_debris.rsp_y     = float(rand() % 100) * .1f;
-        new_debris.rsp_z     = float(rand() % 100) * .1f;
-
-        new_debris.scale_x   = 25.0f + float(rand() % 500) * .2f;
-        new_debris.scale_y   = 25.0f + float(rand() % 500) * .2f;
-        new_debris.scale_z   = 25.0f + float(rand() % 500) * .2f;
-
-        state.add(&new_debris);
-    }
-
-    explosion->move(-1);
 
     state.audio.updatePosition(state.objects[state.player].pos_x - state.cam_x);
 
@@ -1362,35 +1418,12 @@ void Scene::moveScene()
                 player->move(i);
                 break;
 
-            case OBJ_EXPLOSION_1:
-            case OBJ_EXPLOSION_2:
-            case OBJ_EXPLOSION_3:
-            case OBJ_EXPLOSION_4:
-            case OBJ_EXPLOSION_5:
-                explosion->move(i);
-                break;
-
-            case OBJ_MISSILE_1:
-                state.objects[i].pos_x += state.timer_adjustment * state.objects[i].rsp_x;
-                state.objects[i].pos_y += state.timer_adjustment * state.objects[i].rsp_y;
-                state.objects[i].pos_z += state.timer_adjustment * state.objects[i].speed;
-
-                if (state.objects[i].pos_z < -10000.0f) {
-                    state.remove(i);
-                    continue;
-                }
-                break;
-
             case OBJ_CARGO_1:
                 cargo->move(i);
                 break;
 
             case OBJ_POWERUP_1:
                 powerup->move(i);
-                break;
-
-            case OBJ_ASTEROID_1:
-                asteroid->move(i);
                 break;
 
             case OBJ_DEBRIS_1:
@@ -1400,140 +1433,6 @@ void Scene::moveScene()
 
         // collision detection
         switch (state.objects[i].type) {
-
-            // missiles are checked against colliders and obstacles
-            case OBJ_TYPE_MISSILE:
-                for (j = 0; j < state.lvl_entities; j++) {
-
-                    // missiles only hit colliders
-                    if ( (state.objects[j].state == OBJ_STATE_IDLE) ||
-                         (state.objects[j].type != OBJ_TYPE_COLLIDER) ) continue;
-
-                    // whether collider has already passed by
-                    if (state.objects[i].pos_z < state.objects[j].pos_z) continue;
-
-                    // missile position in next frame
-                    mx = state.objects[i].pos_x;
-                    my = state.objects[i].pos_y;
-                    mz = state.objects[i].pos_z + (state.objects[i].speed * state.timer_adjustment);
-
-                    // object position in next frame
-                    ox = state.objects[j].pos_x;
-                    oy = state.objects[j].pos_y;
-                    oz = state.objects[j].pos_z + (state.objects[j].speed * state.timer_adjustment);
-
-                    // distance between object and missile in next frame
-                    dx = fabs(mx - ox);
-                    dy = fabs(my - oy);
-                    dz = mz - oz;
-
-                    // bounding sphere radius
-                    s = ((10000.0f + oz) * .0001f) /
-                           isqrt( state.objects[j].scale_x * state.objects[j].scale_x +
-                                  state.objects[j].scale_y * state.objects[j].scale_y +
-                                  state.objects[j].scale_z * state.objects[j].scale_z
-                            );
-
-                    if ( (dx < s*.5f) && (dy < s*.5f) && (dz < s) ) {
-
-                        if (state.objects[i].pos_x < 0) {
-                            sangle = 360 + (int)(state.objects[j].pos_x / 2.8f);
-                        } else {
-                            sangle = (int)(state.objects[j].pos_x / 2.8f);
-                        }
-                        state.audio.playSample(4, 255, sangle);
-
-                        state.objects[j].life -= player->gun_power;
-
-                        if (state.objects[j].life > 0) {
-                            // gun impact
-                            explosion->add(
-                                OBJ_EXPLOSION_1,
-                                state.objects[i].pos_x,
-                                state.objects[i].pos_y,
-                                state.objects[j].pos_z + s,
-                                state.objects[j].speed
-                            );
-                        } else {
-                            if (state.objects[j].id == OBJ_ASTEROID_1) {
-                                // smoke
-                                explosion->add(
-                                    OBJ_EXPLOSION_2,
-                                    state.objects[j].pos_x,
-                                    state.objects[j].pos_y,
-                                    state.objects[j].pos_z + .2f,
-                                    state.objects[j].speed
-                                );
-                            } else {
-                                // halo
-                                explosion->add(
-                                    OBJ_EXPLOSION_5,
-                                    state.objects[j].pos_x,
-                                    state.objects[j].pos_y,
-                                    state.objects[j].pos_z,
-                                    state.objects[j].speed
-                                );
-                            }
-
-                            explosion->add(
-                                OBJ_EXPLOSION_3,
-                                state.objects[j].pos_x,
-                                state.objects[j].pos_y,
-                                state.objects[j].pos_z,
-                                state.objects[j].speed
-                            );
-
-                            // nearby explosion causes impulse and camera tilt
-                            dz = fabs(state.objects[state.player].pos_z - state.objects[j].pos_z - s);
-                            dd = 1.0f / isqrt(dx*dx + dy*dy + dz*dz);
-                            if (dd < 2000.0f) {
-                                player->tilt((2000.0f - dd) * .01f);
-
-                                da = atan(dy/dx);
-                                dd *= .0002f;
-
-                                // calculate horizontal crash impulse
-                                ix = dd * cos(da);
-                                if (ix > .25f) ix = .25f;
-                                if (state.objects[state.player].pos_x > state.objects[i].pos_x) {
-                                    ix *= -1.0f;
-                                }
-
-                                // calculate vertical crash impulse
-                                iy = dd * sin(da);
-                                if (iy > .25f) iy = .25f;
-                                if (state.objects[state.player].pos_y > state.objects[i].pos_y) {
-                                    iy *= -1.0f;
-                                }
-
-                                // transmit impulse to ship
-                                player->addSpeed(state.player, ix, iy, .0f);
-
-                                dmg = 20 - int((fabs(ix)+fabs(iy))*40.0f);
-                                if (dmg > 0) {
-                                    state.addMessage(dmg, MSG_DAMAGE);
-                                    state.objects[state.player].life -= dmg;
-
-                                    if (state.objects[state.player].life <= 0) {
-                                        player->setSpin(state.player, ix, iy, 0);
-                                        state.audio.stopSampleLoop(1000);
-
-                                        if (state.config.aud_music > 0) {
-                                            state.audio.stopMusic(5000);
-                                        }
-                                    }
-                                }
-                            }
-
-                            state.explode(j);
-                        }
-
-                        // remove missile after collision
-                        state.remove(i);
-                        break;
-                    }
-                }
-                break;
 
             // check player's ship against colliding objects
             case OBJ_TYPE_COLLIDER:
@@ -1608,40 +1507,36 @@ void Scene::moveScene()
 
                     // colliding object destroyed?
                     if (state.objects[i].life < 1) {
-                        explosion->add(
+                        state.entities.push_back(make_shared<Explosion>(
                             OBJ_EXPLOSION_2,
                             state.objects[i].pos_x,
                             state.objects[i].pos_y,
-                            state.objects[i].pos_z + .2f,
-                            state.objects[i].speed
-                        );
+                            state.objects[i].pos_z + .2f
+                        ));
 
-                        explosion->add(
+                        state.entities.push_back(make_shared<Explosion>(
                             OBJ_EXPLOSION_3,
                             state.objects[i].pos_x,
                             state.objects[i].pos_y,
-                            state.objects[i].pos_z,
-                            state.objects[i].speed
-                        );
+                            state.objects[i].pos_z
+                        ));
 
-                        explosion->add(
+                        state.entities.push_back(make_shared<Explosion>(
                             OBJ_EXPLOSION_4,
                             state.objects[i].pos_x,
                             state.objects[i].pos_y,
-                            state.objects[i].pos_z + .1f,
-                            state.objects[i].speed
-                        );
+                            state.objects[i].pos_z + .1f
+                        ));
 
                         state.explode(i);
                     } else {
                         // collision sparks
-                        explosion->add(
+                        state.entities.push_back(make_shared<Explosion>(
                             OBJ_EXPLOSION_4,
                             state.objects[i].pos_x + (state.objects[state.player].pos_x - state.objects[i].pos_x),
                             state.objects[i].pos_y + (state.objects[state.player].pos_y - state.objects[i].pos_y),
-                            state.objects[i].pos_z + (state.objects[state.player].pos_z - state.objects[i].pos_z),
-                            state.objects[i].speed
-                        );
+                            state.objects[i].pos_z + (state.objects[state.player].pos_z - state.objects[i].pos_z)
+                        ));
                     }
 
                     // player's ship was destroyed

@@ -16,9 +16,11 @@ using namespace std;
 
 #include "../config.h"
 
+#include "functions.hpp"
 #include "entity.hpp"
 #include "object.hpp"
 #include "player.hpp"
+#include "asteroid.hpp"
 #include "state.hpp"
 #include "explosion.hpp"
 #include "cargo.hpp"
@@ -38,15 +40,15 @@ class Scene
 
     private:
         State&         state;
-        vector<Entity> entities;
 
-        Object*        asteroid = nullptr;
         Object*        debris = nullptr;
         Cargo*         cargo = nullptr;
         Explosion*     explosion = nullptr;
         Powerup*       powerup = nullptr;
 
         float          stars[8000][4];
+
+        bool           loadLevel();
         GLuint         loadTexture(const char *filename, bool mipmap);
 
         void           drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);

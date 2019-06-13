@@ -33,7 +33,7 @@ struct particle_t
 class ParticleEngine
 {
     public:
-        ParticleEngine(State &s);
+        ParticleEngine();
         ~ParticleEngine();
 
         void            setup(short emitter, short particles, float dx, float dy, float dz, float decay, float size);
@@ -46,11 +46,10 @@ class ParticleEngine
         void            setDirection(float dx, float dy, float dz);
         void            setFadeFactor(float f);
 
-        void            draw(float px, float py, float pz, float rx, float ry, float rz);
-        void            move();
+        void            draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
+        void            move(State &s);
 
     private:
-        State&          state;
         particle_t      p[DEFAULT_GFX_PARTICLES];
 
         short           pemitter;

@@ -1,11 +1,13 @@
 #include "particles.hpp"
 
-ParticleEngine::ParticleEngine(State &s) : state(s)
+ParticleEngine::ParticleEngine()
 {
     pemitter = EMITTER_JET;
+
     pr = 1.0f;
     pg = 1.0f;
     pb = 1.0f;
+
     palpha = 1.0f;
     pscale = 1.0f;
 }
@@ -108,17 +110,17 @@ void ParticleEngine::setParticleNumber(short particles)
     }
 }
 
-void ParticleEngine::move()
+void ParticleEngine::move(State &s)
 {
     int i;
 
     if (pemitter == EMITTER_EXPLOSION) {
         for (i=0; i<pnum_max; i++) {
-            p[i].px += p[i].dx * p[i].lifetime * state.timer_adjustment;
-            p[i].py += p[i].dy * p[i].lifetime * state.timer_adjustment;
-            p[i].pz += p[i].dz * p[i].lifetime * state.timer_adjustment;
+            p[i].px += p[i].dx * p[i].lifetime * s.timer_adjustment;
+            p[i].py += p[i].dy * p[i].lifetime * s.timer_adjustment;
+            p[i].pz += p[i].dz * p[i].lifetime * s.timer_adjustment;
 
-            p[i].lifetime -= p[i].fading * state.timer_adjustment;
+            p[i].lifetime -= p[i].fading * s.timer_adjustment;
 
             if (p[i].lifetime < 0) {
                 p[i].px = 0;
@@ -136,8 +138,8 @@ void ParticleEngine::move()
         }
     } else {
         for (i=0; i<pnum_max; i++) {
-            p[i].lifetime -= state.timer_adjustment * p[i].fading;
-            p[i].pz += (p[i].dz * (.75f + .25f * p[i].fading)) * state.timer_adjustment;
+            p[i].lifetime -= s.timer_adjustment * p[i].fading;
+            p[i].pz += (p[i].dz * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
 
             if (p[i].lifetime < .0f) {
                 p[i].lifetime += 1.0f;
@@ -151,11 +153,11 @@ void ParticleEngine::move()
     }
 }
 
-void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz)
+void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, float ry, float rz)
 {
     int i;
     float m[16];
-    float sf = palpha * state.global_alpha * .005f;
+    float sf = palpha * s.global_alpha * .005f;
 
     glPushMatrix();
 

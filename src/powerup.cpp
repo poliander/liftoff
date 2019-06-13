@@ -2,7 +2,7 @@
 
 Powerup::Powerup(State &s) : Object(s)
 {
-    particles = new ParticleEngine(state);
+    particles = new ParticleEngine();
     particles->setup(EMITTER_EXPLOSION, 20, .4f, .4f, .4f, 25.0f, 5.0f);
 }
 
@@ -38,6 +38,7 @@ void Powerup::draw(int oid)
     particles->setColor(.6f, .75f, 1.0f);
     particles->setScale(25.0f + state.objects[oid].cnt * 100.0f);
     particles->draw(
+        state,
         .0f,
         .0f,
         .0f,
@@ -54,7 +55,7 @@ void Powerup::draw(int oid)
 
 void Powerup::move(int oid)
 {
-    particles->move();
+    particles->move(state);
 
     if (state.objects[oid].state == OBJ_STATE_FADING) {
         state.objects[oid].cnt += state.timer_adjustment * .05f;

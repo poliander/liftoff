@@ -1,9 +1,9 @@
 #ifndef MISSILE_HPP_
 #define MISSILE_HPP_
 
-#include "definitions.hpp"
 #include "entity.hpp"
-#include "state.hpp"
+
+class State;
 
 class Missile : public Entity
 {
@@ -11,8 +11,13 @@ class Missile : public Entity
         Missile();
         ~Missile();
 
-        void move(State &s);
-        void draw(State &s);
+        void         move(State &s);
+        void         draw(State &s);
+
+    protected:
+        int          power;
+
+        void         collide(State &s, shared_ptr<Entity> e);
 };
 
 #endif

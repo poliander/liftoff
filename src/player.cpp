@@ -2,7 +2,7 @@
 
 Player::Player(State &s) : Object(s)
 {
-    particles = new ParticleEngine(s);
+    particles = new ParticleEngine();
     particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 10.0f);
 
     jr = 0;
@@ -80,76 +80,46 @@ void Player::tilt(float t)
 /*
  * fire primary weapons
  */
-bool Player::shoot()
+void Player::shoot()
 {
     static int m_alt = 0;
     static GLuint m_next_shot = state.timer;
     float drift_x = .0f, drift_y = .0f, delta_z;
     Sint16 angle;
 
-    // timing
-    if (m_next_shot > state.timer) {
-        return false;
-    } else {
-        m_next_shot = state.timer + 90 + rand() % 60;
+    if (state.objects[state.player].life <= 0) {
+        // player dead
+        return;
     }
 
-    // don't fire when player is dead or energy is too low
-    if ((state.objects[state.player].life <= 0) || (state.objects[state.player].energy < 20)) {
-        return false;
-    } else {
-        state.objects[state.player].energy -= 20;
+    if (m_next_shot > state.timer) {
+        // timing
+        return;
     }
+
+    m_next_shot = state.timer + 90 + rand() % 60;
+
+    if (state.objects[state.player].energy < 20) {
+        // low energy
+        return;
+    }
+
+    state.objects[state.player].energy -= 20;
 
     // left/right alteration, randomize gun flash
     m_alt = 1 - m_alt;
     gun_flash[m_alt] = 1.0f;
     gun_flash_rot[m_alt] = float(rand()%360);
 
-    // a little auto aiming for locked targets
-    if (state.objects[state.player].target != -1) {
-        delta_z = .01f * fabs(state.objects[state.objects[state.player].target].pos_z - state.objects[state.player].pos_z);
-        drift_x = -(state.objects[state.player].pos_x - state.objects[state.objects[state.player].target].pos_x);
-        drift_y = -(state.objects[state.player].pos_y - state.objects[state.objects[state.player].target].pos_y);
+    auto missile = make_shared<Missile>();
 
-        drift_x = drift_x / delta_z;
-        if (drift_x > 2.0f) drift_x = 2.0f;
-        if (drift_x < -2.0f) drift_x = -2.0f;
+    missile->setPos(
+        state.objects[state.player].pos_x - 8.5f + (m_alt * 17.0f),
+        state.objects[state.player].pos_y,
+        state.objects[state.player].pos_z - 150.0f
+    );
 
-        drift_y = drift_y / delta_z;
-        if (drift_y > 2.0f) drift_y = 2.0f;
-        if (drift_y < -2.0f) drift_y = -2.0f;
-    }
-
-    object_t new_missile;
-
-    new_missile.type        = OBJ_TYPE_MISSILE;
-    new_missile.state       = OBJ_STATE_ACTIVE;
-    new_missile.id          = OBJ_MISSILE_1;
-
-    new_missile.life        = -1;
-    new_missile.life_max    = -1;
-    new_missile.life_time   = -1;
-    new_missile.cnt         = .0f;
-    new_missile.speed       = -125.0f;
-
-    new_missile.pos_x       = state.objects[state.player].pos_x - 8.5f + (m_alt * 17.0f);
-    new_missile.pos_y       = state.objects[state.player].pos_y;
-    new_missile.pos_z       = state.objects[state.player].pos_z - 150.0f;
-
-    new_missile.rot_x       = .0f;
-    new_missile.rot_y       = .0f;
-    new_missile.rot_z       = .0f;
-
-    new_missile.rsp_x       = drift_x;
-    new_missile.rsp_y       = drift_y;
-    new_missile.rsp_z       = .0f;
-
-    new_missile.scale_x     = 2.25f;
-    new_missile.scale_y     = 2.25f;
-    new_missile.scale_z     = 2.25f;
-
-    state.add(&new_missile);
+    state.entities.push_back(missile);
 
     angle = int(.5f * (state.objects[state.player].pos_x - state.cam_x));
 
@@ -158,8 +128,6 @@ bool Player::shoot()
     }
 
     state.audio.playSample(2, 255, angle);
-
-    return true;
 }
 
 void Player::move(int oid)
@@ -265,7 +233,7 @@ void Player::move(int oid)
     if (jt_l > j_l) {
         jt_l -= .1f * ((jt_l - j_l )+.05f) * state.timer_adjustment;
     }
-    particles->move();
+    particles->move(state);
 
     // spin rotation
     setRot(
@@ -535,9 +503,9 @@ void Player::draw(int oid)
         }
 
         // engine jets
-        particles->move();
-        particles->draw(-4.25f, -.75f, .5f, .0f, -90.0f, -5.0f);
-        particles->draw(-4.25f, .75f, .5f, .0f, -90.0f, 5.0f);
+        particles->move(state);
+        particles->draw(state, -4.25f, -.75f, .5f, .0f, -90.0f, -5.0f);
+        particles->draw(state, -4.25f, .75f, .5f, .0f, -90.0f, 5.0f);
 
         // exhaust textures
         glRotatef(90, 1, 0, 0);

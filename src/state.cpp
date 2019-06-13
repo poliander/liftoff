@@ -19,9 +19,9 @@ State::State()
     config.vid_vsync        = DEFAULT_VID_VSYNC;
     config.vid_aspect       = 0;
 
+    config.aud_mixfreq      = DEFAULT_AUD_MIXFREQ;
     config.aud_sfx          = 2;
     config.aud_music        = 2;
-    config.aud_mixfreq      = DEFAULT_AUD_MIXFREQ;
 
     vid_cfg_multisampling   = 8;
 
@@ -72,146 +72,6 @@ void State::log(const char *msg)
         printf("%s", msg);
 #endif
     }
-}
-
-/*
- * load level data file
- */
-bool State::load()
-{
-    FILE *fp = NULL;
-    char fname[255], buf[1024], cmd[16], par[255];
-    int m, p = 0;
-    unsigned int i;
-    object_t nobj;
-
-    lvl_entities = 1;
-    lvl_loaded = false;
-
-    sprintf(fname, "%s/lvl/mission_%d.dat", engine_datadir, lvl_id);
-    fp = fopen(fname, "r");
-    if (fp == NULL) {
-        return false;
-    }
-
-    while (!feof(fp)) {
-        if (fgets(buf, 1024, fp) != NULL) {
-            strcpy(cmd, "");
-            strcpy(par, "");
-            i = 0;
-            m = 0;
-            while ( (i < strlen(buf)) && (m < 4) ) {
-                // forget the rest of the line
-                if (buf[i] == ';') break;
-
-                // remove unnecessary characters
-                if ( buf[i] < 33 ) {
-                    if (m == 0) { i++; continue; }
-                    if (m == 1) { m++; continue; }
-                    if (m == 2) { i++; continue; }
-                    if (m == 3) { m++; continue; }
-                } else {
-                    if (m == 0) { p = 0; m = 1; }
-                    if (m == 2) { p = 0; m = 3; }
-                }
-
-                if (m == 1) {
-                    cmd[p] = buf[i];
-                    p++;
-                    cmd[p] = 0;
-                }
-
-                if (m == 3) {
-                    if (buf[i] == '{') {
-                        i++;
-                        while ( (buf[i] != '}') && (i < strlen(buf)) ) {
-                            par[p] = buf[i];
-                            p++;
-                            par[p] = 0;
-                            i++;
-                        }
-                    } else {
-                        par[p] = buf[i];
-                        p++;
-                        par[p] = 0;
-                    }
-                }
-
-                i++;
-            }
-
-            if (cmd[0] && par[0]) {
-                // music
-                if (!strcmp(cmd, "soundtrack")) strcpy(lvl_music, par);
-
-                // length
-                if (!strcmp(cmd, "length")) sscanf(par, "%d", &lvl_length);
-
-                // colliding object, obstacle
-                if (!strcmp(cmd, "collider")) {
-                    nobj.type = OBJ_TYPE_COLLIDER;
-                    nobj.state = OBJ_STATE_IDLE;
-                    nobj.speed = 0;
-                    nobj.cnt = 0;
-                    nobj.life_time = -1;
-
-                    nobj.rot_x = float(rand() % 3600) * .1f;
-                    nobj.rot_y = float(rand() % 3600) * .1f;
-                    nobj.rot_z = float(rand() % 3600) * .1f;
-
-                    sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u,%u",
-                        (float *)&nobj.pos_z,
-                        (int *)&nobj.id,
-                        (float *)&nobj.pos_x,
-                        (float *)&nobj.pos_y,
-                        (float *)&nobj.scale_x,
-                        (float *)&nobj.scale_y,
-                        (float *)&nobj.scale_z,
-                        (float *)&nobj.rsp_x,
-                        (float *)&nobj.rsp_y,
-                        (float *)&nobj.rsp_z,
-                        (int *)&nobj.life_max,
-                        (int *)&nobj.money
-                    );
-
-                    nobj.life = nobj.life_max;
-                    add(&nobj);
-                }
-
-                // scenery object
-                if (!strcmp(cmd, "scenery")) {
-                    nobj.type = OBJ_TYPE_SCENERY;
-                    nobj.state = OBJ_STATE_IDLE;
-                    nobj.speed = 0;
-                    nobj.cnt = 0;
-                    nobj.life_time = -1;
-
-                    nobj.rot_x = float(rand() % 3600) * .1f;
-                    nobj.rot_y = float(rand() % 3600) * .1f;
-                    nobj.rot_z = float(rand() % 3600) * .1f;
-
-                    sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
-                        (float *)&nobj.pos_z,
-                        (int *)&nobj.id,
-                        (float *)&nobj.pos_x,
-                        (float *)&nobj.pos_y,
-                        (float *)&nobj.scale_x,
-                        (float *)&nobj.scale_y,
-                        (float *)&nobj.scale_z,
-                        (float *)&nobj.rsp_x,
-                        (float *)&nobj.rsp_y,
-                        (float *)&nobj.rsp_z,
-                        (int *)&nobj.life_max
-                    );
-
-                    nobj.life = nobj.life_max;
-                    add(&nobj);
-                }
-            }
-        }
-    }
-    
-    return true;
 }
 
 /*
@@ -421,40 +281,28 @@ bool State::set(int s)
             break;
 
         case STATE_GAME_START:
-            lvl_entities = 0;
+            global_alpha = 99;
+            title_ypos = 99.85f;
+            cam_x = .0f;
+            cam_y = .0f;
+            hud_x = -20.0f;
+            hud_y = -10.0f;
+            lvl_pos = 0;
+            lvl_loaded = true;
+            engine_boundary = true;
+            stars_warp = true;
+            stars_speed = 1.75f;
 
-            sprintf(msg, "Loading 'lvl/mission_%d.dat'... ", lvl_id);
-            log(msg);
+            objects[player].target = -1;
+            objects[player].life = 0;
+            objects[player].money = 0;
+            objects[player].energy = 0;
+            objects[player].powerup = OBJ_POWERUP_0;
 
-            if (load()) {
-                sprintf(msg, "ok (%d objects spawned)\n", lvl_entities);
-                log(msg);
+            audio.stopMusic(1000);
 
-                global_alpha = 99;
-                title_ypos = 99.85f;
-                cam_x = .0f;
-                cam_y = .0f;
-                hud_x = -20.0f;
-                hud_y = -10.0f;
-                lvl_pos = 0;
-                lvl_loaded = true;
-                engine_boundary = true;
-                stars_warp = true;
-                stars_speed = 1.75f;
-
-                objects[player].target = -1;
-                objects[player].life = 0;
-                objects[player].money = 0;
-                objects[player].energy = 0;
-                objects[player].powerup = OBJ_POWERUP_0;
-
-                audio.stopMusic(1000);
-                if (strlen(lvl_music)) {
-                    audio.music[1] = audio.loadMusic(lvl_music);
-                }
-            } else {
-                log("failed\n");
-                set(STATE_MENU);
+            if (strlen(lvl_music)) {
+                audio.music[1] = audio.loadMusic(lvl_music);
             }
             break;
 
@@ -528,3 +376,4 @@ int State::get(void)
 {
     return id;
 }
+

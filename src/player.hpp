@@ -5,6 +5,7 @@
 
 #include "object.hpp"
 #include "particles.hpp"
+#include "missile.hpp"
 
 class Player : public Object
 {
@@ -29,7 +30,7 @@ class Player : public Object
         void            setTarget(int oid);
         int             getTarget(int oid);
 
-        bool            shoot();
+        void            shoot();
         void            tilt(float t);
 
     private:

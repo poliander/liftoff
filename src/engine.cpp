@@ -3,6 +3,7 @@
 
 Engine::Engine()
 {
+    srand((int)time(NULL));
 }
 
 Engine::~Engine()

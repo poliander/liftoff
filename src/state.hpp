@@ -1,27 +1,21 @@
 #ifndef STATE_HPP_
 #define STATE_HPP_
 
-#include <SDL.h>
+using namespace std;
 
+#include <map>
+#include <memory>
+#include <vector>
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <SDL.h>
+
 #include "audio.hpp"
+#include "config.hpp"
 #include "definitions.hpp"
-
-// configuration
-struct config_t
-{
-    short               vid_width;
-    short               vid_height;
-    unsigned short      vid_aspect;
-    unsigned short      vid_fullscreen;
-    unsigned short      vid_vsync;
-
-    short               aud_sfx;
-    short               aud_music;
-    int                 aud_mixfreq;
-};
+#include "message.hpp"
+#include "model.hpp"
 
 // object
 struct object_t
@@ -67,16 +61,7 @@ struct object_t
     float               scale_z;
 };
 
-// money/damage messages
-struct message_t
-{
-    short   type;
-    char    text[64];
-
-    float   counter;
-    short   direction_x;
-    short   direction_y;
-};
+class Entity;
 
 class State
 {
@@ -84,15 +69,16 @@ class State
         State();
         ~State();
 
-        bool            log_file;
-
         // audio subsystem and resources
-        Audio           audio;
+        Audio                       audio;
 
         // game resources
-        config_t        config;
-        object_t        objects[E_MAX_OBJECTS];
-        unsigned int    texture[17];
+        config_t                    config;
+        object_t                    objects[E_MAX_OBJECTS];
+        unsigned int                texture[17];
+
+        vector<shared_ptr<Entity>>  entities;
+        map<unsigned int, Model*>   models;
 
         // timer
         Uint32          timer;
@@ -102,6 +88,8 @@ class State
         float           title_ypos;
 
         int             player;
+
+        bool            log_file;
 
         int             engine_stars;
         int             engine_stars_warp;
@@ -164,8 +152,8 @@ class State
         SDL_Joystick*   joystick;
 
         // level
+        unsigned short  lvl_id = 1;
         bool            lvl_loaded;
-        unsigned short  lvl_id;
         char            lvl_music[32];
         float           lvl_pos;
         int             lvl_length;
@@ -197,13 +185,18 @@ class State
 
         // state
         bool            set(int s);
-        int             get(void);
+        int             get();
 
         void            log(const char *msg);
 
     private:
         int             id;
-        bool            load();
+
+        bool            objectLoad(int id, const char *filename);
+        bool            objectLoadFirstPass(int id, FILE *fp);
+        bool            objectLoadSecondPass(int id, FILE *fp);
+        bool            objectMemAlloc(int id);
+        void            objectFreemem(int id);
 };
 
 #endif
