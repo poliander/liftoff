@@ -85,12 +85,4 @@ class Entity
         bool           focusable = false;
 };
 
-struct EntityComparator
-{
-    bool operator()(const shared_ptr<Entity> &e1, shared_ptr<Entity> &e2)
-    {
-        return (e1->getPosZ() > e2->getPosZ());
-    }
-};
-
 #endif
