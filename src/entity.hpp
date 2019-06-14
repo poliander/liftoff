@@ -51,6 +51,8 @@ class Entity
         virtual void   move(State &s) = 0;
         virtual void   draw(State &s) = 0;
 
+        static bool    sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2);
+
     protected:
         unsigned short e_id;
         unsigned short e_type;

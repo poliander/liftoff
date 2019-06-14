@@ -8,6 +8,11 @@ Entity::~Entity()
 {
 }
 
+bool Entity::sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2)
+{
+    return (e1->getPosZ() < e2->getPosZ());
+}
+
 bool Entity::isCollider()
 {
     return e_type == OBJ_TYPE_COLLIDER;

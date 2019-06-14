@@ -1112,7 +1112,7 @@ void Scene::drawScene()
     int i;
     float alpha;
 
-    std::sort(state.entities.begin(), state.entities.end(), EntityComparator());
+    std::sort(state.entities.begin(), state.entities.end(), Entity::sort);
 
     for (auto &entity: state.entities) {
         if (entity->isIdle()) {
