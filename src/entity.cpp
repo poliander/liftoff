@@ -92,6 +92,13 @@ float Entity::getScaleZ()
     return s_z;
 }
 
+void Entity::setRotation(float x, float y, float z)
+{
+    r_x = x;
+    r_y = y;
+    r_z = z;
+}
+
 void Entity::setSpin(float x, float y, float z)
 {
     w_x = x;
@@ -109,16 +116,27 @@ void Entity::setLife(int l)
     life = l;
 }
 
-bool Entity::isColliding(shared_ptr<Entity> e)
+bool Entity::isColliding(State &s, shared_ptr<Entity> e)
 {
-    float s1 = (10000.0f + p_z) * .0005f * max(max(s_x, s_y), s_z);
-    float s2 = (10000.0f + e->getPosZ()) * .0005f * max(max(e->getScaleX(), e->getScaleY()), e->getScaleZ());
+    float ds, r1, r2, x1, y1, z1, x2, y2, z2;
+    
+    r1 = (s_x + s_y + s_z) / 3.0f;
+    r1 = r1 * (10000.0f + p_z) * .0001f;
 
-    float d_x = e->getPosX() - p_x;
-    float d_y = e->getPosY() - p_y;
-    float d_z = e->getPosZ() - p_z;
+    r2 = (e->getScaleX() + e->getScaleY() + e->getScaleZ()) / 3.0f;
+    r2 = r2 * (10000.0f + e->getPosZ()) * .0001f;
 
-    return ((1.0f / isqrt(d_x * d_x + d_y * d_y + d_z * d_z)) < (s1 + s2));
+    x1 = E_RELATIVE_MOVEMENT * (p_x - s.cam_x);
+    y1 = E_RELATIVE_MOVEMENT * (p_y - s.cam_y);
+    z1 = p_z;
+
+    x2 = E_RELATIVE_MOVEMENT * (e->getPosX() - s.cam_x);
+    y2 = E_RELATIVE_MOVEMENT * (e->getPosY() - s.cam_y);
+    z2 = e->getPosZ();
+
+    ds = pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2);
+
+    return ((1.0f / isqrt(ds)) < (r1 + r2));
 }
 
 void Entity::collide(State &s, shared_ptr<Entity> e)
@@ -140,15 +158,15 @@ void Entity::move(State &s)
     p_y += s.timer_adjustment * v_y;
     p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
 
-    r_x += s.timer_adjustment * w_x;
+    r_x += s.timer_adjustment * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
     if (r_x > 360.0f) r_x -= 360.0f;
 
-    r_y += s.timer_adjustment * w_y;
+    r_y += s.timer_adjustment * w_y * .1f;
     if (r_y < 0) r_y += 360.0f;
     if (r_y > 360.0f) r_y -= 360.0f;
 
-    r_z += s.timer_adjustment * w_z;
+    r_z += s.timer_adjustment * w_z * .1f;
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 }

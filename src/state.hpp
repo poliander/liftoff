@@ -75,7 +75,7 @@ class State
         // game resources
         config_t                    config;
         object_t                    objects[E_MAX_OBJECTS];
-        unsigned int                texture[17];
+        unsigned int                texture[20];
 
         vector<shared_ptr<Entity>>  entities;
         map<unsigned int, Model*>   models;

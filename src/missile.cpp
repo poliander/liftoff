@@ -29,7 +29,7 @@ Missile::~Missile()
 
 void Missile::collide(State &s, shared_ptr<Entity> e)
 {
-    e->damage(s, power);
+    /*e->damage(s, power);*/
 
     if (e->getLife() > 0) {
         s.audio.playSample(SFX_GUN_IMPACT, 192, 180);

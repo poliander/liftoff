@@ -4,36 +4,36 @@ Scene::Scene(State &s) : state(s)
 {
     float x, y;
 
-    // generate far stars
-    for (int i=0; i<(state.engine_stars - state.engine_stars_warp); i++) {
+    // far stars
+    for (int i = 0; i < (state.engine_stars - state.engine_stars_warp); i++) {
         x = 0;
         y = 0;
 
         while ((fabs(x) < 200.0f) && (fabs(y) < 200.0f)) {
-            x = (float)(rand()%800 - 400);
-            y = (float)(rand()%800 - 400);
+            x = (float)(rand() % 800 - 400);
+            y = (float)(rand() % 800 - 400);
         }
 
         stars[i][0] = x;
         stars[i][1] = y;
-        stars[i][2] = (float)(rand()%5000);
-        stars[i][3] = (float)((rand()%100)*.01f);
+        stars[i][2] = (float)(rand() % 5000);
+        stars[i][3] = (float)((rand() % 100) * .01f);
     }
 
-    // generate warp stars
-    for (int i=(state.engine_stars - state.engine_stars_warp); i<state.engine_stars; i++) {
-            x = 0;
-            y = 0;
+    // warp stars
+    for (int i = (state.engine_stars - state.engine_stars_warp); i < state.engine_stars; i++) {
+        x = 0;
+        y = 0;
 
-            while ((fabs(x) < 25.0f) && (fabs(y) < 25.0f)) {
-                x = (float)(rand()%400 - 200);
-                y = (float)(rand()%400 - 200);
-            }
+        while ((fabs(x) < 25.0f) && (fabs(y) < 25.0f)) {
+            x = (float)(rand() % 400 - 200);
+            y = (float)(rand() % 400 - 200);
+        }
 
-            stars[i][0] = x;
-            stars[i][1] = y;
-            stars[i][2] = (float)(rand()%5000);
-            stars[i][3] = (float)((rand()%100)*.01f);
+        stars[i][0] = x;
+        stars[i][1] = y;
+        stars[i][2] = (float)(rand() % 5000);
+        stars[i][3] = (float)((rand() % 100) * .01f);
     }
 }
 
@@ -58,8 +58,6 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio.sample[0]);
     }
 
-    delete cargo;
-    delete debris;
     delete player;
     delete powerup;
 }
@@ -141,6 +139,7 @@ void Scene::load()
     state.texture[T_EXPLOSION_4]  = loadTexture("explosion_3.tga", false);
     state.texture[T_JET]          = loadTexture("star.tga", false);
     state.texture[T_BACKGROUND_1] = loadTexture("background_1.tga", false);
+    state.texture[T_GLOW_1]       = loadTexture("glow_1.tga", false);
 
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
         "resources/gfx/asteroid_1.tga",
@@ -152,25 +151,23 @@ void Scene::load()
         "resources/obj/debris_1.obj"
     )));
 
-    // cargo
-    state.log("Loading 'obj/cargo_1.obj'\n");
-    cargo = new Cargo(state);
-    cargo->textures[0] = loadTexture("cargo_1.tga", false);
-    cargo->load(state.engine_datadir, "cargo_1.obj");
-    cargo->textures[1] = loadTexture("glow_1.tga", false);
+    state.models.insert(make_pair(OBJ_CARGO_1, new Model(
+        "resources/gfx/cargo_1.tga",
+        "resources/obj/cargo_1.obj"
+    )));
 
     // player
     state.log("Loading 'obj/ship_1.obj'\n");
     player = new Player(state);
     player->textures[0] = loadTexture("ship_1_1.tga", false);
     player->textures[1] = loadTexture("ship_1_2.tga", false);
-    player->textures[2] = cargo->textures[1];
+    player->textures[2] = state.texture[T_GLOW_1];
     player->textures[3] = state.texture[T_JET];
     player->load(state.engine_datadir, "ship_1.obj");
 
     // powerup
     powerup = new Powerup(state);
-    powerup->textures[0] = cargo->textures[1];
+    powerup->textures[0] = state.texture[T_GLOW_1];
 
     // music
     state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
@@ -215,8 +212,10 @@ bool Scene::loadLevel()
         if (fgets(buf, 1024, fp) != NULL) {
             strcpy(cmd, "");
             strcpy(par, "");
+
             i = 0;
             m = 0;
+
             while ( (i < strlen(buf)) && (m < 4) ) {
                 // forget the rest of the line
                 if (buf[i] == ';') break;
@@ -291,19 +290,34 @@ bool Scene::loadLevel()
                         (int *)&nobj.money
                     );
 
-                    nobj.life = nobj.life_max;
+                    switch (nobj.id) {
+                        case OBJ_ASTEROID_1:
+                            {
+                                auto asteroid = make_shared<Asteroid>();
 
-                    if (nobj.id == OBJ_ASTEROID_1) {
-                        auto asteroid = make_shared<Asteroid>();
+                                asteroid->setPos(nobj.pos_x, nobj.pos_y, nobj.pos_z);
+                                asteroid->setScale(nobj.scale_x, nobj.scale_y, nobj.scale_z);
+                                asteroid->setRotation(nobj.rot_x, nobj.rot_y, nobj.rot_z);
+                                asteroid->setSpin(nobj.rsp_x, nobj.rsp_y, nobj.rsp_z);
+                                asteroid->setLife(nobj.life_max);
 
-                        asteroid->setPos(nobj.pos_x, nobj.pos_y, nobj.pos_z);
-                        asteroid->setScale(nobj.scale_x, nobj.scale_y, nobj.scale_z);
-                        asteroid->setSpin(nobj.rsp_x, nobj.rsp_y, nobj.rsp_z);
-                        asteroid->setLife(nobj.life_max);
+                                state.entities.push_back(asteroid);
+                            }
+                            break;
 
-                        state.entities.push_back(asteroid);
-                    } else {
-                        state.add(&nobj);
+                        case OBJ_CARGO_1:
+                            {
+                                auto cargo = make_shared<Cargo>();
+
+                                cargo->setPos(nobj.pos_x, nobj.pos_y, nobj.pos_z);
+                                cargo->setScale(nobj.scale_x, nobj.scale_y, nobj.scale_z);
+                                cargo->setRotation(nobj.rot_x, nobj.rot_y, nobj.rot_z);
+                                cargo->setSpin(nobj.rsp_x, nobj.rsp_y, nobj.rsp_z);
+                                cargo->setLife(nobj.life_max);
+
+                                state.entities.push_back(cargo);
+                            }
+                            break;
                     }
                 }
 
@@ -888,11 +902,13 @@ void Scene::drawMenu(bool mouse_recheck)
         }
     }
 
-    if (state.menu_pos >= numentries)
+    if (state.menu_pos >= numentries) {
         state.menu_pos = numentries-1;
+    }
 
-    if (state.menu_pos < 0)
+    if (state.menu_pos < 0) {
         state.menu_pos = 0;
+    }
 
     if (state.get() >= STATE_GAME_START) {
         m_a = (float)state.title_ypos;
@@ -1096,20 +1112,18 @@ void Scene::drawScene()
     int i;
     float alpha;
 
-    state.objects[state.player].target = -1;
+    std::sort(state.entities.begin(), state.entities.end(), EntityComparator());
 
     for (auto &entity: state.entities) {
         if (entity->isIdle()) {
             continue;
         }
 
-        if (entity->isFocusable()) {
-            //player->getTarget(i);
-        }
-
         entity->draw(state);
     }
 
+   player->draw(state.player);
+/*
     for (i=0; i<state.lvl_entities; i++) {
         if (state.objects[i].state == OBJ_STATE_IDLE) {
             continue;
@@ -1117,16 +1131,6 @@ void Scene::drawScene()
 
         switch(state.objects[i].id) {
             case OBJ_PLAYER:
-                player->draw(i);
-                break;
-
-            case OBJ_DEBRIS_1:
-                debris->draw(i);
-                break;
-
-            case OBJ_CARGO_1:
-                cargo->draw(i);
-                cargo->drawCrosshair(i, 1.0f, .55f, .3f);
                 break;
 
             case OBJ_POWERUP_1:
@@ -1135,6 +1139,7 @@ void Scene::drawScene()
                 break;
         }
     }
+*/
 }
 
 /*
@@ -1353,6 +1358,8 @@ void Scene::drawMessages()
  */
 void Scene::moveScene()
 {
+    state.objects[state.player].target = -1;
+
     auto e = state.entities.begin();
 
     while (e != state.entities.end()) {
@@ -1373,6 +1380,10 @@ void Scene::moveScene()
             continue;
         }
 
+        if ((*e)->isFocusable()) {
+            //player->getTarget(*e);
+        }
+
         if ((*e)->isCollider()) {
             auto f = next(e);
 
@@ -1380,7 +1391,7 @@ void Scene::moveScene()
 
                 if (
                     (*f)->isCollider() &&
-                    (*f)->isColliding(*e)
+                    (*f)->isColliding(state, *e)
                 ) {
                     (*e)->collide(state, *f);
                     (*f)->collide(state, *e);
@@ -1418,16 +1429,8 @@ void Scene::moveScene()
                 player->move(i);
                 break;
 
-            case OBJ_CARGO_1:
-                cargo->move(i);
-                break;
-
             case OBJ_POWERUP_1:
                 powerup->move(i);
-                break;
-
-            case OBJ_DEBRIS_1:
-                debris->move(i);
                 break;
         }
 

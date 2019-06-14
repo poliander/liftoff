@@ -3,6 +3,7 @@
 
 using namespace std;
 
+#include <algorithm>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
@@ -17,14 +18,16 @@ using namespace std;
 #include "../config.h"
 
 #include "functions.hpp"
+
 #include "entity.hpp"
-#include "object.hpp"
-#include "player.hpp"
 #include "asteroid.hpp"
-#include "state.hpp"
-#include "explosion.hpp"
 #include "cargo.hpp"
+#include "explosion.hpp"
+
+#include "object.hpp"
 #include "powerup.hpp"
+#include "player.hpp"
+#include "state.hpp"
 
 class Scene
 {
@@ -42,8 +45,6 @@ class Scene
         State&         state;
 
         Object*        debris = nullptr;
-        Cargo*         cargo = nullptr;
-        Explosion*     explosion = nullptr;
         Powerup*       powerup = nullptr;
 
         float          stars[8000][4];

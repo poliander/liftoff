@@ -97,14 +97,15 @@ void Player::shoot()
         return;
     }
 
-    m_next_shot = state.timer + 90 + rand() % 60;
+//    m_next_shot = state.timer + 90 + rand() % 60;
+    m_next_shot = state.timer + 9 + rand() % 6;
 
     if (state.objects[state.player].energy < 20) {
         // low energy
         return;
     }
 
-    state.objects[state.player].energy -= 20;
+//    state.objects[state.player].energy -= 20;
 
     // left/right alteration, randomize gun flash
     m_alt = 1 - m_alt;
@@ -406,7 +407,7 @@ void Player::draw(int oid)
 
     if (state.get() > 10) {
         // ingame
-        glTranslatef(
+         glTranslatef(
           ((state.objects[state.player].pos_x - state.cam_x) * E_RELATIVE_MOVEMENT) + state.tilt_x * .15f,
           ((state.objects[state.player].pos_y - state.cam_y) * E_RELATIVE_MOVEMENT) + state.tilt_y * .15f,
           ((state.objects[state.player].pos_z + (state.tilt_x + state.tilt_y) * .15f))

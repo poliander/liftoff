@@ -22,7 +22,7 @@ class Entity
         bool           isFocusable();
         bool           isIdle();
         bool           isGone();
-        bool           isColliding(shared_ptr<Entity> e);
+        bool           isColliding(State &s, shared_ptr<Entity> e);
 
         void           setPos(float x, float y, float z);
         void           setPosX(float x);
@@ -38,6 +38,7 @@ class Entity
         float          getScaleY();
         float          getScaleZ();
 
+        void           setRotation(float x, float y, float z);
         void           setSpin(float x, float y, float z);
 
         int            getLife();
@@ -56,8 +57,14 @@ class Entity
         unsigned short e_state;
 
         float          p_x, p_y, p_z;        // position
-        float          r_x, r_y, r_z;        // rotation
-        float          s_x, s_y, s_z;        // scale
+
+        float          s_x = 1.0f;           // scale
+        float          s_y = 1.0f;
+        float          s_z = 1.0f;
+
+        float          r_x = 0;              // rotation
+        float          r_y = 0;
+        float          r_z = 0;
 
         float          v_x = 0;              // velocity
         float          v_y = 0;
@@ -74,6 +81,14 @@ class Entity
 
         int            life;
         bool           focusable = false;
+};
+
+struct EntityComparator
+{
+    bool operator()(const shared_ptr<Entity> &e1, shared_ptr<Entity> &e2)
+    {
+        return (e1->getPosZ() > e2->getPosZ());
+    }
 };
 
 #endif
