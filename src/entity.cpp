@@ -43,6 +43,11 @@ void Entity::activate()
     e_state = OBJ_STATE_ACTIVE;
 }
 
+void Entity::setType(unsigned short t)
+{
+    e_type = t;
+}
+
 void Entity::setPos(float x, float y, float z)
 {
     p_x = x;
@@ -230,7 +235,12 @@ void Entity::move(State &s)
 {
     p_x += s.timer_adjustment * v_x;
     p_y += s.timer_adjustment * v_y;
-    p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
+
+    if (e_type == OBJ_TYPE_SCENERY) {
+        p_z += s.timer_adjustment * (v_z + E_BASE_SPEED) * .5f;
+    } else {
+        p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
+    }
 
     r_x += s.timer_adjustment * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;

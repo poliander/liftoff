@@ -22,8 +22,15 @@ void Asteroid::move(State &s)
 
 void Asteroid::draw(State &s)
 {
-    float a = float(s.global_alpha) * .01f;
-    float scale = (10000.0f + p_z) * .0001f;
+    float scale, m, a = float(s.global_alpha) * .01f;
+
+    if (e_type == OBJ_TYPE_SCENERY) {
+        m = .85f;
+        scale = (10000.0f + p_z) * .0000333f;
+    } else {
+        m = 1.0f;
+        scale = (10000.0f + p_z) * .0001f;
+    }
 
     glLoadIdentity();
 
@@ -62,8 +69,8 @@ void Asteroid::draw(State &s)
     glRotatef(s.tilt_y * -.035f, 1.0f,  .0f, .0f);
 
     glTranslatef(
-        E_RELATIVE_MOVEMENT * (p_x - s.cam_x),
-        E_RELATIVE_MOVEMENT * (p_y - s.cam_y),
+        E_RELATIVE_MOVEMENT * m * (p_x - s.cam_x),
+        E_RELATIVE_MOVEMENT * m * (p_y - s.cam_y),
         p_z
     );
 

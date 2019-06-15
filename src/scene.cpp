@@ -322,7 +322,7 @@ bool Scene::loadLevel()
                             break;
                     }
                 }
-/*
+
                 // scenery object
                 if (!strcmp(cmd, "scenery")) {
                     r_x = float(rand() % 360);
@@ -330,22 +330,36 @@ bool Scene::loadLevel()
                     r_z = float(rand() % 360);
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
-                        (float *)&nobj.pos_z,
-                        (int *)&nobj.id,
-                        (float *)&nobj.pos_x,
-                        (float *)&nobj.pos_y,
-                        (float *)&nobj.scale_x,
-                        (float *)&nobj.scale_y,
-                        (float *)&nobj.scale_z,
-                        (float *)&nobj.rsp_x,
-                        (float *)&nobj.rsp_y,
-                        (float *)&nobj.rsp_z,
-                        (int *)&nobj.life_max
+                        (float *) &p_z,
+                        (int *)   &e_id,
+                        (float *) &p_x,
+                        (float *) &p_y,
+                        (float *) &s_x,
+                        (float *) &s_y,
+                        (float *) &s_z,
+                        (float *) &w_x,
+                        (float *) &w_y,
+                        (float *) &w_z,
+                        (int *)   &life
                     );
 
-                    nobj.life = nobj.life_max;
+                    switch (e_id) {
+                        case OBJ_ASTEROID_1:
+                            {
+                                auto asteroid = make_shared<Asteroid>();
+
+                                asteroid->setType(OBJ_TYPE_SCENERY);
+                                asteroid->setPos(p_x, p_y, p_z);
+                                asteroid->setScale(s_x, s_y, s_z);
+                                asteroid->setRotation(r_x, r_y, r_z);
+                                asteroid->setSpin(w_x, w_y, w_z);
+                                asteroid->setLife(life);
+
+                                state.entities.push_back(asteroid);
+                            }
+                            break;
+                    }
                 }
-*/
             }
         }
     }

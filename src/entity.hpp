@@ -18,6 +18,8 @@ class Entity
         Entity();
         virtual ~Entity();
 
+        void           setType(unsigned short t);
+
         bool           isCollider();
         bool           isFocusable();
         bool           isIdle();
