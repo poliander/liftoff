@@ -104,6 +104,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-functions.$(OBJEXT) \
 	__top_builddir__liftoff-audio.$(OBJEXT) \
+	__top_builddir__liftoff-texture.$(OBJEXT) \
 	__top_builddir__liftoff-model.$(OBJEXT) \
 	__top_builddir__liftoff-entity.$(OBJEXT) \
 	__top_builddir__liftoff-asteroid.$(OBJEXT) \
@@ -295,6 +296,7 @@ __top_builddir__liftoff_LDADD = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     audio.cpp \
+    texture.cpp \
     model.cpp \
     entity.cpp \
     asteroid.cpp \
@@ -413,6 +415,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-powerup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-scene.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-state.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-texture.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -455,6 +458,20 @@ __top_builddir__liftoff-audio.obj: audio.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='audio.cpp' object='__top_builddir__liftoff-audio.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-audio.obj `if test -f 'audio.cpp'; then $(CYGPATH_W) 'audio.cpp'; else $(CYGPATH_W) '$(srcdir)/audio.cpp'; fi`
+
+__top_builddir__liftoff-texture.o: texture.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-texture.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-texture.Tpo -c -o __top_builddir__liftoff-texture.o `test -f 'texture.cpp' || echo '$(srcdir)/'`texture.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-texture.Tpo $(DEPDIR)/__top_builddir__liftoff-texture.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='texture.cpp' object='__top_builddir__liftoff-texture.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-texture.o `test -f 'texture.cpp' || echo '$(srcdir)/'`texture.cpp
+
+__top_builddir__liftoff-texture.obj: texture.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-texture.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-texture.Tpo -c -o __top_builddir__liftoff-texture.obj `if test -f 'texture.cpp'; then $(CYGPATH_W) 'texture.cpp'; else $(CYGPATH_W) '$(srcdir)/texture.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-texture.Tpo $(DEPDIR)/__top_builddir__liftoff-texture.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='texture.cpp' object='__top_builddir__liftoff-texture.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-texture.obj `if test -f 'texture.cpp'; then $(CYGPATH_W) 'texture.cpp'; else $(CYGPATH_W) '$(srcdir)/texture.cpp'; fi`
 
 __top_builddir__liftoff-model.o: model.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-model.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-model.Tpo -c -o __top_builddir__liftoff-model.o `test -f 'model.cpp' || echo '$(srcdir)/'`model.cpp

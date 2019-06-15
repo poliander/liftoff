@@ -44,7 +44,7 @@ void Powerup::draw(State &s)
 
     glShadeModel(GL_FLAT);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glBindTexture(GL_TEXTURE_2D, s.texture[T_EXPLOSION_3]);
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_3]);
 
     particles->setAlpha(a * (1.0f - counter));
     particles->setSize(3.0f / (1.0f + counter * 5.0f));

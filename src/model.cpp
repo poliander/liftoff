@@ -2,76 +2,16 @@
 
 Model::Model(const char *txt, const char *obj)
 {
-    status = 0;
-
-    if (loadTexture(txt)) {
-        status = 1;
-
-        if (loadObject(obj)) {
-            status = 2;
-        }
-    }
+    texture = make_shared<Texture>(txt, true);
+    load(obj);
 }
 
 Model::~Model()
 {
-    objectFree();
+    memFree();
 }
 
-GLuint Model::getList()
-{
-    return list;
-}
-
-bool Model::hasError()
-{
-    return status != 2;
-}
-
-bool Model::loadTexture(const char *filename)
-{
-    SDL_Surface *image;
-    SDL_Surface *target;
-    SDL_RWops *rwop;
-
-    rwop = SDL_RWFromFile(filename, "rb");
-    image = IMG_LoadTGA_RW(rwop);
-
-    if (!image) {
-        return false;
-    }
-
-    target = SDL_CreateRGBSurface(SDL_SWSURFACE, image->w, image->h, 32,
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN
-            0x000000FF,
-            0x0000FF00,
-            0x00FF0000,
-            0xFF000000
-#else
-            0xFF000000,
-            0x00FF0000,
-            0x0000FF00,
-            0x000000FF
-#endif
-    );
-
-    SDL_SetAlpha(image, 0, 0);
-    SDL_BlitSurface(image, 0, target, 0);
-
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, target->pixels);
-
-    SDL_FreeSurface(image);
-    SDL_FreeSurface(target);
-}
-
-bool Model::loadObject(const char *filename)
+bool Model::load(const char *filename)
 {
     FILE *fp;
     int i, j;
@@ -82,22 +22,22 @@ bool Model::loadObject(const char *filename)
         return false;
     }
 
-    if (!objectLoadFirstPass(fp)) {
+    if (!loadFirstPass(fp)) {
         fclose(fp);
         return false;
     }
 
     rewind(fp);
 
-    if (!objectAllocate()) {
+    if (!memAllocate()) {
         fclose(fp);
-        objectFree();
+        memFree();
         return false;
     }
 
-    if (!objectLoadSecondPass(fp)) {
+    if (!loadSecondPass(fp)) {
         fclose(fp);
-        objectFree();
+        memFree();
         return false;
     }
 
@@ -106,7 +46,7 @@ bool Model::loadObject(const char *filename)
     list = glGenLists(1);
 
     glNewList(list, GL_COMPILE);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
 
     for (i = 0; i < mesh.num_faces; i++) {
         glBegin(mesh.faces[i].type);
@@ -131,7 +71,7 @@ bool Model::loadObject(const char *filename)
     return true;
 }
 
-bool Model::objectLoadFirstPass(FILE *fp)
+bool Model::loadFirstPass(FILE *fp)
 {
     int v, t, n;
     char buf[256];
@@ -197,7 +137,7 @@ bool Model::objectLoadFirstPass(FILE *fp)
     return true;
 }
 
-bool Model::objectLoadSecondPass(FILE *fp)
+bool Model::loadSecondPass(FILE *fp)
 {
     struct obj_vertex_t *pvert = mesh.vertices;
     struct obj_texCoord_t *puvw = mesh.texCoords;
@@ -331,7 +271,7 @@ bool Model::objectLoadSecondPass(FILE *fp)
     return true;
 }
 
-bool Model::objectAllocate()
+bool Model::memAllocate()
 {
     if (mesh.num_verts) {
         mesh.vertices = (struct obj_vertex_t *)
@@ -372,7 +312,7 @@ bool Model::objectAllocate()
     return true;
 }
 
-void Model::objectFree()
+void Model::memFree()
 {
     int i;
 

@@ -77,7 +77,7 @@ void Cargo::draw(State &s)
 
     glScalef(s_x * scale1, s_y * scale1, s_z * scale1);
 
-    glCallList(s.models[e_id]->getList());
+    glCallList(*s.models[e_id]);
 
     glDisable(GL_NORMALIZE);
     glDisable(GL_LIGHT0);
@@ -85,7 +85,7 @@ void Cargo::draw(State &s)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    glBindTexture(GL_TEXTURE_2D, s.texture[T_GLOW_1]);
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW_1]);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     scale2 += .5f;

@@ -5,6 +5,7 @@ __top_builddir__liftoff_LDADD = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     audio.cpp \
+    texture.cpp \
     model.cpp \
     entity.cpp \
     asteroid.cpp \

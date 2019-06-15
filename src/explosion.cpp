@@ -79,7 +79,7 @@ void Explosion::draw(State &s)
             particles->setSize(2.5f + counter * .005f);
             particles->setScale(2.75f + counter * .005f);
 
-            glBindTexture(GL_TEXTURE_2D, s.texture[T_EXPLOSION_1]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -90,7 +90,7 @@ void Explosion::draw(State &s)
             particles->setSize(6.0f + counter * .0005f);
             particles->setScale(1.5f + counter * 6.5f);
 
-            glBindTexture(GL_TEXTURE_2D, s.texture[T_EXPLOSION_2]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_2]);
             break;
 
         // explosion fireball
@@ -100,7 +100,7 @@ void Explosion::draw(State &s)
             particles->setSize(5.0f - counter * .005f);
             particles->setScale(1.0f + counter * 5.0f);
 
-            glBindTexture(GL_TEXTURE_2D, s.texture[T_EXPLOSION_2]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_3]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -111,13 +111,13 @@ void Explosion::draw(State &s)
             particles->setSize(1.5f);
             particles->setScale(1.0f + counter * 8.0f);
 
-            glBindTexture(GL_TEXTURE_2D, s.texture[T_STAR]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
         // explosion nova
         case OBJ_EXPLOSION_5:
-            glBindTexture(GL_TEXTURE_2D, s.texture[T_EXPLOSION_4]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
             use_particles = false;
             break;
     }

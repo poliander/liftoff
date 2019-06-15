@@ -63,99 +63,109 @@ Scene::~Scene()
 }
 
 /*
- * load texture from file
- */
-GLuint Scene::loadTexture(const char *filename, bool mipmap)
-{
-    char fname[255], lmsg[255];
-    GLuint texture = 0;
-    SDL_Surface *image;
-    SDL_Surface *target;
-    SDL_RWops *rwop;
-
-    sprintf(lmsg, "Loading 'gfx/%s'... ", filename);
-    state.log(lmsg);
-
-    sprintf(fname, "%s/gfx/%s", state.engine_datadir, filename);
-    rwop = SDL_RWFromFile(fname, "rb");
-    image = IMG_LoadTGA_RW(rwop);
-    if (!image) {
-        state.log("failed\n");
-        return false;
-    }
-
-    target = SDL_CreateRGBSurface(SDL_SWSURFACE, image->w, image->h, 32,
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN
-            0x000000FF,
-            0x0000FF00,
-            0x00FF0000,
-            0xFF000000
-#else
-            0xFF000000,
-            0x00FF0000,
-            0x0000FF00,
-            0x000000FF
-#endif
-    );
-
-    SDL_SetAlpha(image, 0, 0);
-    SDL_BlitSurface(image, 0, target, 0);
-
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, target->pixels);
-
-    SDL_FreeSurface(image);
-    SDL_FreeSurface(target);
-
-    state.log("ok\n");
-
-    return texture;
-}
-
-/*
  * load game data
  */
 void Scene::load()
 {
-    state.texture[T_TITLE]        = loadTexture("title.tga", true);
-    state.texture[T_FONT]         = loadTexture("font.tga", true);
-    state.texture[T_CURSOR]       = loadTexture("cursor.tga", true);
-    state.texture[T_MENU_1]       = loadTexture("menu_1.tga", false);
-    state.texture[T_MENU_2]       = loadTexture("menu_2.tga", false);
-    state.texture[T_HUD_1]        = loadTexture("hud_1.tga", true);
-    state.texture[T_HUD_2]        = loadTexture("hud_2.tga", true);
-    state.texture[T_HUD_3]        = loadTexture("hud_3.tga", true);
-    state.texture[T_STAR]         = loadTexture("star.tga", true);
-    state.texture[T_MISSILE_1]    = loadTexture("missile_1.tga", false);
-    state.texture[T_EXPLOSION_1]  = loadTexture("explosion_1.tga", false);
-    state.texture[T_EXPLOSION_2]  = loadTexture("explosion_2.tga", false);
-    state.texture[T_EXPLOSION_3]  = loadTexture("star.tga", false);
-    state.texture[T_EXPLOSION_4]  = loadTexture("explosion_3.tga", false);
-    state.texture[T_JET_EXHAUST]  = loadTexture("jet_exhaust.tga", false);
-    state.texture[T_BACKGROUND_1] = loadTexture("background_1.tga", false);
-    state.texture[T_GLOW_1]       = loadTexture("glow_1.tga", false);
+    state.log("Loading 'title.tga'\n");
+    state.textures.insert(make_pair(T_TITLE, new Texture(
+        "resources/gfx/title.tga", true
+    )));
 
+    state.log("Loading 'font.tga'\n");
+    state.textures.insert(make_pair(T_FONT, new Texture(
+        "resources/gfx/font.tga", true
+    )));
+
+    state.log("Loading 'cursor.tga'\n");
+    state.textures.insert(make_pair(T_CURSOR, new Texture(
+        "resources/gfx/cursor.tga", true
+    )));
+
+    state.log("Loading 'menu_1.tga'\n");
+    state.textures.insert(make_pair(T_MENU_1, new Texture(
+        "resources/gfx/menu_1.tga", true
+    )));
+
+    state.log("Loading 'menu_2.tga'\n");
+    state.textures.insert(make_pair(T_MENU_2, new Texture(
+        "resources/gfx/menu_2.tga", true
+    )));
+
+    state.log("Loading 'hud_1.tga'\n");
+    state.textures.insert(make_pair(T_HUD_1, new Texture(
+        "resources/gfx/hud_1.tga", true
+    )));
+
+    state.log("Loading 'hud_2.tga'\n");
+    state.textures.insert(make_pair(T_HUD_2, new Texture(
+        "resources/gfx/hud_2.tga", true
+    )));
+
+    state.log("Loading 'hud_3.tga'\n");
+    state.textures.insert(make_pair(T_HUD_3, new Texture(
+        "resources/gfx/hud_3.tga", true
+    )));
+
+    state.log("Loading 'star.tga'\n");
+    state.textures.insert(make_pair(T_STAR, new Texture(
+        "resources/gfx/star.tga", true
+    )));
+
+    state.log("Loading 'missile_1.tga'\n");
+    state.textures.insert(make_pair(T_MISSILE_1, new Texture(
+        "resources/gfx/missile_1.tga", true
+    )));
+
+    state.log("Loading 'explosion_1.tga'\n");
+    state.textures.insert(make_pair(T_EXPLOSION_1, new Texture(
+        "resources/gfx/explosion_1.tga", true
+    )));
+
+    state.log("Loading 'explosion_2.tga'\n");
+    state.textures.insert(make_pair(T_EXPLOSION_2, new Texture(
+        "resources/gfx/explosion_2.tga", true
+    )));
+
+    state.log("Loading 'explosion_3.tga'\n");
+    state.textures.insert(make_pair(T_EXPLOSION_3, new Texture(
+        "resources/gfx/explosion_3.tga", true
+    )));
+
+    state.log("Loading 'jet_exhaust.tga'\n");
+    state.textures.insert(make_pair(T_JET_EXHAUST, new Texture(
+        "resources/gfx/jet_exhaust.tga", true
+    )));
+
+    state.log("Loading 'background_1.tga'\n");
+    state.textures.insert(make_pair(T_BACKGROUND_1, new Texture(
+        "resources/gfx/background_1.tga", true
+    )));
+
+    state.log("Loading 'glow_1.tga'\n");
+    state.textures.insert(make_pair(T_GLOW_1, new Texture(
+        "resources/gfx/glow_1.tga", true
+    )));
+
+    state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
         "resources/gfx/ship_1.tga",
         "resources/obj/ship_1.obj"
     )));
 
+    state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
         "resources/gfx/asteroid_1.tga",
         "resources/obj/asteroid_1.obj"
     )));
 
+    state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
         "resources/gfx/debris_1.tga",
         "resources/obj/debris_1.obj"
     )));
 
+    state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
         "resources/gfx/cargo_1.tga",
         "resources/obj/cargo_1.obj"
@@ -353,7 +363,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
     GLfloat x1 = .0f, w, y1, y2, wy;
 
     glColor4f(r, g, b, a);
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_FONT]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_FONT]);
 
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -511,7 +521,7 @@ void Scene::drawTitle()
     float sc, a = state.title_ypos * .01f;
 
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_TITLE]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_TITLE]);
     glPushMatrix();
 
     if (state.get() == STATE_MENU) {
@@ -914,7 +924,7 @@ void Scene::drawMenu(bool mouse_recheck)
     // draw menu background
     glLoadIdentity();
     glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_1]);
     glTranslatef(0, -0.8f, -10);
     glColor4f(1, 1, 1, .01f*m_a);
     glBegin (GL_QUADS);
@@ -945,7 +955,7 @@ void Scene::drawMenu(bool mouse_recheck)
         if (i == state.menu_pos) {
             glLoadIdentity();
             glPushMatrix();
-            glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_2]);
+            glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_2]);
             glTranslatef(-4.9f, (my-(i*mh)), -9.95f);
             glColor4f(.01f*m_a, .01f*m_a, .01f*m_a, 0.2f*m_a);
             glBegin (GL_QUADS);
@@ -981,7 +991,7 @@ void Scene::drawBackground()
     glDisable(GL_CULL_FACE);
 
     // background
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_BACKGROUND_1]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_BACKGROUND_1]);
     glRotatef(state.stars_rotation_pos, 0, 0, 1);
     glPushMatrix();
     glTranslatef(0, 0, 0);
@@ -1001,7 +1011,7 @@ void Scene::drawBackground()
     glEnd();
     glPopMatrix();
 
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_STAR]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_STAR]);
 
     // far stars
     for (i=0; i<(state.engine_stars-state.engine_stars_warp); ++i) {
@@ -1075,7 +1085,7 @@ void Scene::drawMouse()
 {
     glLoadIdentity();
 
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_CURSOR]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_CURSOR]);
     glColor4f(1, 1, 1, .01f * state.global_alpha);
 
     glPushMatrix();
@@ -1165,7 +1175,7 @@ void Scene::drawDisplay()
 
     // lower right screen
 
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_1]);
     glPushMatrix();
     glTranslatef(-state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glBegin (GL_QUADS);
@@ -1195,7 +1205,7 @@ void Scene::drawDisplay()
     glLoadIdentity();
 
     // lower left screen
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_1]);
     glPushMatrix();
     glTranslatef(state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glColor4f(1, 1, 1, alpha * .5f);
@@ -1219,7 +1229,7 @@ void Scene::drawDisplay()
 
     // life symbol
 
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_1]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_HUD_1]);
     glTranslatef(state.hud_x + .5f - state.tilt_x*.01f, state.hud_y - .7f - state.tilt_y*.01f, -9.9f);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
@@ -1246,7 +1256,7 @@ void Scene::drawDisplay()
 
     // energy symbol
 
-    glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_2]);
+    glBindTexture(GL_TEXTURE_2D, *state.textures[T_HUD_2]);
     glTranslatef(0, -.375f, 0);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);

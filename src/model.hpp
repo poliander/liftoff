@@ -1,6 +1,9 @@
 #ifndef MODEL_HPP_
 #define MODEL_HPP_
 
+using namespace std;
+
+#include <memory>
 #include <stdio.h>
 
 #include <GL/gl.h>
@@ -8,6 +11,7 @@
 #include <SDL_image.h>
 
 #include <mesh.hpp>
+#include <texture.hpp>
 
 class Model
 {
@@ -15,23 +19,19 @@ class Model
         Model(const char *txt, const char *obj);
         ~Model();
 
-        GLuint      getList();
-        bool        hasError();
+        operator GLuint() const { return list; }
 
     protected:
-        GLuint      texture;
-        GLuint      list;
-        short       status = 0;
+        obj_model_t         mesh;
+        shared_ptr<Texture> texture;
+        GLuint              list = -1;
 
-        obj_model_t mesh;
+        bool                load(const char *filename);
+        bool                loadFirstPass(FILE *fp);
+        bool                loadSecondPass(FILE *fp);
 
-        bool        loadTexture(const char *filename);
-        bool        loadObject(const char *filename);
-
-        bool        objectLoadFirstPass(FILE *fp);
-        bool        objectLoadSecondPass(FILE *fp);
-        bool        objectAllocate();
-        void        objectFree();
+        bool                memAllocate();
+        void                memFree();
 };
 
 #endif

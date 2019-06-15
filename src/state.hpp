@@ -17,6 +17,7 @@ using namespace std;
 #include "definitions.hpp"
 #include "message.hpp"
 #include "model.hpp"
+#include "texture.hpp"
 
 class Entity;
 
@@ -32,7 +33,7 @@ class State
         // game resources
         config_t                    config;
 
-        unsigned int                texture[20];
+        map<unsigned int, Texture*> textures;
         map<unsigned int, Model*>   models;
 
         shared_ptr<Entity>          player;

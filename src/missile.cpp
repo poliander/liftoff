@@ -59,7 +59,7 @@ void Missile::move(State &s)
 void Missile::draw(State &s)
 {
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, s.texture[T_MISSILE_1]);
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_MISSILE_1]);
     glColor4f(c_r, c_g, c_b, c_a);
 
     glPushMatrix();
