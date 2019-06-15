@@ -21,7 +21,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     switch (type) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            particles->setup(EMITTER_EXPLOSION, 20, .85f, .85f, .85f, .75f, 1.5f);
+            particles->setup(EMITTER_EXPLOSION, 20, .85f, .85f, .85f, .75f, 4.0f);
             timer = 750;
             break;
 
@@ -85,7 +85,7 @@ void Explosion::draw(State &s)
 
             particles->setAlpha(.5f - counter);
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(3.0f - counter);
+            particles->setSize(4.0f - 2.0f * counter);
             particles->setScale(2.5f + counter);
 
             glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
