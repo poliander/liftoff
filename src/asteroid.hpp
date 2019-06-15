@@ -2,6 +2,7 @@
 #define ASTEROID_HPP_
 
 #include "entity.hpp"
+#include "explosion.hpp"
 
 class State;
 

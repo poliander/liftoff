@@ -52,7 +52,7 @@
 #define T_BACKGROUND_1          15
 #define T_JET                   9
 #define T_JET_EXHAUST           17
-#define T_GLOW_1                18
+#define T_GLOW                  18
 
 // objects
 #define OBJ_PLAYER              101 // player

@@ -12,14 +12,8 @@
 
 struct particle_t
 {
-    bool active;
-
     float lifetime;
     float fading;
-
-    float r;
-    float g;
-    float b;
 
     float px;
     float py;
@@ -42,9 +36,7 @@ class ParticleEngine
         void            setColor(float r, float g, float b);
         void            setSize(float size);
         void            setScale(float scale);
-        void            setParticleNumber(short particles);
-        void            setDirection(float dx, float dy, float dz);
-        void            setFadeFactor(float f);
+        void            setContinuous(bool c);
 
         void            draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
         void            move(State &s);
@@ -52,19 +44,17 @@ class ParticleEngine
     private:
         particle_t      p[DEFAULT_GFX_PARTICLES];
 
+        bool            continuous;
         short           pemitter;
         short           pnum_max;
         short           pnum;
 
-        float           pr, pg, pb;
-        float           palpha;
+        float           c_r, c_g, c_b, c_a;
 
         float           pscale;
         float           psize;
+        float           pdecay;
         float           pdx, pdy, pdz;
-
-        void            moveJet();
-        void            moveExplosion();
 };
 
 #endif

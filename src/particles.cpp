@@ -4,11 +4,11 @@ ParticleEngine::ParticleEngine()
 {
     pemitter = EMITTER_JET;
 
-    pr = 1.0f;
-    pg = 1.0f;
-    pb = 1.0f;
+    c_r = 1.0f;
+    c_g = 1.0f;
+    c_b = 1.0f;
+    c_a = 1.0f;
 
-    palpha = 1.0f;
     pscale = 1.0f;
 }
 
@@ -26,6 +26,7 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
         pnum = particles;
     }
 
+    pdecay = decay;
     psize = size;
     pdx = dx;
     pdy = dy;
@@ -35,10 +36,10 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
 
     switch (pemitter) {
         case EMITTER_JET:
-            palpha = .5f;
+            continuous = true;
+            c_a = .5f;
 
             for (i=0; i<pnum; i++) {
-                p[i].active = true;
                 p[i].lifetime = 1.0f;
                 p[i].fading = float(10 + rand() % 10) / 80.0f;
 
@@ -53,8 +54,9 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
             break;
 
         case EMITTER_EXPLOSION:
+            continuous = false;
+
             for (i=0; i<pnum; i++) {
-                p[i].active = true;
                 p[i].lifetime = 1.0f;
                 p[i].fading = decay * (float(rand() % 100) * .001f + .05f);
                 p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
@@ -74,23 +76,16 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
     }
 }
 
-void ParticleEngine::setAlpha(float global_alpha)
-{
-    palpha = global_alpha;
-}
-
 void ParticleEngine::setColor(float r, float g, float b)
 {
-    pr = r;
-    pg = g;
-    pb = b;
+    c_r = r;
+    c_g = g;
+    c_b = b;
 }
 
-void ParticleEngine::setDirection(float dx, float dy, float dz)
+void ParticleEngine::setAlpha(float a)
 {
-    pdx = dx;
-    pdy = dy;
-    pdz = dz;
+    c_a = a;
 }
 
 void ParticleEngine::setSize(float size)
@@ -103,37 +98,45 @@ void ParticleEngine::setScale(float scale)
     pscale = scale;
 }
 
-void ParticleEngine::setParticleNumber(short particles)
+void ParticleEngine::setContinuous(bool c)
 {
-    if (particles > pnum_max) {
-        pnum = pnum_max;
-    } else {
-        pnum = particles;
-    }
+    // explosion emitter + continuous mode = plasma ball
+    continuous = c;
 }
 
 void ParticleEngine::move(State &s)
 {
     if (pemitter == EMITTER_EXPLOSION) {
-        for (int i = 0; i<pnum_max; i++) {
+        for (int i = 0; i < pnum_max; i++) {
             p[i].px += p[i].dx * p[i].lifetime * s.timer_adjustment;
             p[i].py += p[i].dy * p[i].lifetime * s.timer_adjustment;
             p[i].pz += p[i].dz * p[i].lifetime * s.timer_adjustment;
 
             p[i].lifetime -= p[i].fading * s.timer_adjustment;
+
+            if (continuous && p[i].lifetime < 0) {
+                p[i].px = 0;
+                p[i].py = 0;
+                p[i].pz = 0;
+
+                p[i].lifetime += 1.0f;
+                p[i].fading = pdecay * (float(rand() % 100) * .001f + .05f);
+            }
         }
     } else {
         for (int i = 0; i<pnum_max; i++) {
             p[i].lifetime -= s.timer_adjustment * p[i].fading;
+            p[i].px += (p[i].dx * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
+            p[i].py += (p[i].dy * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
             p[i].pz += (p[i].dz * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
 
-            if (p[i].lifetime < .0f) {
+            if (continuous && p[i].lifetime < 0) {
+                p[i].px = 0;
+                p[i].py = 0;
+                p[i].pz = 0;
+
                 p[i].lifetime += 1.0f;
                 p[i].fading = float(10 + rand() % 10) / 80.0f;
-
-                p[i].px = .0f;
-                p[i].py = .0f;
-                p[i].pz = .0f;
             }
         }
     }
@@ -141,9 +144,8 @@ void ParticleEngine::move(State &s)
 
 void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, float ry, float rz)
 {
-    int i;
     float m[16];
-    float sf = palpha * s.global_alpha * .01f;
+    float a = s.global_alpha * .01f;
 
     glPushMatrix();
 
@@ -160,24 +162,26 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
     glLoadMatrixf(m);
 
     // render particles
-    for (i=0; i<pnum; i++) {
-        if (p[i].active) {
-            glColor4f(pr * sf, pg * sf, pb * sf, p[i].lifetime * sf);
-
-            glBegin(GL_QUADS);
-              glTexCoord2d(0, 0);
-              glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py - psize), pscale * p[i].pz);
-
-              glTexCoord2d(1, 0);
-              glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py - psize), pscale * p[i].pz);
-
-              glTexCoord2d(1, 1);
-              glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py + psize), pscale * p[i].pz);
-
-              glTexCoord2d(0, 1);
-              glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py + psize), pscale * p[i].pz);
-            glEnd();
+    for (int i = 0; i < pnum; i++) {
+        if (p[i].lifetime <= 0) {
+            continue;
         }
+
+        glColor4f(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a);
+
+        glBegin(GL_QUADS);
+          glTexCoord2d(0, 0);
+          glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py - psize), pscale * p[i].pz);
+
+          glTexCoord2d(1, 0);
+          glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py - psize), pscale * p[i].pz);
+
+          glTexCoord2d(1, 1);
+          glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py + psize), pscale * p[i].pz);
+
+          glTexCoord2d(0, 1);
+          glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py + psize), pscale * p[i].pz);
+        glEnd();
     }
 
     glPopMatrix();

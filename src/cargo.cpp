@@ -1,7 +1,6 @@
 #include <math.h>
 
 #include "cargo.hpp"
-#include "entity.hpp"
 
 Cargo::Cargo() : Entity()
 {
@@ -22,6 +21,9 @@ bool Cargo::damage(State &s, int p)
 
     if (destroyed) {
         s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
+        s.entities.push_back(make_shared<Powerup>(p_x, p_y, p_z));
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z));
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_5, p_x, p_y, p_z));
     }
 
     return destroyed;
@@ -96,7 +98,7 @@ void Cargo::draw(State &s)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW_1]);
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW]);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     scale2 += .5f;

@@ -6,8 +6,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     e_type = OBJ_TYPE_SCENERY;
     e_state = OBJ_STATE_ACTIVE;
 
-    particles = new ParticleEngine();
-    particles->setup(EMITTER_EXPLOSION, 20, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+    has_particles = true;
 
     p_x = x;
     p_y = y;
@@ -17,30 +16,37 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     r_y = float(rand() % 360);
     r_z = float(rand() % 360);
 
+    particles = new ParticleEngine();
+
     switch (type) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
+            particles->setup(EMITTER_EXPLOSION, 20, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
             timer = 750;
             break;
 
         // explosion smoke
         case OBJ_EXPLOSION_2:
+            particles->setup(EMITTER_EXPLOSION, 15, 5.0f, 5.0f, 5.0f, .1f, 5.0f);
             timer = 4000;
             break;
 
-        // explosion fireball
+        // explosion sparks
         case OBJ_EXPLOSION_3:
+            particles->setup(EMITTER_EXPLOSION, 20, 25.0f, 25.0f, 25.0f, .5f, 10.0f);
             timer = 2000;
             break;
 
         // collision sparks
         case OBJ_EXPLOSION_4:
+            particles->setup(EMITTER_EXPLOSION, 20, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
             timer = 1000;
             break;
 
         // explosion nova
         case OBJ_EXPLOSION_5:
-            timer = 1500;
+            has_particles = false;
+            timer = 200;
             break;
     }
 }
@@ -52,7 +58,9 @@ Explosion::~Explosion()
 
 void Explosion::move(State &s)
 {
-    particles->move(s);
+    if (has_particles) {
+        particles->move(s);
+    }
 
     timer -= s.timer_adjustment * 10.0f;
 
@@ -65,7 +73,7 @@ void Explosion::move(State &s)
 
 void Explosion::draw(State &s)
 {
-    bool use_particles = true;
+    float counter;
 
     glLoadIdentity();
 
@@ -73,34 +81,36 @@ void Explosion::draw(State &s)
 
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            counter = .75f / (751.0f - timer);
-            particles->setAlpha(.75f - counter);
+            counter = (750.0f - timer) * .001333f;
+
+            particles->setAlpha(.5f - counter);
             particles->setColor(.5f, 1.0f, .8f);
             particles->setSize(4.0f - counter);
             particles->setScale(2.5f + counter);
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_2]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
         // explosion smoke
         case OBJ_EXPLOSION_2:
-            particles->setAlpha(.5f - counter * .0001165f);
-            particles->setColor(1.0f, 1.0f, 1.0f);
-            particles->setSize(6.0f + counter * .0005f);
-            particles->setScale(1.5f + counter * 6.5f);
+            counter = (4000.0f - timer) * .00025f;
+
+            particles->setColor(.5f - counter, .5f - counter, .45f - counter);
+            particles->setAlpha(.5f - counter * .5f);
+            particles->setSize(5.0f + ((1.0f - (counter * counter)) * 75.0f));
+            particles->setScale(1.0f + 7.5f * (counter * counter));
 
             glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_2]);
             break;
 
-        // explosion fireball
+        // explosion sparks
         case OBJ_EXPLOSION_3:
-            particles->setAlpha(2.0f - counter * .001f);
-            particles->setColor(1.0f, .65f - counter * .000125f, .35f - counter * .000075f);
-            particles->setSize(5.0f - counter * .005f);
-            particles->setScale(1.0f + counter * 5.0f);
+            counter = (2000.0f - timer) * .0005f;
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_3]);
+            particles->setSize(10.0f - ((counter * counter) * 10.0f));
+
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -111,14 +121,14 @@ void Explosion::draw(State &s)
             particles->setSize(1.5f);
             particles->setScale(1.0f + counter * 8.0f);
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
         // explosion nova
         case OBJ_EXPLOSION_5:
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
-            use_particles = false;
+            counter = (200.0f - timer) * .005f;
+            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_3]);
             break;
     }
 
@@ -128,7 +138,7 @@ void Explosion::draw(State &s)
     glShadeModel(GL_FLAT);
     glPushMatrix();
 
-    if (use_particles) {
+    if (has_particles) {
         particles->draw(s,
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
@@ -136,7 +146,7 @@ void Explosion::draw(State &s)
             r_x, r_y, r_z
         );
     } else {
-        // nova/halo effect without particles
+        float r = counter * 150.0f;
 
         glTranslatef(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
@@ -144,9 +154,7 @@ void Explosion::draw(State &s)
             (p_z)
         );
 
-        float r = 20.0f + counter * 50.0f;
-
-        glColor4f(1.0f, 1.0f, 1.0f, .5f - counter * .001f);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f - counter);
         glScalef(1.0f, 1.0f, 1.0f);
 
         glBegin (GL_QUADS);
@@ -168,5 +176,6 @@ void Explosion::draw(State &s)
 
     glPopMatrix();
     glShadeModel(GL_SMOOTH);
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

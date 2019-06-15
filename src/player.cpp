@@ -492,7 +492,7 @@ void Player::draw(State &s)
     // flashing gun fire
 
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW_1]);
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW]);
 
     if (gun_flash[0] > 0) {
         glTranslatef(1.5f, -1.0f, .5f);

@@ -2,6 +2,8 @@
 #define CARGO_HPP_
 
 #include "entity.hpp"
+#include "explosion.hpp"
+#include "powerup.hpp"
 
 class Cargo : public Entity
 {

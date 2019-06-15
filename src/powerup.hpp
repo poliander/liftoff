@@ -7,7 +7,7 @@
 class Powerup : public Entity
 {
     public:
-        Powerup();
+        Powerup(float x, float y, float z);
         ~Powerup();
 
         void move(State &s);

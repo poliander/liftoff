@@ -143,7 +143,7 @@ void Scene::load()
     )));
 
     state.log("Loading 'glow_1.tga'\n");
-    state.textures.insert(make_pair(T_GLOW_1, new Texture(
+    state.textures.insert(make_pair(T_GLOW, new Texture(
         "resources/gfx/glow_1.tga", true
     )));
 
