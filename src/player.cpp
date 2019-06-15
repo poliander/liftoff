@@ -179,10 +179,11 @@ void Player::shoot(State &s)
 
 void Player::move(State &s)
 {
-    Uint32 t = SDL_GetTicks();
-    float deceleration = .00035f;
+    float deceleration;
 
-    if (life <= 0) {
+    if (life > 0) {
+        deceleration = .00035f;
+    } else {
         deceleration = .0002f;
     }
 
@@ -353,8 +354,8 @@ void Player::move(State &s)
             break;
     }
 
-    powerup_booster_timer += (t - powerup_booster_ltimer);
-    powerup_booster_ltimer = t;
+    powerup_booster_timer += (SDL_GetTicks() - powerup_booster_ltimer);
+    powerup_booster_ltimer = SDL_GetTicks();
 
     // one tick every 0.25s
     if (powerup_booster_timer > 250) {
@@ -363,9 +364,7 @@ void Player::move(State &s)
         if (life <= 0) {
             energy -= int(ceil((float)energy_max * .05f));
 
-            // player
             if (energy <= 0) {
-                energy = 0;
                 s.set(STATE_GAME_QUIT);
             }
         } else {
@@ -469,21 +468,16 @@ void Player::draw(State &s)
           ((p_z + (s.tilt_x + s.tilt_y) * .15f))
         );
         glScalef(22.5f, 22.5f, 23.5f);
-
-        // roll
-        glRotatef(270.0f + (s_x * 50.0f), 0, 0, 1);
-
-        // pitch
-        glRotatef(s_y * -20.0f, 0, 1, 0);
     } else {
         // menu
         glTranslatef(p_x, p_y, p_z - 20.0f);
         glScalef(1.0f, 1.0f, 1.1f);
     }
 
-    glRotatef(r_x, 1.0f,  .0f,  .0f);
-    glRotatef(r_y,  .0f, 1.0f,  .0f);
-    glRotatef(r_z,  .0f,  .0f, 1.0f);
+    // rotation including pitch/roll
+    glRotatef(r_x + v_y * -20.0f, 1.0f,  .0f,  .0f);
+    glRotatef(r_y + v_x *  50.0f,  .0f, 1.0f,  .0f);
+    glRotatef(r_z,                 .0f,  .0f, 1.0f);
 
     glCallList(*s.models[OBJ_PLAYER]);
 
@@ -495,10 +489,11 @@ void Player::draw(State &s)
     glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
 
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-
     // flashing gun fire
+
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW_1]);
+
     if (gun_flash[0] > 0) {
         glTranslatef(1.5f, -1.0f, .5f);
         glRotatef(gun_flash_rot[0], 1, 0, 0);
@@ -519,6 +514,7 @@ void Player::draw(State &s)
         glRotatef(gun_flash_rot[0], -1, 0, 0);
         glTranslatef(-1.5f, 1.0f, -.5f);
     }
+
     if (gun_flash[1] > 0) {
         glTranslatef(1.5f, 1.0f, .5f);
         glRotatef(gun_flash_rot[1], 1, 0, 0);

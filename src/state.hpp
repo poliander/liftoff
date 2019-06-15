@@ -27,7 +27,7 @@ class State
         State();
         ~State();
 
-        // audio subsystem and resources
+        // audio subsystem
         Audio                       audio;
 
         // game resources

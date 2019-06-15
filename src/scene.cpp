@@ -589,7 +589,7 @@ void Scene::drawMenu(bool mouse_recheck)
         mtxt[i] = (char*)malloc(sizeof(char)*64);
     }
 
-    switch(state.menu) {
+    switch (state.menu) {
         case 1: // main menu
             numentries = 3;
             mx = -1.26f;
@@ -1460,6 +1460,7 @@ void Scene::move()
                 player->setEnergy(1);
                 player->setLife(1);
                 player->setPos(0, -90.0f, 50.0f);
+                player->setRotation(90.0f, 0, 270.0f);
                 player->collect(OBJ_POWERUP_0);
 
                 state.set(STATE_GAME_LOOP);
