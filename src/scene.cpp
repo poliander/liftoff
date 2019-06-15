@@ -625,6 +625,9 @@ void Scene::drawMenu(bool mouse_recheck)
                         if (loadLevel()) {
                             state.log("ok\n");
                             state.set(STATE_GAME_START);
+
+                            player->setEnergy(1);
+                            player->setLife(1);
                         } else {
                             state.log("failed\n");
                         }
@@ -1471,8 +1474,6 @@ void Scene::move()
             if (state.stars_speed > .3f) {
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
             } else if (state.lvl_loaded) {
-                player->setEnergy(1);
-                player->setLife(1);
                 player->setPos(0, -90.0f, 50.0f);
                 player->setRotation(90.0f, 0, 270.0f);
                 player->collect(OBJ_POWERUP_0);

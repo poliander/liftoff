@@ -33,8 +33,10 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
     pemitter = emitter;
     pnum_max = pnum;
 
-    switch(pemitter) {
+    switch (pemitter) {
         case EMITTER_JET:
+            palpha = .5f;
+
             for (i=0; i<pnum; i++) {
                 p[i].active = true;
                 p[i].lifetime = 1.0f;
@@ -54,7 +56,7 @@ void ParticleEngine::setup(short emitter, short particles, float dx, float dy, f
             for (i=0; i<pnum; i++) {
                 p[i].active = true;
                 p[i].lifetime = 1.0f;
-                p[i].fading = decay * (float(rand() % 50) * .0001f + .002f);
+                p[i].fading = decay * (float(rand() % 100) * .001f + .05f);
                 p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
                 p[i].dy = -pdy*.5f + float(rand() % int(pdy*100.0f)) *.01f;
                 p[i].dz = -pdz*.5f + float(rand() % int(pdz*100.0f)) *.01f;
@@ -112,32 +114,16 @@ void ParticleEngine::setParticleNumber(short particles)
 
 void ParticleEngine::move(State &s)
 {
-    int i;
-
     if (pemitter == EMITTER_EXPLOSION) {
-        for (i=0; i<pnum_max; i++) {
+        for (int i = 0; i<pnum_max; i++) {
             p[i].px += p[i].dx * p[i].lifetime * s.timer_adjustment;
             p[i].py += p[i].dy * p[i].lifetime * s.timer_adjustment;
             p[i].pz += p[i].dz * p[i].lifetime * s.timer_adjustment;
 
             p[i].lifetime -= p[i].fading * s.timer_adjustment;
-
-            if (p[i].lifetime < 0) {
-                p[i].px = 0;
-                p[i].py = 0;
-                p[i].pz = 0;
-                p[i].lifetime += .01f * float(66 + rand() % 33);
-                p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
-                p[i].dy = -pdy*.5f + float(rand() % int(pdy*100.0f)) *.01f;
-                p[i].dz = -pdz*.5f + float(rand() % int(pdz*100.0f)) *.01f;
-                if ((p[i].dx < -pdx) || (p[i].dx > pdx)) p[i].dx *= .5f;
-                if ((p[i].dy < -pdy) || (p[i].dy > pdy)) p[i].dy *= .5f;
-                if ((p[i].dx > -.05f) && (p[i].dx < .05f)) p[i].dx += -.05f + float(rand() % 10)*.001f;
-                if ((p[i].dy > -.05f) && (p[i].dy < .05f)) p[i].dy += -.05f + float(rand() % 10)*.001f;
-            }
         }
     } else {
-        for (i=0; i<pnum_max; i++) {
+        for (int i = 0; i<pnum_max; i++) {
             p[i].lifetime -= s.timer_adjustment * p[i].fading;
             p[i].pz += (p[i].dz * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
 
@@ -157,7 +143,7 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
 {
     int i;
     float m[16];
-    float sf = palpha * s.global_alpha * .005f;
+    float sf = palpha * s.global_alpha * .01f;
 
     glPushMatrix();
 

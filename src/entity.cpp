@@ -235,12 +235,7 @@ void Entity::move(State &s)
 {
     p_x += s.timer_adjustment * v_x;
     p_y += s.timer_adjustment * v_y;
-
-    if (e_type == OBJ_TYPE_SCENERY) {
-        p_z += s.timer_adjustment * (v_z + E_BASE_SPEED) * .5f;
-    } else {
-        p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
-    }
+    p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
 
     r_x += s.timer_adjustment * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;

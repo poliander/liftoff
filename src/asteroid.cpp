@@ -13,7 +13,26 @@ Asteroid::~Asteroid()
 
 void Asteroid::move(State &s)
 {
-    Entity::move(s);
+    p_x += s.timer_adjustment * v_x;
+    p_y += s.timer_adjustment * v_y;
+
+    if (e_type == OBJ_TYPE_SCENERY) {
+        p_z += s.timer_adjustment * (v_z + E_BASE_SPEED) * .5f;
+    } else {
+        p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
+    }
+
+    r_x += s.timer_adjustment * w_x * .1f;
+    if (r_x < 0) r_x += 360.0f;
+    if (r_x > 360.0f) r_x -= 360.0f;
+
+    r_y += s.timer_adjustment * w_y * .1f;
+    if (r_y < 0) r_y += 360.0f;
+    if (r_y > 360.0f) r_y -= 360.0f;
+
+    r_z += s.timer_adjustment * w_z * .1f;
+    if (r_z < 0) r_z += 360.0f;
+    if (r_z > 360.0f) r_z -= 360.0f;
 
     if (p_z > .0f) {
         e_state = OBJ_STATE_GONE;

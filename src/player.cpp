@@ -7,7 +7,7 @@ Player::Player() : Entity()
     e_state = OBJ_STATE_ACTIVE;
 
     particles = new ParticleEngine();
-    particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 10.0f);
+    particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 1.0f);
 
     jr = 0;
     j_l = 3;
@@ -367,24 +367,24 @@ void Player::move(State &s)
                 s.set(STATE_GAME_QUIT);
             }
         } else {
-            // life booster
+            // life/energy boost
             if (powerup_booster_length > 0) {
                 powerup_booster_length--;
 
-                life += int(ceil((float)life_max * .075f));
-                energy += int(ceil((float)energy_max * .075f));
-            }
+                life += int(ceil((float)life_max * .06f));
+                energy += int(ceil((float)energy_max * .03f));
+            } else {
+                // energy regeneration
+                energy += energy_reg;
 
-            // energy regeneration
-            energy += energy_reg;
+                // life regeneration
+                if (life < life_max) {
+                    if (energy > life_reg_energy) {
+                        life += life_reg;
 
-            // life regeneration
-            if (life < life_max) {
-                if (energy > life_reg_energy) {
-                    life += life_reg;
-
-                    if (powerup_booster_length <= 0) {
-                        energy -= life_reg_energy;
+                        if (powerup_booster_length <= 0) {
+                            energy -= life_reg_energy;
+                        }
                     }
                 }
             }

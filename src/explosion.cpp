@@ -7,7 +7,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     e_state = OBJ_STATE_ACTIVE;
 
     particles = new ParticleEngine();
-    particles->setup(EMITTER_EXPLOSION, 25, .15f, .15f, .1f, 3.0f, 1.25f);
+    particles->setup(EMITTER_EXPLOSION, 20, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 
     p_x = x;
     p_y = y;
@@ -20,7 +20,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     switch (type) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            timer = 500;
+            timer = 750;
             break;
 
         // explosion smoke
@@ -54,8 +54,7 @@ void Explosion::move(State &s)
 {
     particles->move(s);
 
-    timer -= s.timer_adjustment * 22.5f;
-    counter += (7.0f - counter * 1.5f) * s.timer_adjustment * .1f;
+    timer -= s.timer_adjustment * 10.0f;
 
     Entity::move(s);
 
@@ -74,10 +73,11 @@ void Explosion::draw(State &s)
 
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            particles->setAlpha(1.4f - counter * .002f);
+            counter = .75f / (751.0f - timer);
+            particles->setAlpha(.75f - counter);
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(2.5f + counter * .005f);
-            particles->setScale(2.75f + counter * .005f);
+            particles->setSize(4.0f - counter);
+            particles->setScale(2.5f + counter);
 
             glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -129,12 +129,11 @@ void Explosion::draw(State &s)
     glPushMatrix();
 
     if (use_particles) {
-        particles->draw(
-            s,
+        particles->draw(s,
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
             p_z,
-            0, 0, r_z
+            r_x, r_y, r_z
         );
     } else {
         // nova/halo effect without particles
