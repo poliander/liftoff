@@ -4,7 +4,8 @@ Scene::Scene(State &s) : state(s)
 {
     float x, y;
 
-    state.player = &player;
+    player = make_shared<Player>();
+    state.player = player;
 
     // far stars
     for (int i = 0; i < (state.engine_stars - state.engine_stars_warp); i++) {
@@ -194,8 +195,9 @@ bool Scene::loadLevel()
     float w_x, w_y, w_z;
 
     state.lvl_loaded = false;
+
     state.entities.clear();
-    state.entities.push_back(make_shared<Player>(player));
+    state.entities.push_back(player);
 
     sprintf(fname, "%s/lvl/mission_%d.dat", state.engine_datadir, state.lvl_id);
     fp = fopen(fname, "r");
@@ -493,13 +495,11 @@ void Scene::drawFPS()
 
     glLoadIdentity();
 
-    float x = -.45f;
-
-    drawTextA("FPS:", x, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+    drawTextA("FPS:", -.45f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
 
     if ((state.fps > .0f) && state.fps_ready) {
         sprintf(txt, "%d", int(round(state.fps)));
-        drawTextA(txt, x+.65f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+        drawTextA(txt, .2f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
     }
 }
 
@@ -601,7 +601,6 @@ void Scene::drawMenu(bool mouse_recheck)
                         if (loadLevel()) {
                             state.log("ok\n");
                             state.set(STATE_GAME_START);
-                            player.setLife(1);
                         } else {
                             state.log("failed\n");
                         }
@@ -908,9 +907,9 @@ void Scene::drawMenu(bool mouse_recheck)
     }
 
     // draw player's ship
-    player.setPos(4.3f, -1.0f, -3.0f);
-    player.setRotation(112.5f, 0, player.getRotationZ() + (state.timer_adjustment * .2f));
-    player.draw(state);
+    player->setPos(4.3f, -1.0f, -3.0f);
+    player->setRotation(112.5f, 0, player->getRotationZ() + (state.timer_adjustment * .2f));
+    player->draw(state);
 
     // draw menu background
     glLoadIdentity();
@@ -1146,7 +1145,7 @@ void Scene::drawDisplay()
             break;
 
         case STATE_GAME_LOOP:
-            if (player.isAlive()) {
+            if (player->isAlive()) {
                 state.hud_x = -6.413f * state.vid_cfg_aspect;
                 state.hud_y = -4.905f;
             } else {
@@ -1189,7 +1188,7 @@ void Scene::drawDisplay()
 
     // money
 
-    sprintf(msg, "%d $", player.getMoney());
+    sprintf(msg, "%d $", player->getMoney());
     drawText(msg, -4.6f, -1.2f, 0, 130, 1.0f, 1.0f, .3f, alpha * .85f);
     glPopMatrix();
 
@@ -1239,7 +1238,7 @@ void Scene::drawDisplay()
 
     // life bar
 
-    s = int(50.0f / ((float(player.getLifeMaximum() + 1) / float(player.getLife() + 1))));
+    s = int(50.0f / ((float(player->getLifeMaximum() + 1) / float(player->getLife() + 1))));
 
     for (i = 0; i < s; i++) {
         drawText("I", .32f + .077f * i, -.15f, 0, 80, 1.0f, .4f, .2f, .85f * (1.0f - (.02f * ((s + 1) - i))) * alpha);
@@ -1266,7 +1265,7 @@ void Scene::drawDisplay()
 
     // energy bar
 
-    e = int(50.0f / (((float)player.getEnergyMaximum() + 1) / (float(player.getEnergy() + 1))));
+    e = int(50.0f / (((float)player->getEnergyMaximum() + 1) / (float(player->getEnergy() + 1))));
 
     for (i = 0; i < e; i++) {
         drawText("I", .32f + .077f * i, -.11f, 0, 80, .2f, .65f, 1.0f, .85f * (1.0f - (.02f * ((e + 1) - i))) * alpha);
@@ -1448,8 +1447,12 @@ void Scene::move()
             if (state.stars_speed > .3f) {
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
             } else if (state.lvl_loaded) {
+                player->setEnergy(1);
+                player->setLife(1);
+                player->setPos(0, -90.0f, 50.0f);
+                player->collect(OBJ_POWERUP_0);
+
                 state.set(STATE_GAME_LOOP);
-                player.setLife(1);
             } else {
                 state.set(STATE_QUIT);
             }
@@ -1459,7 +1462,7 @@ void Scene::move()
             state.lvl_pos += state.timer_adjustment * 1.5f;
 
             if (
-                player.isAlive() &&
+                player->isAlive() &&
                 state.lvl_pos > state.lvl_length
             ) {
                 state.set(STATE_GAME_NEXTLEVEL);
@@ -1469,17 +1472,17 @@ void Scene::move()
             moveMessages();
 
             if (state.lvl_pos < 50) {
-                player.setAccelerationZ(17.5f);
+                player->setAccelerationZ(17.5f);
             } else {
-                if (player.isAlive()) {
-                    player.setAccelerationZ(0);
+                if (player->isAlive()) {
+                    player->setAccelerationZ(0);
                 } else {
-                    player.setAccelerationZ(-4.0f);
+                    player->setAccelerationZ(-4.0f);
                 }
             }
 
             // update chasecam position
-            if (player.isAlive() <= 0) {
+            if (player->isAlive() <= 0) {
                 if (state.cam_speed < .5f) {
                     state.cam_speed += (.5f - state.cam_speed) * .01f * state.timer_adjustment;
                 }
@@ -1489,15 +1492,11 @@ void Scene::move()
                 } else {
                     state.cam_speed = 0;
                 }
-
-                if (player.getPosZ() > .0f) {
-                    state.set(STATE_GAME_QUIT);
-                }
             }
 
             if (state.cam_speed > 0) {
-                state.cam_x += state.timer_adjustment * ( (player.getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
-                state.cam_y += state.timer_adjustment * ( (player.getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
+                state.cam_x += state.timer_adjustment * ( (player->getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
+                state.cam_y += state.timer_adjustment * ( (player->getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
             }
             break;
 
@@ -1511,27 +1510,27 @@ void Scene::move()
 
                 if (state.title_ypos > 80.0f) {
                     state.global_alpha = int(99.85f - (state.title_ypos - 80.0f) * 5.0f);
-                    player.setAccelerationZ(350.0f);
+                    player->setAccelerationZ(350.0f);
                 } else {
                     state.global_alpha = 100;
                     state.tilt(state.title_ypos * .1f);
-                    player.setAccelerationZ(state.title_ypos * state.title_ypos * -.0001f);
+                    player->setAccelerationZ(state.title_ypos * state.title_ypos * -.0001f);
                 }
 
                 if (state.stars_speed < 1.75f) {
                     state.stars_speed += (state.stars_speed - .1f) * .03f * state.timer_adjustment;
                 }
 
-                state.cam_x += state.timer_adjustment * ((player.getPosX() * state.cam_speed) - ((state.tilt_x * 2.0f + state.cam_x) * state.cam_speed)) * .15f;
+                state.cam_x += state.timer_adjustment * ((player->getPosX() * state.cam_speed) - ((state.tilt_x * 2.0f + state.cam_x) * state.cam_speed)) * .15f;
 
-                state.cam_y += state.timer_adjustment * ((player.getPosY() * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
+                state.cam_y += state.timer_adjustment * ((player->getPosY() * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
             } else {
                 state.set(STATE_MENU);
 
-                player.setRotation(0, 0, 250.0f);
-                player.setSpin(0, 0, 0);
-                player.setVelocity(0, 0, 0);
-                player.setAcceleration(0, 0, 0);
+                player->setRotation(0, 0, 250.0f);
+                player->setSpin(0, 0, 0);
+                player->setVelocity(0, 0, 0);
+                player->setAcceleration(0, 0, 0);
             }
             break;
 
@@ -1540,8 +1539,8 @@ void Scene::move()
             moveMessages();
 
             if (state.title_ypos < 99.85f) {
-                if (player.isAlive()) {
-                    player.setAccelerationZ(-25.0f);
+                if (player->isAlive()) {
+                    player->setAccelerationZ(-25.0f);
                 }
 
                 state.title_ypos += (100.1f - state.title_ypos) * state.timer_adjustment * .075f;
@@ -1549,10 +1548,10 @@ void Scene::move()
             } else {
                 state.set(STATE_MENU);
 
-                player.setRotation(0, 0, 250.0f);
-                player.setSpin(0, 0, 0);
-                player.setVelocity(0, 0, 0);
-                player.setAcceleration(0, 0, 0);
+                player->setRotation(0, 0, 250.0f);
+                player->setSpin(0, 0, 0);
+                player->setVelocity(0, 0, 0);
+                player->setAcceleration(0, 0, 0);
             }
             break;
     }
@@ -1570,8 +1569,8 @@ void Scene::draw()
         state.get() >  STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
     ) {
-        p_x = player.getPosX();
-        p_y = player.getPosY();
+        p_x = player->getPosX();
+        p_y = player->getPosY();
 
         if (p_x < -600.0f) p_x = -600.0f;
         if (p_x >  600.0f) p_x =  600.0f;
@@ -1583,14 +1582,14 @@ void Scene::draw()
 
     gluLookAt(
         p_x * -.01f + state.tilt_x * .4f,
-        p_y * -.01f + player.getVelocityY() * 10.0f + state.tilt_y * .4f,
+        p_y * -.01f + player->getVelocityY() * 10.0f + state.tilt_y * .4f,
         200.0f,
 
-        player.getVelocityX() * .5f,
+        player->getVelocityX() * .5f,
         .0f,
         -10000.0f,
 
-        player.getVelocityX() * .05f,
+        player->getVelocityX() * .05f,
         -1.0f,
         .0f
     );

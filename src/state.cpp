@@ -144,16 +144,19 @@ void State::addMessage(int value, unsigned short type)
             msg[msg_num].direction_y = -1;
             sprintf(msg[msg_num].text, "-%d", value);
             break;
+
         case MSG_MONEY:
             msg[msg_num].direction_x = 1;
             msg[msg_num].direction_y = -1;
             sprintf(msg[msg_num].text, "%d $", value);
             break;
+
         case MSG_ENERGY:
             msg[msg_num].direction_x = -1;
             msg[msg_num].direction_y = -1;
             sprintf(msg[msg_num].text, "+%d", value);
             break;
+
         default:
             return;
     }
@@ -174,7 +177,7 @@ bool State::set(int s)
     char msg[255];
     int x, y;
 
-    sprintf(msg, "Setting global state %d\n", s);
+    sprintf(msg, "Entering state %d\n", s);
     log(msg);
 
     switch(s) {
@@ -230,7 +233,6 @@ bool State::set(int s)
             break;
 
         case STATE_GAME_LOOP:
-            log("Entering game loop...\n");
             menu = 0;
 
             stars_warp = false;
@@ -250,7 +252,6 @@ bool State::set(int s)
             break;
 
         case STATE_GAME_QUIT:
-            log("Quitting game loop.\n");
             title_ypos = 0;
             audio.stopMusic(1000);
             audio.stopSampleLoop(1000);

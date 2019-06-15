@@ -486,29 +486,29 @@ bool Engine::handleKeyboard()
             if (keys[SDLK_ESCAPE])
                 state.set(STATE_GAME_QUIT);
 
-            if (scene->player.isAlive()) {
+            if (scene->player->isAlive()) {
 
                 // Keyboard LEFT, RIGHT
                 if (keys[SDLK_LEFT] || keys[SDLK_a]) {
-                    scene->player.setAccelerationX(1.0f);
+                    scene->player->setAccelerationX(1.0f);
                     moved = true;
                 } else if (keys[SDLK_RIGHT] || keys[SDLK_d]) {
-                    scene->player.setAccelerationX(-1.0f);
+                    scene->player->setAccelerationX(-1.0f);
                     moved = true;
                 }
 
                 // Keyboard UP, DOWN
                 if (keys[SDLK_UP] || keys[SDLK_w]) {
-                    scene->player.setAccelerationY(-1.0f);
+                    scene->player->setAccelerationY(-1.0f);
                     moved = true;
                 } else if (keys[SDLK_DOWN] || keys[SDLK_s]) {
-                    scene->player.setAccelerationY(1.0f);
+                    scene->player->setAccelerationY(1.0f);
                     moved = true;
                 }
 
                 // Keyboard CTRL
                 if (keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) {
-                    scene->player.shoot(state);
+                    scene->player->shoot(state);
                 }
             }
             break;
@@ -584,7 +584,7 @@ void Engine::handleJoystick()
 {
     float v;
 
-    if (scene->player.isAlive() == false) {
+    if (scene->player->isAlive() == false) {
         return;
     }
 
@@ -593,17 +593,17 @@ void Engine::handleJoystick()
     v = float(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
 
     if (fabs(v) > .01f) {
-        scene->player.setAccelerationX(float(scene->player.getAcceleration()) * -.0075f * v);
+        scene->player->setAccelerationX(float(scene->player->getAcceleration()) * -.0075f * v);
     }
 
     v = float(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
 
     if (fabs(v) > .01f) {
-        scene->player.setAccelerationY(float(scene->player.getAcceleration()) * .0075f * v);
+        scene->player->setAccelerationY(float(scene->player->getAcceleration()) * .0075f * v);
     }
 
     if (SDL_JoystickGetButton(state.joystick, 0) != 0) {
-        scene->player.shoot(state);
+        scene->player->shoot(state);
     }
 }
 
@@ -656,6 +656,14 @@ void Engine::halt()
         SDL_JoystickClose(state.joystick);
     }
 
+    state.log("Saving configuration... ");
+
+    if (writeConfiguration()) {
+        state.log("ok\n");
+    } else {
+        state.log("failed\n");
+    }
+
     if ( (state.config.aud_sfx != -1) ||
          (state.config.aud_music != -1) ) {
         state.log("Closing audio device\n");
@@ -670,14 +678,6 @@ void Engine::halt()
     }
 
     SDL_Quit();
-
-    state.log("Saving configuration... ");
-
-    if (writeConfiguration()) {
-        state.log("ok\n");
-    } else {
-        state.log("failed\n");
-    }
 
     delete scene;
 }

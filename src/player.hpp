@@ -22,6 +22,7 @@ class Player : public Entity
         unsigned short  getAcceleration();
         unsigned short  getMoney();
 
+        void            setEnergy(int e);
         int             getEnergy();
         int             getEnergyMaximum();
         int             getEnergyRegeneration();

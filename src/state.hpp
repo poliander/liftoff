@@ -35,7 +35,7 @@ class State
         unsigned int                texture[20];
         map<unsigned int, Model*>   models;
 
-        Entity*                     player;
+        shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
 
         // timer

@@ -5,6 +5,7 @@ using namespace std;
 
 #include <algorithm>
 #include <math.h>
+#include <memory>
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
@@ -33,34 +34,34 @@ class Scene
         Scene(State &s);
         ~Scene();
 
-        Player         player;
+        shared_ptr<Player> player;
 
-        void           load();
-        void           move();
-        void           draw();
+        void               load();
+        void               move();
+        void               draw();
 
     private:
-        State&         state;
+        State&             state;
 
-        float          stars[8000][4];
+        float              stars[8000][4];
 
-        bool           loadLevel();
-        GLuint         loadTexture(const char *filename, bool mipmap);
+        bool               loadLevel();
+        GLuint             loadTexture(const char *filename, bool mipmap);
 
-        void           drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void           drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void           drawBackground();
-        void           drawMouse();
-        void           drawFPS();
-        void           drawTitle();
-        void           drawMenu(bool mouse_recheck);
+        void               drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
+        void               drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
+        void               drawBackground();
+        void               drawMouse();
+        void               drawFPS();
+        void               drawTitle();
+        void               drawMenu(bool mouse_recheck);
 
-        void           drawScene();
-        void           drawDisplay();
-        void           drawMessages();
+        void               drawScene();
+        void               drawDisplay();
+        void               drawMessages();
 
-        void           moveScene();
-        void           moveMessages();
+        void               moveScene();
+        void               moveMessages();
 };
 
 #endif

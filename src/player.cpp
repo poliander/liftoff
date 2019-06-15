@@ -33,6 +33,8 @@ Player::Player() : Entity()
     gun_flash[0] = 0;
     gun_flash[1] = 0;
 
+    life = 1;
+    energy = 1;
     money = 0;
 }
 
@@ -49,6 +51,11 @@ unsigned short Player::getAcceleration()
 unsigned short Player::getMoney()
 {
     return money;
+}
+
+void Player::setEnergy(int e)
+{
+    energy = e;
 }
 
 int Player::getEnergy()
@@ -397,17 +404,18 @@ void Player::move(State &s)
 void Player::draw(State &s)
 {
     float alpha, jlen;
-    GLfloat lightpos[] = { 100.0f, 0, 0, 1.0f };
+    GLfloat lightpos[] = { 0, 0, 0, 1.0f };
 
-    if (s.get() <= 10) {
+    if (s.get() > 10 && s.get() < 20) {
+        alpha = s.global_alpha * .01f;
+        lightpos[0] = 100.0f;
+        lightpos[1] = 1000.0f;
+        lightpos[2] = -3000.0f;
+    } else {
         alpha = s.title_ypos * .01f;
         lightpos[0] = 50.0f;
         lightpos[1] = 500.0f;
         lightpos[2] = .0f;
-    } else {
-        alpha = s.global_alpha * .01f;
-        lightpos[1] = 1000.0f;
-        lightpos[2] = -3000.0f;
     }
 
     GLfloat lightcol[] = { 1, 1, 1, alpha };
@@ -434,7 +442,7 @@ void Player::draw(State &s)
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
     glEnable(GL_LIGHT0);
 
-    if (s.get() <= 10) {
+    if (s.get() <= 10 || s.get() >= 20) {
         lightpos[0] = -150.0f;
         lightpos[1] = 300.0f;
         lightpos[2] = -300.0f;
@@ -453,7 +461,7 @@ void Player::draw(State &s)
 
     glPushMatrix();
 
-    if (s.get() > 10) {
+    if (s.get() > 10 && s.get() < 20) {
         // ingame
          glTranslatef(
           ((p_x - s.cam_x) * E_RELATIVE_MOVEMENT) + s.tilt_x * .15f,
@@ -535,7 +543,7 @@ void Player::draw(State &s)
     glDisable(GL_DEPTH_TEST);
 
     // jet
-    if ((s.get() > 10) && (life > 0)) {
+    if ((s.get() > 10) && (s.get() < 20) && (life > 0)) {
         glBindTexture(GL_TEXTURE_2D, s.texture[T_JET]);
 
         if (s.get() == STATE_GAME_NEXTLEVEL) {

@@ -25,14 +25,13 @@
 #define E_MAX_MESSAGES          64
 
 // engine states
-#define STATE_INTRO             -2
-#define STATE_QUIT              -1
-#define STATE_CLOSE             0
 #define STATE_MENU              1
 #define STATE_GAME_START        10
 #define STATE_GAME_LOOP         11
-#define STATE_GAME_NEXTLEVEL    98
-#define STATE_GAME_QUIT         99
+#define STATE_GAME_NEXTLEVEL    12
+#define STATE_GAME_QUIT         13
+#define STATE_QUIT              98
+#define STATE_CLOSE             99
 
 // textures
 #define T_LOGO                  0
