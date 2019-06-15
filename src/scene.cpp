@@ -1492,8 +1492,9 @@ void Scene::move()
                 }
             }
 
-            // update chasecam position
-            if (player->isAlive() <= 0) {
+            // update chase cam position
+
+            if (player->isAlive()) {
                 if (state.cam_speed < .5f) {
                     state.cam_speed += (.5f - state.cam_speed) * .01f * state.timer_adjustment;
                 }
@@ -1505,10 +1506,8 @@ void Scene::move()
                 }
             }
 
-            if (state.cam_speed > 0) {
-                state.cam_x += state.timer_adjustment * ( (player->getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
-                state.cam_y += state.timer_adjustment * ( (player->getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
-            }
+            state.cam_x += state.timer_adjustment * ((player->getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
+            state.cam_y += state.timer_adjustment * ((player->getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
             break;
 
         case STATE_GAME_NEXTLEVEL:

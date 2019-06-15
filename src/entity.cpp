@@ -72,7 +72,7 @@ float Entity::getPosX()
 
 float Entity::getPosY()
 {
-    return p_x;
+    return p_y;
 }
 
 float Entity::getPosZ()
