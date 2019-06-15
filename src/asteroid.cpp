@@ -13,7 +13,7 @@ Asteroid::~Asteroid()
 
 bool Asteroid::damage(State &s, int p)
 {
-    bool destroyed = Entity::damage(s, p * 2);
+    bool destroyed = Entity::damage(s, p);
 
     if (destroyed) {
         s.audio.playSample(SFX_EXPLOSION_2, 192, 180);

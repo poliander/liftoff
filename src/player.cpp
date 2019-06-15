@@ -21,7 +21,7 @@ Player::Player() : Entity()
 
     // energy capacity and regeneration speed
     energy_max = 1500;
-    energy_reg = 15;
+    energy_reg = 20;
 
     // maximum life, life regeneration and regeneration energy draw
     life_max = 250;

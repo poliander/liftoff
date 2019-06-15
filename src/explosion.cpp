@@ -21,7 +21,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     switch (type) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            particles->setup(EMITTER_EXPLOSION, 20, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+            particles->setup(EMITTER_EXPLOSION, 20, .85f, .85f, .85f, .75f, 1.5f);
             timer = 750;
             break;
 
