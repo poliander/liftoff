@@ -62,7 +62,7 @@ class Entity
         void           setLife(int l);
 
         void           activate();
-        virtual void   damage(State &s, int p);
+        virtual bool   damage(State &s, int p);
         virtual void   collide(State &s, shared_ptr<Entity> e);
 
         virtual void   move(State &s) = 0;

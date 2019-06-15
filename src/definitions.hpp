@@ -88,5 +88,7 @@
 
 // sound fx
 #define SFX_GUN_IMPACT          4
+#define SFX_EXPLOSION_1         5
+#define SFX_EXPLOSION_2         6
 
 #endif

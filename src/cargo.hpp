@@ -9,6 +9,8 @@ class Cargo : public Entity
         Cargo();
         ~Cargo();
 
+        bool damage(State &s, int p);
+
         void move(State &s);
         void draw(State &s);
 

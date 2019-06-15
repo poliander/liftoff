@@ -222,13 +222,15 @@ void Entity::collide(State &s, shared_ptr<Entity> e)
 {
 }
 
-void Entity::damage(State &s, int p)
+bool Entity::damage(State &s, int p)
 {
     life -= p;
 
     if (life <= 0) {
         e_state = OBJ_STATE_GONE;
     }
+
+    return (false == isAlive());
 }
 
 void Entity::move(State &s)

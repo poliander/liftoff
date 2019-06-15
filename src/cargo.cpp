@@ -16,6 +16,17 @@ Cargo::~Cargo()
 {
 }
 
+bool Cargo::damage(State &s, int p)
+{
+    bool destroyed = Entity::damage(s, p);
+
+    if (destroyed) {
+        s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
+    }
+
+    return destroyed;
+}
+
 void Cargo::move(State &s)
 {
     Entity::move(s);
