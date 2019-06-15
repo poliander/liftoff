@@ -99,7 +99,7 @@ float Entity::getVelocityX()
 
 float Entity::getVelocityY()
 {
-    return v_x;
+    return v_y;
 }
 
 float Entity::getVelocityZ()

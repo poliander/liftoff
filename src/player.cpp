@@ -143,15 +143,14 @@ void Player::shoot(State &s)
         return;
     }
 
-//    m_next_shot = s.timer + 90 + rand() % 60;
-    m_next_shot = s.timer + 9 + rand() % 6;
+    m_next_shot = s.timer + 90 + rand() % 60;
 
     if (energy < 20) {
         // low energy
         return;
     }
 
-//    state.objects[state.player].energy -= 20;
+    energy -= 20;
 
     // left/right alteration, randomize gun flash
     m_alt = 1 - m_alt;
@@ -161,9 +160,9 @@ void Player::shoot(State &s)
     auto missile = make_shared<Missile>();
 
     missile->setPos(
-        p_x - 8.5f + (m_alt * 17.0f),
+        p_x - 7.5f + (m_alt * 15.0f),
         p_y,
-        p_z - 150.0f
+        p_z - 175.0f
     );
 
     s.entities.push_back(missile);
@@ -373,6 +372,7 @@ void Player::move(State &s)
                 powerup_booster_length--;
 
                 life += int(ceil((float)life_max * .075f));
+                energy += int(ceil((float)energy_max * .075f));
             }
 
             // energy regeneration
