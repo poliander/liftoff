@@ -180,10 +180,10 @@ void Player::shoot(State &s)
 void Player::move(State &s)
 {
     Uint32 t = SDL_GetTicks();
-    float countersteering = .00035f;
+    float deceleration = .00035f;
 
     if (life <= 0) {
-        countersteering = .0002f;
+        deceleration = .0002f;
     }
 
     // check boundary
@@ -241,9 +241,9 @@ void Player::move(State &s)
 
     // accelerate horizontally
     if ((a_x - v_x) > .0005f) {
-        v_x += (a_x - v_x) * s.timer_adjustment * acceleration * countersteering;
+        v_x += (a_x - v_x) * s.timer_adjustment * acceleration * deceleration;
     } else if ((v_x - a_x) > .0005f) {
-        v_x -= (v_x - a_x) * s.timer_adjustment * acceleration * countersteering;
+        v_x -= (v_x - a_x) * s.timer_adjustment * acceleration * deceleration;
     }
 
     // move horizontally
@@ -251,9 +251,9 @@ void Player::move(State &s)
 
     // accelerate vertically
     if ((a_y - v_y) > .0005f) {
-        v_y += (a_y - v_y) * s.timer_adjustment * acceleration * countersteering;
+        v_y += (a_y - v_y) * s.timer_adjustment * acceleration * deceleration;
     } else if ((v_y - a_y) > .0005f) {
-        v_y -= (v_y - a_y) * s.timer_adjustment * acceleration * countersteering;
+        v_y -= (v_y - a_y) * s.timer_adjustment * acceleration * deceleration;
     }
 
     // move vertically
