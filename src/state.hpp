@@ -4,6 +4,7 @@
 using namespace std;
 
 #include <map>
+#include <math.h>
 #include <memory>
 #include <vector>
 #include <sys/stat.h>
@@ -16,50 +17,6 @@ using namespace std;
 #include "definitions.hpp"
 #include "message.hpp"
 #include "model.hpp"
-
-// object
-struct object_t
-{
-    int                 type;       // OBJ_TYPE_*
-    int                 state;      // OBJ_STATE_*
-    int                 id;         // OBJ_*
-
-    int                 life;
-    int                 life_max;
-    int                 life_time;
-    int                 target;
-
-    int                 money;
-    int                 energy;
-    unsigned short      powerup;
-
-    float               cnt;
-    float               speed;
-
-    float               pos_x;      // position
-    float               pos_y;
-    float               pos_z;
-
-    float               s_x;        // speed
-    float               s_y;
-    float               s_z;
-
-    float               a_x;        // acceleration
-    float               a_y;
-    float               a_z;
-
-    float               rot_x;      // rotation
-    float               rot_y;
-    float               rot_z;
-
-    float               rsp_x;      // rotation speed
-    float               rsp_y;
-    float               rsp_z;
-
-    float               scale_x;    // object scaling
-    float               scale_y;
-    float               scale_z;
-};
 
 class Entity;
 
@@ -74,11 +31,12 @@ class State
 
         // game resources
         config_t                    config;
-        object_t                    objects[E_MAX_OBJECTS];
-        unsigned int                texture[20];
 
-        vector<shared_ptr<Entity>>  entities;
+        unsigned int                texture[20];
         map<unsigned int, Model*>   models;
+
+        Entity*                     player;
+        vector<shared_ptr<Entity>>  entities;
 
         // timer
         Uint32          timer;
@@ -86,8 +44,6 @@ class State
 
         int             global_alpha;
         float           title_ypos;
-
-        int             player;
 
         bool            log_file;
 
@@ -176,12 +132,11 @@ class State
         float           hud_x;
         float           hud_y;
 
-        // entities and money/damage messages
-        bool            add(object_t *n_obj);
+        // add message
         void            addMessage(int value, unsigned short type);
-        void            sort();
-        void            remove(int oid);
-        void            explode(int oid);
+
+        // view related
+        void            tilt(float t);
 
         // state
         bool            set(int s);
@@ -191,12 +146,6 @@ class State
 
     private:
         int             id;
-
-        bool            objectLoad(int id, const char *filename);
-        bool            objectLoadFirstPass(int id, FILE *fp);
-        bool            objectLoadSecondPass(int id, FILE *fp);
-        bool            objectMemAlloc(int id);
-        void            objectFreemem(int id);
 };
 
 #endif

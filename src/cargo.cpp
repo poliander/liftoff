@@ -8,6 +8,8 @@ Cargo::Cargo() : Entity()
     e_id = OBJ_CARGO_1;
     e_type = OBJ_TYPE_COLLIDER;
     e_state = OBJ_STATE_IDLE;
+
+    focusable = true;
 }
 
 Cargo::~Cargo()

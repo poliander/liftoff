@@ -10,7 +10,6 @@ __top_builddir__liftoff_SOURCES = \
     asteroid.cpp \
     missile.cpp \
     state.cpp \
-    object.cpp \
     powerup.cpp \
     player.cpp \
     cargo.cpp \

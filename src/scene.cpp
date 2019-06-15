@@ -4,6 +4,8 @@ Scene::Scene(State &s) : state(s)
 {
     float x, y;
 
+    state.player = &player;
+
     // far stars
     for (int i = 0; i < (state.engine_stars - state.engine_stars_warp); i++) {
         x = 0;
@@ -57,9 +59,6 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio.sample[1]);
         Mix_FreeChunk(state.audio.sample[0]);
     }
-
-    delete player;
-    delete powerup;
 }
 
 /*
@@ -137,9 +136,14 @@ void Scene::load()
     state.texture[T_EXPLOSION_2]  = loadTexture("explosion_2.tga", false);
     state.texture[T_EXPLOSION_3]  = loadTexture("star.tga", false);
     state.texture[T_EXPLOSION_4]  = loadTexture("explosion_3.tga", false);
-    state.texture[T_JET]          = loadTexture("star.tga", false);
+    state.texture[T_JET_EXHAUST]  = loadTexture("jet_exhaust.tga", false);
     state.texture[T_BACKGROUND_1] = loadTexture("background_1.tga", false);
     state.texture[T_GLOW_1]       = loadTexture("glow_1.tga", false);
+
+    state.models.insert(make_pair(OBJ_PLAYER, new Model(
+        "resources/gfx/ship_1.tga",
+        "resources/obj/ship_1.obj"
+    )));
 
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
         "resources/gfx/asteroid_1.tga",
@@ -155,19 +159,6 @@ void Scene::load()
         "resources/gfx/cargo_1.tga",
         "resources/obj/cargo_1.obj"
     )));
-
-    // player
-    state.log("Loading 'obj/ship_1.obj'\n");
-    player = new Player(state);
-    player->textures[0] = loadTexture("ship_1_1.tga", false);
-    player->textures[1] = loadTexture("ship_1_2.tga", false);
-    player->textures[2] = state.texture[T_GLOW_1];
-    player->textures[3] = state.texture[T_JET];
-    player->load(state.engine_datadir, "ship_1.obj");
-
-    // powerup
-    powerup = new Powerup(state);
-    powerup->textures[0] = state.texture[T_GLOW_1];
 
     // music
     state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
@@ -194,12 +185,17 @@ bool Scene::loadLevel()
 {
     FILE *fp = NULL;
     char msg[255], fname[255], buf[1024], cmd[16], par[255];
-    int m, p = 0;
-    unsigned int i;
-    object_t nobj;
 
-    state.lvl_entities = 1;
+    int i, money, life, m, p = 0;
+    unsigned short e_id;
+    float p_x, p_y, p_z;
+    float r_x, r_y, r_z;
+    float s_x, s_y, s_z;
+    float w_x, w_y, w_z;
+
     state.lvl_loaded = false;
+    state.entities.clear();
+    state.entities.push_back(make_shared<Player>(player));
 
     sprintf(fname, "%s/lvl/mission_%d.dat", state.engine_datadir, state.lvl_id);
     fp = fopen(fname, "r");
@@ -265,41 +261,35 @@ bool Scene::loadLevel()
 
                 // colliding object, obstacle
                 if (!strcmp(cmd, "collider")) {
-                    nobj.type = OBJ_TYPE_COLLIDER;
-                    nobj.state = OBJ_STATE_IDLE;
-                    nobj.speed = 0;
-                    nobj.cnt = 0;
-                    nobj.life_time = -1;
-
-                    nobj.rot_x = float(rand() % 3600) * .1f;
-                    nobj.rot_y = float(rand() % 3600) * .1f;
-                    nobj.rot_z = float(rand() % 3600) * .1f;
+                    r_x = float(rand() % 3600) * .1f;
+                    r_y = float(rand() % 3600) * .1f;
+                    r_z = float(rand() % 3600) * .1f;
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u,%u",
-                        (float *)&nobj.pos_z,
-                        (int *)&nobj.id,
-                        (float *)&nobj.pos_x,
-                        (float *)&nobj.pos_y,
-                        (float *)&nobj.scale_x,
-                        (float *)&nobj.scale_y,
-                        (float *)&nobj.scale_z,
-                        (float *)&nobj.rsp_x,
-                        (float *)&nobj.rsp_y,
-                        (float *)&nobj.rsp_z,
-                        (int *)&nobj.life_max,
-                        (int *)&nobj.money
+                        (float *) &p_z,
+                        (int *)   &e_id,
+                        (float *) &p_x,
+                        (float *) &p_y,
+                        (float *) &s_x,
+                        (float *) &s_y,
+                        (float *) &s_z,
+                        (float *) &w_x,
+                        (float *) &w_y,
+                        (float *) &w_z,
+                        (int *)   &life,
+                        (int *)   &money
                     );
 
-                    switch (nobj.id) {
+                    switch (e_id) {
                         case OBJ_ASTEROID_1:
                             {
                                 auto asteroid = make_shared<Asteroid>();
 
-                                asteroid->setPos(nobj.pos_x, nobj.pos_y, nobj.pos_z);
-                                asteroid->setScale(nobj.scale_x, nobj.scale_y, nobj.scale_z);
-                                asteroid->setRotation(nobj.rot_x, nobj.rot_y, nobj.rot_z);
-                                asteroid->setSpin(nobj.rsp_x, nobj.rsp_y, nobj.rsp_z);
-                                asteroid->setLife(nobj.life_max);
+                                asteroid->setPos(p_x, p_y, p_z);
+                                asteroid->setScale(s_x, s_y, s_z);
+                                asteroid->setRotation(r_x, r_y, r_z);
+                                asteroid->setSpin(w_x, w_y, w_z);
+                                asteroid->setLife(life);
 
                                 state.entities.push_back(asteroid);
                             }
@@ -309,29 +299,23 @@ bool Scene::loadLevel()
                             {
                                 auto cargo = make_shared<Cargo>();
 
-                                cargo->setPos(nobj.pos_x, nobj.pos_y, nobj.pos_z);
-                                cargo->setScale(nobj.scale_x, nobj.scale_y, nobj.scale_z);
-                                cargo->setRotation(nobj.rot_x, nobj.rot_y, nobj.rot_z);
-                                cargo->setSpin(nobj.rsp_x, nobj.rsp_y, nobj.rsp_z);
-                                cargo->setLife(nobj.life_max);
+                                cargo->setPos(p_x, p_y, p_z);
+                                cargo->setScale(s_x, s_y, s_z);
+                                cargo->setRotation(r_x, r_y, r_z);
+                                cargo->setSpin(w_x, w_y, w_z);
+                                cargo->setLife(life);
 
                                 state.entities.push_back(cargo);
                             }
                             break;
                     }
                 }
-
+/*
                 // scenery object
                 if (!strcmp(cmd, "scenery")) {
-                    nobj.type = OBJ_TYPE_SCENERY;
-                    nobj.state = OBJ_STATE_IDLE;
-                    nobj.speed = 0;
-                    nobj.cnt = 0;
-                    nobj.life_time = -1;
-
-                    nobj.rot_x = float(rand() % 3600) * .1f;
-                    nobj.rot_y = float(rand() % 3600) * .1f;
-                    nobj.rot_z = float(rand() % 3600) * .1f;
+                    r_x = float(rand() % 360);
+                    r_y = float(rand() % 360);
+                    r_z = float(rand() % 360);
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
                         (float *)&nobj.pos_z,
@@ -348,8 +332,8 @@ bool Scene::loadLevel()
                     );
 
                     nobj.life = nobj.life_max;
-                    state.add(&nobj);
                 }
+*/
             }
         }
     }
@@ -385,60 +369,63 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
         } else if (letter == 32) {
             glTranslatef(size/1000, 0, 0);
         } else {
-            if (letter <= 58) {                // 0..9, :, /, +
+            if (letter <= 58) {
+                // "0" .. "9", ":", "/", "+"
                 y1 = .59f;
-            } else if (letter >=97) {            // a..z
+            } else if (letter >=97) {
+                // "a" .. "z"
                 y1 = .335f;
-            } else {                    // A..Z
+            } else {
+                // "A" .. "Z"
                 y1 = .004f;
             }
             y2 = y1 + .25f;
 
             switch(letter) {
-                case 34:  x1 = 0.435f; w = 0.0170f; break;        // "
-                case 36:  x1 = 0.600f; w = 0.0285f; break;        // $
+                case 34:  x1 = 0.435f; w = 0.0170f; break;            // "
+                case 36:  x1 = 0.600f; w = 0.0285f; break;            // $
                 case 43:  x1 = 0.558f; w = 0.0200f; wy = .03f; break; // +
                 case 45:  x1 = 0.509f; w = 0.0161f; wy = .03f; break; // -
-                case 46:  x1 = 0.480f; w = 0.0120f; break;        // .
-                case 47:  x1 = 0.384f; w = 0.0174f; break;        // /
-                case 48:  x1 = 0.300f; w = 0.0320f; break;        // 0
-                case 49:  x1 = 0.008f; w = 0.0130f; break;        // 1
-                case 50:  x1 = 0.026f; w = 0.0274f; break;        // 2
-                case 51:  x1 = 0.062f; w = 0.0255f; break;        // 3
-                case 52:  x1 = 0.093f; w = 0.0320f; break;        // 4
-                case 53:  x1 = 0.126f; w = 0.0286f; break;        // 5
-                case 54:  x1 = 0.159f; w = 0.0305f; break;        // 6
-                case 55:  x1 = 0.196f; w = 0.0230f; break;        // 7
-                case 56:  x1 = 0.226f; w = 0.0320f; break;        // 8
-                case 57:  x1 = 0.264f; w = 0.0310f; break;        // 9
+                case 46:  x1 = 0.480f; w = 0.0120f; break;            // .
+                case 47:  x1 = 0.384f; w = 0.0174f; break;            // /
+                case 48:  x1 = 0.300f; w = 0.0320f; break;            // 0
+                case 49:  x1 = 0.008f; w = 0.0130f; break;            // 1
+                case 50:  x1 = 0.026f; w = 0.0274f; break;            // 2
+                case 51:  x1 = 0.062f; w = 0.0255f; break;            // 3
+                case 52:  x1 = 0.093f; w = 0.0320f; break;            // 4
+                case 53:  x1 = 0.126f; w = 0.0286f; break;            // 5
+                case 54:  x1 = 0.159f; w = 0.0305f; break;            // 6
+                case 55:  x1 = 0.196f; w = 0.0230f; break;            // 7
+                case 56:  x1 = 0.226f; w = 0.0320f; break;            // 8
+                case 57:  x1 = 0.264f; w = 0.0310f; break;            // 9
                 case 58:  x1 = 0.495f; w = 0.0120f; wy = .06f; break; // :
-                case 65:  x1 = 0.006f; w = 0.0415f; break;        // A
-                case 66:  x1 = 0.050f; w = 0.0310f; break;        // B
-                case 67:  x1 = 0.086f; w = 0.0285f; break;        // C
-                case 68:  x1 = 0.121f; w = 0.0370f; break;        // D
-                case 69:  x1 = 0.163f; w = 0.0278f; break;        // E
-                case 70:  x1 = 0.195f; w = 0.0266f; break;        // F
-                case 71:  x1 = 0.230f; w = 0.0335f; break;        // G
-                case 72:  x1 = 0.270f; w = 0.0342f; break;        // H
-                case 73:  x1 = 0.308f; w = 0.0066f; break;        // I
-                case 74:  x1 = 0.320f; w = 0.0200f; break;        // J
-                case 75:  x1 = 0.340f; w = 0.0325f; break;        // K
-                case 76:  x1 = 0.382f; w = 0.0274f; break;        // L
-                case 77:  x1 = 0.413f; w = 0.0418f; break;        // M
-                case 78:  x1 = 0.460f; w = 0.0353f; break;        // N
-                case 79:  x1 = 0.500f; w = 0.0362f; break;        // O
-                case 80:  x1 = 0.540f; w = 0.0302f; break;        // P
-                case 81:  x1 = 0.576f; w = 0.0364f; break;        // Q
-                case 82:  x1 = 0.617f; w = 0.0316f; break;        // R
-                case 83:  x1 = 0.654f; w = 0.0364f; break;        // S
-                case 84:  x1 = 0.694f; w = 0.0322f; break;        // T
-                case 85:  x1 = 0.730f; w = 0.0356f; break;        // U
-                case 86:  x1 = 0.768f; w = 0.0410f; break;        // V
-                case 87:  x1 = 0.812f; w = 0.0555f; break;        // W
-                case 88:  x1 = 0.870f; w = 0.0380f; break;        // X
-                case 89:  x1 = 0.910f; w = 0.0420f; break;        // Y
-                case 90:  x1 = 0.954f; w = 0.0376f; break;        // Z
-                case 120: x1 = 0.738f; w = 0.0295f; break;        // x
+                case 65:  x1 = 0.006f; w = 0.0415f; break;            // A
+                case 66:  x1 = 0.050f; w = 0.0310f; break;            // B
+                case 67:  x1 = 0.086f; w = 0.0285f; break;            // C
+                case 68:  x1 = 0.121f; w = 0.0370f; break;            // D
+                case 69:  x1 = 0.163f; w = 0.0278f; break;            // E
+                case 70:  x1 = 0.195f; w = 0.0266f; break;            // F
+                case 71:  x1 = 0.230f; w = 0.0335f; break;            // G
+                case 72:  x1 = 0.270f; w = 0.0342f; break;            // H
+                case 73:  x1 = 0.308f; w = 0.0066f; break;            // I
+                case 74:  x1 = 0.320f; w = 0.0200f; break;            // J
+                case 75:  x1 = 0.340f; w = 0.0325f; break;            // K
+                case 76:  x1 = 0.382f; w = 0.0274f; break;            // L
+                case 77:  x1 = 0.413f; w = 0.0418f; break;            // M
+                case 78:  x1 = 0.460f; w = 0.0353f; break;            // N
+                case 79:  x1 = 0.500f; w = 0.0362f; break;            // O
+                case 80:  x1 = 0.540f; w = 0.0302f; break;            // P
+                case 81:  x1 = 0.576f; w = 0.0364f; break;            // Q
+                case 82:  x1 = 0.617f; w = 0.0316f; break;            // R
+                case 83:  x1 = 0.654f; w = 0.0364f; break;            // S
+                case 84:  x1 = 0.694f; w = 0.0322f; break;            // T
+                case 85:  x1 = 0.730f; w = 0.0356f; break;            // U
+                case 86:  x1 = 0.768f; w = 0.0410f; break;            // V
+                case 87:  x1 = 0.812f; w = 0.0555f; break;            // W
+                case 88:  x1 = 0.870f; w = 0.0380f; break;            // X
+                case 89:  x1 = 0.910f; w = 0.0420f; break;            // Y
+                case 90:  x1 = 0.954f; w = 0.0376f; break;            // Z
+                case 120: x1 = 0.738f; w = 0.0295f; break;            // x
             }
 
             if ((lastletter == 84) && (letter == 65)) {
@@ -468,6 +455,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
 
         lastletter = letter;
      }
+
      glPopMatrix();
 }
 
@@ -476,7 +464,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
  */
 void Scene::drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
 {
-    drawText(text, (-5.97f*state.vid_cfg_aspect)+x, 5.69f-y, z, size, r, g, b, a);
+    drawText(text, x + (-5.97f * state.vid_cfg_aspect), -y + 5.69f, z, size, r, g, b, a);
 }
 
 /*
@@ -506,7 +494,9 @@ void Scene::drawFPS()
     glLoadIdentity();
 
     float x = -.45f;
+
     drawTextA("FPS:", x, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+
     if ((state.fps > .0f) && state.fps_ready) {
         sprintf(txt, "%d", int(round(state.fps)));
         drawTextA(txt, x+.65f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
@@ -523,11 +513,13 @@ void Scene::drawTitle()
     glLoadIdentity();
     glBindTexture(GL_TEXTURE_2D, state.texture[T_TITLE]);
     glPushMatrix();
+
     if (state.get() == STATE_MENU) {
         glTranslatef(0, 7.75f-((a*2)*(a*2)), -10.0f);
     } else {
         glTranslatef(-16.0f+((a*4)*(a*4)), 3.75f, -10.0f);
     }
+
     glBegin (GL_QUADS);
       glColor4f(a*.075f, a*.075f, a*.075f, a);
       glTexCoord2f (0, 0);
@@ -546,6 +538,7 @@ void Scene::drawTitle()
     glPopMatrix();
 
     glPushMatrix();
+
     if (state.get() == STATE_MENU) {
         sc = a*a*1.5f;
         glTranslatef(0, 2.65f, -30+(a*20));
@@ -553,6 +546,7 @@ void Scene::drawTitle()
         sc = 1.5f;
         glTranslatef(16.0f-(a*4)*(a*4), 2.65f, -10.02929f);
     }
+
     glColor4f(a, a, a, a);
     glBegin (GL_QUADS);
       glTexCoord2f (0, .6f);
@@ -605,10 +599,9 @@ void Scene::drawMenu(bool mouse_recheck)
                         state.log(msg);
 
                         if (loadLevel()) {
-                            sprintf(msg, "ok (%d objects)\n", state.lvl_entities);
-                            state.log(msg);
-
+                            state.log("ok\n");
                             state.set(STATE_GAME_START);
+                            player.setLife(1);
                         } else {
                             state.log("failed\n");
                         }
@@ -915,9 +908,9 @@ void Scene::drawMenu(bool mouse_recheck)
     }
 
     // draw player's ship
-    player->setPos(state.player, 4.3f, -1.0f, -3.0f);
-    player->setRot(state.player, 20.0f, 0, player->getRotZ(state.player) - (state.timer_adjustment * .2f));
-    player->draw(-1);
+    player.setPos(4.3f, -1.0f, -3.0f);
+    player.setRotation(112.5f, 0, player.getRotationZ() + (state.timer_adjustment * .2f));
+    player.draw(state);
 
     // draw menu background
     glLoadIdentity();
@@ -1121,25 +1114,6 @@ void Scene::drawScene()
 
         entity->draw(state);
     }
-
-   player->draw(state.player);
-/*
-    for (i=0; i<state.lvl_entities; i++) {
-        if (state.objects[i].state == OBJ_STATE_IDLE) {
-            continue;
-        }
-
-        switch(state.objects[i].id) {
-            case OBJ_PLAYER:
-                break;
-
-            case OBJ_POWERUP_1:
-                powerup->draw(i);
-                powerup->drawCrosshair(i, .3f, .55f, 1.0f);
-                break;
-        }
-    }
-*/
 }
 
 /*
@@ -1152,7 +1126,7 @@ void Scene::drawDisplay()
     float t;
     char msg[16];
 
-    switch(state.get()) {
+    switch (state.get()) {
 
         case STATE_GAME_START:
             t = (-6.413f * state.vid_cfg_aspect - state.hud_x) * .055f * state.timer_adjustment;
@@ -1172,13 +1146,13 @@ void Scene::drawDisplay()
             break;
 
         case STATE_GAME_LOOP:
-            if (state.objects[state.player].life <= 0) {
+            if (player.isAlive()) {
+                state.hud_x = -6.413f * state.vid_cfg_aspect;
+                state.hud_y = -4.905f;
+            } else {
                 state.hud_x -= state.timer_adjustment * .01f;
                 state.hud_y -= state.timer_adjustment * .01f;
                 alpha -= state.timer_adjustment * .01f;
-            } else {
-                state.hud_x = -6.413f * state.vid_cfg_aspect;
-                state.hud_y = -4.905f;
             }
             break;
 
@@ -1191,6 +1165,7 @@ void Scene::drawDisplay()
     glLoadIdentity();
 
     // lower right screen
+
     glBindTexture(GL_TEXTURE_2D, state.texture[T_MENU_1]);
     glPushMatrix();
     glTranslatef(-state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
@@ -1213,7 +1188,8 @@ void Scene::drawDisplay()
     glEnd();
 
     // money
-    sprintf(msg, "%d $", state.objects[state.player].money);
+
+    sprintf(msg, "%d $", player.getMoney());
     drawText(msg, -4.6f, -1.2f, 0, 130, 1.0f, 1.0f, .3f, alpha * .85f);
     glPopMatrix();
 
@@ -1240,10 +1216,11 @@ void Scene::drawDisplay()
     glPopMatrix();
 
     glLoadIdentity();
+    glPushMatrix();
 
     // life symbol
+
     glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_1]);
-    glPushMatrix();
     glTranslatef(state.hud_x + .5f - state.tilt_x*.01f, state.hud_y - .7f - state.tilt_y*.01f, -9.9f);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
@@ -1261,12 +1238,15 @@ void Scene::drawDisplay()
     glEnd();
 
     // life bar
-    s = int(50.0f / ( (float(player->shield_max + 1) / float(state.objects[state.player].life + 1)) ));
-    for (i=0; i<s; i++) {
-        drawText("I", .32f+.077f*i, -.15f, 0, 80, 1.0f, .4f, .2f, .85f*(1.0f-(.02f*((s+1)-i)))*alpha);
+
+    s = int(50.0f / ((float(player.getLifeMaximum() + 1) / float(player.getLife() + 1))));
+
+    for (i = 0; i < s; i++) {
+        drawText("I", .32f + .077f * i, -.15f, 0, 80, 1.0f, .4f, .2f, .85f * (1.0f - (.02f * ((s + 1) - i))) * alpha);
     }
 
     // energy symbol
+
     glBindTexture(GL_TEXTURE_2D, state.texture[T_HUD_2]);
     glTranslatef(0, -.375f, 0);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
@@ -1285,10 +1265,13 @@ void Scene::drawDisplay()
     glEnd();
 
     // energy bar
-    e = int(50.0f/(((float)player->energy_max+1) / (float(state.objects[state.player].energy+1))));
-    for (i=0; i<e; i++) {
-        drawText("I", .32f+.077f*i, -.11f, 0, 80, .2f, .65f, 1.0f, .85f*(1.0f-(.02f*((e+1)-i)))*alpha);
+
+    e = int(50.0f / (((float)player.getEnergyMaximum() + 1) / (float(player.getEnergy() + 1))));
+
+    for (i = 0; i < e; i++) {
+        drawText("I", .32f + .077f * i, -.11f, 0, 80, .2f, .65f, 1.0f, .85f * (1.0f - (.02f * ((e + 1) - i))) * alpha);
     }
+
     glPopMatrix();
 }
 
@@ -1300,9 +1283,7 @@ void Scene::drawMessages()
 
     glLoadIdentity();
     glPushMatrix();
-    glTranslatef(
-        .0f, -1.75f, -10.0f
-    );
+    glTranslatef(.0f, -1.75f, -10.0f);
 
     for (i=0; i<state.msg_num; i++) {
 
@@ -1358,8 +1339,6 @@ void Scene::drawMessages()
  */
 void Scene::moveScene()
 {
-    state.objects[state.player].target = -1;
-
     auto e = state.entities.begin();
 
     while (e != state.entities.end()) {
@@ -1403,164 +1382,6 @@ void Scene::moveScene()
 
         ++e;
     }
-
-    int i, j, dmg;
-    int sangle = 0;
-    float dx, dy, dz, da, dd, ix, iy, s;
-    float mx, my, mz, ox, oy, oz;
-
-    state.audio.updatePosition(state.objects[state.player].pos_x - state.cam_x);
-
-    for (i = 0; i < state.lvl_entities; i++) {
-
-        // activate idle object
-        if (state.objects[i].state == OBJ_STATE_IDLE) {
-            if (state.lvl_pos < state.objects[i].pos_z) {
-                continue;
-            }
-
-            state.objects[i].state = OBJ_STATE_ACTIVE;
-            state.objects[i].pos_z = -9999.0f;
-        }
-
-        // move object
-        switch (state.objects[i].id) {
-            case OBJ_PLAYER:
-                player->move(i);
-                break;
-
-            case OBJ_POWERUP_1:
-                powerup->move(i);
-                break;
-        }
-
-        // collision detection
-        switch (state.objects[i].type) {
-
-            // check player's ship against colliding objects
-            case OBJ_TYPE_COLLIDER:
-                // players's position in next frame
-                mx = state.objects[state.player].pos_x;
-                my = state.objects[state.player].pos_y;
-                mz = state.objects[state.player].pos_z - (state.objects[state.player].speed * state.timer_adjustment);
-
-                // object's position in next frame
-                ox = state.objects[i].pos_x;
-                oy = state.objects[i].pos_y;
-                oz = state.objects[i].pos_z + (state.objects[i].speed * state.timer_adjustment);
-
-                // distance between player and object in next frame
-                dx = fabs(mx - ox);
-                dy = fabs(my - oy);
-                dz = fabs(mz - oz);
-
-                // object's size
-                s = ((10000.0f + oz) * .0000625f) /
-                        isqrt( state.objects[i].scale_x * state.objects[i].scale_x +
-                               state.objects[i].scale_y * state.objects[i].scale_y +
-                               state.objects[i].scale_z * state.objects[i].scale_z );
-
-                if ( (dx < s) && (dy < s) && (dz < s * 1.75f) ) {
-
-                    // pick up powerup
-                    if (state.objects[i].id == OBJ_POWERUP_1) {
-                        state.explode(i);
-                        break;
-                    }
-
-                    static float lastcrash = state.timer - 201;
-                    if ( (state.timer - lastcrash) <= 200) break;
-                    lastcrash = state.timer;
-
-                    // calculate object's absolute distance and angle
-                    dd = 1.0f / isqrt(dx*dx + dy*dy);
-                    da = atan(dy/dx);
-
-                    // calculate horizontal crash impulse
-                    ix = (s/dd) * cos(da);
-                    if (ix > .65f) ix = .65f;
-                    if (state.objects[state.player].pos_x > state.objects[i].pos_x) {
-                        ix *= -1.0f;
-                    }
-
-                    // calculate vertical crash impulse
-                    iy = (s/dd) * sin(da);
-                    if (iy > .65f) iy = .65f;
-                    if (state.objects[state.player].pos_y > state.objects[i].pos_y) {
-                        iy *= -1.0f;
-                    }
-
-                    // transmit impulse to ship and tilt camera
-                    player->addSpeed(state.player, ix, iy, 0);
-                    player->tilt((fabs(ix)+fabs(iy)) * 15.0f );
-
-                    // calculate damage
-                    dmg = 25 + int(float(da)*.75f*float(state.objects[i].life));
-                    if (dmg > state.objects[i].life) dmg = state.objects[i].life;
-                    if (dmg == 0) break;
-
-                    // collision noise
-                    state.audio.playSample(7, 192, 180);
-                    if (state.objects[state.player].life <= 0) break;
-
-                    // damage ship & colliding object
-                    state.objects[i].life -= dmg;
-                    state.objects[state.player].life -= dmg;
-                    state.addMessage(dmg, MSG_DAMAGE);
-
-                    // colliding object destroyed?
-                    if (state.objects[i].life < 1) {
-                        state.entities.push_back(make_shared<Explosion>(
-                            OBJ_EXPLOSION_2,
-                            state.objects[i].pos_x,
-                            state.objects[i].pos_y,
-                            state.objects[i].pos_z + .2f
-                        ));
-
-                        state.entities.push_back(make_shared<Explosion>(
-                            OBJ_EXPLOSION_3,
-                            state.objects[i].pos_x,
-                            state.objects[i].pos_y,
-                            state.objects[i].pos_z
-                        ));
-
-                        state.entities.push_back(make_shared<Explosion>(
-                            OBJ_EXPLOSION_4,
-                            state.objects[i].pos_x,
-                            state.objects[i].pos_y,
-                            state.objects[i].pos_z + .1f
-                        ));
-
-                        state.explode(i);
-                    } else {
-                        // collision sparks
-                        state.entities.push_back(make_shared<Explosion>(
-                            OBJ_EXPLOSION_4,
-                            state.objects[i].pos_x + (state.objects[state.player].pos_x - state.objects[i].pos_x),
-                            state.objects[i].pos_y + (state.objects[state.player].pos_y - state.objects[i].pos_y),
-                            state.objects[i].pos_z + (state.objects[state.player].pos_z - state.objects[i].pos_z)
-                        ));
-                    }
-
-                    // player's ship was destroyed
-                    if (state.objects[state.player].life <= 0) {
-                        state.engine_boundary = false;
-
-                        state.audio.playSample(6, 200, 180);
-                        state.audio.playSample(7, 160, 180);
-                        state.audio.playSample(8, 255, 180);
-
-                        player->setSpin(state.player, ix, iy, 0);
-                        state.audio.stopSampleLoop(1000);
-                        state.audio.stopMusic(5000);
-                    }
-                }
-                break;
-
-        }
-    }
-
-    state.sort();
 }
 
 /*
@@ -1628,6 +1449,7 @@ void Scene::move()
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
             } else if (state.lvl_loaded) {
                 state.set(STATE_GAME_LOOP);
+                player.setLife(1);
             } else {
                 state.set(STATE_QUIT);
             }
@@ -1637,8 +1459,8 @@ void Scene::move()
             state.lvl_pos += state.timer_adjustment * 1.5f;
 
             if (
-                state.lvl_pos > state.lvl_length &&
-                state.objects[state.player].life > 0
+                player.isAlive() &&
+                state.lvl_pos > state.lvl_length
             ) {
                 state.set(STATE_GAME_NEXTLEVEL);
             }
@@ -1647,35 +1469,35 @@ void Scene::move()
             moveMessages();
 
             if (state.lvl_pos < 50) {
-                player->accelerateZ(state.player, 17.5f);
+                player.setAccelerationZ(17.5f);
             } else {
-                if (state.objects[state.player].life > 0) {
-                    player->accelerateZ(state.player, .0f);
+                if (player.isAlive()) {
+                    player.setAccelerationZ(0);
                 } else {
-                    player->accelerateZ(state.player, -4.0f);
+                    player.setAccelerationZ(-4.0f);
                 }
             }
 
             // update chasecam position
-            if (state.objects[state.player].life <= 0) {
+            if (player.isAlive() <= 0) {
+                if (state.cam_speed < .5f) {
+                    state.cam_speed += (.5f - state.cam_speed) * .01f * state.timer_adjustment;
+                }
+            } else {
                 if (state.cam_speed > .01f) {
                     state.cam_speed -= (state.cam_speed + .015f) * .015f * state.timer_adjustment;
                 } else {
                     state.cam_speed = 0;
                 }
 
-                if (state.objects[state.player].pos_z > .0f) {
+                if (player.getPosZ() > .0f) {
                     state.set(STATE_GAME_QUIT);
-                }
-            } else {
-                if (state.cam_speed < .5f) {
-                    state.cam_speed += (.5f - state.cam_speed) * .01f * state.timer_adjustment;
                 }
             }
 
             if (state.cam_speed > 0) {
-                state.cam_x += state.timer_adjustment * ( (state.objects[state.player].pos_x * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
-                state.cam_y += state.timer_adjustment * ( (state.objects[state.player].pos_y * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
+                state.cam_x += state.timer_adjustment * ( (player.getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
+                state.cam_y += state.timer_adjustment * ( (player.getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .175f;
             }
             break;
 
@@ -1689,22 +1511,27 @@ void Scene::move()
 
                 if (state.title_ypos > 80.0f) {
                     state.global_alpha = int(99.85f - (state.title_ypos - 80.0f) * 5.0f);
-                    player->accelerateZ(state.player, 350.0f);
+                    player.setAccelerationZ(350.0f);
                 } else {
                     state.global_alpha = 100;
-                    player->accelerateZ(state.player, state.title_ypos * state.title_ypos * -.0001f);
-                    player->tilt(state.title_ypos * .1f);
+                    state.tilt(state.title_ypos * .1f);
+                    player.setAccelerationZ(state.title_ypos * state.title_ypos * -.0001f);
                 }
 
                 if (state.stars_speed < 1.75f) {
                     state.stars_speed += (state.stars_speed - .1f) * .03f * state.timer_adjustment;
                 }
 
-                state.cam_x += state.timer_adjustment * ((state.objects[state.player].pos_x * state.cam_speed) - ((state.tilt_x * 2.0f + state.cam_x) * state.cam_speed)) * .15f;
+                state.cam_x += state.timer_adjustment * ((player.getPosX() * state.cam_speed) - ((state.tilt_x * 2.0f + state.cam_x) * state.cam_speed)) * .15f;
 
-                state.cam_y += state.timer_adjustment * ((state.objects[state.player].pos_y * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
+                state.cam_y += state.timer_adjustment * ((player.getPosY() * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
             } else {
                 state.set(STATE_MENU);
+
+                player.setRotation(0, 0, 250.0f);
+                player.setSpin(0, 0, 0);
+                player.setVelocity(0, 0, 0);
+                player.setAcceleration(0, 0, 0);
             }
             break;
 
@@ -1713,14 +1540,19 @@ void Scene::move()
             moveMessages();
 
             if (state.title_ypos < 99.85f) {
-                if (state.objects[state.player].life > 0) {
-                    player->accelerateZ(state.player, -25.0f);
+                if (player.isAlive()) {
+                    player.setAccelerationZ(-25.0f);
                 }
 
                 state.title_ypos += (100.1f - state.title_ypos) * state.timer_adjustment * .075f;
                 state.global_alpha = (int)(100.1f - state.title_ypos);
             } else {
                 state.set(STATE_MENU);
+
+                player.setRotation(0, 0, 250.0f);
+                player.setSpin(0, 0, 0);
+                player.setVelocity(0, 0, 0);
+                player.setAcceleration(0, 0, 0);
             }
             break;
     }
@@ -1738,8 +1570,8 @@ void Scene::draw()
         state.get() >  STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
     ) {
-        p_x = state.objects[state.player].pos_x;
-        p_y = state.objects[state.player].pos_y;
+        p_x = player.getPosX();
+        p_y = player.getPosY();
 
         if (p_x < -600.0f) p_x = -600.0f;
         if (p_x >  600.0f) p_x =  600.0f;
@@ -1751,14 +1583,14 @@ void Scene::draw()
 
     gluLookAt(
         p_x * -.01f + state.tilt_x * .4f,
-        p_y * -.01f + state.objects[state.player].s_y * 10.0f + state.tilt_y * .4f,
+        p_y * -.01f + player.getVelocityY() * 10.0f + state.tilt_y * .4f,
         200.0f,
 
-        state.objects[state.player].s_x * .5f,
+        player.getVelocityX() * .5f,
         .0f,
         -10000.0f,
 
-        state.objects[state.player].s_x * .05f,
+        player.getVelocityX() * .05f,
         -1.0f,
         .0f
     );

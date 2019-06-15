@@ -48,7 +48,6 @@ State::State()
     tilt_dx                 = .0f;
     tilt_dy                 = .0f;
 
-    lvl_entities            = 1;
     id                      = 0;
 }
 
@@ -75,37 +74,16 @@ void State::log(const char *msg)
 }
 
 /*
- * add new entity to scenery
+ * camera shaking ("tilt")
  */
-bool State::add(object_t *n_obj)
+void State::tilt(float t)
 {
-
-    if (lvl_entities == E_MAX_OBJECTS) {
-        return false;
-    } else {
-        memcpy(&objects[lvl_entities], n_obj, sizeof(object_t));
-        lvl_entities++;
-    }
-
-    return true;
-}
-
-/*
- * remove entity from scenery
- */
-void State::remove(int oid)
-{
-    lvl_entities--;
-
-    if (oid < lvl_entities) {
-        if (player == lvl_entities) player = oid;
-        memcpy(&objects[oid], &objects[lvl_entities], sizeof(object_t));
+    if (tilt_factor < fabs(t)) {
+        tilt_factor = fabs(t);
     }
 }
 
 /*
- * object destroyed, remove it and possibly spawn a new one
- */
 void State::explode(int oid)
 {
     int sangle;
@@ -139,7 +117,7 @@ void State::explode(int oid)
             // power up was picked up and turns into a non-colliding object
             audio.playSample(9, 255, sangle);
             addMessage(objects[oid].energy, MSG_ENERGY);
-            objects[player].powerup = objects[oid].id;
+            player.powerup(objects[oid].id);
             objects[player].energy += objects[oid].energy;
             objects[oid].type = OBJ_TYPE_SCENERY;
             objects[oid].state = OBJ_STATE_FADING;
@@ -151,35 +129,7 @@ void State::explode(int oid)
             remove(oid);
     }
 }
-
-/*
- * sort objects by Z position
- */
-void State::sort()
-{
-    int i, j;
-    object_t tmpobj;
-
-    for (i=0; i<lvl_entities-1; i++) {
-        if (objects[i].state == OBJ_STATE_IDLE) continue;
-
-        for (j=i+1; j<lvl_entities; j++) {
-            if (objects[j].state == OBJ_STATE_IDLE) continue;
-
-            if (objects[i].pos_z > objects[j].pos_z) {
-                if (i == player) {
-                    player = j;
-                } else if (j == player) {
-                    player = i;
-                }
-
-                tmpobj = objects[j];
-                objects[j] = objects[i];
-                objects[i] = tmpobj;
-            }
-        }
-    }
-}
+*/
 
 /*
  * add money/energy message
@@ -243,28 +193,7 @@ bool State::set(int s)
 
             title_ypos = .0f;
             global_alpha = 0;
-            player = 0;
             engine_restart = false;
-
-            objects[player].type  = OBJ_TYPE_PLAYER;
-            objects[player].state = OBJ_STATE_ACTIVE;
-            objects[player].id    = OBJ_PLAYER;
-
-            objects[player].rot_x = .0f;
-            objects[player].rot_y = .0f;
-            objects[player].rot_z = 250.0f;
-
-            objects[player].rsp_x = .0f;
-            objects[player].rsp_y = .0f;
-            objects[player].rsp_z = .0f;
-
-            objects[player].s_x   = .0f;
-            objects[player].s_y   = .0f;
-            objects[player].s_z   = .0f;
-
-            objects[player].a_x   = .0f;
-            objects[player].a_y   = .0f;
-            objects[player].a_z   = .0f;
 
             audio.playMusic(0, 1000);
             audio.stopSampleLoop(0);
@@ -293,12 +222,6 @@ bool State::set(int s)
             stars_warp = true;
             stars_speed = 1.75f;
 
-            objects[player].target = -1;
-            objects[player].life = 0;
-            objects[player].money = 0;
-            objects[player].energy = 0;
-            objects[player].powerup = OBJ_POWERUP_0;
-
             audio.stopMusic(1000);
 
             if (strlen(lvl_music)) {
@@ -314,34 +237,12 @@ bool State::set(int s)
             stars_rotation = false;
             stars_speed = .35f;
 
-            objects[player].target = -1;
-            objects[player].life = 1;
-            objects[player].speed = E_BASE_SPEED;
-
-            objects[player].pos_x = .0f;
-            objects[player].pos_y = -90.0f;
-            objects[player].pos_z = 50.0f;
-
-            objects[player].rot_x = .0f;
-            objects[player].rot_y = .0f;
-            objects[player].rot_z = .0f;
-
-            objects[player].rsp_x = .0f;
-            objects[player].rsp_y = .0f;
-            objects[player].rsp_z = .0f;
-
-            objects[player].s_x = .0f;
-            objects[player].s_y = .0f;
-            objects[player].s_z = .0f;
-
-            objects[player].a_x = .0f;
-            objects[player].a_y = .0f;
-            objects[player].a_z = .0f;
-
             cam_x = -250.0f;
             if ((rand() % 2) == 1) cam_x = -cam_x;
+
             cam_y = -400.0f;
             if ((rand() % 2) == 1) cam_y = -cam_y;
+
             cam_y_offset = 35.0f;
             cam_speed = .015f;
 

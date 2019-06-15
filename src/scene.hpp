@@ -18,16 +18,14 @@ using namespace std;
 #include "../config.h"
 
 #include "functions.hpp"
+#include "state.hpp"
 
 #include "entity.hpp"
 #include "asteroid.hpp"
 #include "cargo.hpp"
 #include "explosion.hpp"
-
-#include "object.hpp"
-#include "powerup.hpp"
 #include "player.hpp"
-#include "state.hpp"
+#include "powerup.hpp"
 
 class Scene
 {
@@ -35,17 +33,14 @@ class Scene
         Scene(State &s);
         ~Scene();
 
+        Player         player;
+
         void           load();
         void           move();
         void           draw();
 
-        Player*        player = nullptr;
-
     private:
         State&         state;
-
-        Object*        debris = nullptr;
-        Powerup*       powerup = nullptr;
 
         float          stars[8000][4];
 

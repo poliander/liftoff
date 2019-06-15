@@ -3,51 +3,61 @@
 
 #include <math.h>
 
-#include "object.hpp"
+#include "entity.hpp"
 #include "particles.hpp"
 #include "missile.hpp"
 
-class Player : public Object
+class Player : public Entity
 {
     public:
-        Player(State &s);
+        Player();
         ~Player();
 
-        int             acceleration;
+        void            move(State &s);
+        void            draw(State &s);
 
-        int             energy_max;
-        int             energy_reg;
+        void            shoot(State &s);
+        void            collect(unsigned short item);
 
-        int             shield_max;
-        int             shield_reg;
-        int             shield_reg_energy;
-        
-        unsigned short  gun_power;
+        unsigned short  getAcceleration();
+        unsigned short  getMoney();
 
-        void            move(int oid);
-        void            draw(int oid);
+        int             getEnergy();
+        int             getEnergyMaximum();
+        int             getEnergyRegeneration();
 
-        void            setTarget(int oid);
-        int             getTarget(int oid);
+        int             getLifeMaximum();
+        int             getLifeRegeneration();
+        int             getLifeRegenerationEnergy();
 
-        void            shoot();
-        void            tilt(float t);
+        bool            isTarget(shared_ptr<Entity> &e);
 
     private:
         ParticleEngine* particles;
 
+        unsigned short  powerup;
         unsigned short  powerup_booster_length;
         int             powerup_booster_timer;
         int             powerup_booster_ltimer;
 
-        // jet exhaust animation
-        float           j_l;
+        unsigned short  acceleration;
+        unsigned short  money;
+
+        int             energy;
+        int             energy_max;
+        int             energy_reg;
+
+        int             life_max;
+        int             life_reg;
+        int             life_reg_energy;
+
+        float           j_l;              // jet axhaust animation
         float           jt_l;
         float           jr;
 
-        // gun fire flashes
-        float           gun_flash[2];
+        float           gun_flash[2];     // gun flashes
         float           gun_flash_rot[2];
+        unsigned short  gun_power;
 };
 
 #endif

@@ -51,8 +51,9 @@
 #define T_EXPLOSION_3           13
 #define T_EXPLOSION_4           14
 #define T_BACKGROUND_1          15
-#define T_JET                   16
-#define T_GLOW_1                17
+#define T_JET                   9
+#define T_JET_EXHAUST           17
+#define T_GLOW_1                18
 
 // objects
 #define OBJ_PLAYER              101 // player
