@@ -1133,12 +1133,15 @@ void Scene::drawScene()
 
     std::sort(state.entities.begin(), state.entities.end(), Entity::sort);
 
-    for (auto &entity: state.entities) {
-        if (entity->isIdle()) {
-            continue;
+    auto e = state.entities.begin();
+
+    while (e != state.entities.end()) {
+        if ((*e)->isIdle() == false) {
+            (*e)->draw(state);
+            (*e)->drawCrosshair(state, *e);
         }
 
-        entity->draw(state);
+        ++e;
     }
 }
 
@@ -1367,6 +1370,8 @@ void Scene::moveScene()
 {
     auto e = state.entities.begin();
 
+    state.player->resetTarget();
+
     while (e != state.entities.end()) {
         if ((*e)->isIdle()) {
             if ((*e)->getPosZ() < state.lvl_pos) {
@@ -1386,7 +1391,7 @@ void Scene::moveScene()
         }
 
         if ((*e)->isFocusable()) {
-            //player->getTarget(*e);
+            state.player->checkTarget(state, *e);
         }
 
         if ((*e)->isCollider()) {

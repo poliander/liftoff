@@ -195,15 +195,22 @@ void Entity::setLife(int l)
     life = l;
 }
 
-bool Entity::isColliding(State &s, shared_ptr<Entity> e)
+float Entity::calcDistance2D(State &s, shared_ptr<Entity> e)
 {
-    float ds, r1, r2, x1, y1, z1, x2, y2, z2;
-    
-    r1 = e->getScale();
-    r1 = r1 * (10000.0f + p_z) * .0001f;
+    float x1, y1, x2, y2;
 
-    r2 = e->getScale();
-    r2 = r2 * (10000.0f + e->getPosZ()) * .0001f;
+    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.timer_adjustment * v_x) - s.cam_x);
+    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.timer_adjustment * v_y) - s.cam_y);
+
+    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.timer_adjustment * e->getVelocityX()) - s.cam_x);
+    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.timer_adjustment * e->getVelocityY()) - s.cam_y);
+
+    return (1.0f / isqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
+}
+
+float Entity::calcDistance3D(State &s, shared_ptr<Entity> e)
+{
+    float ds, x1, y1, z1, x2, y2, z2;
 
     x1 = E_RELATIVE_MOVEMENT * ((p_x + s.timer_adjustment * v_x) - s.cam_x);
     y1 = E_RELATIVE_MOVEMENT * ((p_y + s.timer_adjustment * v_y) - s.cam_y);
@@ -213,9 +220,17 @@ bool Entity::isColliding(State &s, shared_ptr<Entity> e)
     y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.timer_adjustment * e->getVelocityY()) - s.cam_y);
     z2 = e->getPosZ() + s.timer_adjustment * e->getVelocityZ();
 
-    ds = pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2);
+    return (1.0f / isqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2)));
+}
 
-    return ((1.0f / isqrt(ds)) < (r1 + r2));
+bool Entity::isColliding(State &s, shared_ptr<Entity> e)
+{
+    float r1, r2;
+
+    r1 = getScale()    * (10000.0f + p_z)          * .0001f;
+    r2 = e->getScale() * (10000.0f + e->getPosZ()) * .0001f;
+
+    return (calcDistance3D(s, e) < (r1 + r2));
 }
 
 void Entity::collide(State &s, shared_ptr<Entity> e)
@@ -251,3 +266,135 @@ void Entity::move(State &s)
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 }
+
+void Entity::resetTarget()
+{
+    target = nullptr;
+}
+
+void Entity::checkTarget(State &s, shared_ptr<Entity> e)
+{
+    if (calcDistance2D(s, e) < e->getScale()) {
+        if (target) {
+            if (calcDistance3D(s, e) < calcDistance3D(s, target)) {
+                target = e;
+            }
+        } else {
+            target = e;
+        }
+    }
+}
+
+bool Entity::hasTarget(shared_ptr<Entity> e)
+{
+    return e == target;
+}
+
+void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
+{
+    float a = float(s.global_alpha) * .01f;
+    float scale = 150.0f + ((p_z + 12500.0f) * .00005f);
+    float rot, da;
+
+    if (
+        isFocusable() == false ||
+        getPosZ() < -8000.0f
+    ) {
+        return;
+    }
+
+    // let cross-hair fade out when player dies
+    if (isAlive()) {
+        da = .85f;
+    } else {
+        if (da > .01f) {
+            da -= s.timer_adjustment * .01f;
+        } else {
+            da = .0f;
+        }
+    }
+
+    // let cross-hair fade out when too near
+    if (p_z > -1000.0f) {
+        da -= .001f * (1000.0f + p_z);
+    }
+
+    glLoadIdentity();
+
+    glRotatef(s.tilt_x * -.025f, 0, 1, 0);
+    glRotatef(s.tilt_y * -.025f, 1, 0, 0);
+
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_HUD_3]);
+
+    glTranslatef(
+        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+        (p_z)
+    );
+
+    glPushMatrix();
+
+    if (s.player->hasTarget(me)) {
+        // target locked (colored)
+
+        glColor4f(t_r, t_g, t_b, a * da);
+        glBegin (GL_QUADS);
+          glTexCoord2i(0, 0);
+          glVertex2f(-scale * .75f, -scale * .75f);
+
+          glTexCoord2i(1, 0);
+          glVertex2f(scale * .75f, -scale * .75f);
+
+          glTexCoord2i(1, 1);
+          glVertex2f(scale * .75f, scale * .75f);
+
+          glTexCoord2i(0, 1);
+          glVertex2f(-scale * .75f, scale * .75f);
+        glEnd();
+    } else {
+        // target not locked (white)
+
+        rot = (180.0f / M_PI) * atan(
+            (s.player->getPosY() - getPosY()) /
+            (s.player->getPosX() - getPosX())
+        );
+
+        if (s.player->getPosX() < getPosX()) {
+            rot += 180.0f;
+        }
+
+        glColor4f(1.0f, 1.0f, 1.0f, a * da);
+        glRotatef(rot, 0, 0, 1);
+        glBegin (GL_QUADS);
+          glTexCoord2f(.5f, 0);
+          glVertex2f(.8f, -scale * .75f);
+
+          glTexCoord2f(1.0f, 0);
+          glVertex2f(scale * .75f, -scale * .75f);
+
+          glTexCoord2f(1.0f, 1.0f);
+          glVertex2f(scale * .75f, scale * .75f);
+
+          glTexCoord2f(.5f, 1.0f);
+          glVertex2f(.8f, scale * .75f);
+        glEnd();
+        glRotatef(-rot, 0, 0, 1);
+    }
+
+    glBegin (GL_QUADS);
+      glTexCoord2i(0, 0);
+      glVertex2f(-scale, -scale);
+
+      glTexCoord2i(1, 0);
+      glVertex2f(scale, -scale);
+
+      glTexCoord2i(1, 1);
+      glVertex2f(scale, scale);
+
+      glTexCoord2i(0, 1);
+      glVertex2f(-scale, scale);
+    glEnd();
+
+    glPopMatrix();
+}
+

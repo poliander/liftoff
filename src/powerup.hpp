@@ -10,6 +10,8 @@ class Powerup : public Entity
         Powerup(float x, float y, float z);
         ~Powerup();
 
+        bool damage(State &s, int p);
+
         void move(State &s);
         void draw(State &s);
 

@@ -18,94 +18,109 @@ class Entity
         Entity();
         virtual ~Entity();
 
-        void           setType(unsigned short t);
+        void               setType(unsigned short t);
 
-        bool           isCollider();
-        bool           isFocusable();
-        bool           isIdle();
-        bool           isGone();
-        bool           isAlive();
-        bool           isColliding(State &s, shared_ptr<Entity> e);
+        bool               isCollider();
+        bool               isFocusable();
+        bool               isIdle();
+        bool               isGone();
+        bool               isAlive();
+        bool               isColliding(State &s, shared_ptr<Entity> e);
 
-        void           setPos(float x, float y, float z);
-        void           setPosX(float x);
-        void           setPosY(float y);
-        void           setPosZ(float z);
-        float          getPosX();
-        float          getPosY();
-        float          getPosZ();
+        void               setPos(float x, float y, float z);
+        void               setPosX(float x);
+        void               setPosY(float y);
+        void               setPosZ(float z);
+        float              getPosX();
+        float              getPosY();
+        float              getPosZ();
 
-        void           setVelocity(float x, float y, float z);
-        float          getVelocityX();
-        float          getVelocityY();
-        float          getVelocityZ();
+        void               setVelocity(float x, float y, float z);
+        float              getVelocityX();
+        float              getVelocityY();
+        float              getVelocityZ();
 
-        void           setScale(float x, float y, float z);
-        float          getScale();
-        float          getScaleX();
-        float          getScaleY();
-        float          getScaleZ();
+        void               setScale(float x, float y, float z);
+        float              getScale();
+        float              getScaleX();
+        float              getScaleY();
+        float              getScaleZ();
 
-        void           setAcceleration(float x, float y, float z);
-        void           setAccelerationX(float x);
-        void           setAccelerationY(float y);
-        void           setAccelerationZ(float z);
+        void               setAcceleration(float x, float y, float z);
+        void               setAccelerationX(float x);
+        void               setAccelerationY(float y);
+        void               setAccelerationZ(float z);
 
-        void           setRotation(float x, float y, float z);
-        float          getRotationX();
-        float          getRotationY();
-        float          getRotationZ();
+        void               setRotation(float x, float y, float z);
+        float              getRotationX();
+        float              getRotationY();
+        float              getRotationZ();
 
-        void           setSpin(float x, float y, float z);
+        void               setSpin(float x, float y, float z);
 
-        int            getLife();
-        void           setLife(int l);
+        int                getLife();
+        void               setLife(int l);
 
-        void           activate();
-        virtual bool   damage(State &s, int p);
-        virtual void   collide(State &s, shared_ptr<Entity> e);
+        void               activate();
+        virtual bool       damage(State &s, int p);
+        virtual void       collide(State &s, shared_ptr<Entity> e);
 
-        virtual void   move(State &s) = 0;
-        virtual void   draw(State &s) = 0;
+        virtual void       move(State &s) = 0;
+        virtual void       draw(State &s) = 0;
 
-        static bool    sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2);
+        void               drawCrosshair(State &s, shared_ptr<Entity> e);
+
+        void               resetTarget();
+        void               checkTarget(State &s, shared_ptr<Entity> e);
+        bool               hasTarget(shared_ptr<Entity> e);
+
+        static bool        sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2);
 
     protected:
-        unsigned short e_id;
-        unsigned short e_type;
-        unsigned short e_state;
+        unsigned short     e_id;
+        unsigned short     e_type;
+        unsigned short     e_state;
  
-        float          p_x;                  // position
-        float          p_y;
-        float          p_z;
+        float              p_x;                  // position
+        float              p_y;
+        float              p_z;
 
-        float          a_x = 0;              // acceleration
-        float          a_y = 0;
-        float          a_z = 0;
+        float              a_x = 0;              // acceleration
+        float              a_y = 0;
+        float              a_z = 0;
 
-        float          v_x = 0;              // velocity
-        float          v_y = 0;
-        float          v_z = 0;
+        float              v_x = 0;              // velocity
+        float              v_y = 0;
+        float              v_z = 0;
 
-        float          s_x = 1.0f;           // scale
-        float          s_y = 1.0f;
-        float          s_z = 1.0f;
+        float              s_x = 1.0f;           // scale
+        float              s_y = 1.0f;
+        float              s_z = 1.0f;
 
-        float          r_x = 0;              // rotation
-        float          r_y = 0;
-        float          r_z = 0;
+        float              r_x = 0;              // rotation
+        float              r_y = 0;
+        float              r_z = 0;
 
-        float          w_x = 0;              // spin
-        float          w_y = 0;
-        float          w_z = 0;
+        float              w_x = 0;              // spin
+        float              w_y = 0;
+        float              w_z = 0;
 
-        float          c_r = 1.0f;           // color
-        float          c_g = 1.0f;
-        float          c_b = 1.0f;
-        float          c_a = 1.0f;
+        float              c_r = 1.0f;           // color
+        float              c_g = 1.0f;
+        float              c_b = 1.0f;
+        float              c_a = 1.0f;
 
-        int            life;
-        bool           focusable = false;
+        float              t_r = 1.0f;           // crosshair color
+        float              t_g = .55f;
+        float              t_b = .3f;
+
+        shared_ptr<Entity> target;
+
+        int                life = 1;
+        bool               focusable = false;
+
+        float              calcDistance2D(State &s, shared_ptr<Entity> e);
+        float              calcDistance3D(State &s, shared_ptr<Entity> e);
 };
 
 #endif

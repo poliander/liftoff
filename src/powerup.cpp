@@ -6,6 +6,8 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     e_type = OBJ_TYPE_COLLIDER;
     e_state = OBJ_STATE_ACTIVE;
 
+    focusable = true;
+
     particles = new ParticleEngine();
     particles->setup(EMITTER_EXPLOSION, 15, .5f, .5f, .5f, .5f, 9.0f);
     particles->setColor(.6f, .75f, 1.0f);
@@ -16,11 +18,23 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     p_x = x;
     p_y = y;
     p_z = z;
+
+    s_x = 50.0f;
+    s_y = 50.0f;
+    s_z = 50.0f;
+
+    t_r = 0.3f;
+    t_g = 0.55f;
+    t_b = 1.0f;
 }
 
 Powerup::~Powerup()
 {
     delete particles;
+}
+
+bool Powerup::damage(State &s, int p)
+{
 }
 
 void Powerup::move(State &s)
