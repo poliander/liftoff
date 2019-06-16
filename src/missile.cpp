@@ -29,12 +29,14 @@ Missile::~Missile()
 
 void Missile::collide(State &s, shared_ptr<Entity> e)
 {
-    e->damage(s, power);
+    if (e->isCollectable() == false) {
+        e->damage(s, power);
 
-    s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
-    s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, p_x, p_y, p_z));
+        s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, p_x, p_y, p_z));
 
-    e_state = OBJ_STATE_GONE;
+        e_state = OBJ_STATE_GONE;
+    }
 }
 
 void Missile::move(State &s)

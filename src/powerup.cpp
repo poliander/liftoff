@@ -35,6 +35,7 @@ Powerup::~Powerup()
 
 bool Powerup::damage(State &s, int p)
 {
+    return false;
 }
 
 void Powerup::move(State &s)

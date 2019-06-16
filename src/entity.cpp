@@ -38,6 +38,11 @@ bool Entity::isAlive()
     return life > 0;
 }
 
+bool Entity::isCollectable()
+{
+    return e_id == OBJ_POWERUP_1;
+}
+
 void Entity::activate()
 {
     e_state = OBJ_STATE_ACTIVE;
@@ -289,7 +294,19 @@ void Entity::resetTarget()
 
 void Entity::checkTarget(State &s, shared_ptr<Entity> e)
 {
-    if (calcDistance2D(s, e) < e->getScale() * 2.0f) {
+    float ax, ay, hx, hy, dx, dy, dz;
+
+    dx = fabs(e->getPosX() - getPosX());
+    dy = fabs(e->getPosY() - getPosY());
+    dz = fabs(e->getPosZ());
+
+    hx = 1.0f / isqrt(pow(dz, 2) + pow(dx, 2));
+    hy = 1.0f / isqrt(pow(dz, 2) + pow(dy, 2));
+
+    ax = asin(dx / hx) * 180.0f / M_PI;
+    ay = asin(dy / hy) * 180.0f / M_PI;
+
+    if (ax < 1.0f && ay < 1.0f) {
         if (target) {
             if (calcDistance3D(s, e) < calcDistance3D(s, target)) {
                 target = e;

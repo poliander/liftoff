@@ -103,7 +103,7 @@ void Player::shoot(State &s)
 {
     static int m_alt = 0;
     static GLuint m_next_shot = s.timer;
-    float dx, dy, dz;
+    float ax, ay, dx, dy, dz, hx, hy;
     Sint16 angle;
 
     if (life <= 0) {
@@ -128,7 +128,7 @@ void Player::shoot(State &s)
     // left/right alteration, randomize gun flash
     m_alt = 1 - m_alt;
     gun_flash[m_alt] = 1.0f;
-    gun_flash_rot[m_alt] = float(rand()%360);
+    gun_flash_rot[m_alt] = float(rand() % 360);
 
     auto missile = make_shared<Missile>();
 
@@ -138,13 +138,16 @@ void Player::shoot(State &s)
         p_z - 175.0f
     );
 
-    if (target) {
-        dz = (getPosZ() - target->getPosZ()) * -.01f;
-        dx = (getPosX() - target->getPosX()) / dz;
-        dy = (getPosY() - target->getPosY()) / dz;
+    if (target && false == target->isCollectable()) {
+        dx = getPosX() - target->getPosX();
+        dy = getPosY() - target->getPosY();
+        dz = getPosZ() - target->getPosZ();
 
-        missile->setVelocityX(dx);
-        missile->setVelocityY(dy);
+        ax = dx / dz;
+        ay = dy / dz;
+
+        missile->setVelocityX(-ax * E_BASE_SPEED * 5.0f);
+        missile->setVelocityY(-ay * E_BASE_SPEED * 5.0f);
     }
 
     s.entities.push_back(missile);

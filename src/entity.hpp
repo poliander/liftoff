@@ -20,6 +20,7 @@ class Entity
 
         void               setType(unsigned short t);
 
+        bool               isCollectable();
         bool               isCollider();
         bool               isFocusable();
         bool               isIdle();
