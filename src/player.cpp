@@ -405,7 +405,10 @@ void Player::draw(State &s)
     float alpha, jlen;
     GLfloat lightpos[] = { 0, 0, 0, 1.0f };
 
-    if (s.get() > 10 && s.get() < 20) {
+    if (
+        s.get() >= STATE_GAME_LOOP &&
+        s.get() <= STATE_GAME_QUIT
+    ) {
         alpha = s.global_alpha * .01f;
         lightpos[0] = 100.0f;
         lightpos[1] = 1000.0f;
@@ -439,16 +442,22 @@ void Player::draw(State &s)
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightcol);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, col_diffuse);
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+
     glEnable(GL_LIGHT0);
 
-    if (s.get() <= 10 || s.get() >= 20) {
+    if (
+        s.get() <= STATE_GAME_START ||
+        s.get() >= STATE_GAME_QUIT
+    ) {
         lightpos[0] = -150.0f;
-        lightpos[1] = 300.0f;
+        lightpos[1] =  300.0f;
         lightpos[2] = -300.0f;
+
         glLightfv(GL_LIGHT1, GL_SPECULAR, col_specular);
         glLightfv(GL_LIGHT1, GL_AMBIENT, lightcol);
         glLightfv(GL_LIGHT1, GL_DIFFUSE, col_diffuse);
         glLightfv(GL_LIGHT1, GL_POSITION, lightpos);
+
         glEnable(GL_LIGHT1);
     }
 
@@ -460,7 +469,10 @@ void Player::draw(State &s)
 
     glPushMatrix();
 
-    if (s.get() > 10 && s.get() < 20) {
+    if (
+        s.get() >= STATE_GAME_LOOP &&
+        s.get() <= STATE_GAME_QUIT
+    ) {
         // ingame
          glTranslatef(
           ((p_x - s.cam_x) * E_RELATIVE_MOVEMENT) + s.tilt_x * .15f,
@@ -481,7 +493,10 @@ void Player::draw(State &s)
 
     glCallList(*s.models[OBJ_PLAYER]);
 
-    if (s.get() <= 10) {
+    if (
+        s.get() <= STATE_GAME_START ||
+        s.get() >= STATE_GAME_QUIT
+    ) {
         glDisable(GL_LIGHT1);
     }
 
@@ -539,7 +554,12 @@ void Player::draw(State &s)
     glDisable(GL_DEPTH_TEST);
 
     // jet
-    if ((s.get() > 10) && (s.get() < 20) && (life > 0)) {
+
+    if (
+        isAlive() &&
+        (s.get() >= STATE_GAME_LOOP) &&
+        (s.get() <= STATE_GAME_QUIT)
+    ) {
         glBindTexture(GL_TEXTURE_2D, *s.textures[T_JET]);
 
         if (s.get() == STATE_GAME_NEXTLEVEL) {
@@ -550,12 +570,12 @@ void Player::draw(State &s)
             particles->setScale(1.0f);
         }
 
-        // engine jets
+        // plasma
         particles->move(s);
         particles->draw(s, -4.25f, -.75f, .5f, .0f, -90.0f, -5.0f);
         particles->draw(s, -4.25f, .75f, .5f, .0f, -90.0f, 5.0f);
 
-        // exhaust textures
+        // exhausts
         glRotatef(90, 1, 0, 0);
         glRotatef(-90, 0, 1, 0);
         glTranslatef(0, .5f, 3.25f);
