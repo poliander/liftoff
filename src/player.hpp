@@ -31,8 +31,6 @@ class Player : public Entity
         int             getLifeRegeneration();
         int             getLifeRegenerationEnergy();
 
-        bool            isTarget(shared_ptr<Entity> &e);
-
     private:
         ParticleEngine* particles;
 

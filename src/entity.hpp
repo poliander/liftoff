@@ -36,6 +36,9 @@ class Entity
         float              getPosZ();
 
         void               setVelocity(float x, float y, float z);
+        void               setVelocityX(float x);
+        void               setVelocityY(float y);
+        void               setVelocityZ(float z);
         float              getVelocityX();
         float              getVelocityY();
         float              getVelocityZ();

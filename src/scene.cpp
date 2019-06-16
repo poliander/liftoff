@@ -1383,15 +1383,15 @@ void Scene::moveScene()
             }
         }
 
+        if ((*e)->isFocusable()) {
+            state.player->checkTarget(state, *e);
+        }
+
         (*e)->move(state);
 
         if ((*e)->isGone()) {
             e = state.entities.erase(e);
             continue;
-        }
-
-        if ((*e)->isFocusable()) {
-            state.player->checkTarget(state, *e);
         }
 
         if ((*e)->isCollider()) {

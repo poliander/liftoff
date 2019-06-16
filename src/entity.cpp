@@ -92,6 +92,21 @@ void Entity::setVelocity(float x, float y, float z)
     v_z = z;
 }
 
+void Entity::setVelocityX(float x)
+{
+    v_x = x;
+}
+
+void Entity::setVelocityY(float y)
+{
+    v_y = y;
+}
+
+void Entity::setVelocityZ(float z)
+{
+    v_z = z;
+}
+
 float Entity::getVelocityX()
 {
     return v_x;
@@ -116,7 +131,7 @@ void Entity::setScale(float x, float y, float z)
 
 float Entity::getScale()
 {
-    return .333f * (s_x +  s_y + s_z);
+    return (s_x +  s_y + s_z) * .333f;
 }
 
 float Entity::getScaleX()
@@ -274,7 +289,7 @@ void Entity::resetTarget()
 
 void Entity::checkTarget(State &s, shared_ptr<Entity> e)
 {
-    if (calcDistance2D(s, e) < e->getScale()) {
+    if (calcDistance2D(s, e) < e->getScale() * 2.0f) {
         if (target) {
             if (calcDistance3D(s, e) < calcDistance3D(s, target)) {
                 target = e;

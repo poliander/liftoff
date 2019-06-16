@@ -88,33 +88,6 @@ int Player::getLifeRegenerationEnergy()
     return life_reg_energy;
 }
 
-bool Player::isTarget(shared_ptr<Entity> &e)
-{
-    bool target = false;
-
-/*
-    if (
-        (p_x < (e->getPosX() + (e->getScale() * 1.25f))) &&
-        (p_x > (e->getPosX() - (e->getScale() * 1.25f))) &&
-        (p_y < (e->getPosY() + (e->getScale() * 1.25f))) &&
-        (p_y > (e->getPosY() - (e->getScale() * 1.25f)))
-    ) {
-        if (
-            state.objects[state.player].target != -1 &&
-            state.objects[oid].pos_z > state.objects[state.objects[state.player].target].pos_z
-        ) {
-            state.objects[state.player].target = oid;
-        } else if (state.objects[state.player].target == -1) {
-            state.objects[state.player].target = oid;
-        }
-    } else if (oid == state.objects[state.player].target) {
-        state.objects[state.player].target = -1;
-    }
-*/
-
-    return target;
-}
-
 /**
  * player receives item
  */
@@ -130,7 +103,7 @@ void Player::shoot(State &s)
 {
     static int m_alt = 0;
     static GLuint m_next_shot = s.timer;
-    float drift_x = .0f, drift_y = .0f, delta_z;
+    float dx, dy, dz;
     Sint16 angle;
 
     if (life <= 0) {
@@ -165,7 +138,17 @@ void Player::shoot(State &s)
         p_z - 175.0f
     );
 
+    if (target) {
+        dz = (getPosZ() - target->getPosZ()) * -.01f;
+        dx = (getPosX() - target->getPosX()) / dz;
+        dy = (getPosY() - target->getPosY()) / dz;
+
+        missile->setVelocityX(dx);
+        missile->setVelocityY(dy);
+    }
+
     s.entities.push_back(missile);
+
 
     angle = int(.5f * (p_x - s.cam_x));
 

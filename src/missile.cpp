@@ -20,7 +20,7 @@ Missile::Missile() : Entity()
     s_y = 2.25f;
     s_z = 2.25f;
 
-    power = 15;
+    power = 20;
 }
 
 Missile::~Missile()
