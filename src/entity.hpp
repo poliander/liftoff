@@ -68,6 +68,7 @@ class Entity
         void               setLife(int l);
 
         void               addMoney(unsigned short m);
+        void               setMoney(unsigned short m);
         unsigned short     getMoney();
 
         void               activate();

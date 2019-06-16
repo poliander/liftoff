@@ -628,6 +628,7 @@ void Scene::drawMenu(bool mouse_recheck)
 
                             player->setEnergy(1);
                             player->setLife(1);
+                            player->setMoney(0);
                         } else {
                             state.log("failed\n");
                         }
