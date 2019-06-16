@@ -21,7 +21,7 @@ Player::Player() : Entity()
 
     // energy capacity and regeneration speed
     energy_max = 1500;
-    energy_reg = 20;
+    energy_reg = 10;
 
     // maximum life, life regeneration and regeneration energy draw
     life_max = 250;
@@ -88,17 +88,11 @@ int Player::getLifeRegenerationEnergy()
     return life_reg_energy;
 }
 
-/**
- * player receives item
- */
-void Player::collect(unsigned short item)
+void Player::collect(unsigned short e_id)
 {
-    powerup = item;
+    powerup = e_id;
 }
 
-/*
- * fire primary weapons
- */
 void Player::shoot(State &s)
 {
     static int m_alt = 0;
@@ -333,7 +327,13 @@ void Player::move(State &s)
     // power-ups
     switch (powerup) {
         case OBJ_POWERUP_0:
-            powerup_booster_length += 20;
+            powerup_booster_length += 25;
+            powerup_booster_ltimer = SDL_GetTicks();
+            powerup = 0;
+            break;
+
+        case OBJ_POWERUP_1:
+            powerup_booster_length += 10;
             powerup_booster_ltimer = SDL_GetTicks();
             powerup = 0;
             break;

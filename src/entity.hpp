@@ -24,8 +24,10 @@ class Entity
         bool               isCollider();
         bool               isFocusable();
         bool               isIdle();
+        bool               isFading();
         bool               isGone();
         bool               isAlive();
+        bool               isPlayer();
         bool               isColliding(State &s, shared_ptr<Entity> e);
 
         void               setPos(float x, float y, float z);
@@ -67,6 +69,7 @@ class Entity
 
         void               activate();
         virtual bool       damage(State &s, int p);
+        virtual void       collect(unsigned short e_id);
         virtual void       collide(State &s, shared_ptr<Entity> e);
 
         virtual void       move(State &s) = 0;

@@ -23,6 +23,11 @@ bool Entity::isIdle()
     return e_state == OBJ_STATE_IDLE;
 }
 
+bool Entity::isFading()
+{
+    return e_state == OBJ_STATE_FADING;
+}
+
 bool Entity::isGone()
 {
     return e_state == OBJ_STATE_GONE;
@@ -36,6 +41,11 @@ bool Entity::isFocusable()
 bool Entity::isAlive()
 {
     return life > 0;
+}
+
+bool Entity::isPlayer()
+{
+    return e_id == OBJ_PLAYER;
 }
 
 bool Entity::isCollectable()
@@ -247,8 +257,8 @@ bool Entity::isColliding(State &s, shared_ptr<Entity> e)
 {
     float r1, r2;
 
-    r1 = getScale()    * (10000.0f + p_z)          * .0001f;
-    r2 = e->getScale() * (10000.0f + e->getPosZ()) * .0001f;
+    r1 = getScale()    * (10000.0f + p_z)          * .0002f;
+    r2 = e->getScale() * (10000.0f + e->getPosZ()) * .0002f;
 
     return (calcDistance3D(s, e) < (r1 + r2));
 }
@@ -257,15 +267,23 @@ void Entity::collide(State &s, shared_ptr<Entity> e)
 {
 }
 
+void Entity::collect(unsigned short e_id)
+{
+}
+
 bool Entity::damage(State &s, int p)
 {
-    life -= p;
+    if (isAlive()) {
+        life -= p;
 
-    if (life <= 0) {
-        e_state = OBJ_STATE_GONE;
+        if (life <= 0) {
+            e_state = OBJ_STATE_GONE;
+        }
+
+        return true;
     }
 
-    return (false == isAlive());
+    return false;
 }
 
 void Entity::move(State &s)
@@ -330,6 +348,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     if (
         isFocusable() == false ||
+        isFading() ||
         getPosZ() < -8000.0f
     ) {
         return;

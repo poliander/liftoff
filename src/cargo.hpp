@@ -18,6 +18,7 @@ class Cargo : public Entity
 
     private:
         float counter = 0;
+        bool  yield   = false;
 };
 
 #endif

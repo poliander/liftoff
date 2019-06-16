@@ -29,9 +29,7 @@ Missile::~Missile()
 
 void Missile::collide(State &s, shared_ptr<Entity> e)
 {
-    if (e->isCollectable() == false) {
-        e->damage(s, power);
-
+    if (e->damage(s, power)) {
         s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, p_x, p_y, p_z));
 

@@ -17,16 +17,19 @@ Cargo::~Cargo()
 
 bool Cargo::damage(State &s, int p)
 {
-    bool destroyed = Entity::damage(s, p);
+    bool damaged = Entity::damage(s, p);
 
-    if (destroyed) {
+    if (damaged && e_state == OBJ_STATE_GONE && yield == false) {
         s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
-        s.entities.push_back(make_shared<Powerup>(p_x, p_y, p_z));
+
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z));
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_5, p_x, p_y, p_z));
+        s.entities.push_back(make_shared<Powerup>(p_x, p_y, p_z));
+
+        yield = true;
     }
 
-    return destroyed;
+    return damaged;
 }
 
 void Cargo::move(State &s)

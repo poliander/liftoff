@@ -13,15 +13,15 @@ Asteroid::~Asteroid()
 
 bool Asteroid::damage(State &s, int p)
 {
-    bool destroyed = Entity::damage(s, p);
+    bool damaged = Entity::damage(s, p);
 
-    if (destroyed) {
+    if (damaged && !isAlive()) {
         s.audio.playSample(SFX_EXPLOSION_2, 192, 180);
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_2, p_x, p_y, p_z));
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z - 15.0f));
     }
 
-    return destroyed;
+    return damaged;
 }
 
 void Asteroid::move(State &s)

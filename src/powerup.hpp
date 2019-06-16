@@ -11,6 +11,7 @@ class Powerup : public Entity
         ~Powerup();
 
         bool damage(State &s, int p);
+        void collide(State &s, shared_ptr<Entity> e);
 
         void move(State &s);
         void draw(State &s);
