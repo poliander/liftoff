@@ -9,6 +9,7 @@ Cargo::Cargo() : Entity()
     e_state = OBJ_STATE_IDLE;
 
     focusable = true;
+    money = 50;
 }
 
 Cargo::~Cargo()
@@ -21,6 +22,9 @@ bool Cargo::damage(State &s, int p)
 
     if (damaged && e_state == OBJ_STATE_GONE && yield == false) {
         s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
+
+        s.addMessage(money, MSG_MONEY);
+        s.player->addMoney(money);
 
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z));
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_5, p_x, p_y, p_z));

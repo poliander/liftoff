@@ -8,6 +8,7 @@ __top_builddir__liftoff_SOURCES = \
     texture.cpp \
     model.cpp \
     entity.cpp \
+    debris.cpp \
     asteroid.cpp \
     missile.cpp \
     state.cpp \

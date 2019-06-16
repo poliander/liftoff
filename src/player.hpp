@@ -19,7 +19,6 @@ class Player : public Entity
         void            collect(unsigned short e_id);
 
         unsigned short  getAcceleration();
-        unsigned short  getMoney();
 
         void            setEnergy(int e);
         int             getEnergy();
@@ -39,7 +38,6 @@ class Player : public Entity
         int             powerup_booster_ltimer;
 
         unsigned short  acceleration;
-        unsigned short  money;
 
         int             energy;
         int             energy_max;

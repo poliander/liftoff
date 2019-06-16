@@ -1368,9 +1368,16 @@ void Scene::drawMessages()
  */
 void Scene::moveScene()
 {
-    auto e = state.entities.begin();
+    static GLuint nextdebris = state.timer;
+
+    if ((state.timer > nextdebris) && (state.lvl_pos < float(state.lvl_length - 1000))) {
+        nextdebris = state.timer + 250 + rand() % 250;
+        state.entities.push_back(make_shared<Debris>());
+    }
 
     state.player->resetTarget();
+
+    auto e = state.entities.begin();
 
     while (e != state.entities.end()) {
         if ((*e)->isIdle()) {

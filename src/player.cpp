@@ -48,11 +48,6 @@ unsigned short Player::getAcceleration()
     return acceleration;
 }
 
-unsigned short Player::getMoney()
-{
-    return money;
-}
-
 void Player::setEnergy(int e)
 {
     energy = e;

@@ -4,8 +4,6 @@
 #include "entity.hpp"
 #include "explosion.hpp"
 
-class State;
-
 class Asteroid : public Entity
 {
     public:

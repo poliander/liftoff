@@ -215,6 +215,16 @@ void Entity::setSpin(float x, float y, float z)
     w_z = z;
 }
 
+unsigned short Entity::getMoney()
+{
+    return money;
+}
+
+void Entity::addMoney(unsigned short m)
+{
+    money += m;
+}
+
 int Entity::getLife()
 {
     return life;

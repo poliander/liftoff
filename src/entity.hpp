@@ -67,12 +67,15 @@ class Entity
         int                getLife();
         void               setLife(int l);
 
+        void               addMoney(unsigned short m);
+        unsigned short     getMoney();
+
         void               activate();
         virtual bool       damage(State &s, int p);
         virtual void       collect(unsigned short e_id);
         virtual void       collide(State &s, shared_ptr<Entity> e);
 
-        virtual void       move(State &s) = 0;
+        virtual void       move(State &s);
         virtual void       draw(State &s) = 0;
 
         void               drawCrosshair(State &s, shared_ptr<Entity> e);
@@ -123,6 +126,7 @@ class Entity
 
         shared_ptr<Entity> target;
 
+        unsigned short     money = 0;
         int                life = 1;
         bool               focusable = false;
 

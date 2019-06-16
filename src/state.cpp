@@ -84,54 +84,6 @@ void State::tilt(float t)
 }
 
 /*
-void State::explode(int oid)
-{
-    int sangle;
-
-    sangle = int(objects[oid].pos_x / 2.8f);
-    if (sangle < 0) sangle += 360;
-
-    if (objects[player].target == oid) {
-        objects[player].target = -1;
-    }
-
-    if (objects[oid].money > 0) {
-        addMessage(objects[oid].money, MSG_MONEY);
-        objects[player].money += objects[oid].money;
-    }
-
-    switch (objects[oid].id) {
-        case OBJ_CARGO_1:
-            // cargo pod explodes and leaves a power up
-            audio.playSample(5, 192, sangle);
-            objects[oid].id        = OBJ_POWERUP_1;
-            objects[oid].energy    = 250 + rand() % 250;
-            objects[oid].life      = 999;
-            objects[oid].life_time = 500;
-            objects[oid].life_max  = 0;
-            objects[oid].cnt       = 0;
-            objects[oid].money     = 0;
-            return;
-
-        case OBJ_POWERUP_1:
-            // power up was picked up and turns into a non-colliding object
-            audio.playSample(9, 255, sangle);
-            addMessage(objects[oid].energy, MSG_ENERGY);
-            player.powerup(objects[oid].id);
-            objects[player].energy += objects[oid].energy;
-            objects[oid].type = OBJ_TYPE_SCENERY;
-            objects[oid].state = OBJ_STATE_FADING;
-            return;
-
-        default:
-            // explosion
-            audio.playSample(6, 192, sangle);
-            remove(oid);
-    }
-}
-*/
-
-/*
  * add money/energy message
  */
 void State::addMessage(int value, unsigned short type)

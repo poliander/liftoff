@@ -24,6 +24,7 @@ using namespace std;
 #include "entity.hpp"
 #include "asteroid.hpp"
 #include "cargo.hpp"
+#include "debris.hpp"
 #include "explosion.hpp"
 #include "player.hpp"
 #include "powerup.hpp"

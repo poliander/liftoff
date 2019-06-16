@@ -45,7 +45,6 @@ void Powerup::collide(State &s, shared_ptr<Entity> e)
         s.audio.playSample(SFX_POWERUP_1, 192, 180);
         e->collect(e_id);
         e_state = OBJ_STATE_FADING;
-        particles->setContinuous(false);
         v_z = -.5f * E_BASE_SPEED;
     }
 }
@@ -57,10 +56,10 @@ void Powerup::move(State &s)
     particles->move(s);
 
     if (e_state == OBJ_STATE_FADING) {
-        counter += s.timer_adjustment;
+        counter += s.timer_adjustment * .1f;
     }
 
-    if (p_z > 100.0f || counter > 10.0f) {
+    if (p_z > 100.0f || counter > 1.5f) {
         e_state = OBJ_STATE_GONE;
     }
 }
@@ -77,8 +76,9 @@ void Powerup::draw(State &s)
     glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-    particles->setSize (10.0f - counter);
-    particles->setScale(10.0f + counter);
+    particles->setSize (10.0f / (1.0f + counter * 5.0f));
+    particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
+    particles->setScale(10.0f + (7.5f * sin(counter * M_PI)));
     particles->draw(s,
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
         (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
