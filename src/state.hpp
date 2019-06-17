@@ -75,7 +75,7 @@ class State
         unsigned short  vid_cfg_multisampling;
 
         // money/damage messages
-        unsigned short  msg_num;
+        unsigned short  msg_num = 0;
         message_t       msg[E_MAX_MESSAGES];
 
         // game menu

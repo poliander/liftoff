@@ -76,6 +76,10 @@ bool Model::loadFirstPass(FILE *fp)
     int v, t, n;
     char buf[256];
 
+    mesh.num_verts = 0;
+    mesh.num_texCoords = 0;
+    mesh.num_normals = 0;
+
     while (!feof(fp)) {
         fgets (buf, sizeof (buf), fp);
 

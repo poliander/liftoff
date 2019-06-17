@@ -991,8 +991,6 @@ void Scene::drawMenu(bool mouse_recheck)
             glEnd();
             glPopMatrix();
         }
-
-        free(mtxt[i]);
     }
 }
 
