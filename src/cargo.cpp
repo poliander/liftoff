@@ -1,5 +1,3 @@
-#include <math.h>
-
 #include "cargo.hpp"
 
 Cargo::Cargo() : Entity()

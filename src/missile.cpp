@@ -1,5 +1,4 @@
 #include "missile.hpp"
-#include "explosion.hpp"
 
 Missile::Missile() : Entity()
 {

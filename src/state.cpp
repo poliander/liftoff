@@ -1,5 +1,3 @@
-#include <unistd.h>
-
 #include "state.hpp"
 
 State::State()

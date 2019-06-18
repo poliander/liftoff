@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.hpp"
+#include "explosion.hpp"
 
 class State;
 
