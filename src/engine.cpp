@@ -16,22 +16,15 @@ Engine::~Engine()
 bool Engine::loadConfiguration()
 {
     bool result = false;
-    char cfgdir[255], cwd[255];
+    char cwd[255];
     FILE *fp = NULL;
 
     getcwd(cwd, 255);
 
-    // look for game resources in "./resource"
-    if (chdir(state.engine_datadir) != 0) {
-
-        // use path defined at compile-time
-        sprintf(cfgdir, "%s/games/liftoff", GAME_DATA);
-
-        if (chdir(cfgdir) == 0) {
-            sprintf(state.engine_datadir, "%s", cfgdir);
-        } else {
-            sprintf(state.engine_datadir, "%s", "");
-        }
+    if (chdir(DEFAULT_GAMEDATA) == 0) {
+        sprintf(state.engine_datadir, "%s", DEFAULT_GAMEDATA);
+    } else {
+        sprintf(state.engine_datadir, "%s", GAMEDATA);
     }
 
     chdir(cwd);

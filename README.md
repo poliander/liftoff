@@ -29,7 +29,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 ### Compilation
 
 ```
-./configure && make
+./configure && make && sudo make install
 ```
  
 Assumed you have a working cross-compiling environment available (congratulations), then creating win32 executables is possible:
@@ -42,7 +42,7 @@ Assumed you have a working cross-compiling environment available (congratulation
 
 ```liftoff -d```
 
-Write debug information to "debug.log"
+Write debug information to "debug.log" (Windows only)
 
 ```liftoff -noms```
 

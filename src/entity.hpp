@@ -73,7 +73,7 @@ class Entity
 
         void               activate();
         virtual bool       damage(State &s, int p);
-        virtual void       collect(unsigned short e_id);
+        virtual void       collect(unsigned short e_obj);
         virtual void       collide(State &s, shared_ptr<Entity> e);
 
         virtual void       move(State &s);
@@ -88,7 +88,7 @@ class Entity
         static bool        sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2);
 
     protected:
-        unsigned short     e_id;
+        unsigned short     e_obj;
         unsigned short     e_type;
         unsigned short     e_state;
  

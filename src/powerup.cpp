@@ -2,9 +2,9 @@
 
 Powerup::Powerup(float x, float y, float z) : Entity()
 {
-    e_id = OBJ_POWERUP_1;
-    e_type = OBJ_TYPE_COLLIDER;
-    e_state = OBJ_STATE_ACTIVE;
+    e_obj = OBJ_POWERUP_1;
+    e_type = E_TYPE_COLLIDER;
+    e_state = E_STATE_ACTIVE;
 
     focusable = true;
     counter = 0;
@@ -41,10 +41,10 @@ bool Powerup::damage(State &s, int p)
 
 void Powerup::collide(State &s, shared_ptr<Entity> e)
 {
-    if (e_state == OBJ_STATE_ACTIVE && e->isPlayer()) {
+    if (e_state == E_STATE_ACTIVE && e->isPlayer()) {
         s.audio.playSample(SFX_POWERUP_1, 192, 180);
-        e->collect(e_id);
-        e_state = OBJ_STATE_FADING;
+        e->collect(e_obj);
+        e_state = E_STATE_FADING;
         v_z = -.5f * E_BASE_SPEED;
     }
 }
@@ -55,12 +55,12 @@ void Powerup::move(State &s)
 
     particles->move(s);
 
-    if (e_state == OBJ_STATE_FADING) {
+    if (e_state == E_STATE_FADING) {
         counter += s.timer_adjustment * .1f;
     }
 
     if (p_z > 100.0f || counter > 1.5f) {
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 

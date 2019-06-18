@@ -2,9 +2,9 @@
 
 Asteroid::Asteroid() : Entity()
 {
-    e_id = OBJ_ASTEROID_1;
-    e_type = OBJ_TYPE_COLLIDER;
-    e_state = OBJ_STATE_IDLE;
+    e_obj = OBJ_ASTEROID_1;
+    e_type = E_TYPE_COLLIDER;
+    e_state = E_STATE_IDLE;
 }
 
 Asteroid::~Asteroid()
@@ -35,7 +35,7 @@ void Asteroid::move(State &s)
     p_x += s.timer_adjustment * v_x;
     p_y += s.timer_adjustment * v_y;
 
-    if (e_type == OBJ_TYPE_SCENERY) {
+    if (e_type == E_TYPE_SCENERY) {
         p_z += s.timer_adjustment * (v_z + E_BASE_SPEED) * .5f;
     } else {
         p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
@@ -54,7 +54,7 @@ void Asteroid::move(State &s)
     if (r_z > 360.0f) r_z -= 360.0f;
 
     if (p_z > 0) {
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 
@@ -62,7 +62,7 @@ void Asteroid::draw(State &s)
 {
     float scale, m, a = float(s.global_alpha) * .01f;
 
-    if (e_type == OBJ_TYPE_SCENERY) {
+    if (e_type == E_TYPE_SCENERY) {
         m = .85f;
         scale = (10000.0f + p_z) * .0000333f;
     } else {
@@ -118,7 +118,7 @@ void Asteroid::draw(State &s)
 
     glScalef(s_x * scale, s_y * scale, s_z * scale);
 
-    glCallList(*s.models[e_id]);
+    glCallList(*s.models[e_obj]);
 
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHTING);

@@ -28,7 +28,7 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
 AC_C_CONST
 AC_CANONICAL_HOST
-AC_DEFINE_DIR(GAMEDATA, [datadir], [Game resources])
+AC_DEFINE_DIR(GAMEDATA, ["{prefix}/share/liftoff"], [Game resources])
 
 # SDL -------------------------------------------------------------------------
 

@@ -15,22 +15,22 @@ bool Entity::sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2)
 
 bool Entity::isCollider()
 {
-    return e_type == OBJ_TYPE_COLLIDER;
+    return e_type == E_TYPE_COLLIDER;
 }
 
 bool Entity::isIdle()
 {
-    return e_state == OBJ_STATE_IDLE;
+    return e_state == E_STATE_IDLE;
 }
 
 bool Entity::isFading()
 {
-    return e_state == OBJ_STATE_FADING;
+    return e_state == E_STATE_FADING;
 }
 
 bool Entity::isGone()
 {
-    return e_state == OBJ_STATE_GONE;
+    return e_state == E_STATE_GONE;
 }
 
 bool Entity::isFocusable()
@@ -45,17 +45,17 @@ bool Entity::isAlive()
 
 bool Entity::isPlayer()
 {
-    return e_id == OBJ_PLAYER;
+    return e_obj == OBJ_PLAYER;
 }
 
 bool Entity::isCollectable()
 {
-    return e_id == OBJ_POWERUP_1;
+    return e_obj == OBJ_POWERUP_1;
 }
 
 void Entity::activate()
 {
-    e_state = OBJ_STATE_ACTIVE;
+    e_state = E_STATE_ACTIVE;
 }
 
 void Entity::setType(unsigned short t)
@@ -282,7 +282,7 @@ void Entity::collide(State &s, shared_ptr<Entity> e)
 {
 }
 
-void Entity::collect(unsigned short e_id)
+void Entity::collect(unsigned short e_obj)
 {
 }
 
@@ -292,7 +292,7 @@ bool Entity::damage(State &s, int p)
         life -= p;
 
         if (life <= 0) {
-            e_state = OBJ_STATE_GONE;
+            e_state = E_STATE_GONE;
         }
 
         return true;

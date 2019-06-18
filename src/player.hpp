@@ -16,7 +16,7 @@ class Player : public Entity
         void            move(State &s);
         void            draw(State &s);
         void            shoot(State &s);
-        void            collect(unsigned short e_id);
+        void            collect(unsigned short e_obj);
 
         unsigned short  getAcceleration();
 

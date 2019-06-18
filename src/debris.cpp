@@ -2,9 +2,9 @@
 
 Debris::Debris() : Entity()
 {
-    e_id = OBJ_DEBRIS_1;
-    e_type = OBJ_TYPE_SCENERY;
-    e_state = OBJ_STATE_IDLE;
+    e_obj = OBJ_DEBRIS_1;
+    e_type = E_TYPE_SCENERY;
+    e_state = E_STATE_IDLE;
 
     p_x = -600.0f + float(rand() % 1200);
     p_y = -400.0f + float(rand() % 800);
@@ -28,7 +28,7 @@ void Debris::move(State &s)
     Entity::move(s);
 
     if (p_z > 0) {
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 
@@ -58,7 +58,7 @@ void Debris::draw(State &s)
     glScalef(s_x * scale, s_y * scale, s_z * scale);
 
     glColor4f(c_r, c_g, c_b, c_a * a);
-    glCallList(*s.models[e_id]);
+    glCallList(*s.models[e_obj]);
 
     glPopMatrix();
 

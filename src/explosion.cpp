@@ -2,9 +2,9 @@
 
 Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entity()
 {
-    e_id = type;
-    e_type = OBJ_TYPE_SCENERY;
-    e_state = OBJ_STATE_ACTIVE;
+    e_obj = type;
+    e_type = E_TYPE_SCENERY;
+    e_state = E_STATE_ACTIVE;
 
     has_particles = true;
 
@@ -67,7 +67,7 @@ void Explosion::move(State &s)
     Entity::move(s);
 
     if (timer < 0 || p_z > 100.0f) {
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 
@@ -77,7 +77,7 @@ void Explosion::draw(State &s)
 
     glLoadIdentity();
 
-    switch (e_id) {
+    switch (e_obj) {
 
         // green laser gun impact
         case OBJ_EXPLOSION_1:

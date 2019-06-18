@@ -2,7 +2,7 @@
 #define DEFINITIONS_HPP_
 
 #define DEFAULT_CFG_FILE        "liftoff.cfg"
-#define GAME_DATA               "."
+#define DEFAULT_GAMEDATA        "resources"
 
 #define ABS(x) ((x>0)?(x):(-x))
 
@@ -18,10 +18,8 @@
 #define DEFAULT_GFX_PARTICLES   100
 
 // engine globals
-#define E_LOG_FILE              false
 #define E_RELATIVE_MOVEMENT     2.5
 #define E_BASE_SPEED            25.0
-#define E_MAX_OBJECTS           1024
 #define E_MAX_MESSAGES          64
 
 // engine states
@@ -32,6 +30,22 @@
 #define STATE_GAME_QUIT         13
 #define STATE_QUIT              98
 #define STATE_CLOSE             99
+
+// entity states
+#define E_STATE_IDLE            0
+#define E_STATE_ACTIVE          1
+#define E_STATE_FADING          8
+#define E_STATE_GONE            9
+
+// entity types
+#define E_TYPE_PLAYER           1
+#define E_TYPE_SCENERY          2
+#define E_TYPE_COLLIDER         3
+
+// messages types
+#define MSG_MONEY               1
+#define MSG_DAMAGE              2
+#define MSG_ENERGY              3
 
 // textures
 #define T_LOGO                  0
@@ -50,9 +64,8 @@
 #define T_EXPLOSION_3           13
 #define T_EXPLOSION_4           14
 #define T_BACKGROUND_1          15
-#define T_JET                   9
-#define T_JET_EXHAUST           17
-#define T_GLOW                  18
+#define T_JET_EXHAUST           16
+#define T_GLOW                  17
 
 // objects
 #define OBJ_PLAYER              101 // player
@@ -62,31 +75,13 @@
 #define OBJ_MISSILE_1           401 // green laser
 #define OBJ_EXPLOSION_1         501 // explosion (gun impact)
 #define OBJ_EXPLOSION_2         502 // explosion (smoke)
-#define OBJ_EXPLOSION_3         503 // explosion (fireball)
+#define OBJ_EXPLOSION_3         503 // explosion (sparks)
 #define OBJ_EXPLOSION_4         504 // explosion (collision sparks)
 #define OBJ_EXPLOSION_5         505 // explosion (halo)
-#define OBJ_POWERUP_0           601 // energy and shield boost (level start)
-#define OBJ_POWERUP_1           602 // energy boost
+#define OBJ_POWERUP_0           601 // energy and life boost at level start
+#define OBJ_POWERUP_1           602 // energy and life boost
 
-// entity types
-#define OBJ_TYPE_PLAYER         1
-#define OBJ_TYPE_SCENERY        2
-#define OBJ_TYPE_COLLIDER       3
-
-// entity states
-#define OBJ_STATE_IDLE          0
-#define OBJ_STATE_ACTIVE        1
-#define OBJ_STATE_FADING        8
-#define OBJ_STATE_GONE          9
-
-
-// messages types
-#define MSG_MONEY               1
-#define MSG_DAMAGE              2
-#define MSG_ENERGY              3
-#define MSG_SHIELD              4
-
-// sound fx
+// sound fx ids
 #define SFX_GUN_IMPACT          4
 #define SFX_EXPLOSION_1         5
 #define SFX_EXPLOSION_2         6

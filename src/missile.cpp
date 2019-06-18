@@ -3,9 +3,9 @@
 
 Missile::Missile() : Entity()
 {
-    e_id = OBJ_MISSILE_1;
-    e_type = OBJ_TYPE_COLLIDER;
-    e_state = OBJ_STATE_ACTIVE;
+    e_obj = OBJ_MISSILE_1;
+    e_type = E_TYPE_COLLIDER;
+    e_state = E_STATE_ACTIVE;
 
     c_r = 0.5f;
     c_g = 1.0f;
@@ -33,7 +33,7 @@ void Missile::collide(State &s, shared_ptr<Entity> e)
         s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, p_x, p_y, p_z));
 
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 
@@ -44,7 +44,7 @@ void Missile::move(State &s)
     c_a = (s.global_alpha * .005f) + ((p_z + 200.0f) * .00002f);
 
     if (c_a < 0 || p_z < -10000.0f) {
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 

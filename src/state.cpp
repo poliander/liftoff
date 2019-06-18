@@ -25,7 +25,7 @@ State::State()
 
     vid_cfg_multisampling   = 8;
 
-    log_file                = E_LOG_FILE;
+    log_file                = false;
 
     engine_restart          = false;
     engine_stars            = DEFAULT_GFX_STARS;
@@ -60,17 +60,17 @@ State::~State()
  */
 void State::log(const char *msg)
 {
-    if (log_file) {
 #ifdef _WIN32
+    if (log_file) {
         FILE *fp;
 
         fp = fopen("debug.log", "a");
         fprintf(fp, "%s", msg);
         fclose(fp);
-#else
-        printf("%s", msg);
-#endif
     }
+#else
+    printf("%s", msg);
+#endif
 }
 
 /*

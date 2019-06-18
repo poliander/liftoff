@@ -2,9 +2,9 @@
 
 Player::Player() : Entity()
 {
-    e_id = OBJ_PLAYER;
-    e_type = OBJ_TYPE_COLLIDER;
-    e_state = OBJ_STATE_ACTIVE;
+    e_obj = OBJ_PLAYER;
+    e_type = E_TYPE_COLLIDER;
+    e_state = E_STATE_ACTIVE;
 
     particles = new ParticleEngine();
     particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 1.0f);
@@ -83,9 +83,9 @@ int Player::getLifeRegenerationEnergy()
     return life_reg_energy;
 }
 
-void Player::collect(unsigned short e_id)
+void Player::collect(unsigned short e_obj)
 {
-    powerup = e_id;
+    powerup = e_obj;
 }
 
 void Player::shoot(State &s)
@@ -541,7 +541,7 @@ void Player::draw(State &s)
         (s.get() >= STATE_GAME_LOOP) &&
         (s.get() <= STATE_GAME_QUIT)
     ) {
-        glBindTexture(GL_TEXTURE_2D, *s.textures[T_JET]);
+        glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
 
         if (s.get() == STATE_GAME_NEXTLEVEL) {
             particles->setSize(10.0f + s.title_ypos * .025f);

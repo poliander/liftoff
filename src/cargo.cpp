@@ -4,9 +4,9 @@
 
 Cargo::Cargo() : Entity()
 {
-    e_id = OBJ_CARGO_1;
-    e_type = OBJ_TYPE_COLLIDER;
-    e_state = OBJ_STATE_IDLE;
+    e_obj = OBJ_CARGO_1;
+    e_type = E_TYPE_COLLIDER;
+    e_state = E_STATE_IDLE;
 
     focusable = true;
     money = 50;
@@ -20,7 +20,7 @@ bool Cargo::damage(State &s, int p)
 {
     bool damaged = Entity::damage(s, p);
 
-    if (damaged && e_state == OBJ_STATE_GONE && yield == false) {
+    if (damaged && e_state == E_STATE_GONE && yield == false) {
         s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
 
         s.addMessage(money, MSG_MONEY);
@@ -43,7 +43,7 @@ void Cargo::move(State &s)
     counter += s.timer_adjustment * 0.1f;
 
     if (p_z > 100.0f) {
-        e_state = OBJ_STATE_GONE;
+        e_state = E_STATE_GONE;
     }
 }
 
@@ -97,7 +97,7 @@ void Cargo::draw(State &s)
 
     glScalef(s_x * scale1, s_y * scale1, s_z * scale1);
 
-    glCallList(*s.models[e_id]);
+    glCallList(*s.models[e_obj]);
 
     glDisable(GL_NORMALIZE);
     glDisable(GL_LIGHT0);

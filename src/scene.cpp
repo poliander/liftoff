@@ -198,7 +198,7 @@ bool Scene::loadLevel()
     char msg[255], fname[255], buf[1024], cmd[16], par[255];
 
     int i, money, life, m, p = 0;
-    unsigned short e_id;
+    unsigned short e_obj;
     float p_x, p_y, p_z;
     float r_x, r_y, r_z;
     float s_x, s_y, s_z;
@@ -224,12 +224,12 @@ bool Scene::loadLevel()
             i = 0;
             m = 0;
 
-            while ( (i < strlen(buf)) && (m < 4) ) {
+            while ((i < strlen(buf)) && (m < 4)) {
                 // forget the rest of the line
                 if (buf[i] == ';') break;
 
                 // remove unnecessary characters
-                if ( buf[i] < 33 ) {
+                if (buf[i] < 33) {
                     if (m == 0) { i++; continue; }
                     if (m == 1) { m++; continue; }
                     if (m == 2) { i++; continue; }
@@ -248,7 +248,7 @@ bool Scene::loadLevel()
                 if (m == 3) {
                     if (buf[i] == '{') {
                         i++;
-                        while ( (buf[i] != '}') && (i < strlen(buf)) ) {
+                        while ((buf[i] != '}') && (i < strlen(buf))) {
                             par[p] = buf[i];
                             p++;
                             par[p] = 0;
@@ -279,7 +279,7 @@ bool Scene::loadLevel()
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u,%u",
                         (float *) &p_z,
-                        (int *)   &e_id,
+                        (int *)   &e_obj,
                         (float *) &p_x,
                         (float *) &p_y,
                         (float *) &s_x,
@@ -292,7 +292,7 @@ bool Scene::loadLevel()
                         (int *)   &money
                     );
 
-                    switch (e_id) {
+                    switch (e_obj) {
                         case OBJ_ASTEROID_1:
                             {
                                 auto asteroid = make_shared<Asteroid>();
@@ -331,7 +331,7 @@ bool Scene::loadLevel()
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
                         (float *) &p_z,
-                        (int *)   &e_id,
+                        (int *)   &e_obj,
                         (float *) &p_x,
                         (float *) &p_y,
                         (float *) &s_x,
@@ -343,12 +343,12 @@ bool Scene::loadLevel()
                         (int *)   &life
                     );
 
-                    switch (e_id) {
+                    switch (e_obj) {
                         case OBJ_ASTEROID_1:
                             {
                                 auto asteroid = make_shared<Asteroid>();
 
-                                asteroid->setType(OBJ_TYPE_SCENERY);
+                                asteroid->setType(E_TYPE_SCENERY);
                                 asteroid->setPos(p_x, p_y, p_z);
                                 asteroid->setScale(s_x, s_y, s_z);
                                 asteroid->setRotation(r_x, r_y, r_z);
