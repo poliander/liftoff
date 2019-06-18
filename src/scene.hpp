@@ -27,14 +27,13 @@ using namespace std;
 #include "explosion.hpp"
 #include "player.hpp"
 #include "powerup.hpp"
+#include "skybox.hpp"
 
 class Scene
 {
     public:
         Scene(State &s);
         ~Scene();
-
-        shared_ptr<Player> player;
 
         void               load();
         void               move();
@@ -43,11 +42,11 @@ class Scene
     private:
         State&             state;
 
-        float              stars[8000][4];
+        shared_ptr<Player> player;
+        shared_ptr<Skybox> skybox;
 
         void               drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
         void               drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void               drawBackground();
         void               drawMouse();
         void               drawFPS();
         void               drawTitle();

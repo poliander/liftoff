@@ -24,10 +24,7 @@ State::State()
     vid_cfg_multisampling   = 8;
 
     log_file                = false;
-
     engine_restart          = false;
-    engine_stars            = DEFAULT_GFX_STARS;
-    engine_stars_warp       = DEFAULT_GFX_STARS_WARP;
 
     fps                     = 0;
     fps_visible             = false;

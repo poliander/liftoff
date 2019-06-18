@@ -37,6 +37,8 @@ class Entity
         float              getPosY();
         float              getPosZ();
 
+        float              getAcceleration();
+
         void               setVelocity(float x, float y, float z);
         void               setVelocityX(float x);
         void               setVelocityY(float y);
@@ -74,6 +76,7 @@ class Entity
         virtual bool       damage(State &s, int p);
         virtual void       collect(unsigned short e_obj);
         virtual void       collide(State &s, shared_ptr<Entity> e);
+        virtual void       shoot(State &s);
 
         virtual void       move(State &s);
         virtual void       draw(State &s) = 0;
@@ -129,6 +132,7 @@ class Entity
         unsigned short     money = 0;
         int                life = 1;
         bool               focusable = false;
+        float              acceleration;
 
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
         float              calcDistance3D(State &s, shared_ptr<Entity> e);

@@ -47,9 +47,6 @@ class State
 
         bool            log_file;
 
-        int             engine_stars;
-        int             engine_stars_warp;
-
         bool            engine_restart;
         bool            engine_boundary;
         bool            engine_debug;
@@ -82,7 +79,7 @@ class State
         int             menu_pos;
         bool            menu_selected;
 
-        // background stars
+        // stars
         float           stars_speed;
         int             stars_rotation;
         float           stars_rotation_pos;

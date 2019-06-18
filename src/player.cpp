@@ -43,11 +43,6 @@ Player::~Player()
     delete particles;
 }
 
-unsigned short Player::getAcceleration()
-{
-    return acceleration;
-}
-
 void Player::setEnergy(int e)
 {
     energy = e;

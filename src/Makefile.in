@@ -110,6 +110,7 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-debris.$(OBJEXT) \
 	__top_builddir__liftoff-asteroid.$(OBJEXT) \
 	__top_builddir__liftoff-missile.$(OBJEXT) \
+	__top_builddir__liftoff-skybox.$(OBJEXT) \
 	__top_builddir__liftoff-state.$(OBJEXT) \
 	__top_builddir__liftoff-powerup.$(OBJEXT) \
 	__top_builddir__liftoff-player.$(OBJEXT) \
@@ -303,6 +304,7 @@ __top_builddir__liftoff_SOURCES = \
     debris.cpp \
     asteroid.cpp \
     missile.cpp \
+    skybox.cpp \
     state.cpp \
     powerup.cpp \
     player.cpp \
@@ -417,6 +419,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-powerup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-scene.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-skybox.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-state.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-texture.Po@am__quote@
 
@@ -545,6 +548,20 @@ __top_builddir__liftoff-missile.obj: missile.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='missile.cpp' object='__top_builddir__liftoff-missile.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-missile.obj `if test -f 'missile.cpp'; then $(CYGPATH_W) 'missile.cpp'; else $(CYGPATH_W) '$(srcdir)/missile.cpp'; fi`
+
+__top_builddir__liftoff-skybox.o: skybox.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-skybox.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-skybox.Tpo -c -o __top_builddir__liftoff-skybox.o `test -f 'skybox.cpp' || echo '$(srcdir)/'`skybox.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-skybox.Tpo $(DEPDIR)/__top_builddir__liftoff-skybox.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='skybox.cpp' object='__top_builddir__liftoff-skybox.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-skybox.o `test -f 'skybox.cpp' || echo '$(srcdir)/'`skybox.cpp
+
+__top_builddir__liftoff-skybox.obj: skybox.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-skybox.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-skybox.Tpo -c -o __top_builddir__liftoff-skybox.obj `if test -f 'skybox.cpp'; then $(CYGPATH_W) 'skybox.cpp'; else $(CYGPATH_W) '$(srcdir)/skybox.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-skybox.Tpo $(DEPDIR)/__top_builddir__liftoff-skybox.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='skybox.cpp' object='__top_builddir__liftoff-skybox.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-skybox.obj `if test -f 'skybox.cpp'; then $(CYGPATH_W) 'skybox.cpp'; else $(CYGPATH_W) '$(srcdir)/skybox.cpp'; fi`
 
 __top_builddir__liftoff-state.o: state.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-state.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-state.Tpo -c -o __top_builddir__liftoff-state.o `test -f 'state.cpp' || echo '$(srcdir)/'`state.cpp

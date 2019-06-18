@@ -17,8 +17,6 @@ class Player : public Entity
         void            shoot(State &s);
         void            collect(unsigned short e_obj);
 
-        unsigned short  getAcceleration();
-
         void            setEnergy(int e);
         int             getEnergy();
         int             getEnergyMaximum();
@@ -35,8 +33,6 @@ class Player : public Entity
         unsigned short  powerup_booster_length;
         int             powerup_booster_timer;
         int             powerup_booster_ltimer;
-
-        unsigned short  acceleration;
 
         int             energy;
         int             energy_max;

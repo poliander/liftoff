@@ -11,6 +11,7 @@ __top_builddir__liftoff_SOURCES = \
     debris.cpp \
     asteroid.cpp \
     missile.cpp \
+    skybox.cpp \
     state.cpp \
     powerup.cpp \
     player.cpp \

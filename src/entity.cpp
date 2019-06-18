@@ -100,6 +100,11 @@ float Entity::getPosZ()
     return p_z;
 }
 
+float Entity::getAcceleration()
+{
+    return acceleration;
+}
+
 void Entity::setVelocity(float x, float y, float z)
 {
     v_x = x;
@@ -283,6 +288,10 @@ void Entity::collide(State &s, shared_ptr<Entity> e)
 }
 
 void Entity::collect(unsigned short e_obj)
+{
+}
+
+void Entity::shoot(State &s)
 {
 }
 
