@@ -1,4 +1,5 @@
 #include "missile.hpp"
+#include "explosion.hpp"
 
 Missile::Missile() : Entity()
 {
@@ -18,17 +19,27 @@ Missile::Missile() : Entity()
     s_x = 2.25f;
     s_y = 2.25f;
     s_z = 2.25f;
+
+    power = 20;
 }
 
 Missile::~Missile()
 {
 }
 
+void Missile::collide(State &s, shared_ptr<Entity> e)
+{
+    if (e->damage(s, power)) {
+        s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, p_x, p_y, p_z));
+
+        e_state = OBJ_STATE_GONE;
+    }
+}
+
 void Missile::move(State &s)
 {
-    p_x += s.timer_adjustment * v_x;
-    p_y += s.timer_adjustment * v_y;
-    p_z += s.timer_adjustment * v_z;
+    Entity::move(s);
 
     c_a = (s.global_alpha * .005f) + ((p_z + 200.0f) * .00002f);
 
@@ -40,12 +51,17 @@ void Missile::move(State &s)
 void Missile::draw(State &s)
 {
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, s.texture[T_MISSILE_1]);
+    glBindTexture(GL_TEXTURE_2D, *s.textures[T_MISSILE_1]);
     glColor4f(c_r, c_g, c_b, c_a);
 
     glPushMatrix();
 
-    glTranslatef((p_x - s.cam_x) * E_RELATIVE_MOVEMENT, (p_y - s.cam_y) * E_RELATIVE_MOVEMENT, p_z);
+    glTranslatef(
+        E_RELATIVE_MOVEMENT * (p_x - s.cam_x),
+        E_RELATIVE_MOVEMENT * (p_y - s.cam_y),
+        p_z
+    );
+
     glRotatef(270, 0, 0, 1);
     glScalef(s_x, s_y, s_z);
 

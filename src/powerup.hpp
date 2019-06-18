@@ -1,19 +1,23 @@
 #ifndef POWERUP_HPP_
 #define POWERUP_HPP_
 
-#include "object.hpp"
+#include "entity.hpp"
 #include "particles.hpp"
 
-class Powerup : public Object
+class Powerup : public Entity
 {
     public:
-        Powerup(State &s);
+        Powerup(float x, float y, float z);
         ~Powerup();
 
-        void            move(int oid);
-        void            draw(int oid);
+        bool damage(State &s, int p);
+        void collide(State &s, shared_ptr<Entity> e);
+
+        void move(State &s);
+        void draw(State &s);
 
     private:
+        float           counter = 0;
         ParticleEngine* particles;
 };
 

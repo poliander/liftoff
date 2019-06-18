@@ -1,22 +1,23 @@
 #ifndef EXPLOSION_HPP_
 #define EXPLOSION_HPP_
 
-#include "object.hpp"
+#include "entity.hpp"
 #include "particles.hpp"
 
-class Explosion : public Object
+class Explosion : public Entity
 {
     public:
-        Explosion(State &s);
+        Explosion(unsigned short int type, float x, float y, float z);
         ~Explosion();
 
-        bool            add(unsigned short eid, float px, float py, float pz, float sp);
-
-        void            move(int oid);
-        void            draw(int oid);
+        void            move(State &s);
+        void            draw(State &s);
 
     private:
         ParticleEngine* particles;
+
+        bool            has_particles;
+        float           timer;
 };
 
 #endif

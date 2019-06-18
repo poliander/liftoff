@@ -1,17 +1,24 @@
 #ifndef CARGO_HPP_
 #define CARGO_HPP_
 
-#include <math.h>
+#include "entity.hpp"
+#include "explosion.hpp"
+#include "powerup.hpp"
 
-#include "object.hpp"
-
-class Cargo : public Object
+class Cargo : public Entity
 {
     public:
-        Cargo(State &s);
+        Cargo();
         ~Cargo();
 
-        void draw(int oid);
+        bool damage(State &s, int p);
+
+        void move(State &s);
+        void draw(State &s);
+
+    private:
+        float counter = 0;
+        bool  yield   = false;
 };
 
 #endif

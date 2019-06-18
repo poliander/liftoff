@@ -3,6 +3,7 @@
 
 Engine::Engine()
 {
+    srand((int)time(NULL));
 }
 
 Engine::~Engine()
@@ -125,7 +126,7 @@ bool Engine::init(int argc, char **argv)
         state.log("ok\n");
     }
 
-    state.log("Detecting input devices... ");
+    state.log("Initializing peripheral input devices... ");
 
     if (SDL_NumJoysticks() > 0) {
         state.joystick = SDL_JoystickOpen(0);
@@ -133,7 +134,7 @@ bool Engine::init(int argc, char **argv)
         if (state.joystick) {
             state.log("joystick/gamepad found\n");
         } else {
-            state.log("failed to initialize joystick/gamepad\n");
+            state.log("initialization failed\n");
         }
     } else {
         state.log("none found\n");
@@ -485,29 +486,29 @@ bool Engine::handleKeyboard()
             if (keys[SDLK_ESCAPE])
                 state.set(STATE_GAME_QUIT);
 
-            if (state.objects[state.player].life > 0) {
+            if (scene->player->isAlive()) {
 
                 // Keyboard LEFT, RIGHT
                 if (keys[SDLK_LEFT] || keys[SDLK_a]) {
-                    scene->player->accelerateX(state.player, 1.0f);
+                    scene->player->setAccelerationX(1.0f);
                     moved = true;
                 } else if (keys[SDLK_RIGHT] || keys[SDLK_d]) {
-                    scene->player->accelerateX(state.player, -1.0f);
+                    scene->player->setAccelerationX(-1.0f);
                     moved = true;
                 }
 
                 // Keyboard UP, DOWN
                 if (keys[SDLK_UP] || keys[SDLK_w]) {
-                    scene->player->accelerateY(state.player, -1.0f);
+                    scene->player->setAccelerationY(-1.0f);
                     moved = true;
                 } else if (keys[SDLK_DOWN] || keys[SDLK_s]) {
-                    scene->player->accelerateY(state.player, 1.0f);
+                    scene->player->setAccelerationY(1.0f);
                     moved = true;
                 }
 
                 // Keyboard CTRL
                 if (keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) {
-                    scene->player->shoot();
+                    scene->player->shoot(state);
                 }
             }
             break;
@@ -583,10 +584,7 @@ void Engine::handleJoystick()
 {
     float v;
 
-    if (
-        state.objects[state.player].life <= 0 ||
-        state.joystick == NULL
-    ) {
+    if (scene->player->isAlive() == false) {
         return;
     }
 
@@ -595,17 +593,17 @@ void Engine::handleJoystick()
     v = float(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
 
     if (fabs(v) > .01f) {
-        scene->player->accelerateX(state.player, float(scene->player->acceleration) * -.0075f * v);
+        scene->player->setAccelerationX(float(scene->player->getAcceleration()) * -.0075f * v);
     }
 
     v = float(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
 
     if (fabs(v) > .01f) {
-        scene->player->accelerateY(state.player, float(scene->player->acceleration) * .0075f * v);
+        scene->player->setAccelerationY(float(scene->player->getAcceleration()) * .0075f * v);
     }
 
     if (SDL_JoystickGetButton(state.joystick, 0) != 0) {
-        scene->player->shoot();
+        scene->player->shoot(state);
     }
 }
 
@@ -658,6 +656,14 @@ void Engine::halt()
         SDL_JoystickClose(state.joystick);
     }
 
+    state.log("Saving configuration... ");
+
+    if (writeConfiguration()) {
+        state.log("ok\n");
+    } else {
+        state.log("failed\n");
+    }
+
     if ( (state.config.aud_sfx != -1) ||
          (state.config.aud_music != -1) ) {
         state.log("Closing audio device\n");
@@ -672,14 +678,6 @@ void Engine::halt()
     }
 
     SDL_Quit();
-
-    state.log("Saving configuration... ");
-
-    if (writeConfiguration()) {
-        state.log("ok\n");
-    } else {
-        state.log("failed\n");
-    }
 
     delete scene;
 }
