@@ -1,5 +1,4 @@
-#ifndef MODEL_HPP_
-#define MODEL_HPP_
+#pragma once
 
 using namespace std;
 
@@ -33,5 +32,3 @@ class Model
         bool                memAllocate();
         void                memFree();
 };
-
-#endif

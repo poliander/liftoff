@@ -1,5 +1,4 @@
-#ifndef PARTICLES_HPP_
-#define PARTICLES_HPP_
+#pragma once
 
 #include <math.h>
 #include <GL/gl.h>
@@ -56,5 +55,3 @@ class ParticleEngine
         float           pdecay;
         float           pdx, pdy, pdz;
 };
-
-#endif

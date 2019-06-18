@@ -1,5 +1,4 @@
-#ifndef POWERUP_HPP_
-#define POWERUP_HPP_
+#pragma once
 
 #include "entity.hpp"
 #include "particles.hpp"
@@ -20,5 +19,3 @@ class Powerup : public Entity
         float           counter = 0;
         ParticleEngine* particles;
 };
-
-#endif

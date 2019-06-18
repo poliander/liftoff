@@ -1,5 +1,4 @@
-#ifndef DEFINITIONS_HPP_
-#define DEFINITIONS_HPP_
+#pragma once
 
 #define DEFAULT_CFG_FILE        "liftoff.cfg"
 #define DEFAULT_GAMEDATA        "resources"
@@ -86,5 +85,3 @@
 #define SFX_EXPLOSION_1         5
 #define SFX_EXPLOSION_2         6
 #define SFX_POWERUP_1           9
-
-#endif

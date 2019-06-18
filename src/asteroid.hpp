@@ -1,5 +1,4 @@
-#ifndef ASTEROID_HPP_
-#define ASTEROID_HPP_
+#pragma once
 
 #include "entity.hpp"
 #include "explosion.hpp"
@@ -15,5 +14,3 @@ class Asteroid : public Entity
         void move(State &s);
         void draw(State &s);
 };
-
-#endif

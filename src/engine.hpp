@@ -1,5 +1,4 @@
-#ifndef ENGINE_HPP_
-#define ENGINE_HPP_
+#pragma once
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -35,5 +34,3 @@ class Engine
         void         handleJoystick();
         void         handleMouse();
 };
-
-#endif

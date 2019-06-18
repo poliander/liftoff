@@ -1,5 +1,4 @@
-#ifndef MESSAGE_HPP_
-#define MESSAGE_HPP_
+#pragma once
 
 struct message_t
 {
@@ -10,5 +9,3 @@ struct message_t
     short   direction_x;
     short   direction_y;
 };
-
-#endif

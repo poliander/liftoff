@@ -1,5 +1,4 @@
-#ifndef CARGO_HPP_
-#define CARGO_HPP_
+#pragma once
 
 #include "entity.hpp"
 #include "explosion.hpp"
@@ -20,5 +19,3 @@ class Cargo : public Entity
         float counter = 0;
         bool  yield   = false;
 };
-
-#endif

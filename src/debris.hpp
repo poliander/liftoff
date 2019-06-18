@@ -1,5 +1,4 @@
-#ifndef DEBRIS_HPP_
-#define DEBRIS_HPP_
+#pragma once
 
 #include "entity.hpp"
 
@@ -12,5 +11,3 @@ class Debris : public Entity
         void move(State &s);
         void draw(State &s);
 };
-
-#endif

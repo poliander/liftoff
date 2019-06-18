@@ -1,5 +1,4 @@
-#ifndef PLAYER_HPP_
-#define PLAYER_HPP_
+#pragma once
 
 #include <math.h>
 
@@ -55,5 +54,3 @@ class Player : public Entity
         float           gun_flash_rot[2];
         unsigned short  gun_power;
 };
-
-#endif

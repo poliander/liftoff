@@ -1,5 +1,4 @@
-#ifndef AUDIO_HPP_
-#define AUDIO_HPP_
+#pragma once
 
 #include <SDL_mixer.h>
 
@@ -35,5 +34,3 @@ class Audio
         int         state_background_sound;
         char        resource_dir[255];
 };
-
-#endif

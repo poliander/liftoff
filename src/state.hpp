@@ -1,5 +1,4 @@
-#ifndef STATE_HPP_
-#define STATE_HPP_
+#pragma once
 
 using namespace std;
 
@@ -148,5 +147,3 @@ class State
     private:
         int             id;
 };
-
-#endif

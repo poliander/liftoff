@@ -1,5 +1,4 @@
-#ifndef ENTITY_HPP_
-#define ENTITY_HPP_
+#pragma once
 
 using namespace std;
 
@@ -134,5 +133,3 @@ class Entity
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
         float              calcDistance3D(State &s, shared_ptr<Entity> e);
 };
-
-#endif

@@ -1,6 +1,3 @@
-#ifndef FUNCTIONS_HPP_
-#define FUNCTIONS_HPP_
+#pragma once
 
 float isqrt(float f);
-
-#endif

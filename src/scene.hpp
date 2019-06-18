@@ -1,5 +1,4 @@
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#pragma once
 
 using namespace std;
 
@@ -62,5 +61,3 @@ class Scene
 
         bool               loadLevel();
 };
-
-#endif

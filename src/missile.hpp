@@ -1,5 +1,4 @@
-#ifndef MISSILE_HPP_
-#define MISSILE_HPP_
+#pragma once
 
 #include "entity.hpp"
 
@@ -19,5 +18,3 @@ class Missile : public Entity
 
         void         collide(State &s, shared_ptr<Entity> e);
 };
-
-#endif

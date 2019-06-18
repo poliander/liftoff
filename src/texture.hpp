@@ -1,5 +1,4 @@
-#ifndef TEXTURE_HPP_
-#define TEXTURE_HPP_
+#pragma once
 
 #include <stdio.h>
 
@@ -18,5 +17,3 @@ class Texture
     protected:
         GLuint resource = -1;
 };
-
-#endif

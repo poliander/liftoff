@@ -1,5 +1,4 @@
-#ifndef EXPLOSION_HPP_
-#define EXPLOSION_HPP_
+#pragma once
 
 #include "entity.hpp"
 #include "particles.hpp"
@@ -19,5 +18,3 @@ class Explosion : public Entity
         bool            has_particles;
         float           timer;
 };
-
-#endif

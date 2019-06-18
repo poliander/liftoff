@@ -1,5 +1,4 @@
-#ifndef MESH_HPP_
-#define MESH_HPP_
+#pragma once
 
 // vector
 typedef float vec3_t[3];
@@ -50,5 +49,3 @@ struct obj_model_t
     struct obj_normal_t *normals;       // normal vector list
     struct obj_face_t *faces;           // model's polygons
 };
-
-#endif
