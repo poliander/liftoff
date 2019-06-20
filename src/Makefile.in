@@ -291,7 +291,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-__top_builddir__liftoff_CPPFLAGS = $(SDL_CFLAGS) $(SDL_IMAGE_CFLAGS) $(SDL_MIXER_CFLAGS)
+__top_builddir__liftoff_CPPFLAGS = $(SDL_CFLAGS) $(SDL_MIXER_CFLAGS)
 __top_builddir__liftoff_LDADD = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \

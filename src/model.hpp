@@ -7,7 +7,6 @@ using namespace std;
 
 #include <GL/gl.h>
 #include <GL/glext.h>
-#include <SDL_image.h>
 
 #include <mesh.hpp>
 #include <texture.hpp>
