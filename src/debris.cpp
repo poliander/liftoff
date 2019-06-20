@@ -17,6 +17,10 @@ Debris::Debris() : Entity()
     s_x = 20.0f + float(rand() % 400) * .2f;
     s_y = 20.0f + float(rand() % 400) * .2f;
     s_z = 20.0f + float(rand() % 400) * .2f;
+
+    c_r = .6f;
+    c_g = .6f;
+    c_b = .6f;
 }
 
 Debris::~Debris()
@@ -51,9 +55,9 @@ void Debris::draw(State &s)
         p_z
     );
 
-    glRotatef(r_x, 1.0f,  .0f,  .0f);
-    glRotatef(r_y,  .0f, 1.0f,  .0f);
-    glRotatef(r_z,  .0f,  .0f, 1.0f);
+    glRotatef(r_x, 1, 0, 0);
+    glRotatef(r_y, 0, 1, 0);
+    glRotatef(r_z, 0, 0, 1);
 
     glScalef(s_x * scale, s_y * scale, s_z * scale);
 
