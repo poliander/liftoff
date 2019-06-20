@@ -15,6 +15,7 @@ class Player : public Entity
         void            move(State &s);
         void            draw(State &s);
         void            shoot(State &s);
+        void            collide(State &s, shared_ptr<Entity> e);
         void            collect(unsigned short e_obj);
 
         void            setEnergy(int e);

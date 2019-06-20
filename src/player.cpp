@@ -21,10 +21,11 @@ Player::Player() : Entity()
 
     // energy capacity and regeneration speed
     energy_max = 1500;
-    energy_reg = 10;
+    energy_reg = 5;
 
     // maximum life, life regeneration and regeneration energy draw
     life_max = 250;
+    life = life_max;
     life_reg = 1;
     life_reg_energy = 10;
 
@@ -33,7 +34,6 @@ Player::Player() : Entity()
     gun_flash[0] = 0;
     gun_flash[1] = 0;
 
-    life = 1;
     energy = 1;
     money = 0;
 }
@@ -83,6 +83,10 @@ void Player::collect(unsigned short e_obj)
     powerup = e_obj;
 }
 
+void Player::collide(State &s, shared_ptr<Entity> e)
+{
+}
+
 void Player::shoot(State &s)
 {
     static int m_alt = 0;
@@ -102,12 +106,12 @@ void Player::shoot(State &s)
 
     m_next_shot = s.timer + 90 + rand() % 60;
 
-    if (energy < 20) {
+    if (energy < 25) {
         // low energy
         return;
     }
 
-    energy -= 20;
+    energy -= 25;
 
     // left/right alteration, randomize gun flash
     m_alt = 1 - m_alt;
@@ -317,13 +321,13 @@ void Player::move(State &s)
     // power-ups
     switch (powerup) {
         case OBJ_POWERUP_0:
-            powerup_booster_length += 25;
+            powerup_booster_length += 15;
             powerup_booster_ltimer = SDL_GetTicks();
             powerup = 0;
             break;
 
         case OBJ_POWERUP_1:
-            powerup_booster_length += 10;
+            powerup_booster_length += 5;
             powerup_booster_ltimer = SDL_GetTicks();
             powerup = 0;
             break;
@@ -347,8 +351,8 @@ void Player::move(State &s)
             if (powerup_booster_length > 0) {
                 powerup_booster_length--;
 
-                life += int(ceil((float)life_max * .06f));
-                energy += int(ceil((float)energy_max * .03f));
+                life += int(ceil((float)life_max * .075f));
+                energy += int(ceil((float)energy_max * .075f));
             } else {
                 // energy regeneration
                 energy += energy_reg;

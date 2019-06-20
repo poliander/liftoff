@@ -595,7 +595,7 @@ void Scene::drawMenu(bool mouse_recheck)
                             state.set(STATE_GAME_START);
 
                             player->setEnergy(1);
-                            player->setLife(1);
+                            player->setLife(player->getLifeMaximum());
                             player->setMoney(0);
                         } else {
                             state.log("failed\n");
