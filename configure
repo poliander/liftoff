@@ -628,8 +628,6 @@ LTLIBOBJS
 LIBOBJS
 SDL_MIXER_LIBS
 SDL_MIXER_CFLAGS
-SDL_IMAGE_LIBS
-SDL_IMAGE_CFLAGS
 SDL_CONFIG
 SDL_LIBS
 SDL_CFLAGS
@@ -755,8 +753,6 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 SDL_CFLAGS
 SDL_LIBS
-SDL_IMAGE_CFLAGS
-SDL_IMAGE_LIBS
 SDL_MIXER_CFLAGS
 SDL_MIXER_LIBS'
 
@@ -1418,10 +1414,6 @@ Some influential environment variables:
               path overriding pkg-config's built-in search path
   SDL_CFLAGS  C compiler flags for SDL, overriding pkg-config
   SDL_LIBS    linker flags for SDL, overriding pkg-config
-  SDL_IMAGE_CFLAGS
-              C compiler flags for SDL_IMAGE, overriding pkg-config
-  SDL_IMAGE_LIBS
-              linker flags for SDL_IMAGE, overriding pkg-config
   SDL_MIXER_CFLAGS
               C compiler flags for SDL_MIXER, overriding pkg-config
   SDL_MIXER_LIBS
@@ -4744,178 +4736,6 @@ $as_echo "yes" >&6; }
 fi
 
 LIBS="$LIBS $SDL_LIBS"
-
-# SDL_image -------------------------------------------------------------------
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_IMAGE" >&5
-$as_echo_n "checking for SDL_IMAGE... " >&6; }
-
-if test -n "$SDL_IMAGE_CFLAGS"; then
-    pkg_cv_SDL_IMAGE_CFLAGS="$SDL_IMAGE_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"SDL_image >= 1.2.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "SDL_image >= 1.2.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_SDL_IMAGE_CFLAGS=`$PKG_CONFIG --cflags "SDL_image >= 1.2.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$SDL_IMAGE_LIBS"; then
-    pkg_cv_SDL_IMAGE_LIBS="$SDL_IMAGE_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"SDL_image >= 1.2.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "SDL_image >= 1.2.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_SDL_IMAGE_LIBS=`$PKG_CONFIG --libs "SDL_image >= 1.2.0" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        SDL_IMAGE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "SDL_image >= 1.2.0" 2>&1`
-        else
-	        SDL_IMAGE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "SDL_image >= 1.2.0" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$SDL_IMAGE_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL_image not located by pkg-config, checking with AC CHECK LIB:" >&5
-$as_echo "$as_me: SDL_image not located by pkg-config, checking with AC CHECK LIB:" >&6;}
-     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for IMG_Load in -lSDL_image" >&5
-$as_echo_n "checking for IMG_Load in -lSDL_image... " >&6; }
-if ${ac_cv_lib_SDL_image_IMG_Load+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_image  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char IMG_Load ();
-int
-main ()
-{
-return IMG_Load ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_image_IMG_Load=yes
-else
-  ac_cv_lib_SDL_image_IMG_Load=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_image_IMG_Load" >&5
-$as_echo "$ac_cv_lib_SDL_image_IMG_Load" >&6; }
-if test "x$ac_cv_lib_SDL_image_IMG_Load" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL_IMAGE 1
-_ACEOF
-
-  LIBS="-lSDL_image $LIBS"
-
-else
-  as_fn_error $? "SDL_image not found! http://www.libsdl.org/projects/SDL_image" "$LINENO" 5
-fi
-
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL_image not located by pkg-config, checking with AC CHECK LIB:" >&5
-$as_echo "$as_me: SDL_image not located by pkg-config, checking with AC CHECK LIB:" >&6;}
-     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for IMG_Load in -lSDL_image" >&5
-$as_echo_n "checking for IMG_Load in -lSDL_image... " >&6; }
-if ${ac_cv_lib_SDL_image_IMG_Load+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_image  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char IMG_Load ();
-int
-main ()
-{
-return IMG_Load ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_SDL_image_IMG_Load=yes
-else
-  ac_cv_lib_SDL_image_IMG_Load=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_image_IMG_Load" >&5
-$as_echo "$ac_cv_lib_SDL_image_IMG_Load" >&6; }
-if test "x$ac_cv_lib_SDL_image_IMG_Load" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSDL_IMAGE 1
-_ACEOF
-
-  LIBS="-lSDL_image $LIBS"
-
-else
-  as_fn_error $? "SDL_image not found! http://www.libsdl.org/projects/SDL_image" "$LINENO" 5
-fi
-
-else
-	SDL_IMAGE_CFLAGS=$pkg_cv_SDL_IMAGE_CFLAGS
-	SDL_IMAGE_LIBS=$pkg_cv_SDL_IMAGE_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-fi
-
-LIBS="$LIBS $SDL_IMAGE_LIBS"
 
 # SDL_mixer -------------------------------------------------------------------
 

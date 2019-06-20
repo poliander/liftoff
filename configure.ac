@@ -42,20 +42,6 @@ PKG_CHECK_MODULES(
 
 LIBS="$LIBS $SDL_LIBS"
 
-# SDL_image -------------------------------------------------------------------
-
-PKG_CHECK_MODULES(
-    [SDL_IMAGE],
-    [SDL_image >= 1.2.0],
-    [],
-    [AC_MSG_NOTICE([SDL_image not located by pkg-config, checking with AC CHECK LIB:])
-     AC_CHECK_LIB([SDL_image],
-        [IMG_Load],
-        [],
-        [AC_MSG_ERROR([SDL_image not found! http://www.libsdl.org/projects/SDL_image])])])
-
-LIBS="$LIBS $SDL_IMAGE_LIBS"
-
 # SDL_mixer -------------------------------------------------------------------
 
 PKG_CHECK_MODULES(

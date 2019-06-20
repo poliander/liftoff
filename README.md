@@ -23,7 +23,6 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - libvorbis
 - libvorbisfile
 - SDL 1.2
-- SDL\_image 1.2
 - SDL\_mixer 1.2 (with ogg vorbis support)
 
 ### Compilation

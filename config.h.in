@@ -12,9 +12,6 @@
 /* Define to 1 if you have the `GLU' library (-lGLU). */
 #undef HAVE_LIBGLU
 
-/* Define to 1 if you have the `SDL_image' library (-lSDL_image). */
-#undef HAVE_LIBSDL_IMAGE
-
 /* Define to 1 if you have the `SDL_mixer' library (-lSDL_mixer). */
 #undef HAVE_LIBSDL_MIXER
 
