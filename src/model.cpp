@@ -1,8 +1,8 @@
 #include "model.hpp"
 
-Model::Model(std::string textureFilename, std::string objectFilename)
+Model::Model(string textureFilename, string objectFilename)
 {
-    texture = std::make_shared<Texture>(textureFilename, true);
+    texture = make_shared<Texture>(textureFilename, true);
     load(objectFilename);
 }
 
@@ -12,7 +12,7 @@ Model::~Model()
     memFree();
 }
 
-bool Model::load(std::string filename)
+bool Model::load(string filename)
 {
     int i, j;
 

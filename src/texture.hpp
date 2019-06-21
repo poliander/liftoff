@@ -1,5 +1,7 @@
 #pragma once
 
+using namespace std;
+
 #include <stdio.h>
 #include <string>
 #include <memory>
@@ -37,7 +39,7 @@ struct t_image {
 class Texture
 {
     public:
-        Texture(std::string filename, bool mipmap);
+        Texture(string filename, bool mipmap);
         ~Texture();
 
         operator GLuint() const { return resource; }
@@ -45,6 +47,6 @@ class Texture
     protected:
         GLuint resource = -1;
 
-        bool load(std::string filename, t_image *image);
+        bool load(string filename, t_image *image);
         void bind(t_image *image, bool mipmap);
 };

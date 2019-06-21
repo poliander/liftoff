@@ -1,6 +1,6 @@
 #include "texture.hpp"
 
-Texture::Texture(std::string filename, bool mipmap)
+Texture::Texture(string filename, bool mipmap)
 {
     t_image *image;
 
@@ -22,7 +22,7 @@ Texture::~Texture()
 {
 }
 
-bool Texture::load(std::string filename, t_image *image)
+bool Texture::load(string filename, t_image *image)
 {
     t_tga_header header;
     unsigned char raw[4], trans[4];
@@ -113,7 +113,7 @@ void Texture::bind(t_image *image, bool mipmap)
         const GLubyte* srcBegin = image->data + (r * (image->height - i - 1));
         const GLubyte* srcEnd   = srcBegin + r;
 
-        std::copy(srcBegin, srcEnd, data + r * i);
+        copy(srcBegin, srcEnd, data + r * i);
     }
 
     glGenTextures(1, &resource);
