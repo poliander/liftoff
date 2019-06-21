@@ -8,15 +8,15 @@ Model::Model(std::string textureFilename, std::string objectFilename)
 
 Model::~Model()
 {
+    glDeleteLists(list, 1);
     memFree();
 }
 
 bool Model::load(std::string filename)
 {
-    FILE *fp;
     int i, j;
 
-    fp = fopen(filename.c_str(), "r");
+    FILE *fp = fopen(filename.c_str(), "r");
 
     if (!fp) {
         return false;
@@ -79,6 +79,7 @@ bool Model::loadFirstPass(FILE *fp)
     mesh.num_verts = 0;
     mesh.num_texCoords = 0;
     mesh.num_normals = 0;
+    mesh.num_faces = 0;
 
     while (!feof(fp)) {
         fgets (buf, sizeof (buf), fp);
