@@ -122,8 +122,7 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-main.$(OBJEXT)
 __top_builddir__liftoff_OBJECTS =  \
 	$(am___top_builddir__liftoff_OBJECTS)
-am__DEPENDENCIES_1 =
-__top_builddir__liftoff_DEPENDENCIES = $(am__DEPENDENCIES_1)
+__top_builddir__liftoff_LDADD = $(LDADD)
 am__dirstamp = $(am__leading_dot)dirstamp
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -292,7 +291,6 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 __top_builddir__liftoff_CPPFLAGS = $(SDL_CFLAGS) $(SDL_MIXER_CFLAGS)
-__top_builddir__liftoff_LDADD = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     audio.cpp \
