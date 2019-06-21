@@ -3848,7 +3848,7 @@ fi
 done
 
 
-for ac_header in stdlib.h string.h
+for ac_header in algorithm cmath cstring map memory vector
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"

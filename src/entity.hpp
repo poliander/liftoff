@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 #include <GL/gl.h>

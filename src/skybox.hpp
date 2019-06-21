@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 
 #include <state.hpp>

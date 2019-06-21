@@ -1,6 +1,7 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 

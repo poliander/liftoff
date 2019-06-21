@@ -3,6 +3,15 @@
 /* Game resources */
 #undef GAMEDATA
 
+/* Define to 1 if you have the <algorithm> header file. */
+#undef HAVE_ALGORITHM
+
+/* Define to 1 if you have the <cmath> header file. */
+#undef HAVE_CMATH
+
+/* Define to 1 if you have the <cstring> header file. */
+#undef HAVE_CSTRING
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -14,6 +23,12 @@
 
 /* Define to 1 if you have the `SDL_mixer' library (-lSDL_mixer). */
 #undef HAVE_LIBSDL_MIXER
+
+/* Define to 1 if you have the <map> header file. */
+#undef HAVE_MAP
+
+/* Define to 1 if you have the <memory> header file. */
+#undef HAVE_MEMORY
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -38,6 +53,9 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <vector> header file. */
+#undef HAVE_VECTOR
 
 /* Name of package */
 #undef PACKAGE

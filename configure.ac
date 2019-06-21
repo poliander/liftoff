@@ -25,7 +25,7 @@ AC_LANG([C++])
 
 # Checks for standard header files, typedefs, structures etc.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([algorithm cmath cstring map memory vector])
 AC_C_CONST
 AC_CANONICAL_HOST
 AC_DEFINE_DIR(GAMEDATA, ["{prefix}/share/liftoff"], [Game resources])

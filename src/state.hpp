@@ -3,7 +3,7 @@
 using namespace std;
 
 #include <map>
-#include <math.h>
+#include <cmath>
 #include <memory>
 #include <vector>
 #include <sys/stat.h>

@@ -3,7 +3,7 @@
 using namespace std;
 
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <memory>
 #include <stdlib.h>
 #include <time.h>
