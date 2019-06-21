@@ -6,10 +6,10 @@ Texture::Texture(const char *filename, bool mipmap)
 
     if (load(filename, image)) {
         bind(image, mipmap);
+    }
 
-        if (image->data) {
-            free(image->data);
-        }
+    if (image->data) {
+        free(image->data);
     }
 
     free(image);

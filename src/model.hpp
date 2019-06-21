@@ -2,6 +2,7 @@
 
 using namespace std;
 
+#include <cstring>
 #include <memory>
 #include <stdio.h>
 
