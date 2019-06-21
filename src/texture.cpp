@@ -1,6 +1,6 @@
 #include "texture.hpp"
 
-Texture::Texture(const char *filename, bool mipmap)
+Texture::Texture(std::string filename, bool mipmap)
 {
     t_image *image;
 
@@ -22,13 +22,13 @@ Texture::~Texture()
 {
 }
 
-bool Texture::load(const char *filename, t_image *image)
+bool Texture::load(std::string filename, t_image *image)
 {
     t_tga_header header;
     unsigned char raw[4], trans[4];
     int rle_count = 0, rle_repeat = 0, read_next = 1, pixels;
 
-    FILE *fd = fopen(filename, "rb");
+    FILE *fd = fopen(filename.c_str(), "rb");
 
     if (!fd) {
         return false;

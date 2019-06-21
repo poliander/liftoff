@@ -1,8 +1,7 @@
 #pragma once
 
-using namespace std;
-
 #include <cstring>
+#include <string>
 #include <memory>
 #include <stdio.h>
 
@@ -15,20 +14,20 @@ using namespace std;
 class Model
 {
     public:
-        Model(const char *txt, const char *obj);
+        Model(std::string textureFilename, std::string objectFilename);
         ~Model();
 
         operator GLuint() const { return list; }
 
     protected:
-        obj_model_t         mesh;
-        shared_ptr<Texture> texture;
-        GLuint              list = -1;
+        obj_model_t              mesh;
+        std::shared_ptr<Texture> texture;
+        GLuint                   list = -1;
 
-        bool                load(const char *filename);
-        bool                loadFirstPass(FILE *fp);
-        bool                loadSecondPass(FILE *fp);
+        bool                     load(std::string filename);
+        bool                     loadFirstPass(FILE *fp);
+        bool                     loadSecondPass(FILE *fp);
 
-        bool                memAllocate();
-        void                memFree();
+        bool                     memAllocate();
+        void                     memFree();
 };

@@ -8,8 +8,11 @@ using namespace std;
 #include <vector>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #include <SDL.h>
+
+#include "../config.h"
 
 #include "audio.hpp"
 #include "config.hpp"
@@ -47,11 +50,12 @@ class State
 
         bool            log_file;
 
+        char            dir_configuration[255];
+        char            dir_resources[255];
+
         bool            engine_restart;
         bool            engine_boundary;
         bool            engine_debug;
-        char            engine_cfgfile[255];
-        char            engine_datadir[255];
 
         // hardware capabilities
         bool            vid_sup_fullscreen;

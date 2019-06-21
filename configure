@@ -626,6 +626,7 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+GAMEDATA
 SDL_MIXER_LIBS
 SDL_MIXER_CFLAGS
 SDL_CONFIG
@@ -634,7 +635,9 @@ SDL_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
-GAMEDATA
+EGREP
+GREP
+CXXCPP
 host_os
 host_vendor
 host_cpu
@@ -643,9 +646,6 @@ build_os
 build_vendor
 build_cpu
 build
-EGREP
-GREP
-CXXCPP
 am__fastdepCXX_FALSE
 am__fastdepCXX_TRUE
 CXXDEPMODE
@@ -2747,7 +2747,6 @@ END
 fi
 
 
-# Checks for programs.
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3452,8 +3451,77 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
+# Make sure we can run config.sub.
+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
 
-# Checks for standard header files, typedefs, structures etc.
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
+$as_echo_n "checking build system type... " >&6; }
+if ${ac_cv_build+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_build_alias=$build_alias
+test "x$ac_build_alias" = x &&
+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+test "x$ac_build_alias" = x &&
+  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
+$as_echo "$ac_cv_build" >&6; }
+case $ac_cv_build in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+esac
+build=$ac_cv_build
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_build
+shift
+build_cpu=$1
+build_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+build_os=$*
+IFS=$ac_save_IFS
+case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
+$as_echo_n "checking host system type... " >&6; }
+if ${ac_cv_host+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "x$host_alias" = x; then
+  ac_cv_host=$ac_cv_build
+else
+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
+$as_echo "$ac_cv_host" >&6; }
+case $ac_cv_host in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+esac
+host=$ac_cv_host
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_host
+shift
+host_cpu=$1
+host_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+host_os=$*
+IFS=$ac_save_IFS
+case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+
+
 
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3831,36 +3899,6 @@ $as_echo "#define STDC_HEADERS 1" >>confdefs.h
 
 fi
 
-# On IRIX 5.3, sys/types and inttypes.h are conflicting.
-for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
-		  inttypes.h stdint.h unistd.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_cxx_check_header_compile "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default
-"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
-
-for ac_header in algorithm cmath cstring map memory vector
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-
-done
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for an ANSI C-conforming const" >&5
 $as_echo_n "checking for an ANSI C-conforming const... " >&6; }
 if ${ac_cv_c_const+:} false; then :
@@ -3942,93 +3980,35 @@ $as_echo "#define const /**/" >>confdefs.h
 
 fi
 
-# Make sure we can run config.sub.
-$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
-  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
-$as_echo_n "checking build system type... " >&6; }
-if ${ac_cv_build+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_build_alias=$build_alias
-test "x$ac_build_alias" = x &&
-  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
-test "x$ac_build_alias" = x &&
-  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
-ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
-  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
-$as_echo "$ac_cv_build" >&6; }
-case $ac_cv_build in
-*-*-*) ;;
-*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
-esac
-build=$ac_cv_build
-ac_save_IFS=$IFS; IFS='-'
-set x $ac_cv_build
-shift
-build_cpu=$1
-build_vendor=$2
-shift; shift
-# Remember, the first character of IFS is used to create $*,
-# except with old shells:
-build_os=$*
-IFS=$ac_save_IFS
-case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
-$as_echo_n "checking host system type... " >&6; }
-if ${ac_cv_host+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test "x$host_alias" = x; then
-  ac_cv_host=$ac_cv_build
-else
-  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
-    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
-fi
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
-$as_echo "$ac_cv_host" >&6; }
-case $ac_cv_host in
-*-*-*) ;;
-*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
-esac
-host=$ac_cv_host
-ac_save_IFS=$IFS; IFS='-'
-set x $ac_cv_host
-shift
-host_cpu=$1
-host_vendor=$2
-shift; shift
-# Remember, the first character of IFS is used to create $*,
-# except with old shells:
-host_os=$*
-IFS=$ac_save_IFS
-case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
-
-
-
-	prefix_NONE=
-	exec_prefix_NONE=
-	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
-        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
-			eval ac_define_dir="\"$"{prefix}/share/liftoff"\""
-	eval ac_define_dir="\"$ac_define_dir\""
-	GAMEDATA="$ac_define_dir"
-
-
-cat >>confdefs.h <<_ACEOF
-#define GAMEDATA "$ac_define_dir"
+# On IRIX 5.3, sys/types and inttypes.h are conflicting.
+for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
+		  inttypes.h stdint.h unistd.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_compile "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default
+"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
-	test "$prefix_NONE" && prefix=NONE
-	test "$exec_prefix_NONE" && exec_prefix=NONE
+fi
+
+done
+
+
+for ac_header in algorithm cmath cstring map memory string vector
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
 
 
 # SDL -------------------------------------------------------------------------
@@ -4930,10 +4910,44 @@ fi
 
 case $host_os in
     *mingw32*)
+
+	prefix_NONE=
+	exec_prefix_NONE=
+	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
+        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
+			eval ac_define_dir="\"$"resources"\""
+	eval ac_define_dir="\"$ac_define_dir\""
+	GAMEDATA="$ac_define_dir"
+
+
+cat >>confdefs.h <<_ACEOF
+#define GAMEDATA "$ac_define_dir"
+_ACEOF
+
+	test "$prefix_NONE" && prefix=NONE
+	test "$exec_prefix_NONE" && exec_prefix=NONE
+
         LIBS="$LIBS -lvorbisfile -lvorbis -logg -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
     ;;
 
     *)
+
+	prefix_NONE=
+	exec_prefix_NONE=
+	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
+        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
+			eval ac_define_dir="\"$"{prefix}/share/liftoff"\""
+	eval ac_define_dir="\"$ac_define_dir\""
+	GAMEDATA="$ac_define_dir"
+
+
+cat >>confdefs.h <<_ACEOF
+#define GAMEDATA "$ac_define_dir"
+_ACEOF
+
+	test "$prefix_NONE" && prefix=NONE
+	test "$exec_prefix_NONE" && exec_prefix=NONE
+
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glVertex3f in -lGL" >&5
 $as_echo_n "checking for glVertex3f in -lGL... " >&6; }
 if ${ac_cv_lib_GL_glVertex3f+:} false; then :

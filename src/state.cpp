@@ -2,6 +2,24 @@
 
 State::State()
 {
+    char cwd[255];
+
+    getcwd(cwd, 255);
+
+    if (chdir(DEFAULT_GAMEDATA) == 0) {
+        sprintf(dir_resources, "%s", DEFAULT_GAMEDATA);
+    } else {
+        sprintf(dir_resources, "%s", GAMEDATA);
+    }
+
+    chdir(cwd);
+
+#ifdef _WIN32
+    sprintf(dir_configuration, "%s\\LiftOff", getenv("APPDATA"));
+#else
+    sprintf(dir_configuration, "%s/.liftoff", getenv("HOME"));
+#endif
+
     config.vid_width        = DEFAULT_VID_WIDTH;
     config.vid_height       = DEFAULT_VID_HEIGHT;
     config.vid_fullscreen   = DEFAULT_VID_FULLSCREEN;
@@ -28,11 +46,11 @@ State::State()
     mouse_pressed           = false;
     mouse_released          = true;
 
-    tilt_factor             = .0f;
-    tilt_x                  = .0f;
-    tilt_y                  = .0f;
-    tilt_dx                 = .0f;
-    tilt_dy                 = .0f;
+    tilt_factor             = 0;
+    tilt_x                  = 0;
+    tilt_y                  = 0;
+    tilt_dx                 = 0;
+    tilt_dy                 = 0;
 
     id                      = 0;
 }

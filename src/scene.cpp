@@ -35,108 +35,111 @@ Scene::~Scene()
  */
 void Scene::load()
 {
+    state.textures.clear();
+    state.models.clear();
+
     state.log("Loading 'title.tga'\n");
     state.textures.insert(make_pair(T_TITLE, new Texture(
-        "resources/gfx/title.tga", true
+        string(state.dir_resources).append("/gfx/title.tga"), true
     )));
 
     state.log("Loading 'font.tga'\n");
     state.textures.insert(make_pair(T_FONT, new Texture(
-        "resources/gfx/font.tga", true
+        string(state.dir_resources).append("/gfx/font.tga"), true
     )));
 
     state.log("Loading 'cursor.tga'\n");
     state.textures.insert(make_pair(T_CURSOR, new Texture(
-        "resources/gfx/cursor.tga", true
+        string(state.dir_resources).append("/gfx/cursor.tga"), true
     )));
 
     state.log("Loading 'menu_1.tga'\n");
     state.textures.insert(make_pair(T_MENU_1, new Texture(
-        "resources/gfx/menu_1.tga", true
+        string(state.dir_resources).append("/gfx/menu_1.tga"), true
     )));
 
     state.log("Loading 'menu_2.tga'\n");
     state.textures.insert(make_pair(T_MENU_2, new Texture(
-        "resources/gfx/menu_2.tga", true
+        string(state.dir_resources).append("/gfx/menu_2.tga"), true
     )));
 
     state.log("Loading 'hud_1.tga'\n");
     state.textures.insert(make_pair(T_HUD_1, new Texture(
-        "resources/gfx/hud_1.tga", true
+        string(state.dir_resources).append("/gfx/hud_1.tga"), true
     )));
 
     state.log("Loading 'hud_2.tga'\n");
     state.textures.insert(make_pair(T_HUD_2, new Texture(
-        "resources/gfx/hud_2.tga", true
+        string(state.dir_resources).append("/gfx/hud_2.tga"), true
     )));
 
     state.log("Loading 'hud_3.tga'\n");
     state.textures.insert(make_pair(T_HUD_3, new Texture(
-        "resources/gfx/hud_3.tga", true
+        string(state.dir_resources).append("/gfx/hud_3.tga"), true
     )));
 
     state.log("Loading 'star.tga'\n");
     state.textures.insert(make_pair(T_STAR, new Texture(
-        "resources/gfx/star.tga", true
+        string(state.dir_resources).append("/gfx/star.tga"), true
     )));
 
     state.log("Loading 'missile_1.tga'\n");
     state.textures.insert(make_pair(T_MISSILE_1, new Texture(
-        "resources/gfx/missile_1.tga", true
+        string(state.dir_resources).append("/gfx/missile_1.tga"), true
     )));
 
     state.log("Loading 'explosion_1.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_1, new Texture(
-        "resources/gfx/explosion_1.tga", true
+        string(state.dir_resources).append("/gfx/explosion_1.tga"), true
     )));
 
     state.log("Loading 'explosion_2.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_2, new Texture(
-        "resources/gfx/explosion_2.tga", true
+        string(state.dir_resources).append("/gfx/explosion_2.tga"), true
     )));
 
     state.log("Loading 'explosion_3.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_3, new Texture(
-        "resources/gfx/explosion_3.tga", true
+        string(state.dir_resources).append("/gfx/explosion_3.tga"), true
     )));
 
     state.log("Loading 'jet_exhaust.tga'\n");
     state.textures.insert(make_pair(T_JET_EXHAUST, new Texture(
-        "resources/gfx/jet_exhaust.tga", true
+        string(state.dir_resources).append("/gfx/jet_exhaust.tga"), true
     )));
 
     state.log("Loading 'background_1.tga'\n");
     state.textures.insert(make_pair(T_BACKGROUND_1, new Texture(
-        "resources/gfx/background_1.tga", true
+        string(state.dir_resources).append("/gfx/background_1.tga"), true
     )));
 
     state.log("Loading 'glow_1.tga'\n");
     state.textures.insert(make_pair(T_GLOW, new Texture(
-        "resources/gfx/glow_1.tga", true
+        string(state.dir_resources).append("/gfx/glow_1.tga"), true
     )));
 
     state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
-        "resources/gfx/ship_1.tga",
-        "resources/obj/ship_1.obj"
+        string(state.dir_resources).append("/gfx/ship_1.tga"),
+        string(state.dir_resources).append("/obj/ship_1.obj")
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
-        "resources/gfx/asteroid_1.tga",
-        "resources/obj/asteroid_1.obj"
+        string(state.dir_resources).append("/gfx/asteroid_1.tga"),
+        string(state.dir_resources).append("/obj/asteroid_1.obj")
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
-        "resources/gfx/debris_1.tga",
-        "resources/obj/debris_1.obj"
+        string(state.dir_resources).append("/gfx/debris_1.tga"),
+        string(state.dir_resources).append("/obj/debris_1.obj")
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
-        "resources/gfx/cargo_1.tga",
-        "resources/obj/cargo_1.obj"
+        string(state.dir_resources).append("/gfx/cargo_1.tga"),
+        string(state.dir_resources).append("/obj/cargo_1.obj")
     )));
 
     // music
@@ -177,7 +180,7 @@ bool Scene::loadLevel()
     state.entities.clear();
     state.entities.push_back(player);
 
-    sprintf(fname, "%s/lvl/mission_%d.dat", state.engine_datadir, state.lvl_id);
+    sprintf(fname, "%s/lvl/mission_%d.dat", state.dir_resources, state.lvl_id);
     fp = fopen(fname, "r");
 
     if (fp == NULL) {

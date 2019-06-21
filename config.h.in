@@ -1,6 +1,6 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* Game resources */
+/* Game resources directory */
 #undef GAMEDATA
 
 /* Define to 1 if you have the <algorithm> header file. */
@@ -38,6 +38,9 @@
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <string> header file. */
+#undef HAVE_STRING
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H

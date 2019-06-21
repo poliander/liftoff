@@ -19,16 +19,12 @@ AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([foreign])
 
-# Checks for programs.
 AC_PROG_CXX
 AC_LANG([C++])
-
-# Checks for standard header files, typedefs, structures etc.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([algorithm cmath cstring map memory vector])
-AC_C_CONST
 AC_CANONICAL_HOST
-AC_DEFINE_DIR(GAMEDATA, ["{prefix}/share/liftoff"], [Game resources])
+AC_HEADER_STDC
+AC_C_CONST
+AC_CHECK_HEADERS([algorithm cmath cstring map memory string vector])
 
 # SDL -------------------------------------------------------------------------
 
@@ -63,10 +59,12 @@ AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-
 
 case $host_os in
     *mingw32*)
+        AC_DEFINE_DIR(GAMEDATA, ["resources"], [Game resources directory])
         LIBS="$LIBS -lvorbisfile -lvorbis -logg -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
     ;;
 
     *)
+        AC_DEFINE_DIR(GAMEDATA, ["{prefix}/share/liftoff"], [Game resources directory])
         AC_CHECK_LIB(GL, glVertex3f,, [AC_MSG_ERROR([OpenGL library missing or not usable.])])
         AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not usable.])])
     ;;

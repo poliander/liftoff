@@ -1,9 +1,9 @@
 #include "model.hpp"
 
-Model::Model(const char *txt, const char *obj)
+Model::Model(std::string textureFilename, std::string objectFilename)
 {
-    texture = make_shared<Texture>(txt, true);
-    load(obj);
+    texture = std::make_shared<Texture>(textureFilename, true);
+    load(objectFilename);
 }
 
 Model::~Model()
@@ -11,12 +11,12 @@ Model::~Model()
     memFree();
 }
 
-bool Model::load(const char *filename)
+bool Model::load(std::string filename)
 {
     FILE *fp;
     int i, j;
 
-    fp = fopen(filename, "r");
+    fp = fopen(filename.c_str(), "r");
 
     if (!fp) {
         return false;

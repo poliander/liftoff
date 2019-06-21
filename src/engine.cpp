@@ -16,29 +16,22 @@ bool Engine::loadConfiguration()
 {
     bool result = false;
     char cwd[255];
-    FILE *fp = NULL;
 
     getcwd(cwd, 255);
 
-    if (chdir(DEFAULT_GAMEDATA) == 0) {
-        sprintf(state.engine_datadir, "%s", DEFAULT_GAMEDATA);
-    } else {
-        sprintf(state.engine_datadir, "%s", GAMEDATA);
+    if (chdir(state.dir_configuration) == 0) {
+        FILE *fp = fopen(CFG_FILENAME, "rb");
+
+        if (fp) {
+            if (fread(&state.config, sizeof(config_t), 1, fp) == 1) {
+                result = true;
+            }
+
+            fclose(fp);
+        }
     }
 
     chdir(cwd);
-
-    fp = fopen(state.engine_cfgfile, "rb");
-
-    if (fp != NULL) {
-        result = true;
-
-        if (fread(&state.config, sizeof(config_t), 1, fp) != 1) {
-            result = false;
-        }
-
-        fclose(fp);
-    }
 
     return result;
 }
@@ -48,31 +41,32 @@ bool Engine::loadConfiguration()
  */
 bool Engine::writeConfiguration()
 {
-    char cfgdir[255], cwd[255];
-    FILE *fp = NULL;
-    bool result = true;
+    bool result = false;
+    char cwd[255];
 
     getcwd(cwd, 255);
-    sprintf(cfgdir, "%s/.liftoff", getenv("HOME"));
-    if (chdir(cfgdir) != 0) {
+
+    if (chdir(state.dir_configuration) != 0) {
 #ifdef _WIN32
-        mkdir(cfgdir);
+        mkdir(state.dir_configuration);
 #else
-        mkdir(cfgdir, 0755);
+        mkdir(state.dir_configuration, 0755);
 #endif
-    } else chdir(cwd);
-
-    fp = fopen(state.engine_cfgfile, "wb");
-
-    if (fp == NULL) {
-        result = false;
-    } else {
-        if (fwrite(&state.config, sizeof(config_t), 1, fp) != 1) {
-            result = false;
-        }
-
-        fclose(fp);
     }
+
+    if (chdir(state.dir_configuration) == 0) {
+        FILE *fp = fopen(CFG_FILENAME, "wb");
+
+        if (fp) {
+            if (fwrite(&state.config, sizeof(config_t), 1, fp) == 1) {
+                result = true;
+            }
+
+            fclose(fp);
+        }
+    }
+
+    chdir(cwd);
 
     return result;
 }
@@ -132,47 +126,19 @@ bool Engine::init(int argc, char **argv)
         state.log("none found\n");
     }
 
-    // get location of configuration file
-    if (argv != NULL) {
-#ifdef _WIN32
-        int l = strlen(argv[0]);
-        char cfgdir[255], cwd[255];
-
-        getcwd(cwd, 255);
-        sprintf(cfgdir, "%s\\AppData\\Local", getenv("homepath"));
-
-        if (chdir(cfgdir) == 0) {
-            // AppData directory exists
-            mkdir("Lift Off");
-            if (chdir("Lift Off") == 0) {
-                sprintf(state.engine_cfgfile, "%s\\Lift Off\\%s", cfgdir, DEFAULT_CFG_FILE);
-            }
-        } else {
-            // Store liftoff.cfg in same directory as binary
-            while ((l>0) && (argv[0][l] != '\\')) l--;
-            strncpy(cfgdir, argv[0], l);
-            cfgdir[l] = 0;
-            sprintf(state.engine_cfgfile, "%s\\%s", cfgdir, DEFAULT_CFG_FILE);
-        }
-
-        chdir(cwd);
-#else
-        sprintf(state.engine_cfgfile, "%s/.liftoff/%s", getenv("HOME"), DEFAULT_CFG_FILE);
-#endif
-    }
-
-    // load configuration
     state.log("Loading configuration... ");
-    if (!loadConfiguration()) {
-        state.log("failed (using defaults)\n");
-    } else {
+
+    if (loadConfiguration()) {
         state.log("ok\n");
+    } else {
+        state.log("failed (using defaults)\n");
     }
+
     defmodes[0][0] = state.config.vid_width;
     defmodes[0][1] = state.config.vid_height;
 
-    // check for OpenGL/screen capabilities
-    state.log("Validating display configuration...\n");
+    state.log("Initializing OpenGL display...\n");
+
     vidinfo = SDL_GetVideoInfo();
     sprintf(msg, "- %dx%d screen detected\n", vidinfo->current_w, vidinfo->current_h);
     state.log(msg);
@@ -258,7 +224,7 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
-    sprintf(msg, "- using %dx%d @ %d bpp (#%d) ",
+    sprintf(msg, "- %dx%d @ %d bpp (#%d) ",
         state.config.vid_width,
         state.config.vid_height,
         state.vid_cfg_depth,
@@ -268,7 +234,7 @@ bool Engine::init(int argc, char **argv)
     state.log(msg);
 
     if (state.config.vid_fullscreen == 0) {
-        state.log("window mode\n");
+        state.log("window mode selected\n");
     } else {
         state.log("fullscreen mode selected\n");
     }
@@ -281,11 +247,10 @@ bool Engine::init(int argc, char **argv)
         state.log("on\n");
     }
 
-    state.log("Initializing OpenGL display\n");
-
     if (!initDisplay()) {
+        state.log("\n");
         state.log(SDL_GetError());
-        state.log("\n\n");
+        state.log("\n");
 
         return false;
     }
@@ -301,7 +266,7 @@ bool Engine::init(int argc, char **argv)
         } else {
             state.log("ok\n");
             state.audio.init(
-                    state.engine_datadir,
+                    state.dir_resources,
                     state.config.aud_sfx,
                     state.config.aud_music,
                     state.config.aud_mixfreq
@@ -397,9 +362,9 @@ bool Engine::initDisplay()
     }
 
     if (cfg_multisampling == 0) {
-        sprintf(msg, "Multisampling disabled\n");
+        sprintf(msg, "- multisampling disabled\n");
     } else {
-        sprintf(msg, "Multisampling enabled (%d spp)\n", cfg_multisampling);
+        sprintf(msg, "- multisampling enabled (%d spp)\n", cfg_multisampling);
     }
 
     state.log(msg);
@@ -656,9 +621,12 @@ void Engine::halt()
         state.log("failed\n");
     }
 
-    if ( (state.config.aud_sfx != -1) ||
-         (state.config.aud_music != -1) ) {
+    if (
+        state.config.aud_sfx   != -1 ||
+        state.config.aud_music != -1
+    ) {
         state.log("Closing audio device\n");
+
         Mix_CloseAudio();
         SDL_CloseAudio();
     }

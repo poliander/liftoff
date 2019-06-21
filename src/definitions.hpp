@@ -1,9 +1,9 @@
 #pragma once
 
-#define DEFAULT_CFG_FILE        "liftoff.cfg"
-#define DEFAULT_GAMEDATA        "resources"
-
 #define ABS(x) ((x>0)?(x):(-x))
+
+#define DEFAULT_GAMEDATA        "resources"
+#define CFG_FILENAME            "liftoff.cfg"
 
 // video/audio defaults
 #define DEFAULT_VID_FULLSCREEN  true
