@@ -2,13 +2,16 @@
 
 Texture::Texture(const char *filename, bool mipmap)
 {
-    t_image *image = (t_image *)malloc(sizeof(t_image));
+    t_image *image;
+
+    image = (t_image *)malloc(sizeof(t_image));
+    image->data = nullptr;
 
     if (load(filename, image)) {
         bind(image, mipmap);
     }
 
-    if (image->data) {
+    if (image->data != nullptr) {
         free(image->data);
     }
 
@@ -23,7 +26,7 @@ bool Texture::load(const char *filename, t_image *image)
 {
     t_tga_header header;
     unsigned char raw[4], trans[4];
-    int rle_count = 0, rle_repeat = 0, read_next = 1, p;
+    int rle_count = 0, rle_repeat = 0, read_next = 1, pixels;
 
     FILE *fd = fopen(filename, "rb");
 
@@ -51,10 +54,10 @@ bool Texture::load(const char *filename, t_image *image)
             return false;
     }
     
-    p = image->width * image->height;
-    image->data = (GLubyte *)malloc((image->bpp / 8) * p * sizeof(GLubyte));
+    pixels = image->width * image->height;
+    image->data = (GLubyte *)malloc((image->bpp / 8) * pixels * sizeof(GLubyte));
 
-    for (int i = 0; i < p; ++i) {
+    for (int i = 0; i < pixels; ++i) {
         if (header.data_type == 10) {
             if (rle_count == 0) {
                 int rle_cmd = fgetc(fd);

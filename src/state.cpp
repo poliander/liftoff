@@ -2,15 +2,6 @@
 
 State::State()
 {
-    char *buf;
-    long psize = 255;
-
-    if ((buf = (char *)malloc((size_t)psize)) != NULL) {
-        getcwd(buf, (size_t)psize);
-        sprintf(engine_datadir, "%s/resources", buf);
-        delete [] buf;
-    }
-
     config.vid_width        = DEFAULT_VID_WIDTH;
     config.vid_height       = DEFAULT_VID_HEIGHT;
     config.vid_fullscreen   = DEFAULT_VID_FULLSCREEN;
