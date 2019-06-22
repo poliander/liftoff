@@ -21,7 +21,8 @@ bool Asteroid::damage(State &s, int p)
         s.audio.playSample(SFX_EXPLOSION_2, 192, 180);
 
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_2, p_x, p_y, p_z));
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z - 15.0f));
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z + 5.0f));
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_4, p_x, p_y, p_z + 10.0f));
 
         s.addMessage(m, MSG_MONEY);
         s.player->addMoney(m);

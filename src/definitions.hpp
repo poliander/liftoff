@@ -58,11 +58,9 @@
 #define T_MISSILE_1             10
 #define T_EXPLOSION_1           11
 #define T_EXPLOSION_2           12
-#define T_EXPLOSION_3           13
-#define T_EXPLOSION_4           14
-#define T_BACKGROUND_1          15
-#define T_JET_EXHAUST           16
-#define T_GLOW                  17
+#define T_BACKGROUND_1          13
+#define T_JET_EXHAUST           14
+#define T_GLOW                  15
 
 // objects
 #define OBJ_PLAYER              101 // player

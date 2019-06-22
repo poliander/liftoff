@@ -98,11 +98,6 @@ void Scene::load()
         string(state.dir_resources).append("/gfx/explosion_2.tga"), true
     )));
 
-    state.log("Loading 'explosion_3.tga'\n");
-    state.textures.insert(make_pair(T_EXPLOSION_3, new Texture(
-        string(state.dir_resources).append("/gfx/explosion_3.tga"), true
-    )));
-
     state.log("Loading 'jet_exhaust.tga'\n");
     state.textures.insert(make_pair(T_JET_EXHAUST, new Texture(
         string(state.dir_resources).append("/gfx/jet_exhaust.tga"), true

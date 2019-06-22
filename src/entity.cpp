@@ -348,7 +348,7 @@ void Entity::checkTarget(State &s, shared_ptr<Entity> e)
     ax = asin(dx / hx) * 180.0f / M_PI;
     ay = asin(dy / hy) * 180.0f / M_PI;
 
-    if (ax < 1.0f && ay < 1.0f) {
+    if (ax < .75f && ay < .75f) {
         if (target) {
             if (calcDistance3D(s, e) < calcDistance3D(s, target)) {
                 target = e;

@@ -15,6 +15,5 @@ class Explosion : public Entity
     private:
         ParticleEngine* particles;
 
-        bool            has_particles;
         float           timer;
 };
