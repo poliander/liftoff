@@ -16,7 +16,6 @@ using namespace std;
 
 #include "audio.hpp"
 #include "definitions.hpp"
-#include "message.hpp"
 #include "model.hpp"
 #include "texture.hpp"
 
@@ -31,6 +30,16 @@ struct config_t
     short               aud_sfx;
     short               aud_music;
     int                 aud_mixfreq;
+};
+
+struct message_t
+{
+    short   type;
+    char    text[64];
+
+    float   counter;
+    short   direction_x;
+    short   direction_y;
 };
 
 class Entity;
