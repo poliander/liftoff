@@ -1,8 +1,9 @@
 #include "model.hpp"
 
-Model::Model(shared_ptr<Mesh> m, shared_ptr<Texture> t) :
+Model::Model(shared_ptr<Mesh> m, shared_ptr<Texture> t, shared_ptr<Shader> s) :
     mesh(m),
-    texture(t)
+    texture(t),
+    shader(s)
 {
     list = glGenLists(1);
 

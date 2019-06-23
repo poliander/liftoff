@@ -7,6 +7,6 @@ using namespace std;
 class Shader
 {
     public:
-        Shader(string vertexShaderFilename, string fragmentShaderFlename);
+        Shader(string vsFilename, string fsFilename);
         ~Shader();
 };

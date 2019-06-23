@@ -127,25 +127,29 @@ void Scene::load()
     state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
         make_shared<Mesh>(string(state.dir_resources).append("/obj/ship_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga"), true)
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga"), true),
+        make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
         make_shared<Mesh>(string(state.dir_resources).append("/obj/asteroid_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga"), true)
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga"), true),
+        make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
         make_shared<Mesh>(string(state.dir_resources).append("/obj/debris_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga"), true)
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga"), true),
+        make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
         make_shared<Mesh>(string(state.dir_resources).append("/obj/cargo_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga"), true)
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga"), true),
+        make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     // sound effects

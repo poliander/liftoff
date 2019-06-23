@@ -16,7 +16,7 @@ using namespace std;
 class Model
 {
     public:
-        Model(shared_ptr<Mesh> m, shared_ptr<Texture> t);
+        Model(shared_ptr<Mesh> m, shared_ptr<Texture> t, shared_ptr<Shader> s);
         ~Model();
 
         operator GLuint() const { return list; }
