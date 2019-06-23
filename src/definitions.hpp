@@ -62,6 +62,9 @@
 #define T_JET_EXHAUST           14
 #define T_GLOW                  15
 
+// shaders
+#define S_BASIC_1               0
+
 // objects
 #define OBJ_PLAYER              101 // player
 #define OBJ_CARGO_1             201 // cargo

@@ -1,13 +1,13 @@
 #pragma once
 
-using namespace std;
-
 #include <stdio.h>
 #include <string>
 #include <memory>
 
 #include <GL/gl.h>
 #include <GL/glext.h>
+
+using namespace std;
 
 #pragma pack(push, 1)
 

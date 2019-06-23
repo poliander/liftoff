@@ -1,7 +1,5 @@
 #pragma once
 
-using namespace std;
-
 #include <memory>
 
 #include <GL/gl.h>
@@ -9,6 +7,8 @@ using namespace std;
 #include "definitions.hpp"
 #include "functions.hpp"
 #include "state.hpp"
+
+using namespace std;
 
 class Entity
 {

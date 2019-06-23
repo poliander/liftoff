@@ -1,8 +1,5 @@
 #pragma once
 
-using namespace std;
-
-#include <cstring>
 #include <string>
 #include <memory>
 #include <stdio.h>
@@ -11,25 +8,23 @@ using namespace std;
 #include <GL/glext.h>
 
 #include <mesh.hpp>
+#include <shader.hpp>
 #include <texture.hpp>
+
+using namespace std;
 
 class Model
 {
     public:
-        Model(string textureFilename, string objectFilename);
+        Model(shared_ptr<Mesh> m, shared_ptr<Texture> t);
         ~Model();
 
         operator GLuint() const { return list; }
 
     protected:
-        obj_model_t         mesh;
+        shared_ptr<Mesh>    mesh;
+        shared_ptr<Shader>  shader;
         shared_ptr<Texture> texture;
+
         GLuint              list = -1;
-
-        bool                load(string filename);
-        bool                loadFirstPass(FILE *fp);
-        bool                loadSecondPass(FILE *fp);
-
-        bool                memAllocate();
-        void                memFree();
 };

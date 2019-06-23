@@ -36,6 +36,7 @@ Scene::~Scene()
 void Scene::load()
 {
     state.textures.clear();
+    state.shaders.clear();
     state.models.clear();
 
     state.log("Loading 'title.tga'\n");
@@ -113,34 +114,42 @@ void Scene::load()
         string(state.dir_resources).append("/gfx/glow_1.tga"), true
     )));
 
+    // shaders
+
+    state.log("Loading shader 'basic_1'\n");
+    state.shaders.insert(make_pair(S_BASIC_1, new Shader(
+        string(state.dir_resources).append("/gls/basic_1.glvs"),
+        string(state.dir_resources).append("/gls/basic_1.glfs")
+    )));
+
+    // models
+
     state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
-        string(state.dir_resources).append("/gfx/ship_1.tga"),
-        string(state.dir_resources).append("/obj/ship_1.obj")
+        make_shared<Mesh>(string(state.dir_resources).append("/obj/ship_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga"), true)
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
-        string(state.dir_resources).append("/gfx/asteroid_1.tga"),
-        string(state.dir_resources).append("/obj/asteroid_1.obj")
+        make_shared<Mesh>(string(state.dir_resources).append("/obj/asteroid_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga"), true)
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
-        string(state.dir_resources).append("/gfx/debris_1.tga"),
-        string(state.dir_resources).append("/obj/debris_1.obj")
+        make_shared<Mesh>(string(state.dir_resources).append("/obj/debris_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga"), true)
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
-        string(state.dir_resources).append("/gfx/cargo_1.tga"),
-        string(state.dir_resources).append("/obj/cargo_1.obj")
+        make_shared<Mesh>(string(state.dir_resources).append("/obj/cargo_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga"), true)
     )));
 
-    // music
-    state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
+    // sound effects
 
-    // sfx
     state.audio.sample[0]  = state.audio.loadSample("menu_1.wav");
     state.audio.sample[1]  = state.audio.loadSample("menu_2.wav");
     state.audio.sample[2]  = state.audio.loadSample("gun_1.wav");
@@ -153,6 +162,10 @@ void Scene::load()
     state.audio.sample[9]  = state.audio.loadSample("powerup_1.wav");
     state.audio.sample[10] = state.audio.loadSample("engine_3.wav");
     state.audio.sample[11] = state.audio.loadSample("logo.wav");
+
+    // music
+
+    state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
 }
 
 /*

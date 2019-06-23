@@ -1,7 +1,5 @@
 #pragma once
 
-using namespace std;
-
 #include <map>
 #include <cmath>
 #include <memory>
@@ -17,7 +15,10 @@ using namespace std;
 #include "audio.hpp"
 #include "definitions.hpp"
 #include "model.hpp"
+#include "shader.hpp"
 #include "texture.hpp"
+
+using namespace std;
 
 struct config_t
 {
@@ -57,6 +58,7 @@ class State
         config_t                    config;
 
         map<unsigned int, Texture*> textures;
+        map<unsigned int, Shader*>  shaders;
         map<unsigned int, Model*>   models;
 
         shared_ptr<Entity>          player;

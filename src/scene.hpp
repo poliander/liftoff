@@ -1,7 +1,5 @@
 #pragma once
 
-using namespace std;
-
 #include <algorithm>
 #include <cmath>
 #include <memory>
@@ -27,6 +25,8 @@ using namespace std;
 #include "player.hpp"
 #include "powerup.hpp"
 #include "skybox.hpp"
+
+using namespace std;
 
 class Scene
 {

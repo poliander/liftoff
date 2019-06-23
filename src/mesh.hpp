@@ -1,5 +1,13 @@
 #pragma once
 
+#include <cstring>
+#include <string>
+
+#include <GL/gl.h>
+#include <GL/glext.h>
+
+using namespace std;
+
 // vector
 typedef float vec3_t[3];
 typedef float vec4_t[4];
@@ -25,27 +33,38 @@ struct obj_normal_t
 // faces
 struct obj_face_t
 {
-    GLenum type;                        // primitive type
-    int num_elems;                      // number of vertices
+    GLenum type;                            // primitive type
+    int num_elems;                          // number of vertices
 
-    int *vert_indices;                  // vertex indices
-    int *uvw_indices;                   // texture coordinate indices
-    int *norm_indices;                  // normal vector indices
+    int *vert_indices;                      // vertex indices
+    int *uvw_indices;                       // texture coordinate indices
+    int *norm_indices;                      // normal vector indices
 };
 
-// model
-struct obj_model_t
+class Mesh
 {
-    int num_verts;                      // number of vertices
-    int num_texCoords;                  // number of texture coords.
-    int num_normals;                    // number of normal vectors
-    int num_faces;                      // number of polygons
+    public:
+        Mesh(string filename);
+        ~Mesh();
 
-    int has_texCoords;                  // has texture coordinates?
-    int has_normals;                    // has normal vectors?
+        int num_verts = 0;                  // number of vertices
+        int num_texCoords = 0;              // number of texture coords.
+        int num_normals = 0;                // number of normal vectors
+        int num_faces = 0;                  // number of polygons
 
-    struct obj_vertex_t *vertices;      // vertex list
-    struct obj_texCoord_t *texCoords;   // tex. coord. list
-    struct obj_normal_t *normals;       // normal vector list
-    struct obj_face_t *faces;           // model's polygons
+        int has_texCoords = 0;              // has texture coordinates?
+        int has_normals = 0;                // has normal vectors?
+
+        struct obj_vertex_t *vertices;      // vertex list
+        struct obj_texCoord_t *texCoords;   // tex. coord. list
+        struct obj_normal_t *normals;       // normal vector list
+        struct obj_face_t *faces;           // model's polygons
+
+    protected:
+        void load(string filename);
+        bool loadFirstPass(FILE *fp);
+        bool loadSecondPass(FILE *fp);
+
+        bool memAllocate();
+        void memFree();
 };
