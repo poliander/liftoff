@@ -1,9 +1,11 @@
 #pragma once
 
+#include <stdio.h>
 #include <cstring>
 #include <string>
+#include <memory>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <GL/glext.h>
 
 using namespace std;

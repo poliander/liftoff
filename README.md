@@ -19,6 +19,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 
 - libGL
 - libGLU
+- libGLEW
 - libogg
 - libvorbis
 - libvorbisfile

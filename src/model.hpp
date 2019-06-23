@@ -4,7 +4,7 @@
 #include <memory>
 #include <stdio.h>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <GL/glext.h>
 
 #include <mesh.hpp>

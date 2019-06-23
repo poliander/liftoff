@@ -56,17 +56,20 @@ LIBS="$LIBS $SDL_MIXER_LIBS"
 
 AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install libgl1-mesa-dev])])
 AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
+AC_CHECK_HEADER([GL/glew.h],, [AC_MSG_ERROR([GL/glew.h not found, install libglew-dev])])
 
 case $host_os in
     *mingw32*)
         AC_DEFINE_DIR(GAMEDATA, ["resources"], [Game resources directory])
-        LIBS="$LIBS -lvorbisfile -lvorbis -logg -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
+        CXXFLAGS="$CXXFLAGS -DGLEW_STATIC"
+        LIBS="$LIBS -lvorbisfile -lvorbis -logg -lwinmm -lglew32 -lglu32 -lopengl32 -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
     ;;
 
     *)
         AC_DEFINE_DIR(GAMEDATA, ["{prefix}/share/liftoff"], [Game resources directory])
         AC_CHECK_LIB(GL, glVertex3f,, [AC_MSG_ERROR([OpenGL library missing or not usable.])])
         AC_CHECK_LIB(GLU, gluPerspective,, [AC_MSG_ERROR([libglu1-mesa missing or not usable.])])
+        AC_CHECK_LIB(GLEW, glewIsSupported,, [AC_MSG_ERROR([libglew-dev missing or not usable.])])
     ;;
 esac
 

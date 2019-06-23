@@ -4907,6 +4907,14 @@ else
 fi
 
 
+ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glew.h" "ac_cv_header_GL_glew_h" "$ac_includes_default"
+if test "x$ac_cv_header_GL_glew_h" = xyes; then :
+
+else
+  as_fn_error $? "GL/glew.h not found, install libglew-dev" "$LINENO" 5
+fi
+
+
 
 case $host_os in
     *mingw32*)
@@ -4927,7 +4935,8 @@ _ACEOF
 	test "$prefix_NONE" && prefix=NONE
 	test "$exec_prefix_NONE" && exec_prefix=NONE
 
-        LIBS="$LIBS -lvorbisfile -lvorbis -logg -lopengl32 -lglu32 -lwinmm -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
+        CXXFLAGS="$CXXFLAGS -DGLEW_STATIC"
+        LIBS="$LIBS -lvorbisfile -lvorbis -logg -lwinmm -lglew32 -lglu32 -lopengl32 -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
     ;;
 
     *)
@@ -5040,6 +5049,53 @@ _ACEOF
 
 else
   as_fn_error $? "libglu1-mesa missing or not usable." "$LINENO" 5
+fi
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glewIsSupported in -lGLEW" >&5
+$as_echo_n "checking for glewIsSupported in -lGLEW... " >&6; }
+if ${ac_cv_lib_GLEW_glewIsSupported+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLEW  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glewIsSupported ();
+int
+main ()
+{
+return glewIsSupported ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_GLEW_glewIsSupported=yes
+else
+  ac_cv_lib_GLEW_glewIsSupported=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLEW_glewIsSupported" >&5
+$as_echo "$ac_cv_lib_GLEW_glewIsSupported" >&6; }
+if test "x$ac_cv_lib_GLEW_glewIsSupported" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGLEW 1
+_ACEOF
+
+  LIBS="-lGLEW $LIBS"
+
+else
+  as_fn_error $? "libglew-dev missing or not usable." "$LINENO" 5
 fi
 
     ;;

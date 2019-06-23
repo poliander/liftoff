@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 #include "definitions.hpp"
 #include "functions.hpp"
