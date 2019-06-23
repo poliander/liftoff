@@ -369,6 +369,15 @@ bool Engine::initDisplay()
 
     state.log(msg);
 
+    GLint glewStatus = glewInit();
+
+    if (GLEW_OK != glewStatus) {
+        sprintf(msg, "\nGLEW ERROR: %s\n", glewGetErrorString(glewStatus));
+        state.log(msg);
+
+        return false;
+    }
+
     SDL_ShowCursor(0);
     SDL_WM_SetCaption("Lift Off: Beyond Glaxium", NULL);
 
