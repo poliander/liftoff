@@ -8,7 +8,7 @@ Texture::Texture(string filename, bool mipmap)
     image->data = nullptr;
 
     if (load(filename, image)) {
-        bind(image, mipmap);
+        assign(image, mipmap);
     }
 
     if (image->data != nullptr) {
@@ -104,7 +104,7 @@ bool Texture::load(string filename, t_image *image)
     return true;
 }
 
-void Texture::bind(t_image *image, bool mipmap)
+void Texture::assign(t_image *image, bool mipmap)
 {
     int r = image->width * image->bpp / 8;
     GLubyte* data = new GLubyte[image->height * r];
@@ -134,4 +134,9 @@ void Texture::bind(t_image *image, bool mipmap)
     glTexImage2D(GL_TEXTURE_2D, 0, image->bpp / 8, image->width, image->height, 0, image->format, GL_UNSIGNED_BYTE, data);
 
     delete [] data;
+}
+
+void Texture::bind()
+{
+    glBindTexture(GL_TEXTURE_2D, resource);
 }

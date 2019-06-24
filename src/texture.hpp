@@ -43,11 +43,11 @@ class Texture
         Texture(string filename, bool mipmap);
         ~Texture();
 
-        operator GLuint() const { return resource; }
+        void bind();
 
     protected:
         GLuint resource = -1;
 
         bool load(string filename, t_image *image);
-        void bind(t_image *image, bool mipmap);
+        void assign(t_image *image, bool mipmap);
 };
