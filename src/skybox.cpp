@@ -67,7 +67,9 @@ void Skybox::draw(State &s)
     glDisable(GL_CULL_FACE);
 
     // background
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_BACKGROUND_1]);
+
+    s.textures[T_BACKGROUND_1]->bind();
+
     glRotatef(s.stars_rotation_pos, 0, 0, 1);
     glPushMatrix();
     glTranslatef(0, 0, 0);
@@ -87,7 +89,7 @@ void Skybox::draw(State &s)
     glEnd();
     glPopMatrix();
 
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
+    s.textures[T_STAR]->bind();
 
     // far stars
     for (i = 0; i < (num_stars - num_stars_warp); ++i) {

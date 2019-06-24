@@ -13,6 +13,7 @@
 #include "../config.h"
 
 #include "audio.hpp"
+#include "camera.hpp"
 #include "definitions.hpp"
 #include "model.hpp"
 #include "shader.hpp"
@@ -22,25 +23,26 @@ using namespace std;
 
 struct config_t
 {
-    short               vid_width;
-    short               vid_height;
-    unsigned short      vid_aspect;
-    unsigned short      vid_fullscreen;
-    unsigned short      vid_vsync;
+    short          vid_width;
+    short          vid_height;
+    unsigned short vid_aspect;
+    unsigned short vid_fullscreen;
+    unsigned short vid_vsync;
 
-    short               aud_sfx;
-    short               aud_music;
-    int                 aud_mixfreq;
+    short          aud_sfx;
+    short          aud_music;
+    int            aud_mixfreq;
 };
 
 struct message_t
 {
-    short   type;
-    char    text[64];
+    short          type;
+    char           text[64];
 
-    float   counter;
-    short   direction_x;
-    short   direction_y;
+    float          counter;
+
+    short          direction_x;
+    short          direction_y;
 };
 
 class Entity;
@@ -51,8 +53,8 @@ class State
         State();
         ~State();
 
-        // audio subsystem
         Audio                       audio;
+        Camera*                     camera = nullptr;
 
         // game resources
         config_t                    config;

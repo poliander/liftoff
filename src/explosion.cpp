@@ -6,13 +6,8 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     e_type = E_TYPE_SCENERY;
     e_state = E_STATE_ACTIVE;
 
-    p_x = x;
-    p_y = y;
-    p_z = z;
-
-    r_x = float(rand() % 360);
-    r_y = float(rand() % 360);
-    r_z = float(rand() % 360);
+    setPos(x, y, z);
+    setRotation(float(rand() % 360), float(rand() % 360), float(rand() % 360));
 
     particles = new ParticleEngine();
 
@@ -61,7 +56,7 @@ void Explosion::move(State &s)
 
     timer -= s.timer_adjustment * 10.0f;
 
-    if (timer < 0 || p_z > 100.0f) {
+    if (timer < 0 || getPosZ() > 100.0f) {
         e_state = E_STATE_GONE;
     }
 }
@@ -82,7 +77,7 @@ void Explosion::draw(State &s)
             particles->setSize(4.0f - 2.0f * counter);
             particles->setScale(2.5f + counter);
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
+            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -94,7 +89,7 @@ void Explosion::draw(State &s)
             particles->setSize(5.0f + ((1.0f - (counter * counter)) * 75.0f));
             particles->setScale(1.0f + 7.5f * (counter * counter));
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_2]);
+            s.textures[T_EXPLOSION_2]->bind();
             break;
 
         // explosion sparks
@@ -102,7 +97,7 @@ void Explosion::draw(State &s)
             counter = (2000.0f - timer) * .0005f;
             particles->setSize(10.0f - ((counter * counter) * 10.0f));
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
+            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -114,7 +109,7 @@ void Explosion::draw(State &s)
             particles->setScale(.5f + counter * 12.5f);
             particles->setSize(10.0f + ((1.0f - (counter * counter)) * 10.0f));
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
+            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -123,7 +118,7 @@ void Explosion::draw(State &s)
             counter = (200.0f - timer) * .005f;
             particles->setSize(10.0f - ((counter * counter) * 10.0f));
 
-            glBindTexture(GL_TEXTURE_2D, *s.textures[T_EXPLOSION_1]);
+            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
     }
@@ -135,10 +130,12 @@ void Explosion::draw(State &s)
     glPushMatrix();
 
     particles->draw(s,
-        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (p_z),
-        r_x, r_y, r_z
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        (getPosZ()),
+        (getRotationX()),
+        (getRotationY()),
+        (getRotationZ())
     );
 
     glPopMatrix();

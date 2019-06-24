@@ -1,37 +1,52 @@
 #include "model.hpp"
 
-Model::Model(shared_ptr<Mesh> m, shared_ptr<Texture> t, shared_ptr<Shader> s) :
-    mesh(m),
+Model::Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s) :
+    object(o),
     texture(t),
     shader(s)
 {
-    list = glGenLists(1);
+    glGenVertexArrays(1, &vertexArrayObject);
+    glBindVertexArray(vertexArrayObject);
 
-    glNewList(list, GL_COMPILE);
-    glBindTexture(GL_TEXTURE_2D, *texture);
+    glGenBuffers(4, vertexArrayBuffers);
 
-    for (int i = 0; i < mesh->num_faces; i++) {
-        glBegin(mesh->faces[i].type);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers[VAB_POSITIONS]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(object->positions[0]) * object->positions.size(), &object->positions[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        for (int j = 0; j < mesh->faces[i].num_elems; ++j) {
-            if (mesh->has_texCoords) {
-                glTexCoord3fv(mesh->texCoords[mesh->faces[i].uvw_indices[j]].uvw);
-            }
+    glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers[VAB_TEXCOORDS]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(object->texCoords[0]) * object->texCoords.size(), &object->texCoords[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-            if (mesh->has_normals) {
-                glNormal3fv(mesh->normals[mesh->faces[i].norm_indices[j]].ijk);
-            }
+    glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffers[VAB_NORMALS]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(object->normals[0]) * object->normals.size(), &object->normals[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-            glVertex4fv(mesh->vertices[mesh->faces[i].vert_indices[j]].xyzw);
-        }
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexArrayBuffers[VAB_INDICES]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(object->indices[0]) * object->indices.size(), &object->indices[0], GL_STATIC_DRAW);
 
-        glEnd();
-    }
-
-    glEndList();
+    glBindVertexArray(0);
 }
 
 Model::~Model()
 {
-    glDeleteLists(list, 1);
+    glDeleteBuffers(4, vertexArrayBuffers);
+    glDeleteVertexArrays(1, &vertexArrayObject);
+}
+
+void Model::draw(const Transform &t, const Camera &c)
+{
+    shader->bind();
+    shader->update(t, c);
+
+    texture->bind();
+
+    glBindVertexArray(vertexArrayObject);
+    glDrawElementsBaseVertex(GL_TRIANGLES, object->indices.size(), GL_UNSIGNED_INT, 0, 0);
+    glBindVertexArray(0);
+
+    glUseProgram(0);
 }

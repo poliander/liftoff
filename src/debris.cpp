@@ -62,7 +62,8 @@ void Debris::draw(State &s)
     glScalef(s_x * scale, s_y * scale, s_z * scale);
 
     glColor4f(c_r, c_g, c_b, c_a * a);
-    glCallList(*s.models[e_obj]);
+
+    s.models[e_obj]->draw(transform(), *s.camera);
 
     glPopMatrix();
 

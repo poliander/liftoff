@@ -471,7 +471,7 @@ void Player::draw(State &s)
     glRotatef(r_y + v_x *  50.0f,  .0f, 1.0f,  .0f);
     glRotatef(r_z,                 .0f,  .0f, 1.0f);
 
-    glCallList(*s.models[OBJ_PLAYER]);
+    s.models[e_obj]->draw(transform(), *s.camera);
 
     if (
         s.get() <= STATE_GAME_START ||
@@ -487,7 +487,8 @@ void Player::draw(State &s)
     // flashing gun fire
 
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_GLOW]);
+
+    s.textures[T_GLOW]->bind();
 
     if (gun_flash[0] > 0) {
         glTranslatef(1.5f, -1.0f, .5f);
@@ -540,7 +541,7 @@ void Player::draw(State &s)
         (s.get() >= STATE_GAME_LOOP) &&
         (s.get() <= STATE_GAME_QUIT)
     ) {
-        glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
+        s.textures[T_STAR]->bind();
 
         if (s.get() == STATE_GAME_NEXTLEVEL) {
             particles->setSize(10.0f + s.title_ypos * .025f);
@@ -559,7 +560,7 @@ void Player::draw(State &s)
         glRotatef(90, 1, 0, 0);
         glRotatef(-90, 0, 1, 0);
         glTranslatef(0, .5f, 3.25f);
-        glBindTexture(GL_TEXTURE_2D, *s.textures[T_JET_EXHAUST]);
+        s.textures[T_JET_EXHAUST]->bind();
         for (int j=1; j<6; j++) {
             jlen = 3.0f + jt_l*j*.25f;
 

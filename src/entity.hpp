@@ -135,4 +135,6 @@ class Entity
 
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
         float              calcDistance3D(State &s, shared_ptr<Entity> e);
+
+        Transform          transform();
 };

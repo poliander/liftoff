@@ -126,28 +126,28 @@ void Scene::load()
 
     state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
-        make_shared<Mesh>(string(state.dir_resources).append("/obj/ship_1.obj")),
+        make_shared<Object>(string(state.dir_resources).append("/obj/ship_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga"), true),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
-        make_shared<Mesh>(string(state.dir_resources).append("/obj/asteroid_1.obj")),
+        make_shared<Object>(string(state.dir_resources).append("/obj/asteroid_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga"), true),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
-        make_shared<Mesh>(string(state.dir_resources).append("/obj/debris_1.obj")),
+        make_shared<Object>(string(state.dir_resources).append("/obj/debris_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga"), true),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
-        make_shared<Mesh>(string(state.dir_resources).append("/obj/cargo_1.obj")),
+        make_shared<Object>(string(state.dir_resources).append("/obj/cargo_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga"), true),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
@@ -360,7 +360,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
     GLfloat x1 = .0f, w, y1, y2, wy;
 
     glColor4f(r, g, b, a);
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_FONT]);
+    state.textures[T_FONT]->bind();
 
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -518,7 +518,7 @@ void Scene::drawTitle()
     float sc, a = state.title_ypos * .01f;
 
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_TITLE]);
+    state.textures[T_TITLE]->bind();
     glPushMatrix();
 
     if (state.get() == STATE_MENU) {
@@ -919,13 +919,13 @@ void Scene::drawMenu(bool mouse_recheck)
 
     // draw player's ship
     player->setPos(4.3f, -1.0f, -3.0f);
-    player->setRotation(112.5f, 0, player->getRotationZ() + (state.timer_adjustment * .2f));
+    player->setRotation(112.5f, 0, player->getRotationZ() + (state.timer_adjustment * .02f));
     player->draw(state);
 
     // draw menu background
     glLoadIdentity();
     glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_1]);
+    state.textures[T_MENU_1]->bind();
     glTranslatef(0, -0.8f, -10);
     glColor4f(1, 1, 1, .01f*m_a);
     glBegin (GL_QUADS);
@@ -956,7 +956,7 @@ void Scene::drawMenu(bool mouse_recheck)
         if (i == state.menu_pos) {
             glLoadIdentity();
             glPushMatrix();
-            glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_2]);
+            state.textures[T_MENU_2]->bind();
             glTranslatef(-4.9f, (my-(i*mh)), -9.95f);
             glColor4f(.01f*m_a, .01f*m_a, .01f*m_a, 0.2f*m_a);
             glBegin (GL_QUADS);
@@ -984,7 +984,7 @@ void Scene::drawMouse()
 {
     glLoadIdentity();
 
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_CURSOR]);
+    state.textures[T_CURSOR]->bind();
     glColor4f(1, 1, 1, .01f * state.global_alpha);
 
     glPushMatrix();
@@ -1077,7 +1077,8 @@ void Scene::drawDisplay()
 
     // lower right screen
 
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_1]);
+    state.textures[T_MENU_1]->bind();
+
     glPushMatrix();
     glTranslatef(-state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glBegin (GL_QUADS);
@@ -1107,7 +1108,9 @@ void Scene::drawDisplay()
     glLoadIdentity();
 
     // lower left screen
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_MENU_1]);
+
+    state.textures[T_MENU_1]->bind();
+
     glPushMatrix();
     glTranslatef(state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glColor4f(1, 1, 1, alpha * .5f);
@@ -1131,7 +1134,8 @@ void Scene::drawDisplay()
 
     // life symbol
 
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_HUD_1]);
+    state.textures[T_HUD_1]->bind();
+
     glTranslatef(state.hud_x + .5f - state.tilt_x*.01f, state.hud_y - .7f - state.tilt_y*.01f, -9.9f);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
@@ -1158,7 +1162,8 @@ void Scene::drawDisplay()
 
     // energy symbol
 
-    glBindTexture(GL_TEXTURE_2D, *state.textures[T_HUD_2]);
+    state.textures[T_HUD_2]->bind();
+
     glTranslatef(0, -.375f, 0);
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);

@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include <glm/glm.hpp>
+
 #include "entity.hpp"
 #include "particles.hpp"
 #include "missile.hpp"

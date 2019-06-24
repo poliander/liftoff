@@ -2,29 +2,40 @@
 
 #include <string>
 #include <memory>
-#include <stdio.h>
 
 #include <GL/glew.h>
-#include <GL/glext.h>
 
-#include <mesh.hpp>
+#include <camera.hpp>
+#include <object.hpp>
 #include <shader.hpp>
 #include <texture.hpp>
+#include <transform.hpp>
 
 using namespace std;
+
+enum VerexArrayBufferIndex
+{
+    VAB_INDICES,
+    VAB_POSITIONS,
+    VAB_TEXCOORDS,
+    VAB_NORMALS
+};
+
+class State;
 
 class Model
 {
     public:
-        Model(shared_ptr<Mesh> m, shared_ptr<Texture> t, shared_ptr<Shader> s);
+        Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s);
         ~Model();
 
-        operator GLuint() const { return list; }
+        void draw(const Transform& transform, const Camera& camera);
 
     protected:
-        shared_ptr<Mesh>    mesh;
+        shared_ptr<Object>  object;
         shared_ptr<Shader>  shader;
         shared_ptr<Texture> texture;
 
-        GLuint              list = -1;
+        GLuint vertexArrayObject;
+        GLuint vertexArrayBuffers[4];
 };

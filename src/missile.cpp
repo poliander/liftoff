@@ -6,6 +6,8 @@ Missile::Missile() : Entity()
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
 
+    setScale(2.25f, 2.25f, 2.25f);
+
     c_r = 0.5f;
     c_g = 1.0f;
     c_b = 0.8f;
@@ -14,10 +16,6 @@ Missile::Missile() : Entity()
     v_x = 0;
     v_y = 0;
     v_z = -125.0f;
-
-    s_x = 2.25f;
-    s_y = 2.25f;
-    s_z = 2.25f;
 
     power = 20;
 }
@@ -30,7 +28,7 @@ void Missile::collide(State &s, shared_ptr<Entity> e)
 {
     if (e->damage(s, power)) {
         s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, p_x, p_y, p_z));
+        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, getPosX(), getPosY(), getPosZ()));
 
         e_state = E_STATE_GONE;
     }
@@ -40,9 +38,9 @@ void Missile::move(State &s)
 {
     Entity::move(s);
 
-    c_a = (s.global_alpha * .005f) + ((p_z + 200.0f) * .00002f);
+    c_a = (s.global_alpha * .005f) + ((getPosZ() + 200.0f) * .00002f);
 
-    if (c_a < 0 || p_z < -10000.0f) {
+    if (c_a < 0 || getPosZ() < -10000.0f) {
         e_state = E_STATE_GONE;
     }
 }
@@ -50,19 +48,19 @@ void Missile::move(State &s)
 void Missile::draw(State &s)
 {
     glLoadIdentity();
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_MISSILE_1]);
+    s.textures[T_MISSILE_1]->bind();
     glColor4f(c_r, c_g, c_b, c_a);
 
     glPushMatrix();
 
     glTranslatef(
-        E_RELATIVE_MOVEMENT * (p_x - s.cam_x),
-        E_RELATIVE_MOVEMENT * (p_y - s.cam_y),
-        p_z
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        (getPosZ())
     );
 
     glRotatef(270, 0, 0, 1);
-    glScalef(s_x, s_y, s_z);
+    glScalef(getScaleX(), getScaleY(), getScaleZ());
 
     glBegin (GL_QUADS);
       glTexCoord2f (0, 0);

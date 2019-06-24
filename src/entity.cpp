@@ -310,6 +310,25 @@ bool Entity::damage(State &s, int p)
     return false;
 }
 
+Transform Entity::transform()
+{
+    Transform t;
+
+    t.pos.x = p_x;
+    t.pos.y = p_y;
+    t.pos.z = p_z;
+
+    t.rot.x = r_x;
+    t.rot.y = r_y;
+    t.rot.z = r_z;
+
+    t.scale.x = s_x;
+    t.scale.y = s_y;
+    t.scale.z = s_z;
+
+    return t;
+}
+
 void Entity::move(State &s)
 {
     p_x += s.timer_adjustment * v_x;
@@ -399,7 +418,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     glRotatef(s.tilt_x * -.025f, 0, 1, 0);
     glRotatef(s.tilt_y * -.025f, 1, 0, 0);
 
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_HUD_3]);
+    s.textures[T_HUD_3]->bind();
 
     glTranslatef(
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,

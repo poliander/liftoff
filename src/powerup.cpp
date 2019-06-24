@@ -16,13 +16,8 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     particles->setScale(10.0f);
     particles->setContinuous(true);
 
-    p_x = x;
-    p_y = y;
-    p_z = z;
-
-    s_x = 50.0f;
-    s_y = 50.0f;
-    s_z = 50.0f;
+    setPos(x, y, z);
+    setScale(50.0f, 50.0f, 50.0f);
 
     t_r = 0.3f;
     t_g = 0.55f;
@@ -59,7 +54,7 @@ void Powerup::move(State &s)
         counter += s.timer_adjustment * .1f;
     }
 
-    if (p_z > 100.0f || counter > 1.5f) {
+    if (getPosZ() > 100.0f || counter > 1.5f) {
         e_state = E_STATE_GONE;
     }
 }
@@ -73,17 +68,19 @@ void Powerup::draw(State &s)
 
     glShadeModel(GL_FLAT);
 
-    glBindTexture(GL_TEXTURE_2D, *s.textures[T_STAR]);
+    s.textures[T_STAR]->bind();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     particles->setSize (10.0f / (1.0f + counter * 5.0f));
     particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
     particles->setScale(10.0f + (7.5f * sin(counter * M_PI)));
     particles->draw(s,
-        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (p_z),
-        r_x, r_y, r_z
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        (getPosZ()),
+        (getRotationX()),
+        (getRotationY()),
+        (getRotationZ())
     );
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
