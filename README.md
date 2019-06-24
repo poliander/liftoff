@@ -25,6 +25,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - libvorbisfile
 - SDL 1.2
 - SDL\_mixer 1.2 (with ogg vorbis support)
+- glm.hpp (GL math headers)
 
 ### Compilation
 
