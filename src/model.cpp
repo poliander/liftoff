@@ -37,10 +37,10 @@ Model::~Model()
     glDeleteVertexArrays(1, &vertexArrayObject);
 }
 
-void Model::draw(const Transform &t, const Camera &c)
+void Model::draw()
 {
     shader->bind();
-    shader->update(t, c);
+    shader->update();
 
     texture->bind();
 

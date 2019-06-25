@@ -471,7 +471,7 @@ void Player::draw(State &s)
     glRotatef(r_y + v_x *  50.0f,  .0f, 1.0f,  .0f);
     glRotatef(r_z,                 .0f,  .0f, 1.0f);
 
-    s.models[e_obj]->draw(transform(), *s.camera);
+    s.models[e_obj]->draw();
 
     if (
         s.get() <= STATE_GAME_START ||

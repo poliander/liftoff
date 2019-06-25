@@ -57,10 +57,10 @@ class Entity
         void               setAccelerationY(float y);
         void               setAccelerationZ(float z);
 
-        void               setRotation(float x, float y, float z);
-        float              getRotationX();
-        float              getRotationY();
-        float              getRotationZ();
+        void               setRot(float x, float y, float z);
+        float              getRotX();
+        float              getRotY();
+        float              getRotZ();
 
         void               setSpin(float x, float y, float z);
 
@@ -135,6 +135,4 @@ class Entity
 
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
         float              calcDistance3D(State &s, shared_ptr<Entity> e);
-
-        Transform          transform();
 };

@@ -94,7 +94,7 @@ void Cargo::draw(State &s)
 
     glScalef(s_x * scale1, s_y * scale1, s_z * scale1);
 
-    s.models[e_obj]->draw(transform(), *s.camera);
+    s.models[e_obj]->draw();
 
     glDisable(GL_NORMALIZE);
     glDisable(GL_LIGHT0);

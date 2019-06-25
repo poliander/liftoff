@@ -119,7 +119,7 @@ void Asteroid::draw(State &s)
 
     glScalef(s_x * scale, s_y * scale, s_z * scale);
 
-    s.models[e_obj]->draw(transform(), *s.camera);
+    s.models[e_obj]->draw();
 
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHTING);

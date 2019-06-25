@@ -78,9 +78,9 @@ void Powerup::draw(State &s)
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         (getPosZ()),
-        (getRotationX()),
-        (getRotationY()),
-        (getRotationZ())
+        (getRotX()),
+        (getRotY()),
+        (getRotZ())
     );
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

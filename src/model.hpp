@@ -5,11 +5,9 @@
 
 #include <GL/glew.h>
 
-#include <camera.hpp>
 #include <object.hpp>
 #include <shader.hpp>
 #include <texture.hpp>
-#include <transform.hpp>
 
 using namespace std;
 
@@ -29,7 +27,7 @@ class Model
         Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s);
         ~Model();
 
-        void draw(const Transform& transform, const Camera& camera);
+        void draw();
 
     protected:
         shared_ptr<Object>  object;

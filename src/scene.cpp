@@ -281,8 +281,8 @@ bool Scene::loadLevel()
                                 auto asteroid = make_shared<Asteroid>();
 
                                 asteroid->setPos(p_x, p_y, p_z);
+                                asteroid->setRot(r_x, r_y, r_z);
                                 asteroid->setScale(s_x, s_y, s_z);
-                                asteroid->setRotation(r_x, r_y, r_z);
                                 asteroid->setSpin(w_x, w_y, w_z);
                                 asteroid->setLife(life);
 
@@ -295,8 +295,8 @@ bool Scene::loadLevel()
                                 auto cargo = make_shared<Cargo>();
 
                                 cargo->setPos(p_x, p_y, p_z);
+                                cargo->setRot(r_x, r_y, r_z);
                                 cargo->setScale(s_x, s_y, s_z);
-                                cargo->setRotation(r_x, r_y, r_z);
                                 cargo->setSpin(w_x, w_y, w_z);
                                 cargo->setLife(life);
 
@@ -333,8 +333,8 @@ bool Scene::loadLevel()
 
                                 asteroid->setType(E_TYPE_SCENERY);
                                 asteroid->setPos(p_x, p_y, p_z);
+                                asteroid->setRot(r_x, r_y, r_z);
                                 asteroid->setScale(s_x, s_y, s_z);
-                                asteroid->setRotation(r_x, r_y, r_z);
                                 asteroid->setSpin(w_x, w_y, w_z);
                                 asteroid->setLife(life);
 
@@ -919,7 +919,7 @@ void Scene::drawMenu(bool mouse_recheck)
 
     // draw player's ship
     player->setPos(4.3f, -1.0f, -3.0f);
-    player->setRotation(112.5f, 0, player->getRotationZ() + (state.timer_adjustment * .02f));
+    player->setRot(112.5f, 0, player->getRotZ() + (state.timer_adjustment * .02f));
     player->draw(state);
 
     // draw menu background
@@ -1366,7 +1366,7 @@ void Scene::move()
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
             } else if (state.lvl_loaded) {
                 player->setPos(0, -90.0f, 50.0f);
-                player->setRotation(90.0f, 0, 270.0f);
+                player->setRot(90.0f, 0, 270.0f);
                 player->collect(OBJ_POWERUP_0);
 
                 state.set(STATE_GAME_LOOP);
@@ -1443,7 +1443,7 @@ void Scene::move()
             } else {
                 state.set(STATE_MENU);
 
-                player->setRotation(0, 0, 250.0f);
+                player->setRot(0, 0, 250.0f);
                 player->setSpin(0, 0, 0);
                 player->setVelocity(0, 0, 0);
                 player->setAcceleration(0, 0, 0);
@@ -1464,7 +1464,7 @@ void Scene::move()
             } else {
                 state.set(STATE_MENU);
 
-                player->setRotation(0, 0, 250.0f);
+                player->setRot(0, 0, 250.0f);
                 player->setSpin(0, 0, 0);
                 player->setVelocity(0, 0, 0);
                 player->setAcceleration(0, 0, 0);

@@ -13,7 +13,6 @@
 #include "../config.h"
 
 #include "audio.hpp"
-#include "camera.hpp"
 #include "definitions.hpp"
 #include "model.hpp"
 #include "shader.hpp"
@@ -54,7 +53,6 @@ class State
         ~State();
 
         Audio                       audio;
-        Camera*                     camera = nullptr;
 
         // game resources
         config_t                    config;

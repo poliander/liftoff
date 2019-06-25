@@ -191,24 +191,24 @@ void Entity::setAccelerationZ(float z)
     a_z = z;
 }
 
-void Entity::setRotation(float x, float y, float z)
+void Entity::setRot(float x, float y, float z)
 {
     r_x = x;
     r_y = y;
     r_z = z;
 }
 
-float Entity::getRotationX()
+float Entity::getRotX()
 {
     return r_x;
 }
 
-float Entity::getRotationY()
+float Entity::getRotY()
 {
     return r_y;
 }
 
-float Entity::getRotationZ()
+float Entity::getRotZ()
 {
     return r_z;
 }
@@ -308,25 +308,6 @@ bool Entity::damage(State &s, int p)
     }
 
     return false;
-}
-
-Transform Entity::transform()
-{
-    Transform t;
-
-    t.pos.x = p_x;
-    t.pos.y = p_y;
-    t.pos.z = p_z;
-
-    t.rot.x = r_x;
-    t.rot.y = r_y;
-    t.rot.z = r_z;
-
-    t.scale.x = s_x;
-    t.scale.y = s_y;
-    t.scale.z = s_z;
-
-    return t;
 }
 
 void Entity::move(State &s)

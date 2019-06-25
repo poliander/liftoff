@@ -57,9 +57,6 @@ State::State()
 
 State::~State()
 {
-    if (camera != nullptr) {
-        delete camera;
-    }
 }
 
 /*

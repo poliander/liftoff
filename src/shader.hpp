@@ -5,8 +5,6 @@
 
 #include <GL/glew.h>
 
-#include "transform.hpp"
-
 using namespace std;
 
 class Shader
@@ -16,7 +14,7 @@ class Shader
         ~Shader();
 
         void bind();
-        void update(const Transform& transform, const Camera& camera);
+        void update();
 
     private:
         GLuint program;

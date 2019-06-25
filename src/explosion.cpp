@@ -7,7 +7,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     e_state = E_STATE_ACTIVE;
 
     setPos(x, y, z);
-    setRotation(float(rand() % 360), float(rand() % 360), float(rand() % 360));
+    setRot(float(rand() % 360), float(rand() % 360), float(rand() % 360));
 
     particles = new ParticleEngine();
 
@@ -133,9 +133,9 @@ void Explosion::draw(State &s)
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         (getPosZ()),
-        (getRotationX()),
-        (getRotationY()),
-        (getRotationZ())
+        (getRotX()),
+        (getRotY()),
+        (getRotZ())
     );
 
     glPopMatrix();
