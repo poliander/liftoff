@@ -59,7 +59,7 @@ void Debris::draw(State &s)
         s_x * scale,
         s_y * scale,
         s_z * scale
-    ));
+    ), glm::vec4(c_r, c_g, c_b, c_a));
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_NORMALIZE);

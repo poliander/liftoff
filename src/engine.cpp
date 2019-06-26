@@ -383,8 +383,6 @@ bool Engine::initDisplay()
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    glViewport(0, 0, state.config.vid_width, state.config.vid_height);
     glFrustum(-400.0f*state.vid_cfg_aspect, 400.0f*state.vid_cfg_aspect, -300.0f, 300.0f, .1f, 10000.0f);
 
     glLoadIdentity();

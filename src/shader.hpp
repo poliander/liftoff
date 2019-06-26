@@ -8,6 +8,12 @@
 
 using namespace std;
 
+enum UNIFORMS
+{
+    UNI_MVP,
+    UNI_COLOR
+};
+
 class Shader
 {
     public:
@@ -15,12 +21,14 @@ class Shader
         ~Shader();
 
         void bind();
-        void update(glm::mat4 mvp);
+
+        void update(unsigned short u, glm::mat4 m);
+        void update(unsigned short u, glm::vec4 v);
 
     private:
         GLuint program;
         GLuint shaders[2];
-        GLuint uniforms[3];
+        GLuint uniforms[2];
 
         string load(const string& filename);
         GLuint create(const string& text, unsigned int type);

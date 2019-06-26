@@ -463,14 +463,14 @@ void Player::draw(State &s)
             getScaleX(),
             getScaleY(),
             getScaleZ()
-        ));
+        ), glm::vec4(c_r, c_g, c_b, c_a));
     } else {
         setScale(1.0f, 1.0f, 1.0f);
 
         s.models[e_obj]->draw(s.view.transform(
             getPosX(),
             getPosY(),
-            getPosZ() - 20.0f,
+            getPosZ(),
 
             getRotX(),
             getRotY(),
@@ -479,7 +479,7 @@ void Player::draw(State &s)
             getScaleX(),
             getScaleY(),
             getScaleZ()
-        ));
+        ), glm::vec4(c_r, c_g, c_b, c_a));
     }
 
     if (

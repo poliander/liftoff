@@ -117,7 +117,7 @@ void Scene::load()
     // shaders
 
     state.log("Loading shader 'texture_1'\n");
-    state.shaders.insert(make_pair(S_BASIC_1, new Shader(
+    state.shaders.insert(make_pair(S_TEXTURE_1, new Shader(
         string(state.dir_resources).append("/gls/texture_1.glvs"),
         string(state.dir_resources).append("/gls/texture_1.glfs")
     )));
@@ -924,8 +924,6 @@ void Scene::drawMenu(bool mouse_recheck)
     }
 
     // draw player's ship
-    player->setPos(4.3f, -1.0f, -3.0f);
-    player->setRot(112.5f, 0, player->getRotZ() + (state.timer_adjustment * .02f));
     player->draw(state);
 
     // draw menu background
@@ -1449,8 +1447,9 @@ void Scene::move()
             } else {
                 state.set(STATE_MENU);
 
+                player->setPos(4.3f, -1.0f, -3.0f);
                 player->setRot(0, 0, 250.0f);
-                player->setSpin(0, 0, 0);
+                player->setSpin(1.0f, 0, 0);
                 player->setVelocity(0, 0, 0);
                 player->setAcceleration(0, 0, 0);
             }
@@ -1470,8 +1469,9 @@ void Scene::move()
             } else {
                 state.set(STATE_MENU);
 
+                player->setPos(4.3f, -1.0f, -3.0f);
                 player->setRot(0, 0, 250.0f);
-                player->setSpin(0, 0, 0);
+                player->setSpin(1.0f, 0, 0);
                 player->setVelocity(0, 0, 0);
                 player->setAcceleration(0, 0, 0);
             }

@@ -11,7 +11,7 @@ Shader::Shader(string vsFilename, string fsFilename)
     glAttachShader(program, shaders[1]);
 
     glBindAttribLocation(program, 0, "position");
-    glBindAttribLocation(program, 1, "texCoord");
+    glBindAttribLocation(program, 1, "uv");
     glBindAttribLocation(program, 2, "normal");
 
     glLinkProgram(program);
@@ -26,9 +26,8 @@ Shader::Shader(string vsFilename, string fsFilename)
         exit(-1);
     }
 
-    uniforms[0] = glGetUniformLocation(program, "MVP");
-    uniforms[1] = glGetUniformLocation(program, "Normal");
-    uniforms[2] = glGetUniformLocation(program, "lightDirection");
+    uniforms[UNI_MVP] = glGetUniformLocation(program, "mvp");
+    uniforms[UNI_COLOR] = glGetUniformLocation(program, "color");
 }
 
 Shader::~Shader()
@@ -47,9 +46,14 @@ void Shader::bind()
     glUseProgram(program);
 }
 
-void Shader::update(glm::mat4 mvp)
+void Shader::update(unsigned short u, glm::vec4 v)
 {
-    glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &mvp[0][0]);
+    glUniform4fv(uniforms[u], 1, &v[0]);
+}
+
+void Shader::update(unsigned short u, glm::mat4 m)
+{
+    glUniformMatrix4fv(uniforms[u], 1, GL_FALSE, &m[0][0]);
 }
 
 GLuint Shader::create(const string& text, unsigned int type)

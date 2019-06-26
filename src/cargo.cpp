@@ -88,7 +88,7 @@ void Cargo::draw(State &s)
         getScaleX() * scale1,
         getScaleY() * scale1,
         getScaleZ() * scale1
-    ));
+    ), glm::vec4(c_r, c_g, c_b, c_a));
 
     glLoadIdentity();
     glPushMatrix();

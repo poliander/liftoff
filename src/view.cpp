@@ -2,19 +2,19 @@
 
 View::View()
 {
-    camera_pos    = glm::vec3(0.0f,  0.0f,  0.1f);
-    camera_target = glm::vec3(0.0f,  0.0f, -1.0f);
-    camera_up     = glm::vec3(0.0f,  1.0f,  0.0f);
 }
 
 View::~View()
 {
 }
 
-void View::perspective(float fov, float aspect, float zNear, float zFar)
-{
-    projection = glm::perspective(fov, aspect, zNear, zFar);
-    view_projection = projection * glm::lookAt(camera_pos, camera_pos + camera_target, camera_up);
+void View::perspective(
+    float fov,
+    float aspect,
+    float zNear,
+    float zFar
+) {
+    projection = glm::perspective(glm::radians(fov), aspect, zNear, zFar);
 }
 
 void View::lookAt(
@@ -34,7 +34,7 @@ void View::lookAt(
     camera_up.y     = camera_up_y;
     camera_up.z     = camera_up_z;
 
-    view_projection = projection * glm::lookAt(camera_pos, camera_pos + camera_target, camera_up);
+    view = glm::lookAt(camera_pos, camera_pos + camera_target, camera_up);
 }
 
 glm::mat4 View::transform(
@@ -42,15 +42,15 @@ glm::mat4 View::transform(
     float rx, float ry, float rz,
     float sx, float sy, float sz
 ) {
-    glm::mat4 rotX = glm::rotate(rx, glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 rotY = glm::rotate(ry, glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 rotZ = glm::rotate(rz, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 rotX = glm::rotate(glm::radians(-rx), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 rotY = glm::rotate(glm::radians(-ry), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 rotZ = glm::rotate(glm::radians(-rz), glm::vec3(0.0f, 0.0f, 1.0f));
 
-    glm::mat4 posMat = glm::translate(glm::vec3(px, py, pz));
-    glm::mat4 scaleMat = glm::scale(glm::vec3(sx, sy, sz));
+    glm::mat4 posMat = glm::translate(glm::vec3(-px, -py, pz));
     glm::mat4 rotMat = rotX * rotY * rotZ;
+    glm::mat4 scaleMat = glm::scale(glm::vec3(sx, sy, sz));
 
     glm::mat4 model = posMat * rotMat * scaleMat;
 
-    return view_projection * model;
+    return projection * view * model;
 }
