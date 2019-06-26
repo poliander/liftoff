@@ -1516,6 +1516,20 @@ void Scene::draw()
         .0f
     );
 
+    state.view.lookAt(
+        p_x * -.01f + state.tilt_x * .4f,
+        p_y * -.01f + player->getVelocityY() * 10.0f + state.tilt_y * .4f,
+        200.0f,
+
+        player->getVelocityX() * .5f,
+        .0f,
+        -10000.0f,
+
+        player->getVelocityX() * .05f,
+        -1.0f,
+        .0f
+    );
+
     skybox->draw(state);
 
     if (

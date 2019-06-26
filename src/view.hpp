@@ -9,7 +9,18 @@ class View
         View();
         virtual ~View();
 
-        void setup(float fov, float aspect, float zNear, float zFar);
+        void perspective(
+            float fov,
+            float aspect,
+            float zNear,
+            float zFar
+        );
+
+        void lookAt(
+            float camera_pos_x,    float camera_pos_y,    float camera_pos_z,
+            float camera_target_x, float camera_target_y, float camera_target_z,
+            float camera_up_x,     float camera_up_y,     float camera_up_z
+        );
 
         glm::mat4 transform(
             float px, float py, float pz,
@@ -19,8 +30,8 @@ class View
 
     private:
         glm::vec3 camera_pos;
+        glm::vec3 camera_target;
         glm::vec3 camera_up;
-        glm::vec3 camera_forward;
 
         glm::mat4 projection;
         glm::mat4 view_projection;
