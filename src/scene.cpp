@@ -116,6 +116,12 @@ void Scene::load()
 
     // shaders
 
+    state.log("Loading shader 'texture_1'\n");
+    state.shaders.insert(make_pair(S_BASIC_1, new Shader(
+        string(state.dir_resources).append("/gls/texture_1.glvs"),
+        string(state.dir_resources).append("/gls/texture_1.glfs")
+    )));
+
     state.log("Loading shader 'basic_1'\n");
     state.shaders.insert(make_pair(S_BASIC_1, new Shader(
         string(state.dir_resources).append("/gls/basic_1.glvs"),

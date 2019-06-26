@@ -1,0 +1,15 @@
+#version 330 core
+
+out vec4 color;
+
+in vec2 uv0;
+in vec4 color0;
+
+uniform sampler2D image;
+
+void main()
+{
+    //color = texture(image, uv0);
+    color = vec4(1.0, 1.0, 1.0, 1.0);
+}
+

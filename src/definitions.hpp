@@ -63,7 +63,8 @@
 #define T_GLOW                  15
 
 // shaders
-#define S_BASIC_1               0
+#define S_TEXTURE_1             0
+#define S_BASIC_1               1
 
 // objects
 #define OBJ_PLAYER              101 // player
