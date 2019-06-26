@@ -55,10 +55,6 @@ void Cargo::draw(State &s)
         a = (p_z + 10000.0f) * .0005f;
     }
 
-    glLoadIdentity();
-    glRotatef(s.tilt_x * -.035f, 0, 1, 0);
-    glRotatef(s.tilt_y * -.035f, 1, 0, 0);
-
     // light setup
     glEnable(GL_LIGHTING);
     GLfloat col_ambient[] = { a, a, a };
@@ -76,25 +72,26 @@ void Cargo::draw(State &s)
     glMaterialfv(GL_FRONT, GL_SPECULAR, col_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, 64.0f);
 
-    glTranslatef(
-        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (p_z)
-    );
-
-    glPushMatrix();
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
 
-    glRotatef(r_x, 1, 0, 0);
-    glRotatef(r_y, 0, 1, 0);
-    glRotatef(r_z, 0, 0, 1);
+    s.models[e_obj]->draw(s.view.transform(
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        (getPosZ()),
 
-    glScalef(s_x * scale1, s_y * scale1, s_z * scale1);
+        getRotX() + s.tilt_y * -.035f,
+        getRotY() + s.tilt_x * -.035f,
+        getRotZ(),
 
-    s.models[e_obj]->draw();
+        getScaleX() * scale1,
+        getScaleY() * scale1,
+        getScaleZ() * scale1
+    ));
+
+    glLoadIdentity();
+    glPushMatrix();
 
     glDisable(GL_NORMALIZE);
     glDisable(GL_LIGHT0);

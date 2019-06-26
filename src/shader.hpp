@@ -4,6 +4,7 @@
 #include <string>
 
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class Shader
         ~Shader();
 
         void bind();
-        void update();
+        void update(glm::mat4 mvp);
 
     private:
         GLuint program;

@@ -27,7 +27,7 @@ class Model
         Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s);
         ~Model();
 
-        void draw();
+        void draw(glm::mat4 mvp);
 
     protected:
         shared_ptr<Object>  object;

@@ -71,8 +71,6 @@ void Asteroid::draw(State &s)
         scale = (10000.0f + p_z) * .0001f;
     }
 
-    glLoadIdentity();
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
@@ -102,30 +100,23 @@ void Asteroid::draw(State &s)
     glMaterialfv(GL_FRONT, GL_EMISSION, col_emission);
     glMaterialf(GL_FRONT, GL_SHININESS, 4.0f);
 
-    glPushMatrix();
-
-    glRotatef(s.tilt_x * -.035f,  .0f, 1.0f, .0f);
-    glRotatef(s.tilt_y * -.035f, 1.0f,  .0f, .0f);
-
-    glTranslatef(
+    s.models[e_obj]->draw(s.view.transform(
         E_RELATIVE_MOVEMENT * m * (p_x - s.cam_x),
         E_RELATIVE_MOVEMENT * m * (p_y - s.cam_y),
-        p_z
-    );
+        p_z,
 
-    glRotatef(r_x, 1.0f,  .0f,  .0f);
-    glRotatef(r_y,  .0f, 1.0f,  .0f);
-    glRotatef(r_z,  .0f,  .0f, 1.0f);
+        r_x + s.tilt_y * -.035f,
+        r_y + s.tilt_x * -.035f,
+        r_z,
 
-    glScalef(s_x * scale, s_y * scale, s_z * scale);
-
-    s.models[e_obj]->draw();
+        s_x * scale,
+        s_y * scale,
+        s_z * scale
+    ));
 
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_NORMALIZE);
     glDisable(GL_CULL_FACE);
-
-    glPopMatrix();
 }

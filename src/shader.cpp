@@ -47,16 +47,9 @@ void Shader::bind()
     glUseProgram(program);
 }
 
-void Shader::update()
+void Shader::update(glm::mat4 mvp)
 {
-/*
-    glm::mat4 mvp = transform.getMVP(camera);
-    glm::mat4 normal = transform.getModel();
-
     glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &mvp[0][0]);
-    glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &normal[0][0]);
-*/
-    glUniform3f(uniforms[2], 0.0f, 0.0f, 1.0f);
 }
 
 GLuint Shader::create(const string& text, unsigned int type)

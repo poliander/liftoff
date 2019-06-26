@@ -411,8 +411,6 @@ void Player::draw(State &s)
     GLfloat col_specular[] = { alpha, alpha, alpha, 0 };
     GLfloat mat_specular[] = { alpha, alpha, alpha, 0 };
 
-    glLoadIdentity();
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
@@ -447,31 +445,42 @@ void Player::draw(State &s)
     glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
     glMaterialf(GL_FRONT, GL_SHININESS, 64.0f);
 
-    glPushMatrix();
-
     if (
         s.get() >= STATE_GAME_LOOP &&
         s.get() <= STATE_GAME_QUIT
     ) {
-        // ingame
-         glTranslatef(
-          ((p_x - s.cam_x) * E_RELATIVE_MOVEMENT) + s.tilt_x * .15f,
-          ((p_y - s.cam_y) * E_RELATIVE_MOVEMENT) + s.tilt_y * .15f,
-          ((p_z + (s.tilt_x + s.tilt_y) * .15f))
-        );
-        glScalef(22.5f, 22.5f, 23.5f);
+        setScale(22.5f, 22.5f, 22.5f);
+
+        s.models[e_obj]->draw(s.view.transform(
+            ((getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT) + s.tilt_x * .15f,
+            ((getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT) + s.tilt_y * .15f,
+            ((getPosZ() + (s.tilt_x + s.tilt_y) * .15f)),
+
+            getRotX() + v_y * -20.0f,
+            getRotY() + v_x *  50.0f,
+            getRotZ(),
+
+            getScaleX(),
+            getScaleY(),
+            getScaleZ()
+        ));
     } else {
-        // menu
-        glTranslatef(p_x, p_y, p_z - 20.0f);
-        glScalef(1.0f, 1.0f, 1.1f);
+        setScale(1.0f, 1.0f, 1.0f);
+
+        s.models[e_obj]->draw(s.view.transform(
+            getPosX(),
+            getPosY(),
+            getPosZ() - 20.0f,
+
+            getRotX(),
+            getRotY(),
+            getRotZ(),
+
+            getScaleX(),
+            getScaleY(),
+            getScaleZ()
+        ));
     }
-
-    // rotation including pitch/roll
-    glRotatef(r_x + v_y * -20.0f, 1.0f,  .0f,  .0f);
-    glRotatef(r_y + v_x *  50.0f,  .0f, 1.0f,  .0f);
-    glRotatef(r_z,                 .0f,  .0f, 1.0f);
-
-    s.models[e_obj]->draw();
 
     if (
         s.get() <= STATE_GAME_START ||
@@ -483,6 +492,9 @@ void Player::draw(State &s)
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
+
+    glLoadIdentity();
+    glPushMatrix();
 
     // flashing gun fire
 
