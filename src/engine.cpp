@@ -381,6 +381,8 @@ bool Engine::initDisplay()
     SDL_ShowCursor(0);
     SDL_WM_SetCaption("Lift Off: Beyond Glaxium", NULL);
 
+    state.view.setup(65, state.vid_cfg_aspect, .1f, 10000.0f);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 

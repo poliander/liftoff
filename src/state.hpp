@@ -19,6 +19,7 @@
 #include "message.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
+#include "view.hpp"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ class State
 
         Audio                       audio;
         Configuration               config;
+        View                        view;
 
         map<unsigned int, Texture*> textures;
         map<unsigned int, Shader*>  shaders;
