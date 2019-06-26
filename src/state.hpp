@@ -13,36 +13,14 @@
 #include "../config.h"
 
 #include "audio.hpp"
+#include "configuration.hpp"
 #include "definitions.hpp"
 #include "model.hpp"
+#include "message.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 
 using namespace std;
-
-struct config_t
-{
-    short          vid_width;
-    short          vid_height;
-    unsigned short vid_aspect;
-    unsigned short vid_fullscreen;
-    unsigned short vid_vsync;
-
-    short          aud_sfx;
-    short          aud_music;
-    int            aud_mixfreq;
-};
-
-struct message_t
-{
-    short          type;
-    char           text[64];
-
-    float          counter;
-
-    short          direction_x;
-    short          direction_y;
-};
 
 class Entity;
 
@@ -53,9 +31,7 @@ class State
         ~State();
 
         Audio                       audio;
-
-        // game resources
-        config_t                    config;
+        Configuration               config;
 
         map<unsigned int, Texture*> textures;
         map<unsigned int, Shader*>  shaders;
@@ -99,7 +75,7 @@ class State
 
         // money/damage messages
         unsigned short  msg_num = 0;
-        message_t       msg[E_MAX_MESSAGES];
+        Message         msg[E_MAX_MESSAGES];
 
         // game menu
         int             menu;

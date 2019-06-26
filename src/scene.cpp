@@ -1323,7 +1323,7 @@ void Scene::moveMessages()
             state.msg_num--;
 
             if (i < state.msg_num) {
-                memcpy(&state.msg[i], &state.msg[state.msg_num], sizeof(message_t));
+                memcpy(&state.msg[i], &state.msg[state.msg_num], sizeof(Message));
                 i--;
             }
         }

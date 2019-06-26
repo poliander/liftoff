@@ -23,7 +23,7 @@ bool Engine::loadConfiguration()
         FILE *fp = fopen(CFG_FILENAME, "rb");
 
         if (fp) {
-            if (fread(&state.config, sizeof(config_t), 1, fp) == 1) {
+            if (fread(&state.config, sizeof(Configuration), 1, fp) == 1) {
                 result = true;
             }
 
@@ -58,7 +58,7 @@ bool Engine::writeConfiguration()
         FILE *fp = fopen(CFG_FILENAME, "wb");
 
         if (fp) {
-            if (fwrite(&state.config, sizeof(config_t), 1, fp) == 1) {
+            if (fwrite(&state.config, sizeof(Configuration), 1, fp) == 1) {
                 result = true;
             }
 
