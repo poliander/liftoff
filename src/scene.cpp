@@ -521,7 +521,7 @@ void Scene::drawFPS()
  */
 void Scene::drawTitle()
 {
-    float sc, a = state.title_ypos * .01f;
+    float sc, a = state.menu_title_pos * .01f;
 
     glLoadIdentity();
     state.textures[T_TITLE]->bind();
@@ -920,7 +920,7 @@ void Scene::drawMenu(bool mouse_recheck)
     }
 
     if (state.get() >= STATE_GAME_START) {
-        m_a = (float)state.title_ypos;
+        m_a = (float)state.menu_title_pos;
     }
 
     // draw player's ship
@@ -1050,16 +1050,16 @@ void Scene::drawDisplay()
             state.hud_x += t;
             t = (4.905f + state.hud_y) * .055f * state.timer_adjustment;
             state.hud_y -= t;
-            alpha = float(100 - state.title_ypos) * .01f;
+            alpha = float(100 - state.menu_title_pos) * .01f;
             break;
 
         case STATE_GAME_NEXTLEVEL:
         case STATE_GAME_QUIT:
-            if (state.title_ypos > 0) {
-                state.hud_x -= state.title_ypos * .001f;
-                state.hud_y -= state.title_ypos * .001f;
+            if (state.menu_title_pos > 0) {
+                state.hud_x -= state.menu_title_pos * .001f;
+                state.hud_y -= state.menu_title_pos * .001f;
             }
-            alpha = float(100 - state.title_ypos) * .01f;
+            alpha = float(100 - state.menu_title_pos) * .01f;
             break;
 
         case STATE_GAME_LOOP:
@@ -1076,7 +1076,7 @@ void Scene::drawDisplay()
         default:
             state.hud_x = .0f;
             state.hud_y = -.8f;
-            alpha = .01f * (100.0f - float(state.title_ypos));
+            alpha = .01f * (100.0f - float(state.menu_title_pos));
     }
 
     glLoadIdentity();
@@ -1347,25 +1347,25 @@ void Scene::move()
 
     switch (state.get()) {
         case STATE_MENU:
-            if (state.title_ypos < 99.85f) {
-                state.title_ypos += (100.1f-state.title_ypos) * state.timer_adjustment * .025f;
-                state.global_alpha = (int)state.title_ypos;
+            if (state.menu_title_pos < 99.85f) {
+                state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .025f;
+                state.global_alpha = (int)state.menu_title_pos;
             }
             break;
 
         case STATE_QUIT:
-            if (state.title_ypos > 0) {
-                state.title_ypos -= (100.1f-state.title_ypos) * state.timer_adjustment * .15f;
-                state.global_alpha = (int)state.title_ypos;
+            if (state.menu_title_pos > 0) {
+                state.menu_title_pos -= (100.1f - state.menu_title_pos) * state.timer_adjustment * .15f;
+                state.global_alpha = (int)state.menu_title_pos;
             } else {
                 state.set(STATE_CLOSE);
             }
             break;
 
         case STATE_GAME_START:
-            if (state.title_ypos > 0) {
-                state.title_ypos -= (100.1f-state.title_ypos) * state.timer_adjustment * .15f;
-                state.stars_rotation_speed = .05f * state.title_ypos * .01f;
+            if (state.menu_title_pos > 0) {
+                state.menu_title_pos -= (100.1f - state.menu_title_pos) * state.timer_adjustment * .15f;
+                state.stars_rotation_speed = .05f * state.menu_title_pos * .01f;
             }
 
             if (state.stars_speed > .3f) {
@@ -1426,17 +1426,17 @@ void Scene::move()
             moveScene();
             moveMessages();
 
-            if (state.title_ypos < 99.85f) {
-                state.title_ypos += state.timer_adjustment * .375;
-                state.cam_y_offset = 35.0f + state.title_ypos * .85f;
+            if (state.menu_title_pos < 99.85f) {
+                state.menu_title_pos += state.timer_adjustment * .375;
+                state.cam_y_offset = 35.0f + state.menu_title_pos * .85f;
 
-                if (state.title_ypos > 80.0f) {
-                    state.global_alpha = int(99.85f - (state.title_ypos - 80.0f) * 5.0f);
+                if (state.menu_title_pos > 80.0f) {
+                    state.global_alpha = int(99.85f - (state.menu_title_pos - 80.0f) * 5.0f);
                     player->setAccelerationZ(350.0f);
                 } else {
                     state.global_alpha = 100;
-                    state.tilt(state.title_ypos * .1f);
-                    player->setAccelerationZ(state.title_ypos * state.title_ypos * -.0001f);
+                    state.tilt(state.menu_title_pos * .1f);
+                    player->setAccelerationZ(state.menu_title_pos * state.menu_title_pos * -.0001f);
                 }
 
                 if (state.stars_speed < 1.75f) {
@@ -1460,13 +1460,13 @@ void Scene::move()
             moveScene();
             moveMessages();
 
-            if (state.title_ypos < 99.85f) {
+            if (state.menu_title_pos < 99.85f) {
                 if (player->isAlive()) {
                     player->setAccelerationZ(-25.0f);
                 }
 
-                state.title_ypos += (100.1f - state.title_ypos) * state.timer_adjustment * .075f;
-                state.global_alpha = (int)(100.1f - state.title_ypos);
+                state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .075f;
+                state.global_alpha = (int)(100.1f - state.menu_title_pos);
             } else {
                 state.set(STATE_MENU);
 

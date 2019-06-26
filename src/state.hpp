@@ -35,10 +35,12 @@ class State
         Configuration               config;
         View                        view;
 
+        // resources
         map<unsigned int, Texture*> textures;
         map<unsigned int, Shader*>  shaders;
         map<unsigned int, Model*>   models;
 
+        // scenery components
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
 
@@ -47,7 +49,6 @@ class State
         float           timer_adjustment;
 
         int             global_alpha;
-        float           title_ypos;
 
         bool            log_file;
 
@@ -82,6 +83,7 @@ class State
         // game menu
         int             menu;
         int             menu_pos;
+        float           menu_title_pos;
         bool            menu_selected;
 
         // stars
@@ -110,7 +112,7 @@ class State
         SDL_Joystick*   joystick;
 
         // level
-        unsigned short  lvl_id = 1;
+        unsigned short  lvl_id;
         bool            lvl_loaded;
         char            lvl_music[32];
         float           lvl_pos;

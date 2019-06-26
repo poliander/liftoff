@@ -2,9 +2,9 @@
 
 View::View()
 {
-    camera_pos     = glm::vec3(0.0f,  0.0f,  0.1f);
-    camera_target  = glm::vec3(0.0f,  0.0f, -1.0f);
-    camera_up      = glm::vec3(0.0f,  1.0f,  0.0f);
+    camera_pos    = glm::vec3(0.0f,  0.0f,  0.1f);
+    camera_target = glm::vec3(0.0f,  0.0f, -1.0f);
+    camera_up     = glm::vec3(0.0f,  1.0f,  0.0f);
 }
 
 View::~View()

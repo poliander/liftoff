@@ -53,6 +53,7 @@ State::State()
     tilt_dy                 = 0;
 
     id                      = 0;
+    lvl_id                  = 1;
 }
 
 State::~State()
@@ -148,9 +149,9 @@ bool State::set(int s)
 
             menu = 1;
             menu_pos = 0;
+            menu_title_pos = 0;
             menu_selected = false;
 
-            title_ypos = .0f;
             global_alpha = 0;
             engine_restart = false;
 
@@ -164,13 +165,13 @@ bool State::set(int s)
             break;
 
         case STATE_QUIT:
-            title_ypos = 99.85f;
+            menu_title_pos = 99.85f;
             audio.stopMusic(1000);
             break;
 
         case STATE_GAME_START:
             global_alpha = 99;
-            title_ypos = 99.85f;
+            menu_title_pos = 99.85f;
             cam_x = .0f;
             cam_y = .0f;
             hud_x = -20.0f;
@@ -208,7 +209,7 @@ bool State::set(int s)
             break;
 
         case STATE_GAME_QUIT:
-            title_ypos = 0;
+            menu_title_pos = 0;
             audio.stopMusic(1000);
             audio.stopSampleLoop(1000);
             break;

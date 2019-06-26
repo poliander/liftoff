@@ -394,7 +394,7 @@ void Player::draw(State &s)
         lightpos[1] = 1000.0f;
         lightpos[2] = -3000.0f;
     } else {
-        alpha = s.title_ypos * .01f;
+        alpha = s.menu_title_pos * .01f;
         lightpos[0] = 50.0f;
         lightpos[1] = 500.0f;
         lightpos[2] = .0f;
@@ -556,8 +556,8 @@ void Player::draw(State &s)
         s.textures[T_STAR]->bind();
 
         if (s.get() == STATE_GAME_NEXTLEVEL) {
-            particles->setSize(10.0f + s.title_ypos * .025f);
-            particles->setScale(1.0f + s.title_ypos * .015f);
+            particles->setSize(10.0f + s.menu_title_pos * .025f);
+            particles->setScale(1.0f + s.menu_title_pos * .015f);
         } else {
             particles->setSize(10.0f);
             particles->setScale(1.0f);
