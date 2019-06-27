@@ -1349,6 +1349,10 @@ void Scene::move()
                 state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .025f;
                 state.global_alpha = (int)state.menu_title_pos;
             }
+            player->setSpin(0, 0, 3.5f);
+            player->setVelocity(0, 0, 0);
+            player->setAcceleration(0, 0, 0);
+            player->move(state);
             break;
 
         case STATE_QUIT:
@@ -1368,9 +1372,11 @@ void Scene::move()
 
             if (state.stars_speed > .3f) {
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
+                player->move(state);
             } else if (state.lvl_loaded) {
                 player->setPos(0, -90.0f, 50.0f);
                 player->setRot(90.0f, 0, 270.0f);
+                player->setSpin(0, 0, 0);
                 player->collect(OBJ_POWERUP_0);
 
                 state.set(STATE_GAME_LOOP);
@@ -1445,13 +1451,10 @@ void Scene::move()
 
                 state.cam_y += state.timer_adjustment * ((player->getPosY() * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
             } else {
-                state.set(STATE_MENU);
-
-                player->setPos(4.3f, -1.0f, -3.0f);
-                player->setRot(0, 0, 250.0f);
-                player->setSpin(1.0f, 0, 0);
+                player->setRot(115.0f, 0, 0);
                 player->setVelocity(0, 0, 0);
                 player->setAcceleration(0, 0, 0);
+                state.set(STATE_MENU);
             }
             break;
 
@@ -1467,13 +1470,8 @@ void Scene::move()
                 state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .075f;
                 state.global_alpha = (int)(100.1f - state.menu_title_pos);
             } else {
+                player->setRot(115.0f, 0, 0);
                 state.set(STATE_MENU);
-
-                player->setPos(4.3f, -1.0f, -3.0f);
-                player->setRot(0, 0, 250.0f);
-                player->setSpin(1.0f, 0, 0);
-                player->setVelocity(0, 0, 0);
-                player->setAcceleration(0, 0, 0);
             }
             break;
     }
@@ -1519,7 +1517,7 @@ void Scene::draw()
     state.view.lookAt(
         p_x * -.01f + state.tilt_x * .4f,
         p_y * -.01f + player->getVelocityY() * 10.0f + state.tilt_y * .4f,
-        200.0f,
+        .0f,
 
         player->getVelocityX() * .5f,
         .0f,

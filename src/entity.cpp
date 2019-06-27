@@ -198,6 +198,21 @@ void Entity::setRot(float x, float y, float z)
     r_z = z;
 }
 
+void Entity::setRotX(float x)
+{
+    r_x = x;
+}
+
+void Entity::setRotY(float y)
+{
+    r_y = y;
+}
+
+void Entity::setRotZ(float z)
+{
+    r_z = z;
+}
+
 float Entity::getRotX()
 {
     return r_x;

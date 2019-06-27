@@ -46,7 +46,7 @@ void Model::draw(glm::mat4 mvp, glm::vec4 color)
     shader->update(UNI_COLOR, color);
 
     glBindVertexArray(vertexArrayObject);
-    glDrawElementsBaseVertex(GL_TRIANGLES, object->indices.size(), GL_UNSIGNED_INT, 0, 0);
+    glDrawElements(GL_TRIANGLES, object->indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     glUseProgram(0);

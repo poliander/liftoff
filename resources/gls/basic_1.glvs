@@ -6,8 +6,10 @@ layout(location = 2) in vec3 normal;
 
 out vec2 uv0;
 out vec3 normal0;
+out vec4 color0;
 
 uniform mat4 mvp;
+uniform vec4 color;
 
 void main()
 {
@@ -15,4 +17,5 @@ void main()
 
     uv0 = uv;
     normal0 = normal;
+    color0 = color;
 }

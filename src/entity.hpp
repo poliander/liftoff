@@ -36,7 +36,19 @@ class Entity
         float              getPosY();
         float              getPosZ();
 
-        float              getAcceleration();
+        void               setRot(float x, float y, float z);
+        void               setRotX(float z);
+        void               setRotY(float z);
+        void               setRotZ(float z);
+        float              getRotX();
+        float              getRotY();
+        float              getRotZ();
+
+        void               setScale(float x, float y, float z);
+        float              getScale();
+        float              getScaleX();
+        float              getScaleY();
+        float              getScaleZ();
 
         void               setVelocity(float x, float y, float z);
         void               setVelocityX(float x);
@@ -46,26 +58,17 @@ class Entity
         float              getVelocityY();
         float              getVelocityZ();
 
-        void               setScale(float x, float y, float z);
-        float              getScale();
-        float              getScaleX();
-        float              getScaleY();
-        float              getScaleZ();
-
         void               setAcceleration(float x, float y, float z);
         void               setAccelerationX(float x);
         void               setAccelerationY(float y);
         void               setAccelerationZ(float z);
 
-        void               setRot(float x, float y, float z);
-        float              getRotX();
-        float              getRotY();
-        float              getRotZ();
-
         void               setSpin(float x, float y, float z);
 
-        int                getLife();
+        float              getAcceleration();
+
         void               setLife(int l);
+        int                getLife();
 
         void               addMoney(unsigned short m);
         void               setMoney(unsigned short m);

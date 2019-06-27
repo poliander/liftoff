@@ -2,6 +2,9 @@
 
 Shader::Shader(string vsFilename, string fsFilename)
 {
+    GLint success;
+    GLchar error[1024];
+
     program = glCreateProgram();
 
     shaders[0] = create(load(vsFilename), GL_VERTEX_SHADER);
@@ -15,10 +18,14 @@ Shader::Shader(string vsFilename, string fsFilename)
     glBindAttribLocation(program, 2, "normal");
 
     glLinkProgram(program);
-    glValidateProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (success == GL_FALSE) {
+        glGetProgramInfoLog(program, sizeof(error), NULL, error);
+        FILE *fp = fopen("shader.log", "a");fprintf(fp,"%s\n", error);fclose(fp);
+        exit(-1);
+    }
 
-    GLint success = 0;
-    GLchar error[1024] = { 0 };
+    glValidateProgram(program);
     glGetProgramiv(program, GL_VALIDATE_STATUS, &success);
     if (success == GL_FALSE) {
         glGetProgramInfoLog(program, sizeof(error), NULL, error);

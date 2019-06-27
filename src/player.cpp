@@ -13,6 +13,10 @@ Player::Player() : Entity()
     j_l = 3;
     jt_l = 3;
 
+    r_x = 115.0f;
+    r_y = 0;
+    r_z = 0;
+
     powerup_booster_timer = 0;
     powerup_booster_length = 0;
 
@@ -383,67 +387,19 @@ void Player::move(State &s)
 void Player::draw(State &s)
 {
     float alpha, jlen;
-    GLfloat lightpos[] = { 0, 0, 0, 1.0f };
 
     if (
         s.get() >= STATE_GAME_LOOP &&
         s.get() <= STATE_GAME_QUIT
     ) {
         alpha = s.global_alpha * .01f;
-        lightpos[0] = 100.0f;
-        lightpos[1] = 1000.0f;
-        lightpos[2] = -3000.0f;
     } else {
         alpha = s.menu_title_pos * .01f;
-        lightpos[0] = 50.0f;
-        lightpos[1] = 500.0f;
-        lightpos[2] = .0f;
     }
-
-    GLfloat lightcol[] = { 1, 1, 1, alpha };
-
-    GLfloat mat_diffuse[] = { alpha*.05f, alpha*.05f, alpha*.05f, alpha };
-    GLfloat col_diffuse[] = { .0f, .0f, .0f };
-
-    GLfloat mat_emission[] = { .15f*alpha, .2f*alpha, .2f*alpha, alpha };
-    GLfloat mat_fire[] = { .15f*alpha, .15f*alpha, .15f*alpha, alpha };
-
-    GLfloat col_specular[] = { alpha, alpha, alpha, 0 };
-    GLfloat mat_specular[] = { alpha, alpha, alpha, 0 };
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-
-    glLightfv(GL_LIGHT0, GL_SPECULAR, col_specular);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightcol);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, col_diffuse);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
-
-    glEnable(GL_LIGHT0);
-
-    if (
-        s.get() <= STATE_GAME_START ||
-        s.get() >= STATE_GAME_QUIT
-    ) {
-        lightpos[0] = -150.0f;
-        lightpos[1] =  300.0f;
-        lightpos[2] = -300.0f;
-
-        glLightfv(GL_LIGHT1, GL_SPECULAR, col_specular);
-        glLightfv(GL_LIGHT1, GL_AMBIENT, lightcol);
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, col_diffuse);
-        glLightfv(GL_LIGHT1, GL_POSITION, lightpos);
-
-        glEnable(GL_LIGHT1);
-    }
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_fire);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
-    glMaterialf(GL_FRONT, GL_SHININESS, 64.0f);
 
     if (
         s.get() >= STATE_GAME_LOOP &&
@@ -463,9 +419,10 @@ void Player::draw(State &s)
             getScaleX(),
             getScaleY(),
             getScaleZ()
-        ), glm::vec4(c_r, c_g, c_b, c_a));
+        ), glm::vec4(c_r, c_g, c_b, alpha));
     } else {
-        setScale(1.0f, 1.0f, 1.0f);
+        setScale(2.0f, 2.0f, 2.0f);
+        setPos(9.0f, -2.5f, -50.0f);
 
         s.models[e_obj]->draw(s.view.transform(
             getPosX(),
@@ -479,18 +436,9 @@ void Player::draw(State &s)
             getScaleX(),
             getScaleY(),
             getScaleZ()
-        ), glm::vec4(c_r, c_g, c_b, c_a));
+        ), glm::vec4(c_r, c_g, c_b, alpha));
     }
 
-    if (
-        s.get() <= STATE_GAME_START ||
-        s.get() >= STATE_GAME_QUIT
-    ) {
-        glDisable(GL_LIGHT1);
-    }
-
-    glDisable(GL_LIGHT0);
-    glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
 
     glLoadIdentity();
@@ -615,7 +563,7 @@ void Player::draw(State &s)
             glEnd();
             glRotatef(j*2, 0, 0, 1);
 
-            glTranslatef(-.7f-j*.05f, 0, 0);
+            glTranslatef(-.7f - j * .05f, 0, 0);
         }
     }
 
