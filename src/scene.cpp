@@ -1560,7 +1560,7 @@ void Scene::draw()
 
     // menu
 
-    glClear(GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 
     if (
         state.get() >= STATE_GAME_START &&
@@ -1582,4 +1582,6 @@ void Scene::draw()
     if (state.fps_visible) {
         drawFPS();
     }
+
+    glEnable(GL_DEPTH_TEST);
 }

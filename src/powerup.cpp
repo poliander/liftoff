@@ -10,7 +10,7 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     counter = 0;
 
     particles = new ParticleEngine();
-    particles->setup(EMITTER_EXPLOSION, 15, .5f, .5f, .5f, .5f, 10.0f);
+    particles->setup(EMITTER_EXPLOSION, 15, .5f, .5f, .5f, .5f, 1.0f);
     particles->setColor(.6f, .75f, 1.0f);
     particles->setAlpha(.5f);
     particles->setScale(10.0f);
@@ -68,7 +68,7 @@ void Powerup::draw(State &s)
 
     s.textures[T_STAR]->bind();
 
-    particles->setSize (10.0f / (1.0f + counter * 5.0f));
+    particles->setSize (150.0f / (1.0f + counter * 75.0f));
     particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
     particles->setScale(10.0f + (7.5f * sin(counter * M_PI)));
     particles->draw(s,
