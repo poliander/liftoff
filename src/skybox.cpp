@@ -62,11 +62,6 @@ void Skybox::draw(State &s)
     unsigned short i;
     float a, c, sl, sa;
 
-    glShadeModel(GL_FLAT);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_BLEND);
-    glDepthMask(GL_FALSE);
-
     // background
 
     s.textures[T_BACKGROUND_1]->bind();
@@ -81,15 +76,13 @@ void Skybox::draw(State &s)
 
     s.textures[T_BACKGROUND_1]->draw();
 
-    glEnable(GL_BLEND);
-    glDepthMask(GL_TRUE);
+    s.shaders[S_TEXTURE_1]->unbind();
+
 /*
 
     // far stars
 
     glLoadIdentity();
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     s.textures[T_STAR]->bind();
 
@@ -151,8 +144,4 @@ void Skybox::draw(State &s)
         }
     }
 */
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glShadeModel(GL_SMOOTH);
-
-    glDepthMask(GL_TRUE);
 }

@@ -147,19 +147,9 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
     float m[16];
     float a = s.global_alpha * .01f;
 
-    glPushMatrix();
+    glDisable(GL_DEPTH_TEST);
 
-    // set up position and rotation
-    glTranslatef(px, py, pz);
-    glRotatef(rx, 1, 0, 0);
-    glRotatef(ry, 0, 1, 0);
-    glRotatef(rz, 0, 0, 1);
-
-    // let the particles face the observer
-    glGetFloatv(GL_MODELVIEW_MATRIX, m);
-    m[0] = 1.0f; m[1] = 0.0f; m[2] = 0.0f;
-    m[4] = 0.0f; m[5] = 1.0f; m[6] = 0.0f;
-    glLoadMatrixf(m);
+    s.shaders[S_TEXTURE_1]->bind();
 
     // render particles
     for (int i = 0; i < pnum; i++) {
@@ -167,22 +157,25 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
             continue;
         }
 
-        glColor4f(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a);
+        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a));
+        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+            px + (p[i].px * pscale),
+            py + (p[i].py * pscale),
+            pz,
 
-        glBegin(GL_QUADS);
-          glTexCoord2d(0, 0);
-          glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py - psize), pscale * p[i].pz);
+            0,
+            0,
+            0,
 
-          glTexCoord2d(1, 0);
-          glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py - psize), pscale * p[i].pz);
+            psize,
+            psize,
+            0
+        ));
 
-          glTexCoord2d(1, 1);
-          glVertex3f(pscale * (p[i].px + psize), pscale * (p[i].py + psize), pscale * p[i].pz);
-
-          glTexCoord2d(0, 1);
-          glVertex3f(pscale * (p[i].px - psize), pscale * (p[i].py + psize), pscale * p[i].pz);
-        glEnd();
+        s.textures[T_STAR]->draw();
     }
 
-    glPopMatrix();
+    s.shaders[S_TEXTURE_1]->unbind();
+
+    glEnable(GL_DEPTH_TEST);
 }

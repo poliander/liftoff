@@ -54,22 +54,19 @@ void Powerup::move(State &s)
         counter += s.timer_adjustment * .1f;
     }
 
-    if (getPosZ() > 100.0f || counter > 1.5f) {
+    if (getPosZ() > 0 || counter > 1.5f) {
         e_state = E_STATE_GONE;
     }
 }
 
 void Powerup::draw(State &s)
 {
-    glLoadIdentity();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     glRotatef(s.tilt_x * -.035f, 0, 1, 0);
     glRotatef(s.tilt_y * -.035f, 1, 0, 0);
 
-    glShadeModel(GL_FLAT);
-
     s.textures[T_STAR]->bind();
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     particles->setSize (10.0f / (1.0f + counter * 5.0f));
     particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
@@ -84,8 +81,5 @@ void Powerup::draw(State &s)
     );
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glShadeModel(GL_SMOOTH);
-
-    glPopMatrix();
 }
 

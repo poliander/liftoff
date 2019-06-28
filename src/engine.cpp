@@ -392,9 +392,10 @@ bool Engine::initDisplay()
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     if (state.vid_cfg_multisampling > 0) glEnable(GL_MULTISAMPLE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
     glClearColor(.0f, .0f, .0f, .0f);
     glClearDepth(1.0f);

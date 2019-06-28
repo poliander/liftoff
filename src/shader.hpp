@@ -21,6 +21,7 @@ class Shader
         ~Shader();
 
         void bind();
+        void unbind();
 
         void update(unsigned short u, glm::mat4 m);
         void update(unsigned short u, glm::vec4 v);

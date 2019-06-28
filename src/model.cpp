@@ -49,5 +49,5 @@ void Model::draw(glm::mat4 mvp, glm::vec4 color)
     glDrawElements(GL_TRIANGLES, object->indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    glUseProgram(0);
+    shader->unbind();
 }

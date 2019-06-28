@@ -43,7 +43,6 @@ void Debris::draw(State &s)
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_NORMALIZE);
-    glEnable(GL_DEPTH_TEST);
 
     glColor4f(c_r, c_g, c_b, c_a * a);
 
@@ -61,7 +60,6 @@ void Debris::draw(State &s)
         s_z * scale
     ), glm::vec4(c_r, c_g, c_b, c_a));
 
-    glDisable(GL_DEPTH_TEST);
     glDisable(GL_NORMALIZE);
     glDisable(GL_CULL_FACE);
 }

@@ -393,6 +393,8 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         return;
     }
 
+    glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+
     // let cross-hair fade out when player dies
     if (isAlive()) {
         da = .85f;
@@ -420,7 +422,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-            (p_z),
+            (p_z + .01f),
 
             s.tilt_y * -.035f,
             s.tilt_x * -.035f,
@@ -450,7 +452,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-            (p_z),
+            (p_z + .01f),
 
             s.tilt_y * -.035f,
             s.tilt_x * -.035f,
@@ -469,7 +471,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
         (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (p_z),
+        (p_z + .01f),
 
         s.tilt_y * -.035f,
         s.tilt_x * -.035f,
@@ -481,5 +483,9 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     ));
 
     s.textures[T_HUD_3]->draw();
+
+    s.shaders[S_TEXTURE_1]->unbind();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 

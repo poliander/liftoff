@@ -127,7 +127,7 @@ void Player::shoot(State &s)
     missile->setPos(
         p_x - 7.5f + (m_alt * 15.0f),
         p_y,
-        p_z - 175.0f
+        p_z - 300.0f
     );
 
     if (target && false == target->isCollectable()) {
@@ -397,10 +397,6 @@ void Player::draw(State &s)
         alpha = s.menu_title_pos * .01f;
     }
 
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_DEPTH_TEST);
-
     if (
         s.get() >= STATE_GAME_LOOP &&
         s.get() <= STATE_GAME_QUIT
@@ -438,15 +434,11 @@ void Player::draw(State &s)
             getScaleZ()
         ), glm::vec4(c_r, c_g, c_b, alpha));
     }
-
-    glDisable(GL_CULL_FACE);
-
+/*
     glLoadIdentity();
     glPushMatrix();
 
     // flashing gun fire
-
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 
     s.textures[T_GLOW]->bind();
 
@@ -491,8 +483,6 @@ void Player::draw(State &s)
         glRotatef(gun_flash_rot[1], -1, 0, 0);
         glTranslatef(-1.5f, -1.0f, -.5f);
     }
-
-    glDisable(GL_DEPTH_TEST);
 
     // jet
 
@@ -567,6 +557,6 @@ void Player::draw(State &s)
         }
     }
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPopMatrix();
+*/
 }

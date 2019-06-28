@@ -39,7 +39,7 @@ void Cargo::move(State &s)
 
     counter += s.timer_adjustment * 0.1f;
 
-    if (p_z > 100.0f) {
+    if (p_z > 0) {
         e_state = E_STATE_GONE;
     }
 }
@@ -56,7 +56,6 @@ void Cargo::draw(State &s)
     }
 
     glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
 
     s.models[e_obj]->draw(s.view.transform(
@@ -77,12 +76,10 @@ void Cargo::draw(State &s)
     glPushMatrix();
 
     glDisable(GL_NORMALIZE);
-    glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
     s.textures[T_GLOW]->bind();
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     scale2 += .5f;
     glColor4f(.5f, .75f, 1.0f, (.15f + .1f * scale2) * s.global_alpha * .01f);
     scale2 *= 7.5f;
@@ -130,6 +127,5 @@ void Cargo::draw(State &s)
       glVertex3f(scale2, -scale2, 0);
     glEnd();
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPopMatrix();
 }

@@ -53,6 +53,11 @@ void Shader::bind()
     glUseProgram(program);
 }
 
+void Shader::unbind()
+{
+    glUseProgram(0);
+}
+
 void Shader::update(unsigned short u, glm::vec4 v)
 {
     glUniform4fv(uniforms[u], 1, &v[0]);

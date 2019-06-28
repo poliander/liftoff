@@ -14,7 +14,7 @@ Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entit
     switch (type) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
-            particles->setup(EMITTER_EXPLOSION, 20, .85f, .85f, .85f, .75f, 4.0f);
+            particles->setup(EMITTER_EXPLOSION, 20, .85f, .85f, .85f, .5f, 20.0f);
             timer = 750;
             break;
 
@@ -56,7 +56,7 @@ void Explosion::move(State &s)
 
     timer -= s.timer_adjustment * 10.0f;
 
-    if (timer < 0 || getPosZ() > 100.0f) {
+    if (getPosZ() > 0 || timer < 0) {
         e_state = E_STATE_GONE;
     }
 }
@@ -65,9 +65,6 @@ void Explosion::draw(State &s)
 {
     float counter;
 
-    glLoadIdentity();
-    glEnable(GL_BLEND);
-
     switch (e_obj) {
 
         // green laser gun impact
@@ -75,8 +72,8 @@ void Explosion::draw(State &s)
             counter = (750.0f - timer) * .001333f;
             particles->setAlpha(.5f - counter);
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(4.0f - 2.0f * counter);
-            particles->setScale(2.5f + counter);
+            particles->setSize(24.0f - 32.0f * counter);
+            particles->setScale(counter * 4.0f);
 
             s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -123,13 +120,10 @@ void Explosion::draw(State &s)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
     }
-
+/*
     glRotatef(s.tilt_x * -.035f, 0, 1, 0);
     glRotatef(s.tilt_y * -.035f, 1, 0, 0);
-
-    glShadeModel(GL_FLAT);
-    glPushMatrix();
-
+*/
     particles->draw(s,
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
@@ -138,9 +132,6 @@ void Explosion::draw(State &s)
         (getRotY()),
         (getRotZ())
     );
-
-    glPopMatrix();
-    glShadeModel(GL_SMOOTH);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

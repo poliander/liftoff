@@ -528,6 +528,8 @@ void Scene::drawTitle()
 {
     float sc, a = state.menu_title_pos * .01f;
 
+    glDisable(GL_DEPTH_TEST);
+
     glLoadIdentity();
     state.textures[T_TITLE]->bind();
     glPushMatrix();
@@ -580,6 +582,8 @@ void Scene::drawTitle()
       glVertex3f (-4*sc, 0, 0);
     glEnd();
     glPopMatrix();
+
+    glEnable(GL_DEPTH_TEST);
 }
 
 /*
@@ -928,14 +932,12 @@ void Scene::drawMenu(bool mouse_recheck)
         m_a = (float)state.menu_title_pos;
     }
 
-    // draw player's ship
-    player->draw(state);
-
     // draw menu background
     glLoadIdentity();
     glPushMatrix();
     state.textures[T_MENU_1]->bind();
     glTranslatef(0, -0.8f, -10);
+    glScalef(1, 1, 1);
     glColor4f(1, 1, 1, .01f*m_a);
     glBegin (GL_QUADS);
       glTexCoord2f (0, 0);
@@ -1533,15 +1535,39 @@ void Scene::draw()
         .0f
     );
 
+    // background
+
+    glDepthRange(1, 1);
+    glDepthFunc(GL_ALWAYS);
+
     skybox->draw(state);
+
+    glDepthRange(0, 1);
+    glDepthFunc(GL_LESS);
+
+    // scene
 
     if (
         state.get() >= STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
     ) {
         drawScene();
-        drawDisplay();
+    }
+
+    if (state.menu) {
+        player->draw(state);
+    }
+
+    // menu
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    if (
+        state.get() >= STATE_GAME_START &&
+        state.get() <= STATE_GAME_QUIT
+    ) {
         drawMessages();
+        drawDisplay();
     }
 
     if (state.menu) {
