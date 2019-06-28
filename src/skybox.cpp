@@ -78,11 +78,11 @@ void Skybox::draw(State &s)
 
     s.shaders[S_TEXTURE_1]->unbind();
 
-/*
-
     // far stars
 
     glLoadIdentity();
+
+    glRotatef(s.stars_rotation_pos, 0, 0, -1);
 
     s.textures[T_STAR]->bind();
 
@@ -143,5 +143,4 @@ void Skybox::draw(State &s)
             glPopMatrix();
         }
     }
-*/
 }
