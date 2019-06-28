@@ -54,13 +54,14 @@
 #define T_HUD_1                 6
 #define T_HUD_2                 7
 #define T_HUD_3                 8
-#define T_STAR                  9
-#define T_MISSILE_1             10
-#define T_EXPLOSION_1           11
-#define T_EXPLOSION_2           12
-#define T_BACKGROUND_1          13
-#define T_JET_EXHAUST           14
-#define T_GLOW                  15
+#define T_HUD_4                 9
+#define T_STAR                  10
+#define T_MISSILE_1             11
+#define T_EXPLOSION_1           12
+#define T_EXPLOSION_2           13
+#define T_BACKGROUND_1          14
+#define T_JET_EXHAUST           15
+#define T_GLOW                  16
 
 // shaders
 #define S_TEXTURE_1             0

@@ -66,6 +66,7 @@ void Explosion::draw(State &s)
     float counter;
 
     glLoadIdentity();
+    glEnable(GL_BLEND);
 
     switch (e_obj) {
 

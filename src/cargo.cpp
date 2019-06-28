@@ -55,23 +55,6 @@ void Cargo::draw(State &s)
         a = (p_z + 10000.0f) * .0005f;
     }
 
-    // light setup
-    glEnable(GL_LIGHTING);
-    GLfloat col_ambient[] = { a, a, a };
-    GLfloat pos_ambient[] = {.5f, .5f, .0f, .0f };
-    glLightfv(GL_LIGHT0, GL_AMBIENT, col_ambient);
-    glLightfv(GL_LIGHT0, GL_POSITION, pos_ambient);
-    glEnable(GL_LIGHT0);
-
-    // material setup
-    GLfloat col_specular[] = { a, a, a };
-    GLfloat col_emission[] = { (.2f + scale2) * a, (.4f + scale2) * a, (.8f + scale2) * a };
-
-    glMaterialfv(GL_FRONT, GL_EMISSION, col_emission);
-    glMaterialfv(GL_FRONT, GL_AMBIENT, col_ambient);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, col_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, 64.0f);
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
@@ -94,8 +77,6 @@ void Cargo::draw(State &s)
     glPushMatrix();
 
     glDisable(GL_NORMALIZE);
-    glDisable(GL_LIGHT0);
-    glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 

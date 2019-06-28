@@ -382,7 +382,7 @@ bool Entity::hasTarget(shared_ptr<Entity> e)
 void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 {
     float a = float(s.global_alpha) * .01f;
-    float scale = 150.0f + ((p_z + 12500.0f) * .00005f);
+    float scale = 1.25f * (150.0f + ((p_z + 12500.0f) * .00005f));
     float rot, da;
 
     if (
@@ -409,82 +409,77 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         da -= .001f * (1000.0f + p_z);
     }
 
-    glLoadIdentity();
-
-    glRotatef(s.tilt_x * -.025f, 0, 1, 0);
-    glRotatef(s.tilt_y * -.025f, 1, 0, 0);
-
-    s.textures[T_HUD_3]->bind();
-
-    glTranslatef(
-        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (p_z)
-    );
-
-    glPushMatrix();
+    s.shaders[S_TEXTURE_1]->bind();
 
     if (s.player->hasTarget(me)) {
-        // target locked (colored)
+        // target locked, auto-aiming active
 
-        glColor4f(t_r, t_g, t_b, a * da);
-        glBegin (GL_QUADS);
-          glTexCoord2i(0, 0);
-          glVertex2f(-scale * .75f, -scale * .75f);
+        s.textures[T_HUD_3]->bind();
 
-          glTexCoord2i(1, 0);
-          glVertex2f(scale * .75f, -scale * .75f);
+        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
+        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+            (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
+            (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+            (p_z),
 
-          glTexCoord2i(1, 1);
-          glVertex2f(scale * .75f, scale * .75f);
+            s.tilt_y * -.035f,
+            s.tilt_x * -.035f,
+            0,
 
-          glTexCoord2i(0, 1);
-          glVertex2f(-scale * .75f, scale * .75f);
-        glEnd();
+            scale,
+            scale,
+            0
+        ));
+
+        s.textures[T_HUD_3]->draw();
     } else {
-        // target not locked (white)
+        // aiming help
 
-        rot = (180.0f / M_PI) * atan(
+        s.textures[T_HUD_4]->bind();
+
+        rot = (-180.0f / M_PI) * atan(
             (s.player->getPosY() - getPosY()) /
             (s.player->getPosX() - getPosX())
         );
 
-        if (s.player->getPosX() < getPosX()) {
+        if (s.player->getPosX() > getPosX()) {
             rot += 180.0f;
         }
 
-        glColor4f(1.0f, 1.0f, 1.0f, a * da);
-        glRotatef(rot, 0, 0, 1);
-        glBegin (GL_QUADS);
-          glTexCoord2f(.5f, 0);
-          glVertex2f(.8f, -scale * .75f);
+        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * da));
+        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+            (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
+            (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+            (p_z),
 
-          glTexCoord2f(1.0f, 0);
-          glVertex2f(scale * .75f, -scale * .75f);
+            s.tilt_y * -.035f,
+            s.tilt_x * -.035f,
+            rot,
 
-          glTexCoord2f(1.0f, 1.0f);
-          glVertex2f(scale * .75f, scale * .75f);
+            scale,
+            scale,
+            0
+        ));
 
-          glTexCoord2f(.5f, 1.0f);
-          glVertex2f(.8f, scale * .75f);
-        glEnd();
-        glRotatef(-rot, 0, 0, 1);
+        s.textures[T_HUD_4]->draw();
     }
 
-    glBegin (GL_QUADS);
-      glTexCoord2i(0, 0);
-      glVertex2f(-scale, -scale);
+    s.textures[T_HUD_3]->bind();
 
-      glTexCoord2i(1, 0);
-      glVertex2f(scale, -scale);
+    s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+        (p_z),
 
-      glTexCoord2i(1, 1);
-      glVertex2f(scale, scale);
+        s.tilt_y * -.035f,
+        s.tilt_x * -.035f,
+        0,
 
-      glTexCoord2i(0, 1);
-      glVertex2f(-scale, scale);
-    glEnd();
+        scale * 1.5f,
+        scale * 1.5f,
+        0
+    ));
 
-    glPopMatrix();
+    s.textures[T_HUD_3]->draw();
 }
 

@@ -41,77 +41,82 @@ void Scene::load()
 
     state.log("Loading 'title.tga'\n");
     state.textures.insert(make_pair(T_TITLE, new Texture(
-        string(state.dir_resources).append("/gfx/title.tga"), true
+        string(state.dir_resources).append("/gfx/title.tga")
     )));
 
     state.log("Loading 'font.tga'\n");
     state.textures.insert(make_pair(T_FONT, new Texture(
-        string(state.dir_resources).append("/gfx/font.tga"), true
+        string(state.dir_resources).append("/gfx/font.tga")
     )));
 
     state.log("Loading 'cursor.tga'\n");
     state.textures.insert(make_pair(T_CURSOR, new Texture(
-        string(state.dir_resources).append("/gfx/cursor.tga"), true
+        string(state.dir_resources).append("/gfx/cursor.tga")
     )));
 
     state.log("Loading 'menu_1.tga'\n");
     state.textures.insert(make_pair(T_MENU_1, new Texture(
-        string(state.dir_resources).append("/gfx/menu_1.tga"), true
+        string(state.dir_resources).append("/gfx/menu_1.tga")
     )));
 
     state.log("Loading 'menu_2.tga'\n");
     state.textures.insert(make_pair(T_MENU_2, new Texture(
-        string(state.dir_resources).append("/gfx/menu_2.tga"), true
+        string(state.dir_resources).append("/gfx/menu_2.tga")
     )));
 
     state.log("Loading 'hud_1.tga'\n");
     state.textures.insert(make_pair(T_HUD_1, new Texture(
-        string(state.dir_resources).append("/gfx/hud_1.tga"), true
+        string(state.dir_resources).append("/gfx/hud_1.tga")
     )));
 
     state.log("Loading 'hud_2.tga'\n");
     state.textures.insert(make_pair(T_HUD_2, new Texture(
-        string(state.dir_resources).append("/gfx/hud_2.tga"), true
+        string(state.dir_resources).append("/gfx/hud_2.tga")
     )));
 
     state.log("Loading 'hud_3.tga'\n");
     state.textures.insert(make_pair(T_HUD_3, new Texture(
-        string(state.dir_resources).append("/gfx/hud_3.tga"), true
+        string(state.dir_resources).append("/gfx/hud_3.tga")
+    )));
+
+    state.log("Loading 'hud_4.tga'\n");
+    state.textures.insert(make_pair(T_HUD_4, new Texture(
+        string(state.dir_resources).append("/gfx/hud_4.tga")
     )));
 
     state.log("Loading 'star.tga'\n");
     state.textures.insert(make_pair(T_STAR, new Texture(
-        string(state.dir_resources).append("/gfx/star.tga"), true
+        string(state.dir_resources).append("/gfx/star.tga")
     )));
 
     state.log("Loading 'missile_1.tga'\n");
     state.textures.insert(make_pair(T_MISSILE_1, new Texture(
-        string(state.dir_resources).append("/gfx/missile_1.tga"), true
+        string(state.dir_resources).append("/gfx/missile_1.tga")
     )));
 
     state.log("Loading 'explosion_1.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_1, new Texture(
-        string(state.dir_resources).append("/gfx/explosion_1.tga"), true
+        string(state.dir_resources).append("/gfx/explosion_1.tga")
     )));
 
     state.log("Loading 'explosion_2.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_2, new Texture(
-        string(state.dir_resources).append("/gfx/explosion_2.tga"), true
+        string(state.dir_resources).append("/gfx/explosion_2.tga")
     )));
 
     state.log("Loading 'jet_exhaust.tga'\n");
     state.textures.insert(make_pair(T_JET_EXHAUST, new Texture(
-        string(state.dir_resources).append("/gfx/jet_exhaust.tga"), true
+        string(state.dir_resources).append("/gfx/jet_exhaust.tga")
     )));
 
     state.log("Loading 'background_1.tga'\n");
     state.textures.insert(make_pair(T_BACKGROUND_1, new Texture(
-        string(state.dir_resources).append("/gfx/background_1.tga"), true
+        string(state.dir_resources).append("/gfx/background_1.tga")
     )));
 
     state.log("Loading 'glow_1.tga'\n");
     state.textures.insert(make_pair(T_GLOW, new Texture(
-        string(state.dir_resources).append("/gfx/glow_1.tga"), true
+        string(state.dir_resources).append("/gfx/glow_1.tga")
     )));
 
     // shaders
@@ -133,28 +138,28 @@ void Scene::load()
     state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
         make_shared<Object>(string(state.dir_resources).append("/obj/ship_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga"), true),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
         make_shared<Object>(string(state.dir_resources).append("/obj/asteroid_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga"), true),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
         make_shared<Object>(string(state.dir_resources).append("/obj/debris_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga"), true),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
         make_shared<Object>(string(state.dir_resources).append("/obj/cargo_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga"), true),
+        make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
@@ -1439,7 +1444,7 @@ void Scene::move()
                     player->setAccelerationZ(350.0f);
                 } else {
                     state.global_alpha = 100;
-                    state.tilt(state.menu_title_pos * .1f);
+                    state.tilt(state.menu_title_pos * .05f);
                     player->setAccelerationZ(state.menu_title_pos * state.menu_title_pos * -.0001f);
                 }
 
@@ -1502,28 +1507,28 @@ void Scene::draw()
 
     gluLookAt(
         p_x * -.01f + state.tilt_x * .4f,
-        p_y * -.01f + player->getVelocityY() * 10.0f + state.tilt_y * .4f,
+        p_y * -.01f + player->getVelocityY() * 5.0f + state.tilt_y * .4f,
         200.0f,
 
-        player->getVelocityX() * .5f,
+        player->getVelocityX(),
         .0f,
         -10000.0f,
 
-        player->getVelocityX() * .05f,
+        player->getVelocityX() * .1f,
         -1.0f,
         .0f
     );
 
     state.view.lookAt(
         p_x * -.01f + state.tilt_x * .4f,
-        p_y * -.01f + player->getVelocityY() * 10.0f + state.tilt_y * .4f,
+        p_y * -.01f + player->getVelocityY() * 5.0f + state.tilt_y * .4f,
         .0f,
 
-        player->getVelocityX() * .5f,
+        player->getVelocityX(),
         .0f,
         -10000.0f,
 
-        player->getVelocityX() * .05f,
+        player->getVelocityX() * .1f,
         -1.0f,
         .0f
     );

@@ -1,13 +1,13 @@
-#version 330
-
-in vec4 color0;
-in vec2 uv0;
+#version 330 core
 
 out vec4 color;
+
+in vec2 uv0;
+in vec4 color0;
 
 uniform sampler2D image;
 
 void main()
 {
-    color = texture2D(image, uv0) * color0;
+    color = texture(image, uv0) * color0;
 }

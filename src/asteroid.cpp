@@ -74,31 +74,6 @@ void Asteroid::draw(State &s)
     glEnable(GL_CULL_FACE);
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-
-    // light setup
-    GLfloat col_specular[] = { a, a, a, a };
-    glLightfv(GL_LIGHT0, GL_SPECULAR, col_specular);
-
-    GLfloat col_ambient[] = { .25f, .225f, .2f, a };
-    glLightfv(GL_LIGHT0, GL_AMBIENT, col_ambient);
-
-    GLfloat col_diffuse[] = { .0f, .0f, .0f, a };
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, col_diffuse);
-
-    GLfloat pos_ambient[] = { .5f, .5f, .0f, a };
-    glLightfv(GL_LIGHT0, GL_POSITION, pos_ambient);
-
-    glEnable(GL_LIGHT0);
-
-    // material setup
-    GLfloat col_emission[] = { .25f * a, .225f * a, .2f * a, a };
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, col_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, col_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, col_specular);
-    glMaterialfv(GL_FRONT, GL_EMISSION, col_emission);
-    glMaterialf(GL_FRONT, GL_SHININESS, 4.0f);
 
     s.models[e_obj]->draw(s.view.transform(
         E_RELATIVE_MOVEMENT * m * (p_x - s.cam_x),
@@ -114,8 +89,6 @@ void Asteroid::draw(State &s)
         s_z * scale
     ), glm::vec4(c_r, c_g, c_b, c_a));
 
-    glDisable(GL_LIGHT0);
-    glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_NORMALIZE);
     glDisable(GL_CULL_FACE);

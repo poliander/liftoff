@@ -40,14 +40,18 @@ struct t_image {
 class Texture
 {
     public:
-        Texture(string filename, bool mipmap);
+        Texture(string filename);
         ~Texture();
 
         void bind();
+        void draw();
 
     protected:
         GLuint resource = -1;
 
+        GLuint vertexArrayObject;
+        GLuint vertexArrayBuffers[2];
+
         bool load(string filename, t_image *image);
-        void assign(t_image *image, bool mipmap);
+        void assign(t_image *image);
 };

@@ -63,35 +63,36 @@ void Skybox::draw(State &s)
     float a, c, sl, sa;
 
     glShadeModel(GL_FLAT);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDisable(GL_CULL_FACE);
+    glDisable(GL_BLEND);
+    glDepthMask(GL_FALSE);
 
     // background
 
     s.textures[T_BACKGROUND_1]->bind();
 
-    glRotatef(s.stars_rotation_pos, 0, 0, 1);
-    glPushMatrix();
-    glTranslatef(0, 0, 0);
-    glColor4f(.65f, .7f, .8f, s.global_alpha * .01f);
-    glBegin (GL_QUADS);
-      glTexCoord2i (0, 0);
-      glVertex2i (-260, 260);
+    s.shaders[S_TEXTURE_1]->bind();
+    s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(.65f, .7f, .8f, 1.0f));
+    s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+        0, 0, -50.0f,
+        0, 0, s.stars_rotation_pos,
+        150.0f, 150.0f, 0
+    ));
 
-      glTexCoord2i (1, 0);
-      glVertex2i (260, 260);
+    s.textures[T_BACKGROUND_1]->draw();
 
-      glTexCoord2i (1, 1);
-      glVertex2i (260, -260);
+    glEnable(GL_BLEND);
+    glDepthMask(GL_TRUE);
+/*
 
-      glTexCoord2i (0, 1);
-      glVertex2i (-260, -260);
-    glEnd();
-    glPopMatrix();
+    // far stars
+
+    glLoadIdentity();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     s.textures[T_STAR]->bind();
 
-    // far stars
     for (i = 0; i < (num_stars - num_stars_warp); ++i) {
         c = stars[i][3];
         a = ((500.0f+stars[i][2])/250.0f) * (.0075f * s.global_alpha);
@@ -149,7 +150,9 @@ void Skybox::draw(State &s)
             glPopMatrix();
         }
     }
-
+*/
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glShadeModel(GL_SMOOTH);
+
+    glDepthMask(GL_TRUE);
 }
