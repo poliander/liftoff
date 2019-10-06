@@ -403,13 +403,13 @@ bool Engine::handleKeyboard()
     }
 
     // STRG+C: Quit immediately
-    if (keys[SDLK_LCTRL] && keys[SDLK_c]) {
+    if (keys[SDL_SCANCODE_LCTRL] && keys[SDL_SCANCODE_C]) {
         state.set(STATE_CLOSE);
         return moved;
     }
 
     // F12: toggle FPS display
-    if (keys[SDLK_F12]) {
+    if (keys[SDL_SCANCODE_F12]) {
         if (state.timer > nextrelease) {
             state.fps_visible =! state.fps_visible;
             nextrelease = state.timer + 100;
@@ -427,41 +427,41 @@ bool Engine::handleKeyboard()
     switch (state.get()) {
 
         case STATE_GAME_LOOP:
-            if (keys[SDLK_ESCAPE])
+            if (keys[SDL_SCANCODE_ESCAPE])
                 state.set(STATE_GAME_QUIT);
 
             if (state.player->isAlive()) {
 
                 // Keyboard LEFT, RIGHT
-                if (keys[SDLK_LEFT] || keys[SDLK_a]) {
+                if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_A]) {
                     state.player->setAccelerationX(1.0f);
                     moved = true;
-                } else if (keys[SDLK_RIGHT] || keys[SDLK_d]) {
+                } else if (keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_D]) {
                     state.player->setAccelerationX(-1.0f);
                     moved = true;
                 }
 
                 // Keyboard UP, DOWN
-                if (keys[SDLK_UP] || keys[SDLK_w]) {
+                if (keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_W]) {
                     state.player->setAccelerationY(-1.0f);
                     moved = true;
-                } else if (keys[SDLK_DOWN] || keys[SDLK_s]) {
+                } else if (keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_S]) {
                     state.player->setAccelerationY(1.0f);
                     moved = true;
                 }
 
                 // Keyboard CTRL
-                if (keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) {
+                if (keys[SDL_SCANCODE_LCTRL] || keys[SDL_SCANCODE_RCTRL]) {
                     state.player->shoot(state);
                 }
             }
             break;
 
         case STATE_MENU:
-            if (keys[SDLK_ESCAPE]) {
+            if (keys[SDL_SCANCODE_ESCAPE]) {
                 state.audio.playSample(1, 128, 0);
 
-                switch(state.menu) {
+                switch (state.menu) {
                     case 4: // audio
                         state.menu_pos = 3;
                         state.menu_selected = true;
@@ -494,7 +494,7 @@ bool Engine::handleKeyboard()
                 return moved;
             }
 
-            if (keys[SDLK_RETURN]) {
+            if (keys[SDL_SCANCODE_RETURN]) {
                 state.menu_selected = true;
 
                 if ( (state.menu == 1 && state.menu_pos == 2) ||
@@ -507,12 +507,12 @@ bool Engine::handleKeyboard()
                 return moved;
             }
 
-            if (keys[SDLK_UP] || keys[SDLK_w]) {
+            if (keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_W]) {
                 state.menu_pos--;
                 return moved;
             }
 
-            if (keys[SDLK_DOWN] || keys[SDLK_s]) {
+            if (keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_S]) {
                 state.menu_pos++;
                 return moved;
             }
