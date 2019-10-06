@@ -76,9 +76,8 @@ bool Engine::writeConfiguration()
  */
 bool Engine::init(int argc, char **argv)
 {
-    const SDL_VideoInfo *vidinfo;
+    const SDL_RendererInfo *vidinfo;
     SDL_Rect **vidmodes;
-    Uint32 modeok = false;
     int i;
     char *msg = new char[255];
     int defmodes[3][2] = {
@@ -101,30 +100,7 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
-    state.log("Initializing SDL... ");
-
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK)) {
-        sprintf(msg, "%s\n", SDL_GetError());
-        state.log(msg);
-
-        return false;
-    } else {
-        state.log("ok\n");
-    }
-
-    state.log("Initializing peripheral input devices... ");
-
-    if (SDL_NumJoysticks() > 0) {
-        state.joystick = SDL_JoystickOpen(0);
-
-        if (state.joystick) {
-            state.log("joystick/gamepad found\n");
-        } else {
-            state.log("initialization failed\n");
-        }
-    } else {
-        state.log("none found\n");
-    }
+    // load configuration
 
     state.log("Loading configuration... ");
 
@@ -137,115 +113,38 @@ bool Engine::init(int argc, char **argv)
     defmodes[0][0] = state.config.vid_width;
     defmodes[0][1] = state.config.vid_height;
 
-    state.log("Initializing OpenGL display...\n");
+    // initialize SDL
 
-    vidinfo = SDL_GetVideoInfo();
-    sprintf(msg, "- %dx%d screen detected\n", vidinfo->current_w, vidinfo->current_h);
-    state.log(msg);
-    for (i=0; i<2; i++) {
-        if (defmodes[i][0] == -1) {
-            defmodes[i][0] = vidinfo->current_w;
-            defmodes[i][1] = vidinfo->current_h;
-        }
-    }
-    state.vid_cfg_depth = vidinfo->vfmt->BitsPerPixel;
-    vidmodes = SDL_ListModes(NULL, SDL_FULLSCREEN);
-    state.vid_sup_fullscreen = true;
-    if (vidmodes == (SDL_Rect **)0) {
-        state.vid_sup_window = false;
-    }
-    vidmodes = SDL_ListModes(NULL, SDL_RESIZABLE);
-    state.vid_sup_window = true;
-    if (vidmodes == (SDL_Rect **)0) {
-        state.vid_sup_fullscreen = false;
-    }
-    if ( (state.vid_sup_window == false) &&
-         (state.config.vid_fullscreen == 0) ) {
-        state.config.vid_fullscreen = 1;
-    }
-    if ( (state.vid_sup_fullscreen == false) &&
-         (state.config.vid_fullscreen == 1) ) {
-        state.config.vid_fullscreen = 0;
-    }
-    vidmodes = SDL_ListModes(NULL, SDL_RESIZABLE | SDL_FULLSCREEN);
-    if (vidmodes == (SDL_Rect **)0) {
-        state.log("No valid video mode found\n");
+    state.log("Initializing SDL... ");
+
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK)) {
+        sprintf(msg, "failed (%s)\n", SDL_GetError());
+        state.log(msg);
+
         return false;
-    }
-
-    for (i = 0; vidmodes[i]; ++i);
-
-    state.vid_sup_modes_count = i;
-    state.vid_sup_modes = vidmodes;
-
-    if (i > 0) {
-        defmodes[2][0] = state.vid_sup_modes[i-1]->w;
-        defmodes[2][1] = state.vid_sup_modes[i-1]->h;
     } else {
-        state.log("No valid video mode found\n");
-
-        return false;
+        state.log("ok\n");
     }
 
-    for (i = 0; i < 3; i++) {
-        if (state.config.vid_fullscreen) {
-            modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state.vid_cfg_depth, SDL_FULLSCREEN);
+    // initialize joystick/gamepad
 
-            if (modeok) {
-                state.config.vid_width = defmodes[i][0];
-                state.config.vid_height = defmodes[i][1];
-                break;
-            }
+    state.log("Initializing joystick/gamepad... ");
+
+    if (SDL_NumJoysticks() > 0) {
+        state.joystick = SDL_JoystickOpen(0);
+
+        if (state.joystick) {
+            state.log("ok\n");
         } else {
-            modeok = SDL_VideoModeOK(defmodes[i][0], defmodes[i][1], state.vid_cfg_depth, SDL_RESIZABLE);
-
-            if (modeok) {
-                state.config.vid_width = defmodes[i][0];
-                state.config.vid_height = defmodes[i][1];
-                break;
-            }
+            state.log("failed\n");
         }
-    }
-
-    if (!modeok) {
-        state.log("No valid video mode found\n");
-
-        return false;
-    }
-
-    state.vid_cfg_mode = -1;
-
-    for (int i=0; i<state.vid_sup_modes_count; i++) {
-        if (
-            state.config.vid_width  == state.vid_sup_modes[i]->w &&
-            state.config.vid_height == state.vid_sup_modes[i]->h
-        ) {
-            state.vid_cfg_mode = i;
-        }
-    }
-
-    sprintf(msg, "- %dx%d @ %d bpp (#%d) ",
-        state.config.vid_width,
-        state.config.vid_height,
-        state.vid_cfg_depth,
-        state.vid_cfg_mode
-    );
-
-    state.log(msg);
-
-    if (state.config.vid_fullscreen == 0) {
-        state.log("window mode selected\n");
     } else {
-        state.log("fullscreen mode selected\n");
+        state.log("none found\n");
     }
 
-    state.log("- vsync ");
+    // initialize screen
 
-    if (state.config.vid_vsync == 0) {
-        state.log("off\n");
-    } else {
-        state.log("on\n");
-    }
+    state.log("Initializing OpenGL display...\n");
 
     if (!initDisplay()) {
         state.log("\n");
@@ -254,6 +153,10 @@ bool Engine::init(int argc, char **argv)
 
         return false;
     }
+
+    return false;
+
+    // initialize audio
 
     if (state.config.aud_sfx || state.config.aud_music) {
         sprintf(msg, "Initializing audio device at %d Hz... ", state.config.aud_mixfreq);
@@ -287,20 +190,20 @@ bool Engine::init(int argc, char **argv)
  */
 bool Engine::initDisplay()
 {
-    int cfg_multisampling, sdl_mode;
+    int cfg_multisampling, sdl_mode = SDL_WINDOW_OPENGL;
     char msg[255];
 
     switch (state.config.vid_aspect) {
         case 1:
-            state.vid_cfg_aspect = 4.0f/3.0f;
+            state.vid_cfg_aspect = 4.0f / 3.0f;
             break;
 
         case 2:
-            state.vid_cfg_aspect = 16.0f/9.0f;
+            state.vid_cfg_aspect = 16.0f / 9.0f;
             break;
 
         case 3:
-            state.vid_cfg_aspect = 1.6f;
+            state.vid_cfg_aspect = 16.0f / 10.0f;
             break;
 
         default:
@@ -308,9 +211,7 @@ bool Engine::initDisplay()
     }
 
     if (state.config.vid_fullscreen) {
-        sdl_mode = SDL_OPENGL | SDL_FULLSCREEN;
-    } else {
-        sdl_mode = SDL_OPENGL;
+        sdl_mode |= SDL_WINDOW_FULLSCREEN;
     }
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
@@ -325,16 +226,23 @@ bool Engine::initDisplay()
     }
 
     if (state.config.vid_vsync) {
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+        SDL_GL_SetSwapInterval(1);
     } else {
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+        SDL_GL_SetSwapInterval(0);
     }
 
-    screen = SDL_SetVideoMode(state.config.vid_width, state.config.vid_height, state.vid_cfg_depth, sdl_mode);
+    window = SDL_CreateWindow(
+        "Lift Off: Beyond Glaxium",
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
+        state.config.vid_width,
+        state.config.vid_height,
+        sdl_mode
+    );
 
     SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
 
-    while (screen == NULL && state.vid_cfg_multisampling != cfg_multisampling) {
+    while (window == NULL && state.vid_cfg_multisampling != cfg_multisampling) {
         switch (state.vid_cfg_multisampling) {
             case 8:
                 state.vid_cfg_multisampling = 4;
@@ -357,7 +265,15 @@ bool Engine::initDisplay()
                return false;
         }
 
-        screen = SDL_SetVideoMode(state.config.vid_width, state.config.vid_height, state.vid_cfg_depth, sdl_mode);
+        window = SDL_CreateWindow(
+            "Lift Off: Beyond Glaxium",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            state.config.vid_width,
+            state.config.vid_height,
+            sdl_mode
+        );
+
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
     }
 
@@ -379,7 +295,6 @@ bool Engine::initDisplay()
     }
 
     SDL_ShowCursor(0);
-    SDL_WM_SetCaption("Lift Off: Beyond Glaxium", NULL);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -415,7 +330,7 @@ bool Engine::initDisplay()
  */
 bool Engine::handleKeyboard()
 {
-    Uint8 *keys = SDL_GetKeyState(NULL);
+    const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
     static GLuint timer = state.timer - 51;
     static GLuint nextrelease = state.timer - 100;
@@ -582,8 +497,8 @@ void Engine::handleMouse()
 {
     int x, y;
 
-    if (state.config.vid_fullscreen == 0) {
-        if (!(SDL_GetAppState()&SDL_APPMOUSEFOCUS)) return;
+    if (state.config.vid_fullscreen == 0 && state.mouse_focus == false) {
+        return;
     }
 
     state.mouse_button = SDL_GetMouseState(&x, &y);
@@ -695,6 +610,14 @@ bool Engine::main()
                 handleKeyboard();
                 break;
 
+            case SDL_WINDOWEVENT_ENTER:
+                state.mouse_focus = true;
+                break;
+
+            case SDL_WINDOWEVENT_LEAVE:
+                state.mouse_focus = false; 
+                break;
+
             case SDL_MOUSEMOTION:
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEBUTTONDOWN:
@@ -710,7 +633,7 @@ bool Engine::main()
     scene->move();
     scene->draw();
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(window);
 
     return (state.get() != STATE_CLOSE);
 }

@@ -20,11 +20,8 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - libGL
 - libGLU
 - libGLEW
-- libogg
-- libvorbis
-- libvorbisfile
-- SDL 1.2
-- SDL\_mixer 1.2 (with ogg vorbis support)
+- SDL 2.0
+- SDL\_mixer 2.0 (with ogg vorbis support)
 - glm.hpp (GL math headers)
 
 ### Compilation

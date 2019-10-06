@@ -42,6 +42,8 @@ State::State()
     fps_frame               = 0;
 
     joystick                = NULL;
+
+    mouse_focus             = true;
     mouse_moved             = true;
     mouse_pressed           = false;
     mouse_released          = true;

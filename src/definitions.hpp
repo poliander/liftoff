@@ -1,6 +1,7 @@
 #pragma once
 
 #define ABS(x) ((x>0)?(x):(-x))
+#define GLM_ENABLE_EXPERIMENTAL
 
 #define DEFAULT_GAMEDATA        "resources"
 #define CFG_FILENAME            "liftoff.cfg"

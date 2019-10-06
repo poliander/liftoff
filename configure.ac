@@ -29,34 +29,31 @@ AC_CHECK_HEADERS([algorithm cmath cstring map memory string vector])
 # SDL -------------------------------------------------------------------------
 
 PKG_CHECK_MODULES(
-    [SDL],
-    [sdl >= 1.2.0],
+    [SDL2],
+    [sdl2 >= 2.0.0],
     [],
-    [SDL_VERSION=1.2.0
-     AM_PATH_SDL($SDL_VERSION, :,
+    [SDL_VERSION=2.0
+     AM_PATH_SDL2($SDL_VERSION, :,
         AC_MSG_ERROR([SDL version $SDL_VERSION not found! http://www.libsdl.org]))])
-
-LIBS="$LIBS $SDL_LIBS"
 
 # SDL_mixer -------------------------------------------------------------------
 
 PKG_CHECK_MODULES(
-    [SDL_MIXER],
-    [SDL_mixer >= 1.2.0],
+    [SDL2_mixer],
+    [SDL2_mixer >= 2.0.0],
     [],
-    [AC_MSG_NOTICE([SDL_mixer not located by pkg-config, checking with AC CHECK LIB:])
-     AC_CHECK_LIB([SDL_mixer],
+    [AC_MSG_NOTICE([SDL2_mixer not located by pkg-config, checking with AC CHECK LIB:])
+     AC_CHECK_LIB([SDL2_mixer],
         [Mix_OpenAudio],
         [],
         [AC_MSG_ERROR([SDL_mixer not found! http://www.libsdl.org/projects/SDL_mixer])])])
 
-LIBS="$LIBS $SDL_MIXER_LIBS"
-
-# GL + GLU --------------------------------------------------------------------
+# GL, GLU, GLEW, GLM ----------------------------------------------------------
 
 AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install libgl1-mesa-dev])])
 AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
 AC_CHECK_HEADER([GL/glew.h],, [AC_MSG_ERROR([GL/glew.h not found, install libglew-dev])])
+AC_CHECK_HEADER([glm/glm.hpp],, [AC_MSG_ERROR([glm/glm.hpp not found, install libglm-dev])])
 
 case $host_os in
     *mingw32*)

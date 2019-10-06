@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include "../config.h"
 
@@ -109,6 +109,7 @@ class State
         bool            mouse_pressed;
         bool            mouse_released;
         Uint8           mouse_button;
+        bool            mouse_focus;
         SDL_Joystick*   joystick;
 
         // level
