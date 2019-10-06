@@ -1,7 +1,7 @@
 bin_PROGRAMS = $(top_builddir)/liftoff
 
-__top_builddir__liftoff_CPPFLAGS = $(SDL2_CFLAGS)
-__top_builddir__liftoff_LDFLAGS = $(LIBS) $(SDL2_LIBS) $(SDL2_mixer_LIBS)
+__top_builddir__liftoff_CPPFLAGS = $(CXXFLAGS)
+__top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     audio.cpp \

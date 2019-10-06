@@ -626,7 +626,10 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
-GAMEDATA
+libogg_LIBS
+libogg_CFLAGS
+libvorbisfile_LIBS
+libvorbisfile_CFLAGS
 SDL2_mixer_LIBS
 SDL2_mixer_CFLAGS
 SDL2_CONFIG
@@ -635,6 +638,7 @@ SDL_CFLAGS
 SDL2_FRAMEWORK
 SDL2_LIBS
 SDL2_CFLAGS
+GAMEDATA
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
@@ -761,7 +765,11 @@ SDL2_FRAMEWORK
 SDL_CFLAGS
 SDL_LIBS
 SDL2_mixer_CFLAGS
-SDL2_mixer_LIBS'
+SDL2_mixer_LIBS
+libvorbisfile_CFLAGS
+libvorbisfile_LIBS
+libogg_CFLAGS
+libogg_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1430,6 +1438,13 @@ Some influential environment variables:
               C compiler flags for SDL2_mixer, overriding pkg-config
   SDL2_mixer_LIBS
               linker flags for SDL2_mixer, overriding pkg-config
+  libvorbisfile_CFLAGS
+              C compiler flags for libvorbisfile, overriding pkg-config
+  libvorbisfile_LIBS
+              linker flags for libvorbisfile, overriding pkg-config
+  libogg_CFLAGS
+              C compiler flags for libogg, overriding pkg-config
+  libogg_LIBS linker flags for libogg, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -4023,9 +4038,6 @@ fi
 done
 
 
-# SDL -------------------------------------------------------------------------
-
-
 
 
 
@@ -4145,6 +4157,230 @@ $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
+
+# GL, GLU, GLEW, GLM ----------------------------------------------------------
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "GL/gl.h" "ac_cv_header_GL_gl_h" "$ac_includes_default"
+if test "x$ac_cv_header_GL_gl_h" = xyes; then :
+
+else
+  as_fn_error $? "GL/gl.h not found, install libgl1-mesa-dev" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glu.h" "ac_cv_header_GL_glu_h" "$ac_includes_default"
+if test "x$ac_cv_header_GL_glu_h" = xyes; then :
+
+else
+  as_fn_error $? "GL/glu.h not found, install libglu1-mesa-dev" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glew.h" "ac_cv_header_GL_glew_h" "$ac_includes_default"
+if test "x$ac_cv_header_GL_glew_h" = xyes; then :
+
+else
+  as_fn_error $? "GL/glew.h not found, install libglew-dev" "$LINENO" 5
+fi
+
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "glm/glm.hpp" "ac_cv_header_glm_glm_hpp" "$ac_includes_default"
+if test "x$ac_cv_header_glm_glm_hpp" = xyes; then :
+
+else
+  as_fn_error $? "glm/glm.hpp not found, install libglm-dev" "$LINENO" 5
+fi
+
+
+
+case $host_os in
+    *mingw32*)
+
+	prefix_NONE=
+	exec_prefix_NONE=
+	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
+        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
+			eval ac_define_dir="\"$"resources"\""
+	eval ac_define_dir="\"$ac_define_dir\""
+	GAMEDATA="$ac_define_dir"
+
+
+cat >>confdefs.h <<_ACEOF
+#define GAMEDATA "$ac_define_dir"
+_ACEOF
+
+	test "$prefix_NONE" && prefix=NONE
+	test "$exec_prefix_NONE" && exec_prefix=NONE
+
+        PKG_CONFIG="$PKG_CONFIG --static"
+        CXXFLAGS="$CXXFLAGS -DGLEW_STATIC"
+        LIBS="$LIBS -lwinmm -lglew32 -lglu32 -lopengl32 -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
+    ;;
+
+    *)
+
+	prefix_NONE=
+	exec_prefix_NONE=
+	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
+        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
+			eval ac_define_dir="\"$"{prefix}/share/liftoff"\""
+	eval ac_define_dir="\"$ac_define_dir\""
+	GAMEDATA="$ac_define_dir"
+
+
+cat >>confdefs.h <<_ACEOF
+#define GAMEDATA "$ac_define_dir"
+_ACEOF
+
+	test "$prefix_NONE" && prefix=NONE
+	test "$exec_prefix_NONE" && exec_prefix=NONE
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glVertex3f in -lGL" >&5
+$as_echo_n "checking for glVertex3f in -lGL... " >&6; }
+if ${ac_cv_lib_GL_glVertex3f+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGL  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glVertex3f ();
+int
+main ()
+{
+return glVertex3f ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_GL_glVertex3f=yes
+else
+  ac_cv_lib_GL_glVertex3f=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GL_glVertex3f" >&5
+$as_echo "$ac_cv_lib_GL_glVertex3f" >&6; }
+if test "x$ac_cv_lib_GL_glVertex3f" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGL 1
+_ACEOF
+
+  LIBS="-lGL $LIBS"
+
+else
+  as_fn_error $? "OpenGL library missing or not usable." "$LINENO" 5
+fi
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluPerspective in -lGLU" >&5
+$as_echo_n "checking for gluPerspective in -lGLU... " >&6; }
+if ${ac_cv_lib_GLU_gluPerspective+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLU  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gluPerspective ();
+int
+main ()
+{
+return gluPerspective ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_GLU_gluPerspective=yes
+else
+  ac_cv_lib_GLU_gluPerspective=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLU_gluPerspective" >&5
+$as_echo "$ac_cv_lib_GLU_gluPerspective" >&6; }
+if test "x$ac_cv_lib_GLU_gluPerspective" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGLU 1
+_ACEOF
+
+  LIBS="-lGLU $LIBS"
+
+else
+  as_fn_error $? "libglu1-mesa missing or not usable." "$LINENO" 5
+fi
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glewIsSupported in -lGLEW" >&5
+$as_echo_n "checking for glewIsSupported in -lGLEW... " >&6; }
+if ${ac_cv_lib_GLEW_glewIsSupported+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGLEW  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char glewIsSupported ();
+int
+main ()
+{
+return glewIsSupported ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_GLEW_glewIsSupported=yes
+else
+  ac_cv_lib_GLEW_glewIsSupported=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLEW_glewIsSupported" >&5
+$as_echo "$ac_cv_lib_GLEW_glewIsSupported" >&6; }
+if test "x$ac_cv_lib_GLEW_glewIsSupported" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBGLEW 1
+_ACEOF
+
+  LIBS="-lGLEW $LIBS"
+
+else
+  as_fn_error $? "libglew-dev missing or not usable." "$LINENO" 5
+fi
+
+    ;;
+esac
+
+# SDL2 ------------------------------------------------------------------------
+
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL2" >&5
@@ -4575,7 +4811,7 @@ rm -f core conftest.err conftest.$ac_objext \
      fi
      SDL_CFLAGS=""
      SDL_LIBS=""
-     as_fn_error $? "SDL version $SDL_VERSION not found! http://www.libsdl.org" "$LINENO" 5
+     as_fn_error $? "SDL version $SDL2_VERSION not found! http://www.libsdl.org" "$LINENO" 5
   fi
 
 
@@ -4955,7 +5191,7 @@ rm -f core conftest.err conftest.$ac_objext \
      fi
      SDL_CFLAGS=""
      SDL_LIBS=""
-     as_fn_error $? "SDL version $SDL_VERSION not found! http://www.libsdl.org" "$LINENO" 5
+     as_fn_error $? "SDL version $SDL2_VERSION not found! http://www.libsdl.org" "$LINENO" 5
   fi
 
 
@@ -4969,7 +5205,7 @@ $as_echo "yes" >&6; }
 
 fi
 
-# SDL_mixer -------------------------------------------------------------------
+# SDL2_mixer ------------------------------------------------------------------
 
 
 pkg_failed=no
@@ -5076,7 +5312,7 @@ _ACEOF
   LIBS="-lSDL2_mixer $LIBS"
 
 else
-  as_fn_error $? "SDL_mixer not found! http://www.libsdl.org/projects/SDL_mixer" "$LINENO" 5
+  as_fn_error $? "SDL2_mixer not found! http://www.libsdl.org/projects/SDL_mixer" "$LINENO" 5
 fi
 
 elif test $pkg_failed = untried; then
@@ -5128,7 +5364,7 @@ _ACEOF
   LIBS="-lSDL2_mixer $LIBS"
 
 else
-  as_fn_error $? "SDL_mixer not found! http://www.libsdl.org/projects/SDL_mixer" "$LINENO" 5
+  as_fn_error $? "SDL2_mixer not found! http://www.libsdl.org/projects/SDL_mixer" "$LINENO" 5
 fi
 
 else
@@ -5139,89 +5375,85 @@ $as_echo "yes" >&6; }
 
 fi
 
-# GL, GLU, GLEW, GLM ----------------------------------------------------------
+# libvorbisfile ---------------------------------------------------------------
 
-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/gl.h" "ac_cv_header_GL_gl_h" "$ac_includes_default"
-if test "x$ac_cv_header_GL_gl_h" = xyes; then :
-
-else
-  as_fn_error $? "GL/gl.h not found, install libgl1-mesa-dev" "$LINENO" 5
-fi
-
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glu.h" "ac_cv_header_GL_glu_h" "$ac_includes_default"
-if test "x$ac_cv_header_GL_glu_h" = xyes; then :
+ac_fn_cxx_check_header_mongrel "$LINENO" "vorbis/vorbisfile.h" "ac_cv_header_vorbis_vorbisfile_h" "$ac_includes_default"
+if test "x$ac_cv_header_vorbis_vorbisfile_h" = xyes; then :
 
 else
-  as_fn_error $? "GL/glu.h not found, install libglu1-mesa-dev" "$LINENO" 5
-fi
-
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "GL/glew.h" "ac_cv_header_GL_glew_h" "$ac_includes_default"
-if test "x$ac_cv_header_GL_glew_h" = xyes; then :
-
-else
-  as_fn_error $? "GL/glew.h not found, install libglew-dev" "$LINENO" 5
-fi
-
-
-ac_fn_cxx_check_header_mongrel "$LINENO" "glm/glm.hpp" "ac_cv_header_glm_glm_hpp" "$ac_includes_default"
-if test "x$ac_cv_header_glm_glm_hpp" = xyes; then :
-
-else
-  as_fn_error $? "glm/glm.hpp not found, install libglm-dev" "$LINENO" 5
+  as_fn_error $? "vorbis/vorbisfile.h not found, install libvorbis-dev" "$LINENO" 5
 fi
 
 
 
-case $host_os in
-    *mingw32*)
 
-	prefix_NONE=
-	exec_prefix_NONE=
-	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
-        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
-			eval ac_define_dir="\"$"resources"\""
-	eval ac_define_dir="\"$ac_define_dir\""
-	GAMEDATA="$ac_define_dir"
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libvorbisfile" >&5
+$as_echo_n "checking for libvorbisfile... " >&6; }
+
+if test -n "$libvorbisfile_CFLAGS"; then
+    pkg_cv_libvorbisfile_CFLAGS="$libvorbisfile_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"vorbisfile >= 1.3.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "vorbisfile >= 1.3.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_libvorbisfile_CFLAGS=`$PKG_CONFIG --cflags "vorbisfile >= 1.3.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$libvorbisfile_LIBS"; then
+    pkg_cv_libvorbisfile_LIBS="$libvorbisfile_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"vorbisfile >= 1.3.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "vorbisfile >= 1.3.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_libvorbisfile_LIBS=`$PKG_CONFIG --libs "vorbisfile >= 1.3.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
 
 
-cat >>confdefs.h <<_ACEOF
-#define GAMEDATA "$ac_define_dir"
-_ACEOF
 
-	test "$prefix_NONE" && prefix=NONE
-	test "$exec_prefix_NONE" && exec_prefix=NONE
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
-        CXXFLAGS="$CXXFLAGS -DGLEW_STATIC"
-        LIBS="$LIBS -lvorbisfile -lvorbis -logg -lwinmm -lglew32 -lglu32 -lopengl32 -lgdi32 -ldxguid -static -static-libgcc -static-libstdc++"
-    ;;
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        libvorbisfile_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "vorbisfile >= 1.3.0" 2>&1`
+        else
+	        libvorbisfile_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "vorbisfile >= 1.3.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$libvorbisfile_PKG_ERRORS" >&5
 
-    *)
-
-	prefix_NONE=
-	exec_prefix_NONE=
-	test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
-        test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
-			eval ac_define_dir="\"$"{prefix}/share/liftoff"\""
-	eval ac_define_dir="\"$ac_define_dir\""
-	GAMEDATA="$ac_define_dir"
-
-
-cat >>confdefs.h <<_ACEOF
-#define GAMEDATA "$ac_define_dir"
-_ACEOF
-
-	test "$prefix_NONE" && prefix=NONE
-	test "$exec_prefix_NONE" && exec_prefix=NONE
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glVertex3f in -lGL" >&5
-$as_echo_n "checking for glVertex3f in -lGL... " >&6; }
-if ${ac_cv_lib_GL_glVertex3f+:} false; then :
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: libvorbisfile not located by pkg-config, checking with AC CHECK LIB:" >&5
+$as_echo "$as_me: libvorbisfile not located by pkg-config, checking with AC CHECK LIB:" >&6;}
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ov_test in -lvorbisfile" >&5
+$as_echo_n "checking for ov_test in -lvorbisfile... " >&6; }
+if ${ac_cv_lib_vorbisfile_ov_test+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGL  $LIBS"
+LIBS="-lvorbisfile  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -5231,44 +5463,49 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char glVertex3f ();
+char ov_test ();
 int
 main ()
 {
-return glVertex3f ();
+return ov_test ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_GL_glVertex3f=yes
+  ac_cv_lib_vorbisfile_ov_test=yes
 else
-  ac_cv_lib_GL_glVertex3f=no
+  ac_cv_lib_vorbisfile_ov_test=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GL_glVertex3f" >&5
-$as_echo "$ac_cv_lib_GL_glVertex3f" >&6; }
-if test "x$ac_cv_lib_GL_glVertex3f" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_vorbisfile_ov_test" >&5
+$as_echo "$ac_cv_lib_vorbisfile_ov_test" >&6; }
+if test "x$ac_cv_lib_vorbisfile_ov_test" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGL 1
+#define HAVE_LIBVORBISFILE 1
 _ACEOF
 
-  LIBS="-lGL $LIBS"
+  LIBS="-lvorbisfile $LIBS"
 
 else
-  as_fn_error $? "OpenGL library missing or not usable." "$LINENO" 5
+  as_fn_error $? "libvorbisfile not found! https://xiph.org/vorbis" "$LINENO" 5
 fi
 
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluPerspective in -lGLU" >&5
-$as_echo_n "checking for gluPerspective in -lGLU... " >&6; }
-if ${ac_cv_lib_GLU_gluPerspective+:} false; then :
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: libvorbisfile not located by pkg-config, checking with AC CHECK LIB:" >&5
+$as_echo "$as_me: libvorbisfile not located by pkg-config, checking with AC CHECK LIB:" >&6;}
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ov_test in -lvorbisfile" >&5
+$as_echo_n "checking for ov_test in -lvorbisfile... " >&6; }
+if ${ac_cv_lib_vorbisfile_ov_test+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLU  $LIBS"
+LIBS="-lvorbisfile  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -5278,44 +5515,124 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char gluPerspective ();
+char ov_test ();
 int
 main ()
 {
-return gluPerspective ();
+return ov_test ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_GLU_gluPerspective=yes
+  ac_cv_lib_vorbisfile_ov_test=yes
 else
-  ac_cv_lib_GLU_gluPerspective=no
+  ac_cv_lib_vorbisfile_ov_test=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLU_gluPerspective" >&5
-$as_echo "$ac_cv_lib_GLU_gluPerspective" >&6; }
-if test "x$ac_cv_lib_GLU_gluPerspective" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_vorbisfile_ov_test" >&5
+$as_echo "$ac_cv_lib_vorbisfile_ov_test" >&6; }
+if test "x$ac_cv_lib_vorbisfile_ov_test" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGLU 1
+#define HAVE_LIBVORBISFILE 1
 _ACEOF
 
-  LIBS="-lGLU $LIBS"
+  LIBS="-lvorbisfile $LIBS"
 
 else
-  as_fn_error $? "libglu1-mesa missing or not usable." "$LINENO" 5
+  as_fn_error $? "libvorbisfile not found! https://xiph.org/vorbis" "$LINENO" 5
 fi
 
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glewIsSupported in -lGLEW" >&5
-$as_echo_n "checking for glewIsSupported in -lGLEW... " >&6; }
-if ${ac_cv_lib_GLEW_glewIsSupported+:} false; then :
+else
+	libvorbisfile_CFLAGS=$pkg_cv_libvorbisfile_CFLAGS
+	libvorbisfile_LIBS=$pkg_cv_libvorbisfile_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+fi
+
+# libogg ----------------------------------------------------------------------
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "ogg/ogg.h" "ac_cv_header_ogg_ogg_h" "$ac_includes_default"
+if test "x$ac_cv_header_ogg_ogg_h" = xyes; then :
+
+else
+  as_fn_error $? "ogg/ogg.h not found, install libogg-dev" "$LINENO" 5
+fi
+
+
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libogg" >&5
+$as_echo_n "checking for libogg... " >&6; }
+
+if test -n "$libogg_CFLAGS"; then
+    pkg_cv_libogg_CFLAGS="$libogg_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ogg >= 1.3.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ogg >= 1.3.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_libogg_CFLAGS=`$PKG_CONFIG --cflags "ogg >= 1.3.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$libogg_LIBS"; then
+    pkg_cv_libogg_LIBS="$libogg_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ogg >= 1.3.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ogg >= 1.3.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_libogg_LIBS=`$PKG_CONFIG --libs "ogg >= 1.3.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        libogg_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "ogg >= 1.3.0" 2>&1`
+        else
+	        libogg_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "ogg >= 1.3.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$libogg_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: libogg not located by pkg-config, checking with AC CHECK LIB:" >&5
+$as_echo "$as_me: libogg not located by pkg-config, checking with AC CHECK LIB:" >&6;}
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ov_test in -logg" >&5
+$as_echo_n "checking for ov_test in -logg... " >&6; }
+if ${ac_cv_lib_ogg_ov_test+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLEW  $LIBS"
+LIBS="-logg  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -5325,39 +5642,104 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char glewIsSupported ();
+char ov_test ();
 int
 main ()
 {
-return glewIsSupported ();
+return ov_test ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_GLEW_glewIsSupported=yes
+  ac_cv_lib_ogg_ov_test=yes
 else
-  ac_cv_lib_GLEW_glewIsSupported=no
+  ac_cv_lib_ogg_ov_test=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLEW_glewIsSupported" >&5
-$as_echo "$ac_cv_lib_GLEW_glewIsSupported" >&6; }
-if test "x$ac_cv_lib_GLEW_glewIsSupported" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ogg_ov_test" >&5
+$as_echo "$ac_cv_lib_ogg_ov_test" >&6; }
+if test "x$ac_cv_lib_ogg_ov_test" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGLEW 1
+#define HAVE_LIBOGG 1
 _ACEOF
 
-  LIBS="-lGLEW $LIBS"
+  LIBS="-logg $LIBS"
 
 else
-  as_fn_error $? "libglew-dev missing or not usable." "$LINENO" 5
+  as_fn_error $? "libogg not found! https://xiph.org/vorbis" "$LINENO" 5
 fi
 
-    ;;
-esac
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: libogg not located by pkg-config, checking with AC CHECK LIB:" >&5
+$as_echo "$as_me: libogg not located by pkg-config, checking with AC CHECK LIB:" >&6;}
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ov_test in -logg" >&5
+$as_echo_n "checking for ov_test in -logg... " >&6; }
+if ${ac_cv_lib_ogg_ov_test+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-logg  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ov_test ();
+int
+main ()
+{
+return ov_test ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_ogg_ov_test=yes
+else
+  ac_cv_lib_ogg_ov_test=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ogg_ov_test" >&5
+$as_echo "$ac_cv_lib_ogg_ov_test" >&6; }
+if test "x$ac_cv_lib_ogg_ov_test" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBOGG 1
+_ACEOF
+
+  LIBS="-logg $LIBS"
+
+else
+  as_fn_error $? "libogg not found! https://xiph.org/vorbis" "$LINENO" 5
+fi
+
+else
+	libogg_CFLAGS=$pkg_cv_libogg_CFLAGS
+	libogg_LIBS=$pkg_cv_libogg_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+fi
+
+# -----------------------------------------------------------------------------
+
+CXXFLAGS="$CXXFLAGS $SDL2_CFLAGS $SDL2_mixer_CFLAGS $libvorbisfile_CFLAGS $libogg_CFLGAS"
+LIBS="$LIBS $SDL2_LIBS $SDL2_mixer_LIBS $libvorbisfile_LIBS $libogg_LIBS"
+
+
+
 
 ac_config_files="$ac_config_files Makefile src/Makefile"
 

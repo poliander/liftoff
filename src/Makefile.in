@@ -280,6 +280,10 @@ infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
+libogg_CFLAGS = @libogg_CFLAGS@
+libogg_LIBS = @libogg_LIBS@
+libvorbisfile_CFLAGS = @libvorbisfile_CFLAGS@
+libvorbisfile_LIBS = @libvorbisfile_LIBS@
 localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -298,8 +302,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-__top_builddir__liftoff_CPPFLAGS = $(SDL2_CFLAGS)
-__top_builddir__liftoff_LDFLAGS = $(LIBS) $(SDL2_LIBS) $(SDL2_mixer_LIBS)
+__top_builddir__liftoff_CPPFLAGS = $(CXXFLAGS)
+__top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     audio.cpp \
