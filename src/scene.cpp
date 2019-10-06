@@ -748,17 +748,6 @@ void Scene::drawMenu(bool mouse_recheck)
                         if (state.vid_mode < 0) {
                             state.vid_mode = state.vid_cap_modes_num - 1;
                         }
-
-                        while (
-                            state.vid_cap_modes[state.vid_mode].w < 800 ||
-                            state.vid_cap_modes[state.vid_mode].h < 600
-                        ) {
-                            state.vid_mode--;
-
-                            if (state.vid_mode < 0) {
-                                state.vid_mode = state.vid_cap_modes_num - 1;
-                            }
-                        }
                         break;
 
                     case 1: // toggle aspect ratio
