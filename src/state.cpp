@@ -30,9 +30,16 @@ State::State()
     config.aud_sfx          = 2;
     config.aud_music        = 2;
 
-    vid_cfg_multisampling   = 8;
+    vid_multisampling       = 8;
+    vid_width               = DEFAULT_VID_WIDTH;
+    vid_height              = DEFAULT_VID_HEIGHT;
+    vid_fullscreen          = DEFAULT_VID_FULLSCREEN;
+    vid_vsync               = DEFAULT_VID_VSYNC;
+    vid_aspect              = 0;
+    vid_display             = -1;
 
     log_file                = false;
+    cfg_loaded              = false;
     engine_restart          = false;
 
     fps                     = 0;
@@ -42,6 +49,8 @@ State::State()
     fps_frame               = 0;
 
     joystick                = NULL;
+
+    mouse_focus             = true;
     mouse_moved             = true;
     mouse_pressed           = false;
     mouse_released          = true;
@@ -159,7 +168,7 @@ bool State::set(int s)
             audio.stopSampleLoop(0);
 
             SDL_GetMouseState(&x, &y);
-            mouse_x = (-3.1f * vid_cfg_aspect) + (1 / float(config.vid_width)) * x * (6.35f * vid_cfg_aspect);
+            mouse_x = (-3.1f * vid_aspect) + (1 / float(config.vid_width)) * x * (6.35f * vid_aspect);
             mouse_y = 3.1f + (-1 / float(config.vid_height)) * y * 6.35f;
             mouse_moved = true;
             break;

@@ -16,21 +16,22 @@ class Engine
         Engine();
         ~Engine();
 
-        bool         init(int argc, char **argv);
-        bool         main();
-        void         halt();
+        bool          init(int argc, char **argv);
+        bool          main();
+        void          halt();
 
     private:
-        State        state;
-        Scene*       scene;
+        State         state;
+        Scene*        scene;
 
-        SDL_Surface* screen;
+        SDL_Window*   window;
+        SDL_GLContext context;
 
-        bool         initDisplay();
-        bool         loadConfiguration();
-        bool         writeConfiguration();
+        bool          initDisplay();
+        bool          loadConfiguration();
+        bool          writeConfiguration();
 
-        bool         handleKeyboard();
-        void         handleJoystick();
-        void         handleMouse();
+        bool          handleKeyboard();
+        void          handleJoystick();
+        void          handleMouse();
 };

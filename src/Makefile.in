@@ -126,6 +126,8 @@ am___top_builddir__liftoff_OBJECTS =  \
 __top_builddir__liftoff_OBJECTS =  \
 	$(am___top_builddir__liftoff_OBJECTS)
 __top_builddir__liftoff_LDADD = $(LDADD)
+__top_builddir__liftoff_LINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
+	$(__top_builddir__liftoff_LDFLAGS) $(LDFLAGS) -o $@
 am__dirstamp = $(am__leading_dot)dirstamp
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -233,11 +235,14 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+SDL2_CFLAGS = @SDL2_CFLAGS@
+SDL2_CONFIG = @SDL2_CONFIG@
+SDL2_FRAMEWORK = @SDL2_FRAMEWORK@
+SDL2_LIBS = @SDL2_LIBS@
+SDL2_mixer_CFLAGS = @SDL2_mixer_CFLAGS@
+SDL2_mixer_LIBS = @SDL2_mixer_LIBS@
 SDL_CFLAGS = @SDL_CFLAGS@
-SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
-SDL_MIXER_CFLAGS = @SDL_MIXER_CFLAGS@
-SDL_MIXER_LIBS = @SDL_MIXER_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -275,6 +280,10 @@ infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
+libogg_CFLAGS = @libogg_CFLAGS@
+libogg_LIBS = @libogg_LIBS@
+libvorbisfile_CFLAGS = @libvorbisfile_CFLAGS@
+libvorbisfile_LIBS = @libvorbisfile_LIBS@
 localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -293,7 +302,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-__top_builddir__liftoff_CPPFLAGS = $(SDL_CFLAGS) $(SDL_MIXER_CFLAGS)
+__top_builddir__liftoff_CPPFLAGS = $(CXXFLAGS)
+__top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     audio.cpp \
@@ -398,7 +408,7 @@ $(top_builddir)/$(am__dirstamp):
 
 $(top_builddir)/liftoff$(EXEEXT): $(__top_builddir__liftoff_OBJECTS) $(__top_builddir__liftoff_DEPENDENCIES) $(EXTRA___top_builddir__liftoff_DEPENDENCIES) $(top_builddir)/$(am__dirstamp)
 	@rm -f $(top_builddir)/liftoff$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(__top_builddir__liftoff_OBJECTS) $(__top_builddir__liftoff_LDADD) $(LIBS)
+	$(AM_V_CXXLD)$(__top_builddir__liftoff_LINK) $(__top_builddir__liftoff_OBJECTS) $(__top_builddir__liftoff_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

@@ -484,7 +484,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
  */
 void Scene::drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
 {
-    drawText(text, x + (-5.97f * state.vid_cfg_aspect), -y + 5.69f, z, size, r, g, b, a);
+    drawText(text, x + (-5.97f * state.vid_aspect), -y + 5.69f, z, size, r, g, b, a);
 }
 
 /*
@@ -681,15 +681,15 @@ void Scene::drawMenu(bool mouse_recheck)
                         state.config.aud_sfx = state.audio.volume_sfx;
                         state.config.aud_music = state.audio.volume_music;
                         state.config.aud_mixfreq = state.audio.mixer_frequency;
-                        for (int i=0; i<state.vid_sup_modes_count; i++) {
-                            if ( (state.vid_cfg_width  == state.vid_sup_modes[i]->w) &&
-                                 (state.vid_cfg_height == state.vid_sup_modes[i]->h) ) {
-                                 state.vid_cfg_mode = i;
+                        for (int i = 0; i < state.vid_cap_modes_num; i++) {
+                            if ( (state.vid_width  == state.vid_cap_modes[i].w) &&
+                                 (state.vid_height == state.vid_cap_modes[i].h) ) {
+                                 state.vid_mode = i;
                             }
                         }
-                        state.config.vid_aspect = state.vid_cfg_aspect_mode;
-                        state.config.vid_fullscreen = state.vid_cfg_fullscreen;
-                        state.config.vid_vsync = state.vid_cfg_vsync;
+                        state.config.vid_aspect = state.vid_aspect_mode;
+                        state.config.vid_fullscreen = state.vid_fullscreen;
+                        state.config.vid_vsync = state.vid_vsync;
                         break;
 
                     case 3: // accept
@@ -711,8 +711,8 @@ void Scene::drawMenu(bool mouse_recheck)
             mo = .32f;
 
             sprintf(mtxt[0], "VIDEO MODE:\n     %dX%d",
-              state.vid_sup_modes[state.vid_cfg_mode]->w,
-              state.vid_sup_modes[state.vid_cfg_mode]->h);
+              state.vid_cap_modes[state.vid_mode].w,
+              state.vid_cap_modes[state.vid_mode].h);
 
             switch(state.config.vid_aspect) {
                 case 1:
@@ -743,21 +743,10 @@ void Scene::drawMenu(bool mouse_recheck)
             if (state.menu_selected) {
                 switch (state.menu_pos) {
                     case 0: // toggle video mode
-                        state.vid_cfg_mode--;
+                        state.vid_mode--;
 
-                        if (state.vid_cfg_mode < 0) {
-                            state.vid_cfg_mode = state.vid_sup_modes_count-1;
-                        }
-
-                        while (
-                            state.vid_sup_modes[state.vid_cfg_mode]->w < 800 ||
-                            state.vid_sup_modes[state.vid_cfg_mode]->h < 600
-                        ) {
-                            state.vid_cfg_mode--;
-
-                            if (state.vid_cfg_mode < 0) {
-                                state.vid_cfg_mode = state.vid_sup_modes_count-1;
-                            }
+                        if (state.vid_mode < 0) {
+                            state.vid_mode = state.vid_cap_modes_num - 1;
                         }
                         break;
 
@@ -1051,7 +1040,7 @@ void Scene::drawDisplay()
     switch (state.get()) {
 
         case STATE_GAME_START:
-            t = (-6.413f * state.vid_cfg_aspect - state.hud_x) * .055f * state.timer_adjustment;
+            t = (-6.413f * state.vid_aspect - state.hud_x) * .055f * state.timer_adjustment;
             state.hud_x += t;
             t = (4.905f + state.hud_y) * .055f * state.timer_adjustment;
             state.hud_y -= t;
@@ -1069,7 +1058,7 @@ void Scene::drawDisplay()
 
         case STATE_GAME_LOOP:
             if (player->isAlive()) {
-                state.hud_x = -6.413f * state.vid_cfg_aspect;
+                state.hud_x = -6.413f * state.vid_aspect;
                 state.hud_y = -4.905f;
             } else {
                 state.hud_x -= state.timer_adjustment * .01f;
@@ -1240,9 +1229,9 @@ void Scene::drawMessages()
         }
 
         if (state.msg[i].direction_x > 0) {
-            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_cfg_aspect * .0003f);
+            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_aspect * .0003f);
         } else {
-            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_cfg_aspect * .0004f);
+            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_aspect * .0004f);
         }
 
         x += state.msg[i].direction_x * 1.0f;
