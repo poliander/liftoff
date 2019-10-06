@@ -45,40 +45,40 @@ class State
         vector<shared_ptr<Entity>>  entities;
 
         // timer
-        Uint32          timer;
-        float           timer_adjustment;
+        Uint32                      timer;
+        float                       timer_adjustment;
 
-        int             global_alpha;
+        int                         global_alpha;
 
-        bool            log_file;
+        bool                        log_file;
+        bool                        cfg_loaded;
 
-        char            dir_configuration[255];
-        char            dir_resources[255];
+        char                        dir_configuration[255];
+        char                        dir_resources[255];
 
-        bool            engine_restart;
-        bool            engine_boundary;
-        bool            engine_debug;
+        bool                        engine_restart;
+        bool                        engine_boundary;
 
-        // hardware capabilities
-        bool            vid_sup_fullscreen;
-        bool            vid_sup_window;
-        int             vid_sup_modes_count;
-        SDL_Rect**      vid_sup_modes;
+        // video capabilities
+        int                         vid_cap_modes_num;
+        SDL_DisplayMode             vid_cap_modes[128];
 
         // hardware configuration
-        int             vid_cfg_mode;
-        int             vid_cfg_width;
-        int             vid_cfg_height;
-        float           vid_cfg_aspect;
-        unsigned short  vid_cfg_aspect_mode;
-        unsigned short  vid_cfg_fullscreen;
-        unsigned short  vid_cfg_vsync;
-        int             vid_cfg_depth;
-        unsigned short  vid_cfg_multisampling;
+        int                         vid_display;
+        int                         vid_mode;
+        int                         vid_width;
+        int                         vid_height;
+        int                         vid_refresh_rate;
+        Uint32                      vid_format;
+        float                       vid_aspect;
+        unsigned short              vid_aspect_mode;
+        unsigned short              vid_fullscreen;
+        unsigned short              vid_vsync;
+        unsigned short              vid_multisampling;
 
         // money/damage messages
-        unsigned short  msg_num = 0;
-        Message         msg[E_MAX_MESSAGES];
+        unsigned short              msg_num = 0;
+        Message                     msg[E_MAX_MESSAGES];
 
         // game menu
         int             menu;
