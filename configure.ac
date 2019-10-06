@@ -102,7 +102,7 @@ PKG_CHECK_MODULES(
 
 # -----------------------------------------------------------------------------
 
-CXXFLAGS="$CXXFLAGS $SDL2_CFLAGS $SDL2_mixer_CFLAGS $libvorbisfile_CFLAGS $libogg_CFLGAS"
+CXXFLAGS="$CXXFLAGS $SDL2_CFLAGS $SDL2_mixer_CFLAGS $libvorbisfile_CFLAGS $libogg_CFLAGS"
 LIBS="$LIBS $SDL2_LIBS $SDL2_mixer_LIBS $libvorbisfile_LIBS $libogg_LIBS"
 
 AC_SUBST(CXXFLAGS)
