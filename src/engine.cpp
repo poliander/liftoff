@@ -236,10 +236,10 @@ bool Engine::init(int argc, char **argv)
         } else {
             state.log("ok\n");
             state.audio.init(
-                    state.dir_resources,
-                    state.config.aud_sfx,
-                    state.config.aud_music,
-                    state.config.aud_mixfreq
+                state.dir_resources,
+                state.config.aud_sfx,
+                state.config.aud_music,
+                state.config.aud_mixfreq
             );
         }
     }
@@ -274,7 +274,7 @@ bool Engine::initDisplay()
             break;
 
         default:
-            state.vid_aspect = (float)state.config.vid_width/(float)state.config.vid_height;
+            state.vid_aspect = (float)state.vid_width / (float)state.vid_height;
     }
 
     if (state.config.vid_fullscreen) {
