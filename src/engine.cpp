@@ -292,12 +292,6 @@ bool Engine::initDisplay()
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
     }
 
-    if (state.config.vid_vsync) {
-        SDL_GL_SetSwapInterval(1);
-    } else {
-        SDL_GL_SetSwapInterval(0);
-    }
-
     window = SDL_CreateWindow(
         "Lift Off: Beyond Glaxium",
         SDL_WINDOWPOS_UNDEFINED,
@@ -306,8 +300,6 @@ bool Engine::initDisplay()
         state.config.vid_height,
         sdl_mode
     );
-
-    context = SDL_GL_CreateContext(window);
 
     SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
 
@@ -344,6 +336,14 @@ bool Engine::initDisplay()
         );
 
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
+    }
+
+    context = SDL_GL_CreateContext(window);
+
+    if (state.config.vid_vsync) {
+        SDL_GL_SetSwapInterval(1);
+    } else {
+        SDL_GL_SetSwapInterval(0);
     }
 
     GLint glewStatus = glewInit();
