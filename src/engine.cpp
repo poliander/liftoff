@@ -301,11 +301,17 @@ bool Engine::initDisplay()
         sdl_mode
     );
 
+    context = SDL_GL_CreateContext(window);
+
     SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
 
-    while (window == NULL && state.vid_multisampling != cfg_multisampling) {
+    while (state.vid_multisampling != cfg_multisampling) {
+
+        SDL_GL_DeleteContext(context);
+        SDL_DestroyWindow(window);
+
         switch (state.vid_multisampling) {
-            case 8:
+            case 32:
                 state.vid_multisampling = 4;
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
                 SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
@@ -318,12 +324,16 @@ bool Engine::initDisplay()
                 break;
 
             case 2:
-                state.vid_multisampling = 0;
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+                state.vid_multisampling = 1;
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
                 break;
 
-            case 0:
-               return false;
+            case 1:
+                state.vid_multisampling = 0;
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+                break;
         }
 
         window = SDL_CreateWindow(
@@ -335,10 +345,18 @@ bool Engine::initDisplay()
             sdl_mode
         );
 
+        context = SDL_GL_CreateContext(window);
+
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
     }
 
-    context = SDL_GL_CreateContext(window);
+    if (cfg_multisampling == 0) {
+        sprintf(msg, "- multisampling disabled\n");
+    } else {
+        sprintf(msg, "- multisampling enabled (%d spp)\n", state.vid_multisampling);
+    }
+
+    state.log(msg);
 
     if (state.config.vid_vsync) {
         SDL_GL_SetSwapInterval(1);
