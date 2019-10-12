@@ -41,9 +41,6 @@ void Debris::draw(State &s)
     float a = float(s.global_alpha) * .01f;
     float scale = (10000.0f + p_z) * .0001f;
 
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_NORMALIZE);
-
     glColor4f(c_r, c_g, c_b, c_a * a);
 
     s.models[e_obj]->draw(s.view.transform(
@@ -59,7 +56,4 @@ void Debris::draw(State &s)
         s_y * scale,
         s_z * scale
     ), glm::vec4(c_r, c_g, c_b, c_a));
-
-    glDisable(GL_NORMALIZE);
-    glDisable(GL_CULL_FACE);
 }

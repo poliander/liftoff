@@ -55,9 +55,6 @@ void Cargo::draw(State &s)
         a = (p_z + 10000.0f) * .0005f;
     }
 
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_NORMALIZE);
-
     s.models[e_obj]->draw(s.view.transform(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
@@ -74,9 +71,6 @@ void Cargo::draw(State &s)
 
     glLoadIdentity();
     glPushMatrix();
-
-    glDisable(GL_NORMALIZE);
-    glDisable(GL_CULL_FACE);
 
     s.textures[T_GLOW]->bind();
 

@@ -71,9 +71,6 @@ void Asteroid::draw(State &s)
         scale = (10000.0f + p_z) * .0001f;
     }
 
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_NORMALIZE);
-
     s.models[e_obj]->draw(s.view.transform(
         E_RELATIVE_MOVEMENT * m * (p_x - s.cam_x),
         E_RELATIVE_MOVEMENT * m * (p_y - s.cam_y),
@@ -87,7 +84,4 @@ void Asteroid::draw(State &s)
         s_y * scale,
         s_z * scale
     ), glm::vec4(c_r, c_g, c_b, c_a));
-
-    glDisable(GL_NORMALIZE);
-    glDisable(GL_CULL_FACE);
 }
