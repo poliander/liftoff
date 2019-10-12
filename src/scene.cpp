@@ -1355,6 +1355,7 @@ void Scene::move()
             if (state.menu_title_pos > 0) {
                 state.menu_title_pos -= (100.1f - state.menu_title_pos) * state.timer_adjustment * .15f;
                 state.global_alpha = (int)state.menu_title_pos;
+                player->move(state);
             } else {
                 state.set(STATE_CLOSE);
             }
