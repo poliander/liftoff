@@ -3,6 +3,7 @@
 #include <cmath>
 #include <stdlib.h>
 
+#include <functions.hpp>
 #include <state.hpp>
 
 #define SKYBOX_NUM_STARS      3000

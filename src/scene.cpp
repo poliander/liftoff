@@ -624,9 +624,10 @@ void Scene::drawMenu(bool mouse_recheck)
                             state.log("ok\n");
                             state.set(STATE_GAME_START);
 
-                            player->setEnergy(1);
+                            player->setEnergy(-200);
                             player->setLife(player->getLifeMaximum());
                             player->setMoney(0);
+                            player->collect(OBJ_POWERUP_0);
                         } else {
                             state.log("failed\n");
                         }
@@ -1374,7 +1375,6 @@ void Scene::move()
                 player->setPos(0, -90.0f, 50.0f);
                 player->setRot(90.0f, 0, 270.0f);
                 player->setSpin(0, 0, 0);
-                player->collect(OBJ_POWERUP_0);
 
                 state.set(STATE_GAME_LOOP);
             } else {

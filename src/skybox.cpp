@@ -9,9 +9,9 @@ Skybox::Skybox() : texture(new Texture())
         x = 0;
         y = 0;
 
-        while ((fabs(x) < 30.0f) && (fabs(y) < 30.0f)) {
-            x = .1f * (rand() % 1200 - 600);
-            y = .1f * (rand() % 1200 - 600);
+        while ((fabs(x) < 50.0f) && (fabs(y) < 50.0f)) {
+            x = .1f * (rand() % 1500 - 750);
+            y = .1f * (rand() % 1500 - 750);
         }
 
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
@@ -93,15 +93,14 @@ void Skybox::draw(State &s)
 
     if (s.stars_warp) {
         for (i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
-            c = stars[i][3];
-            a = ((500.0f+stars[i][2])/250.0f);
-            sl = (a*3.5f) * (a*3.5f) * (s.stars_speed - .3f);
+            a = (1000.0f + stars[i][2]) / 1000.0f;
+            sl = pow(a * 1.25f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
 
-            s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * .75f));
+            s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (s.stars_speed - .35f)));
             s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform2D(
                 stars[i][0], stars[i][1], stars[i][2],
                 90.0f, 0, 0,
-                stars[i][3], stars[i][3] * sl, 0
+                stars[i][3], stars[i][3] * sl * (s.stars_speed - .35f), 0
             ));
 
             s.textures[T_STAR]->draw();
