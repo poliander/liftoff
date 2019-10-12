@@ -24,6 +24,12 @@ class View
             float camera_up_x,     float camera_up_y,     float camera_up_z
         );
 
+        glm::mat4 transform2D(
+            float px, float py, float pz,
+            float rx, float ry, float rz,
+            float sx, float sy, float sz
+        );
+
         glm::mat4 transform(
             float px, float py, float pz,
             float rx, float ry, float rz,

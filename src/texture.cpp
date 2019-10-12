@@ -1,17 +1,35 @@
 #include "texture.hpp"
 
+Texture::Texture()
+{
+    glGenFramebuffers(1, &frameBuffer);
+
+    init();
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+}
+
 Texture::Texture(string filename)
 {
-    t_image *image;
-
-    image = (t_image *)malloc(sizeof(t_image));
-    image->data = nullptr;
+    t_image *image = (t_image *)malloc(sizeof(t_image));
 
     if (load(filename, image)) {
-        assign(image);
-    }
+        init();
 
-    if (image->data != nullptr) {
+        glTexImage2D(GL_TEXTURE_2D, 0, image->format, image->width, image->height, 0, image->format, GL_UNSIGNED_BYTE, image->data);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
         free(image->data);
     }
 
@@ -20,6 +38,9 @@ Texture::Texture(string filename)
 
 Texture::~Texture()
 {
+    if (frameBuffer != -1) {
+        glDeleteFramebuffers(1, &frameBuffer);
+    }
 }
 
 bool Texture::load(string filename, t_image *image)
@@ -116,20 +137,8 @@ bool Texture::load(string filename, t_image *image)
     return true;
 }
 
-void Texture::assign(t_image *image)
+void Texture::init()
 {
-    glGenTextures(1, &resource);
-    glBindTexture(GL_TEXTURE_2D, resource);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, image->format, image->width, image->height, 0, image->format, GL_UNSIGNED_BYTE, image->data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
     float vertices[] = {
          0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
          0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
@@ -161,6 +170,11 @@ void Texture::assign(t_image *image)
 
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    glGenTextures(1, &texColorBuffer);
+
+    bind();
+    bindFrameBuffer();
 }
 
 void Texture::draw()
@@ -171,5 +185,22 @@ void Texture::draw()
 
 void Texture::bind()
 {
-    glBindTexture(GL_TEXTURE_2D, resource);
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+}
+
+void Texture::bindFrameBuffer()
+{
+    if (frameBuffer != -1) {
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        glViewport(0, 0, 1024, 1024);
+    }
+}
+
+void Texture::unbindFrameBuffer()
+{
+    if (frameBuffer != -1) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+    }
 }

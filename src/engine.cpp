@@ -391,8 +391,6 @@ bool Engine::initDisplay()
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    glClearColor(.0f, .0f, .0f, .0f);
-    glClearDepth(1.0f);
     glLoadIdentity();
 
     state.vid_width = state.config.vid_width;

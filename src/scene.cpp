@@ -1494,7 +1494,11 @@ void Scene::draw()
         if (p_y >  400.0f) p_y =  400.0f;
     }
 
+    glClearColor(0, 0, 0, 0);
+    glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glViewport(0, 0, state.vid_width, state.vid_height);
 
     gluLookAt(
         p_x * -.01f + state.tilt_x * .4f,

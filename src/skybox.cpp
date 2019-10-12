@@ -1,40 +1,28 @@
 #include <skybox.hpp>
 
-Skybox::Skybox()
+Skybox::Skybox() : texture(new Texture())
 {
     int i;
     float x, y;
 
-    // far stars
-    for (i = 0; i < (num_stars - num_stars_warp); i++) {
+    for (i = 0; i < SKYBOX_NUM_STARS; i++) {
         x = 0;
         y = 0;
 
-        while ((fabs(x) < 200.0f) && (fabs(y) < 200.0f)) {
-            x = (float)(rand() % 800 - 400);
-            y = (float)(rand() % 800 - 400);
+        while ((fabs(x) < 30.0f) && (fabs(y) < 30.0f)) {
+            x = .1f * (rand() % 1200 - 600);
+            y = .1f * (rand() % 1200 - 600);
+        }
+
+        if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
+            x *= .5f;
+            y *= .5f;
         }
 
         stars[i][0] = x;
         stars[i][1] = y;
-        stars[i][2] = (float)(rand() % 5000);
-        stars[i][3] = (float)((rand() % 100) * .01f);
-    }
-
-    // warp stars
-    for (i = (num_stars - num_stars_warp); i < num_stars; i++) {
-        x = 0;
-        y = 0;
-
-        while ((fabs(x) < 25.0f) && (fabs(y) < 25.0f)) {
-            x = (float)(rand() % 400 - 200);
-            y = (float)(rand() % 400 - 200);
-        }
-
-        stars[i][0] = x;
-        stars[i][1] = y;
-        stars[i][2] = (float)(rand() % 5000);
-        stars[i][3] = (float)((rand() % 100) * .01f);
+        stars[i][2] = -1000.0f + (rand() % 1000);
+        stars[i][3] = (float)((rand() % 100) * .005f) + .25f;
     }
 }
 
@@ -44,10 +32,14 @@ Skybox::~Skybox()
 
 void Skybox::move(State &s)
 {
-    for (int i = 0; i < num_stars; i++) {
-        stars[i][2] += s.timer_adjustment * s.stars_speed;
+    for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
+        if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
+            stars[i][2] += s.timer_adjustment * s.stars_speed * .45f;
+        } else {
+            stars[i][2] += s.timer_adjustment * s.stars_speed * .25f;
+        }
 
-        if (stars[i][2] > 300.0f) {
+        if (stars[i][2] > 0) {
             stars[i][2] -= 1000.0f;
         }
     }
@@ -62,85 +54,75 @@ void Skybox::draw(State &s)
     unsigned short i;
     float a, c, sl, sa;
 
+    texture->bindFrameBuffer();
+
+    glClearColor(0, 0, 1, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    s.shaders[S_TEXTURE_1]->bind();
+
     // background
 
     s.textures[T_BACKGROUND_1]->bind();
 
-    s.shaders[S_TEXTURE_1]->bind();
     s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(.65f, .7f, .8f, 1.0f));
-    s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
-        0, 0, -50.0f,
-        0, 0, s.stars_rotation_pos,
-        150.0f, 150.0f, 0
+    s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform2D(
+        0, 0, -1.0f,
+        0, 0, 0,
+        1.35f, 1.35f, 0
     ));
 
     s.textures[T_BACKGROUND_1]->draw();
 
-    s.shaders[S_TEXTURE_1]->unbind();
-
     // far stars
-
-    glLoadIdentity();
-
-    glRotatef(s.stars_rotation_pos, 0, 0, -1);
 
     s.textures[T_STAR]->bind();
 
-    for (i = 0; i < (num_stars - num_stars_warp); ++i) {
-        c = stars[i][3];
-        a = ((500.0f+stars[i][2])/250.0f) * (.0075f * s.global_alpha);
+    for (i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
+        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform2D(
+            stars[i][0], stars[i][1], stars[i][2],
+            0, 0, 0,
+            stars[i][3], stars[i][3], 0
+        ));
 
-        glPushMatrix();
-        glTranslatef(stars[i][0], stars[i][1], stars[i][2]);
-
-        glColor4f(c, c, c, a*.75f);
-        c = .75f + c*1.5f;
-        glBegin(GL_QUADS);
-          glTexCoord2i(0, 0);
-          glVertex3f(-c, -c, 0);
-
-          glTexCoord2i(1, 0);
-          glVertex3f(c, -c, 0);
-
-          glTexCoord2i(1, 1);
-          glVertex3f(c, c, 0);
-
-          glTexCoord2i(0, 1);
-          glVertex3f(-c, c, 0);
-        glEnd();
-
-        glPopMatrix();
+        s.textures[T_STAR]->draw();
     }
 
     // warp stars
+
     if (s.stars_warp) {
-        for (i = (num_stars - num_stars_warp); i < num_stars; ++i) {
+        for (i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
             c = stars[i][3];
-            a = ((500.0f+stars[i][2])/250.0f) * (.0075f * s.global_alpha);
+            a = ((500.0f+stars[i][2])/250.0f);
             sl = (a*3.5f) * (a*3.5f) * (s.stars_speed - .3f);
-            sa = .6f * (s.stars_speed - .3f);
 
-            glPushMatrix();
-            glTranslatef(stars[i][0], stars[i][1], stars[i][2]);
+            s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * .75f));
+            s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform2D(
+                stars[i][0], stars[i][1], stars[i][2],
+                90.0f, 0, 0,
+                stars[i][3], stars[i][3] * sl, 0
+            ));
 
-            glBegin (GL_QUADS);
-              glColor4f(a, a, a, sa);
-
-              glTexCoord2i(1, 0);
-              glVertex3f(-1, -1, -sl);
-
-              glTexCoord2i(1, 1);
-              glVertex3f (1, -1, -sl);
-
-              glColor4f(c*a, c*a, c*a, .35f*sa);
-
-              glTexCoord2i(0, 1);
-              glVertex3f (1, 1, sl);
-
-              glTexCoord2i(0, 0);
-              glVertex3f (-1, 1, sl);
-            glEnd();
-            glPopMatrix();
+            s.textures[T_STAR]->draw();
         }
     }
+
+    s.shaders[S_TEXTURE_1]->unbind();
+
+    texture->unbindFrameBuffer();
+
+    texture->bind();
+
+    s.shaders[S_TEXTURE_1]->bind();
+    s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(s.global_alpha * .01f, s.global_alpha * .01f, s.global_alpha * .01f, 1.0f));
+    s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+        0, 0, -50.0f,
+        0, 0, s.stars_rotation_pos,
+        135.0f, 135.0f, 0
+    ));
+
+    texture->draw();
+
+    s.shaders[S_TEXTURE_1]->unbind();
 }

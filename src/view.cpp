@@ -37,6 +37,24 @@ void View::lookAt(
     view = glm::lookAt(camera_pos, camera_pos + camera_target, camera_up);
 }
 
+glm::mat4 View::transform2D(
+    float px, float py, float pz,
+    float rx, float ry, float rz,
+    float sx, float sy, float sz
+) {
+    glm::mat4 rotX = glm::rotate(glm::radians(-rx), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 rotY = glm::rotate(glm::radians(-ry), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 rotZ = glm::rotate(glm::radians(-rz), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    glm::mat4 posMat = glm::translate(glm::vec3(-px, -py, pz));
+    glm::mat4 rotMat = rotX * rotY * rotZ;
+    glm::mat4 scaleMat = glm::scale(glm::vec3(sx, sy, sz));
+
+    glm::mat4 model = posMat * rotMat * scaleMat;
+
+    return glm::perspective(glm::radians(65.0f), 1.0f, .1f, 1000.0f) * model;
+}
+
 glm::mat4 View::transform(
     float px, float py, float pz,
     float rx, float ry, float rz,
