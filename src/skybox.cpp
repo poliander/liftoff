@@ -1,6 +1,6 @@
 #include <skybox.hpp>
 
-Skybox::Skybox() : texture(new Texture())
+Skybox::Skybox() : framebuffer(new Framebuffer())
 {
     int i;
     float x, y;
@@ -58,7 +58,7 @@ void Skybox::draw(State &s)
 
     glDepthMask(GL_FALSE);
 
-    texture->bindFrameBuffer();
+    framebuffer->bind();
 
     glClearColor(0, 0, 1, 0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -111,21 +111,22 @@ void Skybox::draw(State &s)
         }
     }
 
-    s.shaders[S_TEXTURE_1]->unbind();
+    framebuffer->unbind();
 
-    texture->unbindFrameBuffer();
+    s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(
+        s.global_alpha * .01f,
+        s.global_alpha * .01f,
+        s.global_alpha * .01f,
+        1.0f
+    ));
 
-    texture->bind();
-
-    s.shaders[S_TEXTURE_1]->bind();
-    s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(s.global_alpha * .01f, s.global_alpha * .01f, s.global_alpha * .01f, 1.0f));
     s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
         0, 0, -50.0f,
         0, 0, s.stars_rotation_pos,
         135.0f, 135.0f, 0
     ));
 
-    texture->draw();
+    framebuffer->draw();
 
     s.shaders[S_TEXTURE_1]->unbind();
 

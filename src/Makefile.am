@@ -8,6 +8,7 @@ __top_builddir__liftoff_SOURCES = \
     view.cpp \
     object.cpp \
     shader.cpp \
+    framebuffer.cpp \
     texture.cpp \
     model.cpp \
     entity.cpp \

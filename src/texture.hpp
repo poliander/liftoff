@@ -40,13 +40,8 @@ struct t_image {
 class Texture
 {
     public:
-        Texture();
         Texture(string filename);
-
         ~Texture();
-
-        void bindFrameBuffer();
-        void unbindFrameBuffer();
 
         void bind();
         void draw();
@@ -54,10 +49,7 @@ class Texture
     protected:
         GLuint vertexArrayObject;
         GLuint vertexArrayBuffers[2];
-
-        GLint  viewport[4];
-        GLuint frameBuffer = -1;
-        GLuint texColorBuffer = -1;
+        GLuint texColorBuffer;
 
         void init();
         bool load(string filename, t_image *image);

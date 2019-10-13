@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include <functions.hpp>
+#include <framebuffer.hpp>
 #include <state.hpp>
 
 #define SKYBOX_NUM_STARS      3000
@@ -19,6 +20,6 @@ class Skybox
         void draw(State &s);
 
     private:
-        float               stars[SKYBOX_NUM_STARS][4];
-        shared_ptr<Texture> texture;
+        float                   stars[SKYBOX_NUM_STARS][4];
+        shared_ptr<Framebuffer> framebuffer;
 };

@@ -107,6 +107,7 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-view.$(OBJEXT) \
 	__top_builddir__liftoff-object.$(OBJEXT) \
 	__top_builddir__liftoff-shader.$(OBJEXT) \
+	__top_builddir__liftoff-framebuffer.$(OBJEXT) \
 	__top_builddir__liftoff-texture.$(OBJEXT) \
 	__top_builddir__liftoff-model.$(OBJEXT) \
 	__top_builddir__liftoff-entity.$(OBJEXT) \
@@ -310,6 +311,7 @@ __top_builddir__liftoff_SOURCES = \
     view.cpp \
     object.cpp \
     shader.cpp \
+    framebuffer.cpp \
     texture.cpp \
     model.cpp \
     entity.cpp \
@@ -423,6 +425,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-engine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-entity.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-explosion.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-framebuffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-functions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-missile.Po@am__quote@
@@ -521,6 +524,20 @@ __top_builddir__liftoff-shader.obj: shader.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shader.cpp' object='__top_builddir__liftoff-shader.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-shader.obj `if test -f 'shader.cpp'; then $(CYGPATH_W) 'shader.cpp'; else $(CYGPATH_W) '$(srcdir)/shader.cpp'; fi`
+
+__top_builddir__liftoff-framebuffer.o: framebuffer.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-framebuffer.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-framebuffer.Tpo -c -o __top_builddir__liftoff-framebuffer.o `test -f 'framebuffer.cpp' || echo '$(srcdir)/'`framebuffer.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-framebuffer.Tpo $(DEPDIR)/__top_builddir__liftoff-framebuffer.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='framebuffer.cpp' object='__top_builddir__liftoff-framebuffer.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-framebuffer.o `test -f 'framebuffer.cpp' || echo '$(srcdir)/'`framebuffer.cpp
+
+__top_builddir__liftoff-framebuffer.obj: framebuffer.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-framebuffer.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-framebuffer.Tpo -c -o __top_builddir__liftoff-framebuffer.obj `if test -f 'framebuffer.cpp'; then $(CYGPATH_W) 'framebuffer.cpp'; else $(CYGPATH_W) '$(srcdir)/framebuffer.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-framebuffer.Tpo $(DEPDIR)/__top_builddir__liftoff-framebuffer.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='framebuffer.cpp' object='__top_builddir__liftoff-framebuffer.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-framebuffer.obj `if test -f 'framebuffer.cpp'; then $(CYGPATH_W) 'framebuffer.cpp'; else $(CYGPATH_W) '$(srcdir)/framebuffer.cpp'; fi`
 
 __top_builddir__liftoff-texture.o: texture.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-texture.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-texture.Tpo -c -o __top_builddir__liftoff-texture.o `test -f 'texture.cpp' || echo '$(srcdir)/'`texture.cpp

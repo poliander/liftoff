@@ -1,19 +1,5 @@
 #include "texture.hpp"
 
-Texture::Texture()
-{
-    glGenFramebuffers(1, &frameBuffer);
-
-    init();
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2048, 2048, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
-}
-
 Texture::Texture(string filename)
 {
     t_image *image = (t_image *)malloc(sizeof(t_image));
@@ -38,9 +24,6 @@ Texture::Texture(string filename)
 
 Texture::~Texture()
 {
-    if (frameBuffer != -1) {
-        glDeleteFramebuffers(1, &frameBuffer);
-    }
 }
 
 bool Texture::load(string filename, t_image *image)
@@ -172,9 +155,7 @@ void Texture::init()
     glEnableVertexAttribArray(2);
 
     glGenTextures(1, &texColorBuffer);
-
-    bind();
-    bindFrameBuffer();
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 }
 
 void Texture::draw()
@@ -186,21 +167,4 @@ void Texture::draw()
 void Texture::bind()
 {
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-}
-
-void Texture::bindFrameBuffer()
-{
-    if (frameBuffer != -1) {
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-        glGetIntegerv(GL_VIEWPORT, viewport);
-        glViewport(0, 0, 2048, 2048);
-    }
-}
-
-void Texture::unbindFrameBuffer()
-{
-    if (frameBuffer != -1) {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-    }
 }
