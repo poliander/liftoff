@@ -293,8 +293,6 @@ bool Engine::initDisplay()
     context = NULL;
 
     do {
-        state.vid_multisampling = state.vid_multisampling >> 1;
-
         if (state.vid_multisampling > 0) {
             SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
             SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
@@ -323,7 +321,15 @@ bool Engine::initDisplay()
         context = SDL_GL_CreateContext(window);
 
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
-    } while (state.vid_multisampling != cfg_multisampling);
+
+        if (state.vid_multisampling == cfg_multisampling) {
+            break;
+        }
+
+        if (state.vid_multisampling > 0) {
+            state.vid_multisampling = state.vid_multisampling >> 1;
+        }
+    } while (true);
 
     if (cfg_multisampling == 0) {
         sprintf(msg, "- multisampling disabled\n");
@@ -406,9 +412,9 @@ bool Engine::handleKeyboard()
             state.fps_visible =! state.fps_visible;
             nextrelease = state.timer + 100;
             if (state.fps_visible) {
-                state.fps = 0;
-                state.fps_frame = 0;
-                state.fps_count = 100;
+                state.fps_counter = 0;
+                state.fps_timer = 0;
+                state.fps_timer_l = 0;
                 state.fps_ready = false;
             }
         } else nextrelease = state.timer + 100;
@@ -640,15 +646,20 @@ bool Engine::main()
     // complete restart of game engine
     if (state.engine_restart) {
         state.log("Restarting game engine.\n");
-
         state.config.vid_width = state.vid_cap_modes[state.vid_mode].w;
         state.config.vid_height = state.vid_cap_modes[state.vid_mode].h;
         state.set(STATE_QUIT);
 
         halt();
         bool ok = init(-1, NULL);
+
         otimer = SDL_GetTicks();
         state.timer = otimer;
+
+        state.fps_timer = 0;
+        state.fps_timer_l = 0;
+        state.fps_ready = false;
+        state.fps_counter = 0;
 
         return ok;
     }

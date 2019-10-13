@@ -30,7 +30,7 @@ State::State()
     config.aud_sfx          = 2;
     config.aud_music        = 2;
 
-    vid_multisampling       = 8;
+    vid_multisampling       = DEFAULT_VID_MSAA;
     vid_width               = DEFAULT_VID_WIDTH;
     vid_height              = DEFAULT_VID_HEIGHT;
     vid_fullscreen          = DEFAULT_VID_FULLSCREEN;
@@ -42,11 +42,11 @@ State::State()
     cfg_loaded              = false;
     engine_restart          = false;
 
-    fps                     = 0;
     fps_visible             = false;
-    fps_count               = 100;
     fps_ready               = false;
-    fps_frame               = 0;
+    fps_counter             = 0;
+    fps_timer               = 0;
+    fps_timer_l             = 0;
 
     joystick                = NULL;
 

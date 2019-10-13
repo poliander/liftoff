@@ -488,37 +488,47 @@ void Scene::drawTextA(const char *text, float x, float y, float z, float size, f
 }
 
 /*
- * display frame rate
+ * display video infos (FPS, MSAA level)
  */
-void Scene::drawFPS()
+void Scene::drawVideoInfos()
 {
     static char txt[16];
 
-    state.fps_frame++;
+    if (state.fps_timer_l > 0) {
+        state.fps_timer += state.timer - state.fps_timer_l;
 
-    if (state.fps_frame >= state.fps_count) {
-        Uint32 t = SDL_GetTicks();
-
-        state.fps_dt = t - state.fps_lt;
-        state.fps_lt = t;
-
-        if (state.fps_ready) {
-            state.fps = float(state.fps_frame) / (float(state.fps_dt) * .001f);
+        if (state.fps_timer > 1000) {
+            state.fps = float(state.fps_counter) / (float(state.fps_timer) * .001f);
+            state.fps_ready = true;
+            state.fps_counter = 0;
+            state.fps_timer = 0;
         }
-
-        state.fps_count = int(round(state.fps));
-        state.fps_ready = true;
-        state.fps_frame = 0;
     }
+
+    state.fps_counter++;
+    state.fps_timer_l = state.timer;
 
     glLoadIdentity();
 
-    drawTextA("FPS:", -.45f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+    // FPS
 
-    if ((state.fps > .0f) && state.fps_ready) {
-        sprintf(txt, "%d", int(round(state.fps)));
-        drawTextA(txt, .2f, -.4f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+    if (state.fps_ready) {
+        sprintf(txt, "FPS: %d", int(round(state.fps)));
+    } else {
+        sprintf(txt, "FPS: WAIT...");
     }
+
+    drawTextA(txt, -.45f, -.25f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+
+    // MSAA
+
+    if (state.vid_multisampling > 0) {
+        sprintf(txt, "MSAA: %dX", int(state.vid_multisampling));
+    } else {
+        sprintf(txt, "MSAA: OFF");
+    }
+
+    drawTextA(txt, -.45f, .05f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
 }
 
 /*
@@ -1574,7 +1584,7 @@ void Scene::draw()
     }
 
     if (state.fps_visible) {
-        drawFPS();
+        drawVideoInfos();
     }
 
     glEnable(GL_DEPTH_TEST);

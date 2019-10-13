@@ -94,13 +94,12 @@ class State
         bool            stars_warp;
 
         // frames per second
-        float           fps;
-        bool            fps_visible;
-        bool            fps_ready;
-        int             fps_count;
-        int             fps_frame;
-        int             fps_dt;
-        int             fps_lt;
+        float           fps;         // calculated fps rate
+        Uint32          fps_timer;   // measuring timer
+        Uint32          fps_timer_l; // previous frame measuring time
+        bool            fps_visible; // toggle display
+        bool            fps_ready;   // measuring valid
+        int             fps_counter; // frames counter
 
         // input
         float           mouse_x;
