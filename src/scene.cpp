@@ -1538,17 +1538,9 @@ void Scene::draw()
         .0f
     );
 
-    // background
-
-    glDepthRange(1, 1);
-    glDepthFunc(GL_ALWAYS);
+    // scenery
 
     skybox->draw(state);
-
-    glDepthRange(0, 1);
-    glDepthFunc(GL_LESS);
-
-    // scene
 
     if (
         state.get() >= STATE_GAME_START &&

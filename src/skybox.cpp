@@ -56,6 +56,8 @@ void Skybox::draw(State &s)
     unsigned short i;
     float a, c, sl;
 
+    glDepthMask(GL_FALSE);
+
     texture->bindFrameBuffer();
 
     glClearColor(0, 0, 1, 0);
@@ -126,4 +128,6 @@ void Skybox::draw(State &s)
     texture->draw();
 
     s.shaders[S_TEXTURE_1]->unbind();
+
+    glDepthMask(GL_TRUE);
 }
