@@ -10,19 +10,21 @@ Skybox::Skybox() : texture(new Texture())
         y = 0;
 
         while ((fabs(x) < 50.0f) && (fabs(y) < 50.0f)) {
-            x = .1f * (rand() % 1500 - 750);
-            y = .1f * (rand() % 1500 - 750);
+            x = .1f * (rand() % 2000 - 1000);
+            y = .1f * (rand() % 2000 - 1000);
         }
 
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
-            x *= .5f;
-            y *= .5f;
+            stars[i][0] = x;
+            stars[i][1] = y;
+            stars[i][2] = -1000.0f + (rand() % 1000);
+            stars[i][3] = 90.0f + (atan(stars[i][1] / stars[i][0]) * 180.0f/ M_PI);
+        } else  {
+            stars[i][0] = x;
+            stars[i][1] = y;
+            stars[i][2] = -1000.0f + (rand() % 1000);
+            stars[i][3] = (float)((rand() % 100) * .005f) + .35f;
         }
-
-        stars[i][0] = x;
-        stars[i][1] = y;
-        stars[i][2] = -1000.0f + (rand() % 1000);
-        stars[i][3] = (float)((rand() % 100) * .005f) + .25f;
     }
 }
 
@@ -34,9 +36,9 @@ void Skybox::move(State &s)
 {
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
-            stars[i][2] += s.timer_adjustment * s.stars_speed * .45f;
+            stars[i][2] += s.timer_adjustment * s.stars_speed * 1.25f;
         } else {
-            stars[i][2] += s.timer_adjustment * s.stars_speed * .25f;
+            stars[i][2] += s.timer_adjustment * s.stars_speed * 0.25f;
         }
 
         if (stars[i][2] > 0) {
@@ -52,7 +54,7 @@ void Skybox::move(State &s)
 void Skybox::draw(State &s)
 {
     unsigned short i;
-    float a, c, sl, sa;
+    float a, c, sl;
 
     texture->bindFrameBuffer();
 
@@ -93,14 +95,14 @@ void Skybox::draw(State &s)
 
     if (s.stars_warp) {
         for (i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
-            a = (1000.0f + stars[i][2]) / 1000.0f;
-            sl = pow(a * 1.25f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
+            a = (1000.0f + stars[i][2]) / 1250.0f;
+            sl = pow(a * 1.45f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
 
-            s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (s.stars_speed - .35f)));
+            s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (s.stars_speed - .3f)));
             s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform2D(
                 stars[i][0], stars[i][1], stars[i][2],
-                90.0f, 0, 0,
-                stars[i][3], stars[i][3] * sl * (s.stars_speed - .35f), 0
+                90.0f, stars[i][3], 0,
+                .9f, sl * (s.stars_speed - .3f), 0
             ));
 
             s.textures[T_STAR]->draw();

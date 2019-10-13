@@ -7,7 +7,7 @@
 #include <state.hpp>
 
 #define SKYBOX_NUM_STARS      3000
-#define SKYBOX_NUM_STARS_WARP 1000
+#define SKYBOX_NUM_STARS_WARP 500
 
 class Skybox
 {
