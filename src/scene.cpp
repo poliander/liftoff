@@ -958,7 +958,6 @@ void Scene::drawMenu(bool mouse_recheck)
     glPopMatrix();
 
     drawText("VECTOR ZERO MK. IX \"REDUX\"", -.1f, -2.3f, -10.0f, 65, 1, .9f, .85f, .0045f*m_a);
-    drawTextA(PACKAGE_VERSION, -.45f, 12.0f, -10.0f, 65, .85f, .85f, .85f, .0035f*m_a);
 
     // draw menu items
     for (i=0; i<numentries; i++) {
