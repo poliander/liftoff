@@ -5,8 +5,7 @@
 #include <string>
 #include <memory>
 
-#include <GL/glew.h>
-#include <GL/glext.h>
+#include "quad.hpp"
 
 using namespace std;
 
@@ -37,20 +36,14 @@ struct t_image {
     GLubyte*  data;
 };
 
-class Texture
+class Texture : public Quad
 {
     public:
         Texture(string filename);
         ~Texture();
 
         void bind();
-        void draw();
 
     protected:
-        GLuint vertexArrayObject;
-        GLuint vertexArrayBuffers[2];
-        GLuint texColorBuffer;
-
-        void init();
         bool load(string filename, t_image *image);
 };

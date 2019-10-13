@@ -1,10 +1,10 @@
 #pragma once
 
-#include <GL/glew.h>
+#include "quad.hpp"
 
 using namespace std;
 
-class Framebuffer
+class Framebuffer : public Quad
 {
     public:
         Framebuffer();
@@ -12,14 +12,8 @@ class Framebuffer
 
         void bind();
         void unbind();
-        void draw();
 
     protected:
-        GLuint vertexArrayObject;
-        GLuint vertexArrayBuffers[2];
-        GLuint texColorBuffer;
         GLuint frameBuffer;
         GLint  viewport[4];
-
-        void init();
 };
