@@ -73,11 +73,6 @@ void Framebuffer::unbind()
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 
-void Framebuffer::bindTexture()
-{
-    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-}
-
 void Framebuffer::draw()
 {
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);

@@ -11,7 +11,6 @@ class Framebuffer
         ~Framebuffer();
 
         void bind();
-        void bindTexture();
         void unbind();
         void draw();
 
