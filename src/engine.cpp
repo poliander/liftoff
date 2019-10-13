@@ -257,7 +257,7 @@ bool Engine::init(int argc, char **argv)
  */
 bool Engine::initDisplay()
 {
-    int cfg_multisampling, sdl_mode = SDL_WINDOW_OPENGL;
+    int cfg_multisampling = -1, sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
     char msg[255];
 
     switch (state.config.vid_aspect) {
@@ -281,59 +281,34 @@ bool Engine::initDisplay()
         sdl_mode |= SDL_WINDOW_FULLSCREEN;
     }
 
+//  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+//  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    if (state.vid_multisampling > 0) {
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
-    }
+    window = NULL;
+    context = NULL;
 
-    window = SDL_CreateWindow(
-        "Lift Off: Beyond Glaxium",
-        SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED,
-        state.config.vid_width,
-        state.config.vid_height,
-        sdl_mode
-    );
+    do {
+        state.vid_multisampling = state.vid_multisampling >> 1;
 
-    context = SDL_GL_CreateContext(window);
+        if (state.vid_multisampling > 0) {
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
+        } else {
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+        }
 
-    SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
+        if (context != NULL) {
+            SDL_GL_DeleteContext(context);
+        }
 
-    while (state.vid_multisampling != cfg_multisampling) {
-
-        SDL_GL_DeleteContext(context);
-        SDL_DestroyWindow(window);
-
-        switch (state.vid_multisampling) {
-            case 32:
-                state.vid_multisampling = 4;
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
-                break;
-
-            case 4:
-                state.vid_multisampling = 2;
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
-                break;
-
-            case 2:
-                state.vid_multisampling = 1;
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
-                break;
-
-            case 1:
-                state.vid_multisampling = 0;
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-                break;
+        if (window != NULL) {
+            SDL_DestroyWindow(window);
         }
 
         window = SDL_CreateWindow(
@@ -348,7 +323,7 @@ bool Engine::initDisplay()
         context = SDL_GL_CreateContext(window);
 
         SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
-    }
+    } while (state.vid_multisampling != cfg_multisampling);
 
     if (cfg_multisampling == 0) {
         sprintf(msg, "- multisampling disabled\n");
@@ -373,6 +348,7 @@ bool Engine::initDisplay()
         return false;
     }
 
+    SDL_ShowWindow(window);
     SDL_ShowCursor(0);
 
     glMatrixMode(GL_PROJECTION);
