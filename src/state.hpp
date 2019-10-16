@@ -102,13 +102,6 @@ class State
         int             fps_counter; // frames counter
 
         // input
-        float           mouse_x;
-        float           mouse_y;
-        bool            mouse_moved;
-        bool            mouse_pressed;
-        bool            mouse_released;
-        Uint8           mouse_button;
-        bool            mouse_focus;
         SDL_Joystick*   joystick;
 
         // level

@@ -47,10 +47,9 @@ class Scene
 
         void               drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
         void               drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void               drawMouse();
         void               drawVideoInfos();
         void               drawTitle();
-        void               drawMenu(bool mouse_recheck);
+        void               drawMenu();
         void               drawScene();
         void               drawDisplay();
         void               drawMessages();

@@ -550,42 +550,6 @@ void Engine::handleJoystick()
 }
 
 /*
- * mouse handler
- */
-void Engine::handleMouse()
-{
-    int x, y;
-
-    if (state.config.vid_fullscreen == 0 && state.mouse_focus == false) {
-        return;
-    }
-
-    state.mouse_button = SDL_GetMouseState(&x, &y);
-
-    if (state.mouse_button & SDL_BUTTON(1)) {
-        if (!state.mouse_pressed) {
-            state.mouse_button = SDL_GetMouseState(&x, &y);
-            if (state.mouse_released) {
-                state.mouse_pressed = true;
-            }
-        } else {
-            state.mouse_button = 0;
-        }
-        state.mouse_released = false;
-    } else {
-        state.mouse_pressed = false;
-        state.mouse_released = true;
-        SDL_GetMouseState(&x, &y);
-    }
-
-    if (state.get() == STATE_MENU) {
-        state.mouse_moved = true;
-        state.mouse_x = (-3.1f * state.vid_aspect) + (1 / float(state.config.vid_width)) * x * (6.35f * state.vid_aspect);
-        state.mouse_y = 3.1f + (-1 / float(state.config.vid_height)) * y * 6.35f;
-    }
-}
-
-/*
  * engine shutdown
  */
 void Engine::halt()
@@ -664,8 +628,6 @@ bool Engine::main()
         return ok;
     }
 
-    state.mouse_moved = false;
-
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
@@ -674,20 +636,6 @@ bool Engine::main()
 
             case SDL_KEYDOWN:
                 handleKeyboard();
-                break;
-
-            case SDL_WINDOWEVENT_ENTER:
-                state.mouse_focus = true;
-                break;
-
-            case SDL_WINDOWEVENT_LEAVE:
-                state.mouse_focus = false; 
-                break;
-
-            case SDL_MOUSEMOTION:
-            case SDL_MOUSEBUTTONUP:
-            case SDL_MOUSEBUTTONDOWN:
-                handleMouse();
                 break;
         }
     }

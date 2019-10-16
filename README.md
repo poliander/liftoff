@@ -6,8 +6,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 
 ## Controls
 
-- JOYSTICKS and GAMEPADS are supported
-- MOUSE works intentionally only in menu
+- JOYSTICK or GAMEPAD is supported
 - CURSOR KEYS or W/A/S/D will move your ship
 - CTRL will let your ship fire its little guns
 - F12 toggles frame rate display

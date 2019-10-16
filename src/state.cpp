@@ -50,11 +50,6 @@ State::State()
 
     joystick                = NULL;
 
-    mouse_focus             = true;
-    mouse_moved             = true;
-    mouse_pressed           = false;
-    mouse_released          = true;
-
     tilt_factor             = 0;
     tilt_x                  = 0;
     tilt_y                  = 0;
@@ -166,11 +161,6 @@ bool State::set(int s)
 
             audio.playMusic(0, 1000);
             audio.stopSampleLoop(0);
-
-            SDL_GetMouseState(&x, &y);
-            mouse_x = (-3.1f * vid_aspect) + (1 / float(config.vid_width)) * x * (6.35f * vid_aspect);
-            mouse_y = 3.1f + (-1 / float(config.vid_height)) * y * 6.35f;
-            mouse_moved = true;
             break;
 
         case STATE_QUIT:

@@ -599,7 +599,7 @@ void Scene::drawTitle()
 /*
  * draw menu
  */
-void Scene::drawMenu(bool mouse_recheck)
+void Scene::drawMenu()
 {
     int i, numentries;
     float mx, my, mh, mf, mo;
@@ -649,7 +649,7 @@ void Scene::drawMenu(bool mouse_recheck)
                             state.menu = 2;
                             state.menu_pos = 0;
                             state.menu_selected = false;
-                            drawMenu(false);
+                            drawMenu();
                             return;
                         }
                         break;
@@ -883,41 +883,8 @@ void Scene::drawMenu(bool mouse_recheck)
 
     if (state.menu_selected) {
         state.menu_selected = false;
-        drawMenu(state.mouse_button & SDL_BUTTON(1));
+        drawMenu();
         return;
-    }
-
-    // check mouse position
-    if (state.mouse_moved || (state.mouse_button & SDL_BUTTON(1)) || mouse_recheck) {
-        for (i=0; i<numentries; i++) {
-
-            if (
-                (state.mouse_y <= .285f - (float(i)   * mh * .505f)) &&
-                (state.mouse_y >  .285f - (float(i+1) * mh * .505f)) &&
-                (state.mouse_x > -2.48f) &&
-                (state.mouse_x < -.55f)
-            ) {
-                state.menu_pos = i;
-
-                // mouse pressed?
-                if (state.mouse_pressed && !mouse_recheck) {
-                    state.menu_selected = true;
-                    state.mouse_pressed = false;
-
-                    if (
-                        (state.menu == 1 && state.menu_pos == 2) ||
-                        (state.menu == 2 && state.menu_pos == 2)
-                    ) {
-                        state.audio.playSample(1, 128, 0);
-                    } else {
-                        state.audio.playSample(0, 128, 0);
-                    }
-
-                    drawMenu(true);
-                    return;
-                }
-            }
-        }
     }
 
     if (state.menu_pos >= numentries) {
@@ -985,34 +952,6 @@ void Scene::drawMenu(bool mouse_recheck)
             glPopMatrix();
         }
     }
-}
-
-/*
- * draw mouse cursor
- */
-void Scene::drawMouse()
-{
-    glLoadIdentity();
-
-    state.textures[T_CURSOR]->bind();
-    glColor4f(1, 1, 1, .01f * state.global_alpha);
-
-    glPushMatrix();
-    glTranslatef(state.mouse_x, state.mouse_y, -5.0f);
-    glBegin (GL_QUADS);
-      glTexCoord2f (0, 0);
-      glVertex3f (-.1f, .1f, 0);
-
-      glTexCoord2f (1, 0);
-      glVertex3f (.1f, .1f, 0);
-
-      glTexCoord2f (1, 1);
-      glVertex3f (.1f, -.1f, 0);
-
-      glTexCoord2f (0, 1);
-      glVertex3f (-.1f, -.1f, 0);
-    glEnd();
-    glPopMatrix();
 }
 
 /*
@@ -1566,12 +1505,8 @@ void Scene::draw()
     }
 
     if (state.menu) {
-        drawMenu(false);
+        drawMenu();
         drawTitle();
-
-        if (state.get() == STATE_MENU) {
-            drawMouse();
-        }
     }
 
     if (state.fps_visible) {

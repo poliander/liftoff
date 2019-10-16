@@ -33,5 +33,4 @@ class Engine
 
         bool          handleKeyboard();
         void          handleJoystick();
-        void          handleMouse();
 };
