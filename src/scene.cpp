@@ -49,11 +49,6 @@ void Scene::load()
         string(state.dir_resources).append("/gfx/font.tga")
     )));
 
-    state.log("Loading 'cursor.tga'\n");
-    state.textures.insert(make_pair(T_CURSOR, new Texture(
-        string(state.dir_resources).append("/gfx/cursor.tga")
-    )));
-
     state.log("Loading 'menu_1.tga'\n");
     state.textures.insert(make_pair(T_MENU_1, new Texture(
         string(state.dir_resources).append("/gfx/menu_1.tga")
