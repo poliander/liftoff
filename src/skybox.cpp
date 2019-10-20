@@ -1,4 +1,4 @@
-#include <skybox.hpp>
+#include "skybox.hpp"
 
 Skybox::Skybox() : framebuffer(new Framebuffer())
 {
@@ -32,7 +32,7 @@ Skybox::~Skybox()
 {
 }
 
-void Skybox::move(State &s)
+void Skybox::update(State &s)
 {
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {

@@ -1195,9 +1195,9 @@ void Scene::drawMessages()
 }
 
 /*
- * move game scene
+ * update game scene
  */
-void Scene::moveScene()
+void Scene::updateScene()
 {
     static GLuint nextdebris = state.timer;
 
@@ -1225,7 +1225,7 @@ void Scene::moveScene()
             state.player->checkTarget(state, *e);
         }
 
-        (*e)->move(state);
+        (*e)->update(state);
 
         if ((*e)->isGone()) {
             e = state.entities.erase(e);
@@ -1254,9 +1254,9 @@ void Scene::moveScene()
 }
 
 /*
- * move money/damage messages
+ * update money/damage messages
  */
-void Scene::moveMessages()
+void Scene::updateMessages()
 {
     int i;
 
@@ -1275,13 +1275,13 @@ void Scene::moveMessages()
 }
 
 /*
- * move everything
+ * update everything
  */
-void Scene::move()
+void Scene::update()
 {
     int i;
 
-    skybox->move(state);
+    skybox->update(state);
 
     switch (state.get()) {
         case STATE_MENU:
@@ -1292,14 +1292,14 @@ void Scene::move()
             player->setSpin(0, 0, 3.5f);
             player->setVelocity(0, 0, 0);
             player->setAcceleration(0, 0, 0);
-            player->move(state);
+            player->update(state);
             break;
 
         case STATE_QUIT:
             if (state.menu_title_pos > 0) {
                 state.menu_title_pos -= (100.1f - state.menu_title_pos) * state.timer_adjustment * .15f;
                 state.global_alpha = (int)state.menu_title_pos;
-                player->move(state);
+                player->update(state);
             } else {
                 state.set(STATE_CLOSE);
             }
@@ -1313,7 +1313,7 @@ void Scene::move()
 
             if (state.stars_speed > .3f) {
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
-                player->move(state);
+                player->update(state);
             } else if (state.lvl_loaded) {
                 player->setPos(0, -90.0f, 50.0f);
                 player->setRot(90.0f, 0, 270.0f);
@@ -1335,8 +1335,8 @@ void Scene::move()
                 state.set(STATE_GAME_NEXTLEVEL);
             }
 
-            moveScene();
-            moveMessages();
+            updateScene();
+            updateMessages();
 
             if (state.lvl_pos < 50) {
                 player->setAccelerationZ(17.5f);
@@ -1367,8 +1367,8 @@ void Scene::move()
             break;
 
         case STATE_GAME_NEXTLEVEL:
-            moveScene();
-            moveMessages();
+            updateScene();
+            updateMessages();
 
             if (state.menu_title_pos < 99.85f) {
                 state.menu_title_pos += state.timer_adjustment * .375;
@@ -1399,8 +1399,8 @@ void Scene::move()
             break;
 
         case STATE_GAME_QUIT:
-            moveScene();
-            moveMessages();
+            updateScene();
+            updateMessages();
 
             if (state.menu_title_pos < 99.85f) {
                 if (player->isAlive()) {

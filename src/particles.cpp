@@ -104,7 +104,7 @@ void ParticleEngine::setContinuous(bool c)
     continuous = c;
 }
 
-void ParticleEngine::move(State &s)
+void ParticleEngine::update(State &s)
 {
     if (pemitter == EMITTER_EXPLOSION) {
         for (int i = 0; i < pnum_max; i++) {

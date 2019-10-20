@@ -8,6 +8,6 @@ class Debris : public Entity
         Debris();
         ~Debris();
 
-        void move(State &s);
+        void update(State &s);
         void draw(State &s);
 };

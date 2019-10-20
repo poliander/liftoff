@@ -44,11 +44,11 @@ void Powerup::collide(State &s, shared_ptr<Entity> e)
     }
 }
 
-void Powerup::move(State &s)
+void Powerup::update(State &s)
 {
-    Entity::move(s);
+    Entity::update(s);
 
-    particles->move(s);
+    particles->update(s);
 
     if (e_state == E_STATE_FADING) {
         counter += s.timer_adjustment * .1f;

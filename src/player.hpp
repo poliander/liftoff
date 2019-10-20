@@ -14,7 +14,7 @@ class Player : public Entity
         Player();
         ~Player();
 
-        void            move(State &s);
+        void            update(State &s);
         void            draw(State &s);
         void            shoot(State &s);
         void            collide(State &s, shared_ptr<Entity> e);

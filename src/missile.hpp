@@ -11,11 +11,10 @@ class Missile : public Entity
         Missile();
         ~Missile();
 
-        void         move(State &s);
-        void         draw(State &s);
+        void update(State &s);
+        void draw(State &s);
 
     protected:
-        int          power;
-
-        void         collide(State &s, shared_ptr<Entity> e);
+        int  power;
+        void collide(State &s, shared_ptr<Entity> e);
 };

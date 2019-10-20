@@ -31,7 +31,7 @@ bool Asteroid::damage(State &s, int p)
     return damaged;
 }
 
-void Asteroid::move(State &s)
+void Asteroid::update(State &s)
 {
     p_x += s.timer_adjustment * v_x;
     p_y += s.timer_adjustment * v_y;

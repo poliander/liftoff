@@ -3,9 +3,9 @@
 #include <cmath>
 #include <stdlib.h>
 
-#include <functions.hpp>
-#include <framebuffer.hpp>
-#include <state.hpp>
+#include "functions.hpp"
+#include "framebuffer.hpp"
+#include "state.hpp"
 
 #define SKYBOX_NUM_STARS      3000
 #define SKYBOX_NUM_STARS_WARP 500
@@ -16,8 +16,8 @@ class Skybox
         Skybox();
         ~Skybox();
 
-        void move(State &s);
-        void draw(State &s);
+        void                    update(State &s);
+        void                    draw(State &s);
 
     private:
         float                   stars[SKYBOX_NUM_STARS][4];

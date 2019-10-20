@@ -9,11 +9,10 @@ class Explosion : public Entity
         Explosion(unsigned short int type, float x, float y, float z);
         ~Explosion();
 
-        void            move(State &s);
+        void            update(State &s);
         void            draw(State &s);
 
     private:
         ParticleEngine* particles;
-
         float           timer;
 };

@@ -29,7 +29,9 @@ class Object
         vector<glm::vec3>    normals;
         vector<unsigned int> indices;
 
-        static bool compareIndex(const index_t* a, const index_t* b) { return a->vertex < b->vertex; }
+        static bool          compareIndex(const index_t* a, const index_t* b) {
+            return a->vertex < b->vertex;
+        }
 
     private:
         vector<glm::vec3>    objVertices;
@@ -37,13 +39,12 @@ class Object
         vector<glm::vec3>    objNormals;
         vector<index_t>      objIndices;
 
-        bool load(string filename);
-        void index();
-        unsigned int previousVertexIndex(vector<index_t*> &lookup, index_t* currentIndex);
+        bool                 load(string filename);
+        void                 index();
+        unsigned int         previousVertexIndex(vector<index_t*> &lookup, index_t* currentIndex);
 
-        vector<string> split(string txt, char delim);
-        index_t toIndex(const string& token);
-
-        glm::vec2 toVec2(const string& line);
-        glm::vec3 toVec3(const string& line);
+        vector<string>       split(string txt, char delim);
+        index_t              toIndex(const string& token);
+        glm::vec2            toVec2(const string& line);
+        glm::vec3            toVec3(const string& line);
 };

@@ -154,7 +154,7 @@ void Player::shoot(State &s)
     s.audio.playSample(2, 255, angle);
 }
 
-void Player::move(State &s)
+void Player::update(State &s)
 {
     float deceleration;
 
@@ -266,7 +266,7 @@ void Player::move(State &s)
         jt_l -= .1f * ((jt_l - j_l )+.05f) * s.timer_adjustment;
     }
 
-    particles->move(s);
+    particles->update(s);
 
     // rotate
     r_x += s.timer_adjustment * w_x * .1f;
@@ -502,7 +502,7 @@ void Player::draw(State &s)
         }
 
         // plasma
-        particles->move(s);
+        particles->update(s);
         particles->draw(s, -4.25f, -.75f, .5f, .0f, -90.0f, -5.0f);
         particles->draw(s, -4.25f, .75f, .5f, .0f, -90.0f, 5.0f);
 

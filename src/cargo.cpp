@@ -33,9 +33,9 @@ bool Cargo::damage(State &s, int p)
     return damaged;
 }
 
-void Cargo::move(State &s)
+void Cargo::update(State &s)
 {
-    Entity::move(s);
+    Entity::update(s);
 
     counter += s.timer_adjustment * 0.1f;
 

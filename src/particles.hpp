@@ -38,8 +38,8 @@ class ParticleEngine
         void            setScale(float scale);
         void            setContinuous(bool c);
 
+        void            update(State &s);
         void            draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
-        void            move(State &s);
 
     private:
         particle_t      p[DEFAULT_GFX_PARTICLES];

@@ -10,8 +10,8 @@ class Framebuffer : public Quad
         Framebuffer();
         ~Framebuffer();
 
-        void bind();
-        void unbind();
+        void   bind();
+        void   unbind();
 
     protected:
         GLuint frameBuffer;

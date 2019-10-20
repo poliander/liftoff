@@ -36,7 +36,7 @@ class Scene
         ~Scene();
 
         void               load();
-        void               move();
+        void               update();
         void               draw();
 
     private:
@@ -54,8 +54,8 @@ class Scene
         void               drawDisplay();
         void               drawMessages();
 
-        void               moveScene();
-        void               moveMessages();
+        void               updateScene();
+        void               updateMessages();
 
         bool               loadLevel();
 };

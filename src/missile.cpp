@@ -34,9 +34,9 @@ void Missile::collide(State &s, shared_ptr<Entity> e)
     }
 }
 
-void Missile::move(State &s)
+void Missile::update(State &s)
 {
-    Entity::move(s);
+    Entity::update(s);
 
     c_a = (s.global_alpha * .005f) + ((getPosZ() + 200.0f) * .00002f);
 

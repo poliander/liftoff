@@ -20,11 +20,10 @@ class Shader
         Shader(string vsFilename, string fsFilename);
         ~Shader();
 
-        void bind();
-        void unbind();
-
-        void update(unsigned short u, glm::mat4 m);
-        void update(unsigned short u, glm::vec4 v);
+        void   bind();
+        void   unbind();
+        void   update(unsigned short u, glm::mat4 m);
+        void   update(unsigned short u, glm::vec4 v);
 
     private:
         GLuint program;

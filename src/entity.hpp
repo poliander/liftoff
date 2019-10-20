@@ -80,9 +80,8 @@ class Entity
         virtual void       collide(State &s, shared_ptr<Entity> e);
         virtual void       shoot(State &s);
 
-        virtual void       move(State &s);
+        virtual void       update(State &s);
         virtual void       draw(State &s) = 0;
-
         void               drawCrosshair(State &s, shared_ptr<Entity> e);
 
         void               resetTarget();

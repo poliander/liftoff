@@ -27,13 +27,13 @@ class Model
         Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s);
         ~Model();
 
-        void draw(glm::mat4 mvp, glm::vec4 color);
+        void                draw(glm::mat4 mvp, glm::vec4 color);
 
     protected:
         shared_ptr<Object>  object;
         shared_ptr<Shader>  shader;
         shared_ptr<Texture> texture;
 
-        GLuint vertexArrayObject;
-        GLuint vertexArrayBuffers[4];
+        GLuint              vertexArrayObject;
+        GLuint              vertexArrayBuffers[4];
 };

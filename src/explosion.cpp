@@ -48,11 +48,11 @@ Explosion::~Explosion()
     delete particles;
 }
 
-void Explosion::move(State &s)
+void Explosion::update(State &s)
 {
-    Entity::move(s);
+    Entity::update(s);
 
-    particles->move(s);
+    particles->update(s);
 
     timer -= s.timer_adjustment * 10.0f;
 

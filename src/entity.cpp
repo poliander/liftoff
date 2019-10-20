@@ -325,7 +325,7 @@ bool Entity::damage(State &s, int p)
     return false;
 }
 
-void Entity::move(State &s)
+void Entity::update(State &s)
 {
     p_x += s.timer_adjustment * v_x;
     p_y += s.timer_adjustment * v_y;

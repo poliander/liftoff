@@ -11,6 +11,6 @@ class Asteroid : public Entity
 
         bool damage(State &s, int p);
 
-        void move(State &s);
+        void update(State &s);
         void draw(State &s);
 };

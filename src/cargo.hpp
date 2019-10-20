@@ -10,10 +10,9 @@ class Cargo : public Entity
         Cargo();
         ~Cargo();
 
-        bool damage(State &s, int p);
-
-        void move(State &s);
-        void draw(State &s);
+        bool  damage(State &s, int p);
+        void  update(State &s);
+        void  draw(State &s);
 
     private:
         float counter = 0;

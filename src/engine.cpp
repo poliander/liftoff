@@ -644,7 +644,7 @@ bool Engine::main()
         handleJoystick();
     }
 
-    scene->move();
+    scene->update();
     scene->draw();
 
     SDL_GL_SwapWindow(window);

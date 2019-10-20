@@ -81,66 +81,66 @@ class State
         Message                     msg[E_MAX_MESSAGES];
 
         // game menu
-        int             menu;
-        int             menu_pos;
-        float           menu_title_pos;
-        bool            menu_selected;
+        int                         menu;
+        int                         menu_pos;
+        float                       menu_title_pos;
+        bool                        menu_selected;
 
         // stars
-        float           stars_speed;
-        int             stars_rotation;
-        float           stars_rotation_pos;
-        float           stars_rotation_speed;
-        bool            stars_warp;
+        float                       stars_speed;
+        int                         stars_rotation;
+        float                       stars_rotation_pos;
+        float                       stars_rotation_speed;
+        bool                        stars_warp;
 
         // frames per second
-        float           fps;         // calculated fps rate
-        Uint32          fps_timer;   // measuring timer
-        Uint32          fps_timer_l; // previous frame measuring time
-        bool            fps_visible; // toggle display
-        bool            fps_ready;   // measuring valid
-        int             fps_counter; // frames counter
+        float                       fps;         // calculated fps rate
+        Uint32                      fps_timer;   // measuring timer
+        Uint32                      fps_timer_l; // previous frame measuring time
+        bool                        fps_visible; // toggle display
+        bool                        fps_ready;   // measuring valid
+        int                         fps_counter; // frames counter
 
         // input
-        SDL_Joystick*   joystick;
+        SDL_Joystick*               joystick;
 
         // level
-        unsigned short  lvl_id;
-        bool            lvl_loaded;
-        char            lvl_music[32];
-        float           lvl_pos;
-        int             lvl_length;
-        int             lvl_entities;
+        unsigned short              lvl_id;
+        bool                        lvl_loaded;
+        char                        lvl_music[32];
+        float                       lvl_pos;
+        int                         lvl_length;
+        int                         lvl_entities;
 
         // chase cam
-        float           cam_x;
-        float           cam_y;
-        float           cam_y_offset;
-        float           cam_speed;
+        float                       cam_x;
+        float                       cam_y;
+        float                       cam_y_offset;
+        float                       cam_speed;
 
         // camera tilt
-        float           tilt_x;
-        float           tilt_y;
-        float           tilt_dx;
-        float           tilt_dy;
-        float           tilt_factor;
+        float                       tilt_x;
+        float                       tilt_y;
+        float                       tilt_dx;
+        float                       tilt_dy;
+        float                       tilt_factor;
 
         // hud position
-        float           hud_x;
-        float           hud_y;
+        float                       hud_x;
+        float                       hud_y;
 
         // add message
-        void            addMessage(int value, unsigned short type);
+        void                        addMessage(int value, unsigned short type);
 
         // view related
-        void            tilt(float t);
+        void                        tilt(float t);
 
         // state
-        bool            set(int s);
-        int             get();
+        bool                        set(int s);
+        int                         get();
 
-        void            log(const char *msg);
+        void                        log(const char *msg);
 
     private:
-        int             id;
+        int                         id;
 };

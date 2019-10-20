@@ -27,9 +27,9 @@ Debris::~Debris()
 {
 }
 
-void Debris::move(State &s)
+void Debris::update(State &s)
 {
-    Entity::move(s);
+    Entity::update(s);
 
     if (p_z > 0) {
         e_state = E_STATE_GONE;
