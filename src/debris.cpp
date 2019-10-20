@@ -41,8 +41,6 @@ void Debris::draw(State &s)
     float a = float(s.global_alpha) * .01f;
     float scale = (10000.0f + p_z) * .0001f;
 
-    glColor4f(c_r, c_g, c_b, c_a * a);
-
     s.models[e_obj]->draw(s.view.transform(
         E_RELATIVE_MOVEMENT * (p_x - s.cam_x),
         E_RELATIVE_MOVEMENT * (p_y - s.cam_y),
@@ -55,5 +53,5 @@ void Debris::draw(State &s)
         s_x * scale,
         s_y * scale,
         s_z * scale
-    ), glm::vec4(c_r, c_g, c_b, c_a));
+    ), glm::vec4(c_r * a, c_g * a, c_b * a, c_a));
 }

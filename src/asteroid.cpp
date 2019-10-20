@@ -83,5 +83,5 @@ void Asteroid::draw(State &s)
         s_x * scale,
         s_y * scale,
         s_z * scale
-    ), glm::vec4(c_r, c_g, c_b, c_a));
+    ), glm::vec4(c_r * a, c_g * a, c_b * a, c_a));
 }
