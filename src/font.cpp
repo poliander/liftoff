@@ -1,6 +1,8 @@
 #include "font.hpp"
 
-Font::Font(string name)
+Font::Font(shared_ptr<Texture> t, shared_ptr<GlyphMap> m) :
+    texture(t),
+    map(m)
 {
 }
 

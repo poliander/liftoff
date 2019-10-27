@@ -17,7 +17,7 @@ enum UNIFORMS
 class Shader
 {
     public:
-        Shader(string vsFilename, string fsFilename);
+        Shader(const string vsFilename, const string fsFilename);
         ~Shader();
 
         void   bind();

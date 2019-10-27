@@ -28,11 +28,6 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio.sample[1]);
         Mix_FreeChunk(state.audio.sample[0]);
     }
-
-    state.textures.clear();
-    state.shaders.clear();
-    state.models.clear();
-    state.fonts.clear();
 }
 
 /*
@@ -115,13 +110,6 @@ void Scene::load()
         string(state.dir_resources).append("/textures/glow_1.tga")
     )));
 
-    // fonts
-
-    state.log("Loading font 'zekton'\n");
-    state.fonts.insert(make_pair(F_ZEKTON, new Font(
-        string(state.dir_resources).append("/fonts/zekton")
-    )));
-
     // shaders
 
     state.log("Loading shader 'texture_1'\n");
@@ -134,6 +122,14 @@ void Scene::load()
     state.shaders.insert(make_pair(S_BASIC_1, new Shader(
         string(state.dir_resources).append("/shaders/basic_1.glvs"),
         string(state.dir_resources).append("/shaders/basic_1.glfs")
+    )));
+
+    // fonts
+
+    state.log("Loading font 'zekton'\n");
+    state.fonts.insert(make_pair(F_ZEKTON, new Font(
+        make_shared<Texture>(string(state.dir_resources).append("/fonts/zekton.tga")),
+        make_shared<GlyphMap>(string(state.dir_resources).append("/fonts/zekton.map"))
     )));
 
     // models

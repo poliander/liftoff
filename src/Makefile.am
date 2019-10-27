@@ -10,6 +10,7 @@ __top_builddir__liftoff_SOURCES = \
     shader.cpp \
     quad.cpp \
     framebuffer.cpp \
+    glyphmap.cpp \
     font.cpp \
     texture.cpp \
     model.cpp \

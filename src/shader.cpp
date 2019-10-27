@@ -1,6 +1,6 @@
 #include "shader.hpp"
 
-Shader::Shader(string vsFilename, string fsFilename)
+Shader::Shader(const string vsFilename, const string fsFilename)
 {
     GLint success;
     GLchar error[1024];
