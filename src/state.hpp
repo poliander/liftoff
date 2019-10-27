@@ -15,6 +15,7 @@
 #include "audio.hpp"
 #include "configuration.hpp"
 #include "definitions.hpp"
+#include "font.hpp"
 #include "model.hpp"
 #include "message.hpp"
 #include "shader.hpp"
@@ -39,8 +40,9 @@ class State
         map<unsigned int, Texture*> textures;
         map<unsigned int, Shader*>  shaders;
         map<unsigned int, Model*>   models;
+        map<unsigned int, Font*>    fonts;
 
-        // scenery components
+        // scenery
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
 

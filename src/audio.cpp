@@ -20,7 +20,7 @@ void Audio::init(char *data_dir, int vol_sfx, int vol_music, int mix_freq)
     volume_sfx = vol_sfx;
     volume_music = vol_music;
     mixer_frequency = mix_freq;
-    sprintf(resource_dir, "%s/sfx", data_dir);
+    sprintf(resource_dir, "%s/sound", data_dir);
     Mix_AllocateChannels(32);
 }
 

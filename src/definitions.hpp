@@ -64,6 +64,9 @@
 #define T_JET_EXHAUST           14
 #define T_GLOW                  15
 
+// fonts
+#define F_ZEKTON                0
+
 // shaders
 #define S_TEXTURE_1             0
 #define S_BASIC_1               1

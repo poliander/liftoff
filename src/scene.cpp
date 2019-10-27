@@ -28,6 +28,11 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio.sample[1]);
         Mix_FreeChunk(state.audio.sample[0]);
     }
+
+    state.textures.clear();
+    state.shaders.clear();
+    state.models.clear();
+    state.fonts.clear();
 }
 
 /*
@@ -35,126 +40,129 @@ Scene::~Scene()
  */
 void Scene::load()
 {
-    state.textures.clear();
-    state.shaders.clear();
-    state.models.clear();
-
     state.log("Loading 'title.tga'\n");
     state.textures.insert(make_pair(T_TITLE, new Texture(
-        string(state.dir_resources).append("/gfx/title.tga")
+        string(state.dir_resources).append("/textures/title.tga")
     )));
 
     state.log("Loading 'font.tga'\n");
     state.textures.insert(make_pair(T_FONT, new Texture(
-        string(state.dir_resources).append("/gfx/font.tga")
+        string(state.dir_resources).append("/textures/font.tga")
     )));
 
     state.log("Loading 'menu_1.tga'\n");
     state.textures.insert(make_pair(T_MENU_1, new Texture(
-        string(state.dir_resources).append("/gfx/menu_1.tga")
+        string(state.dir_resources).append("/textures/menu_1.tga")
     )));
 
     state.log("Loading 'menu_2.tga'\n");
     state.textures.insert(make_pair(T_MENU_2, new Texture(
-        string(state.dir_resources).append("/gfx/menu_2.tga")
+        string(state.dir_resources).append("/textures/menu_2.tga")
     )));
 
     state.log("Loading 'hud_1.tga'\n");
     state.textures.insert(make_pair(T_HUD_1, new Texture(
-        string(state.dir_resources).append("/gfx/hud_1.tga")
+        string(state.dir_resources).append("/textures/hud_1.tga")
     )));
 
     state.log("Loading 'hud_2.tga'\n");
     state.textures.insert(make_pair(T_HUD_2, new Texture(
-        string(state.dir_resources).append("/gfx/hud_2.tga")
+        string(state.dir_resources).append("/textures/hud_2.tga")
     )));
 
     state.log("Loading 'hud_3.tga'\n");
     state.textures.insert(make_pair(T_HUD_3, new Texture(
-        string(state.dir_resources).append("/gfx/hud_3.tga")
+        string(state.dir_resources).append("/textures/hud_3.tga")
     )));
 
     state.log("Loading 'hud_4.tga'\n");
     state.textures.insert(make_pair(T_HUD_4, new Texture(
-        string(state.dir_resources).append("/gfx/hud_4.tga")
+        string(state.dir_resources).append("/textures/hud_4.tga")
     )));
 
     state.log("Loading 'star.tga'\n");
     state.textures.insert(make_pair(T_STAR, new Texture(
-        string(state.dir_resources).append("/gfx/star.tga")
+        string(state.dir_resources).append("/textures/star.tga")
     )));
 
     state.log("Loading 'missile_1.tga'\n");
     state.textures.insert(make_pair(T_MISSILE_1, new Texture(
-        string(state.dir_resources).append("/gfx/missile_1.tga")
+        string(state.dir_resources).append("/textures/missile_1.tga")
     )));
 
     state.log("Loading 'explosion_1.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_1, new Texture(
-        string(state.dir_resources).append("/gfx/explosion_1.tga")
+        string(state.dir_resources).append("/textures/explosion_1.tga")
     )));
 
     state.log("Loading 'explosion_2.tga'\n");
     state.textures.insert(make_pair(T_EXPLOSION_2, new Texture(
-        string(state.dir_resources).append("/gfx/explosion_2.tga")
+        string(state.dir_resources).append("/textures/explosion_2.tga")
     )));
 
     state.log("Loading 'jet_exhaust.tga'\n");
     state.textures.insert(make_pair(T_JET_EXHAUST, new Texture(
-        string(state.dir_resources).append("/gfx/jet_exhaust.tga")
+        string(state.dir_resources).append("/textures/jet_exhaust.tga")
     )));
 
     state.log("Loading 'background_1.tga'\n");
     state.textures.insert(make_pair(T_BACKGROUND_1, new Texture(
-        string(state.dir_resources).append("/gfx/background_1.tga")
+        string(state.dir_resources).append("/textures/background_1.tga")
     )));
 
     state.log("Loading 'glow_1.tga'\n");
     state.textures.insert(make_pair(T_GLOW, new Texture(
-        string(state.dir_resources).append("/gfx/glow_1.tga")
+        string(state.dir_resources).append("/textures/glow_1.tga")
+    )));
+
+    // fonts
+
+    state.log("Loading font 'zekton'\n");
+    state.fonts.insert(make_pair(F_ZEKTON, new Font(
+        string(state.dir_resources).append("/fonts/zekton")
     )));
 
     // shaders
 
     state.log("Loading shader 'texture_1'\n");
     state.shaders.insert(make_pair(S_TEXTURE_1, new Shader(
-        string(state.dir_resources).append("/gls/texture_1.glvs"),
-        string(state.dir_resources).append("/gls/texture_1.glfs")
+        string(state.dir_resources).append("/shaders/texture_1.glvs"),
+        string(state.dir_resources).append("/shaders/texture_1.glfs")
     )));
 
     state.log("Loading shader 'basic_1'\n");
     state.shaders.insert(make_pair(S_BASIC_1, new Shader(
-        string(state.dir_resources).append("/gls/basic_1.glvs"),
-        string(state.dir_resources).append("/gls/basic_1.glfs")
+        string(state.dir_resources).append("/shaders/basic_1.glvs"),
+        string(state.dir_resources).append("/shaders/basic_1.glfs")
     )));
 
     // models
 
     state.log("Loading model 'ship_1'\n");
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
-        make_shared<Object>(string(state.dir_resources).append("/obj/ship_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/ship_1.tga")),
+        make_shared<Object>(string(state.dir_resources).append("/models/ship_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/models/ship_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
-        make_shared<Object>(string(state.dir_resources).append("/obj/asteroid_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/asteroid_1.tga")),
+        make_shared<Object>(string(state.dir_resources).append("/models/asteroid_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/models/asteroid_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
-        make_shared<Object>(string(state.dir_resources).append("/obj/debris_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/debris_1.tga")),
+        make_shared<Object>(string(state.dir_resources).append("/models/debris_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/models/debris_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
-        make_shared<Object>(string(state.dir_resources).append("/obj/cargo_1.obj")),
-        make_shared<Texture>(string(state.dir_resources).append("/gfx/cargo_1.tga")),
+        make_shared<Object>(string(state.dir_resources).append("/models/cargo_1.obj")),
+        make_shared<Texture>(string(state.dir_resources).append("/models/cargo_1.tga")),
         make_shared<Shader>(*state.shaders[S_BASIC_1])
     )));
 
@@ -198,7 +206,7 @@ bool Scene::loadLevel()
     state.entities.clear();
     state.entities.push_back(player);
 
-    sprintf(fname, "%s/lvl/mission_%d.dat", state.dir_resources, state.lvl_id);
+    sprintf(fname, "%s/levels/mission_%d.dat", state.dir_resources, state.lvl_id);
     fp = fopen(fname, "r");
 
     if (fp == NULL) {
@@ -389,7 +397,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
                 y1 = .59f;
             } else if (letter >=97) {
                 // "a" .. "z"
-                y1 = .335f;
+                y1 = .3f;
             } else {
                 // "A" .. "Z"
                 y1 = .004f;
@@ -440,7 +448,7 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
                 case 88:  x1 = 0.870f; w = 0.0380f; break;            // X
                 case 89:  x1 = 0.910f; w = 0.0420f; break;            // Y
                 case 90:  x1 = 0.954f; w = 0.0376f; break;            // Z
-                case 120: x1 = 0.738f; w = 0.0295f; break;            // x
+                case 120: x1 = 0.697f; w = 0.0310f; break;            // x
             }
 
             if ((lastletter == 84) && (letter == 65)) {
@@ -518,7 +526,7 @@ void Scene::drawVideoInfos()
     // MSAA
 
     if (state.vid_multisampling > 0) {
-        sprintf(txt, "MSAA: %dX", int(state.vid_multisampling));
+        sprintf(txt, "MSAA: %dx", int(state.vid_multisampling));
     } else {
         sprintf(txt, "MSAA: OFF");
     }
@@ -716,7 +724,7 @@ void Scene::drawMenu()
             mf = 70;
             mo = .32f;
 
-            sprintf(mtxt[0], "VIDEO MODE:\n     %dX%d",
+            sprintf(mtxt[0], "VIDEO MODE:\n     %dx%d",
               state.vid_cap_modes[state.vid_mode].w,
               state.vid_cap_modes[state.vid_mode].h);
 

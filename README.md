@@ -47,6 +47,10 @@ Write debug information to "debug.log" (Windows only)
 
 Disable multisampling
 
+## External resources used
+
+Font "Zekton" from Typodermic Fonts Inc. (c) 2000 Ray Larabie
+
 ## License
 
 [GNU GPLv3](https://github.com/poliander/liftoff/blob/master/LICENSE)
