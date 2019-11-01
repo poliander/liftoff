@@ -534,7 +534,7 @@ void Scene::drawVideoInfos()
     }
 
     //drawTextA(txt, -.45f, .05f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-    state.fonts[F_ZEKTON]->draw(txt, -.45f, .05f, -10.0f, 1, .6f, .6f, .6f, 1.0f);
+    state.fonts[F_ZEKTON]->draw(txt, -.45f, .05f, 1, .6f, .6f, .6f, 1.0f);
 }
 
 /*

@@ -52,6 +52,10 @@ Disable multisampling
 
 Font "Zekton" from Typodermic Fonts Inc. (c) 2000 Ray Larabie
 
+### Helpful links
+
+[LearnOpenGL - Text Rendering](https://learnopengl.com/In-Practice/Text-Rendering)
+
 ## License
 
 [GNU GPLv3](https://github.com/poliander/liftoff/blob/master/LICENSE)

@@ -1,8 +1,55 @@
 #include "font.hpp"
-#include "state.hpp"
 
-Font::Font(const string &filename, shared_ptr<Shader> s) : shader(s)
+Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
 {
+    FT_Library ft;
+    FT_Face face;
+
+    FT_Init_FreeType(&ft);
+    FT_New_Face(ft, filename.c_str(), 0, &face);
+    FT_Set_Pixel_Sizes(face, 0, 64);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    for (GLubyte c = 0; c < 128; c++) {
+        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+            continue;
+        }
+
+        GLuint texture;
+
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_RED,
+            face->glyph->bitmap.width,
+            face->glyph->bitmap.rows,
+            0,
+            GL_RED,
+            GL_UNSIGNED_BYTE,
+            face->glyph->bitmap.buffer
+        );
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        Glyph glyph = {
+            texture, 
+            glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+            glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+            face->glyph->advance.x
+        };
+
+        glyphs.insert(std::pair<GLchar, Glyph>(c, glyph));
+    }
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(ft);
+
     glGenVertexArrays(1, &vertexArray);
     glGenBuffers(1, &vertexArrayBuffer);
     glBindVertexArray(vertexArray);
@@ -18,7 +65,7 @@ Font::~Font()
 {
 }
 
-void Font::draw(const string& txt, float x, float y, float z, float s, float r, float g, float b, float a)
+void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a)
 {
     shader->bind();
     shader->update(UNI_COLOR, glm::vec4(r, g, b, a));
