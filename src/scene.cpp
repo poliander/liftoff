@@ -1115,7 +1115,20 @@ void Scene::drawDisplay()
     s = int(50.0f / ((float(player->getLifeMaximum() + 1) / float(player->getLife() + 1))));
 
     for (i = 0; i < s; i++) {
-        drawText("I", .32f + .077f * i, -.15f, 0, 80, 1.0f, .4f, .2f, .85f * (1.0f - (.02f * ((s + 1) - i))) * alpha);
+        state.fonts[F_ZEKTON]->draw(
+            "I",
+
+            213.0f - ((state.hud_x - state.tilt_x * .01f) * -18.0f) + 1.45f * i,
+            134.5f + ((state.hud_y - state.tilt_y * .01f) *  24.5f),
+
+            0.09f,
+
+            1.0f,
+            0.4f,
+            0.2f,
+
+            0.85f * (1.0f - (.02f * ((s + 1) - i))) * alpha
+        );
     }
 
     // energy symbol
@@ -1143,7 +1156,20 @@ void Scene::drawDisplay()
     e = int(50.0f / (((float)player->getEnergyMaximum() + 1) / (float(player->getEnergy() + 1))));
 
     for (i = 0; i < e; i++) {
-        drawText("I", .32f + .077f * i, -.11f, 0, 80, .2f, .65f, 1.0f, .85f * (1.0f - (.02f * ((e + 1) - i))) * alpha);
+        state.fonts[F_ZEKTON]->draw(
+            "I",
+
+            213.0f - ((state.hud_x - state.tilt_x * .01f) * -18.0f) + 1.45f * i,
+            126.0f + ((state.hud_y - state.tilt_y * .01f) *  24.5f),
+
+            0.09f,
+
+            0.2f,
+            0.65f,
+            1.0f,
+
+            0.85f * (1.0f - (.02f * ((s + 1) - i))) * alpha
+        );
     }
 
     glPopMatrix();
