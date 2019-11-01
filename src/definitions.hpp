@@ -49,20 +49,19 @@
 // textures
 #define T_LOGO                  0
 #define T_TITLE                 1
-#define T_FONT                  2
-#define T_MENU_1                3
-#define T_MENU_2                4
-#define T_HUD_1                 5
-#define T_HUD_2                 6
-#define T_HUD_3                 7
-#define T_HUD_4                 8
-#define T_STAR                  9
-#define T_MISSILE_1             10
-#define T_EXPLOSION_1           11
-#define T_EXPLOSION_2           12
-#define T_BACKGROUND_1          13
-#define T_JET_EXHAUST           14
-#define T_GLOW                  15
+#define T_MENU_1                2
+#define T_MENU_2                3
+#define T_HUD_1                 4
+#define T_HUD_2                 5
+#define T_HUD_3                 6
+#define T_HUD_4                 7
+#define T_STAR                  8
+#define T_MISSILE_1             9
+#define T_EXPLOSION_1           10
+#define T_EXPLOSION_2           11
+#define T_BACKGROUND_1          12
+#define T_JET_EXHAUST           13
+#define T_GLOW                  14
 
 // fonts
 #define F_ZEKTON                0

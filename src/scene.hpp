@@ -45,8 +45,6 @@ class Scene
         shared_ptr<Player> player;
         shared_ptr<Skybox> skybox;
 
-        void               drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
-        void               drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a);
         void               drawVideoInfos();
         void               drawTitle();
         void               drawMenu();

@@ -40,11 +40,6 @@ void Scene::load()
         string(state.dir_resources).append("/textures/title.tga")
     )));
 
-    state.log("Loading 'font.tga'\n");
-    state.textures.insert(make_pair(T_FONT, new Texture(
-        string(state.dir_resources).append("/textures/font.tga")
-    )));
-
     state.log("Loading 'menu_1.tga'\n");
     state.textures.insert(make_pair(T_MENU_1, new Texture(
         string(state.dir_resources).append("/textures/menu_1.tga")
@@ -364,124 +359,6 @@ bool Scene::loadLevel()
     }
     
     return true;
-}
-
-/*
- * draw text
- */
-void Scene::drawText(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
-{
-    int strLenth = strlen(text);
-    char letter, lastletter = 0;
-    GLfloat x1 = .0f, w, y1, y2, wy;
-
-    glColor4f(r, g, b, a);
-    state.textures[T_FONT]->bind();
-
-    glPushMatrix();
-    glTranslatef(x, y, z);
-
-    for (int i=0; i<strLenth; i++) {
-        letter = text[i];
-        w = 0;
-        wy = 0;
-
-        if (letter == 10) {
-            glPopMatrix();
-            glPushMatrix();
-            y-=(size/280)*1.05f;
-            glTranslatef(x, y, z);
-        } else if (letter == 32) {
-            glTranslatef(size/1000, 0, 0);
-        } else {
-            if (letter <= 58) {
-                // "0" .. "9", ":", "/", "+"
-                y1 = .59f;
-            } else if (letter >=97) {
-                // "a" .. "z"
-                y1 = .3f;
-            } else {
-                // "A" .. "Z"
-                y1 = .004f;
-            }
-            y2 = y1 + .25f;
-
-            switch(letter) {
-                case 34:  x1 = 0.435f; w = 0.0170f; break;            // "
-                case 36:  x1 = 0.600f; w = 0.0285f; break;            // $
-                case 43:  x1 = 0.558f; w = 0.0200f; wy = .03f; break; // +
-                case 45:  x1 = 0.509f; w = 0.0161f; wy = .03f; break; // -
-                case 46:  x1 = 0.480f; w = 0.0120f; break;            // .
-                case 47:  x1 = 0.384f; w = 0.0174f; break;            // /
-                case 48:  x1 = 0.300f; w = 0.0320f; break;            // 0
-                case 49:  x1 = 0.008f; w = 0.0130f; break;            // 1
-                case 50:  x1 = 0.026f; w = 0.0274f; break;            // 2
-                case 51:  x1 = 0.062f; w = 0.0255f; break;            // 3
-                case 52:  x1 = 0.093f; w = 0.0320f; break;            // 4
-                case 53:  x1 = 0.126f; w = 0.0286f; break;            // 5
-                case 54:  x1 = 0.159f; w = 0.0305f; break;            // 6
-                case 55:  x1 = 0.196f; w = 0.0230f; break;            // 7
-                case 56:  x1 = 0.226f; w = 0.0320f; break;            // 8
-                case 57:  x1 = 0.264f; w = 0.0310f; break;            // 9
-                case 58:  x1 = 0.495f; w = 0.0120f; wy = .06f; break; // :
-                case 65:  x1 = 0.006f; w = 0.0415f; break;            // A
-                case 66:  x1 = 0.050f; w = 0.0310f; break;            // B
-                case 67:  x1 = 0.086f; w = 0.0285f; break;            // C
-                case 68:  x1 = 0.121f; w = 0.0370f; break;            // D
-                case 69:  x1 = 0.163f; w = 0.0278f; break;            // E
-                case 70:  x1 = 0.195f; w = 0.0266f; break;            // F
-                case 71:  x1 = 0.230f; w = 0.0335f; break;            // G
-                case 72:  x1 = 0.270f; w = 0.0342f; break;            // H
-                case 73:  x1 = 0.308f; w = 0.0066f; break;            // I
-                case 74:  x1 = 0.320f; w = 0.0200f; break;            // J
-                case 75:  x1 = 0.340f; w = 0.0325f; break;            // K
-                case 76:  x1 = 0.382f; w = 0.0274f; break;            // L
-                case 77:  x1 = 0.413f; w = 0.0418f; break;            // M
-                case 78:  x1 = 0.460f; w = 0.0353f; break;            // N
-                case 79:  x1 = 0.500f; w = 0.0362f; break;            // O
-                case 80:  x1 = 0.540f; w = 0.0302f; break;            // P
-                case 81:  x1 = 0.576f; w = 0.0364f; break;            // Q
-                case 82:  x1 = 0.617f; w = 0.0316f; break;            // R
-                case 83:  x1 = 0.654f; w = 0.0364f; break;            // S
-                case 84:  x1 = 0.694f; w = 0.0322f; break;            // T
-                case 85:  x1 = 0.730f; w = 0.0356f; break;            // U
-                case 86:  x1 = 0.768f; w = 0.0410f; break;            // V
-                case 87:  x1 = 0.812f; w = 0.0555f; break;            // W
-                case 88:  x1 = 0.870f; w = 0.0380f; break;            // X
-                case 89:  x1 = 0.910f; w = 0.0420f; break;            // Y
-                case 90:  x1 = 0.954f; w = 0.0376f; break;            // Z
-                case 120: x1 = 0.697f; w = 0.0310f; break;            // x
-            }
-
-            if ((lastletter == 84) && (letter == 65)) {
-                glTranslatef(-(size/1500), 0, 0);
-            } else if ((lastletter == 65) && (letter == 84)) {
-                glTranslatef(-(size/1500), 0, 0);
-            } else if ((lastletter == 47) && (letter == 65)) {
-                glTranslatef(-(size/1500), 0, 0);
-            }
-
-            glBegin(GL_QUADS);
-              glTexCoord2f(x1, y2+wy);
-              glVertex3f(0, 0, 0);
-
-              glTexCoord2f(x1+w, y2+wy);
-              glVertex3f((size/14)*w, 0, 0);
-
-              glTexCoord2f(x1+w, y1+wy);
-              glVertex3f((size/14)*w, size/280, 0);
-
-              glTexCoord2f(x1, y1+wy);
-              glVertex3f(0, size/280, 0);
-            glEnd();
-
-            glTranslatef((size/14)*(w+.0065f), 0, 0) ;
-        }
-
-        lastletter = letter;
-     }
-
-     glPopMatrix();
 }
 
 /*
@@ -1220,14 +1097,15 @@ void Scene::drawMessages()
 
         x += state.msg[i].direction_x * 1.0f;
         y = -1.5f + state.msg[i].direction_y * (state.msg[i].counter * .0265f);
-        z = state.msg[i].counter * .01f;
 
-        drawText(
+        state.fonts[F_ZEKTON]->draw(
             state.msg[i].text,
-            x, y, z,
-            75.0f + state.msg[i].counter * .75f,
-            r, g, b,
-            1.0f - state.msg[i].counter * .01f
+
+            200.0f + x * 13.5f,
+            150.0f + y * 32.0f,
+
+            0.1f,
+            r, g, b, 1.0f - state.msg[i].counter * .01f
         );
     }
 
