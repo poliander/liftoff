@@ -43,7 +43,6 @@ State::State()
     engine_restart          = false;
 
     fps_visible             = false;
-    fps_ready               = false;
     fps_counter             = 0;
     fps_timer               = 0;
     fps_timer_l             = 0;

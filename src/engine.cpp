@@ -415,7 +415,6 @@ bool Engine::handleKeyboard()
                 state.fps_counter = 0;
                 state.fps_timer = 0;
                 state.fps_timer_l = 0;
-                state.fps_ready = false;
             }
         } else nextrelease = state.timer + 100;
     }
@@ -607,6 +606,19 @@ bool Engine::main()
     state.timer = ntimer;
     otimer = ntimer;
 
+    if (state.fps_timer_l > 0) {
+        state.fps_timer += state.timer - state.fps_timer_l;
+
+        if (state.fps_timer > 1000) {
+            state.fps = float(state.fps_counter) / (float(state.fps_timer) * .001f);
+            state.fps_counter = 0;
+            state.fps_timer = 0;
+        }
+    }
+
+    state.fps_counter++;
+    state.fps_timer_l = state.timer;
+
     // complete restart of game engine
     if (state.engine_restart) {
         state.log("Restarting game engine.\n");
@@ -622,7 +634,6 @@ bool Engine::main()
 
         state.fps_timer = 0;
         state.fps_timer_l = 0;
-        state.fps_ready = false;
         state.fps_counter = 0;
 
         return ok;

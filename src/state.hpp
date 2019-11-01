@@ -101,7 +101,6 @@ class State
         Uint32                      fps_timer;   // measuring timer
         Uint32                      fps_timer_l; // previous frame measuring time
         bool                        fps_visible; // toggle display
-        bool                        fps_ready;   // measuring valid
         int                         fps_counter; // frames counter
 
         // input

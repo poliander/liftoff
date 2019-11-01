@@ -7,7 +7,7 @@ Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
 
     FT_Init_FreeType(&ft);
     FT_New_Face(ft, filename.c_str(), 0, &face);
-    FT_Set_Pixel_Sizes(face, 0, 64);
+    FT_Set_Pixel_Sizes(face, 0, 128);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -20,6 +20,7 @@ Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
 
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
+
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
@@ -32,10 +33,12 @@ Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
             face->glyph->bitmap.buffer
         );
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
         Glyph glyph = {
             texture, 
@@ -68,37 +71,45 @@ Font::~Font()
 void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a)
 {
     shader->bind();
-    shader->update(UNI_COLOR, glm::vec4(r, g, b, a));
+
+    shader->update(UNI_TEXT_COLOR, glm::vec4(r, g, b, a));
+    shader->update(UNI_MVP, View::transformReal2D(x, y, s, s));
 
     glBindVertexArray(vertexArray);
 
-    for (char const &c: txt) {
-/*
-        auto i = glyphs.find(c);
+    string::const_iterator c;
 
-        if (i != glyphs.end()) {
-            shader->update(UNI_MVP, View::transform2D(x, y, 0, 0, s, s));
+    for (c = txt.begin(); c != txt.end(); c++) {
+        Glyph g = glyphs[*c];
 
-            GLfloat vertices[6][4] = {
-                { 0.0, 0.0, tx,     ty + 0.25f },
-                { 0.0, 1.0, tx,     ty },
-                { 1.0, 1.0, tx + w, ty },
+        GLfloat xp = x + g.bearing.x * s;
+        GLfloat yp = y - (g.size.y - g.bearing.y) * s;
+        GLfloat w = g.size.x * s;
+        GLfloat h = g.size.y * s;
 
-                { 0.0, 0.0, tx,     ty + 0.25f },
-                { 1.0, 1.0, tx + w, ty },
-                { 1.0, 0.0, tx + w, ty + 0.25f }
-            };
+        GLfloat vertices[6][4] = {
+            { xp,     yp + h,   0.0, 0.0 },            
+            { xp,     yp,       0.0, 1.0 },
+            { xp + w, yp,       1.0, 1.0 },
 
-            glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            { xp,     yp + h,   0.0, 0.0 },
+            { xp + w, yp,       1.0, 1.0 },
+            { xp + w, yp + h,   1.0, 0.0 }           
+        };
 
-            glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindTexture(GL_TEXTURE_2D, g.texture);
 
-            x -= s * w * 30;
-        }
-*/
+        glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        x += (g.advance >> 6) * s;
     }
+
+    glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     shader->unbind();
 }

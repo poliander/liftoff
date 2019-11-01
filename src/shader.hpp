@@ -11,7 +11,8 @@ using namespace std;
 enum UNIFORMS
 {
     UNI_MVP,
-    UNI_COLOR
+    UNI_COLOR,
+    UNI_TEXT_COLOR
 };
 
 class Shader
@@ -29,7 +30,7 @@ class Shader
     private:
         GLuint program;
         GLuint shaders[2];
-        GLuint uniforms[2];
+        GLuint uniforms[3];
 
         string load(const string& filename);
         GLuint create(const string& text, unsigned int type);

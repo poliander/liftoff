@@ -5,9 +5,10 @@ in vec2 uv0;
 out vec4 color;
 
 uniform sampler2D image;
+uniform vec4 textColor;
 
 void main()
 {
-    color = vec4(1.0, 1.0, 1.0, texture(image, uv0).r);
+    color = vec4(1.0, 1.0, 1.0, texture(image, uv0).r) * textColor;
 }
 

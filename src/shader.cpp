@@ -35,6 +35,7 @@ Shader::Shader(const string vsFilename, const string fsFilename)
 
     uniforms[UNI_MVP] = glGetUniformLocation(program, "mvp");
     uniforms[UNI_COLOR] = glGetUniformLocation(program, "color");
+    uniforms[UNI_TEXT_COLOR] = glGetUniformLocation(program, "textColor");
 }
 
 Shader::~Shader()

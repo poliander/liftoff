@@ -485,45 +485,16 @@ void Scene::drawText(const char *text, float x, float y, float z, float size, fl
 }
 
 /*
- * draw text using absolute coordinates
- */
-void Scene::drawTextA(const char *text, float x, float y, float z, float size, float r, float g, float b, float a)
-{
-    drawText(text, x + (-5.97f * state.vid_aspect), -y + 5.69f, z, size, r, g, b, a);
-}
-
-/*
  * display video infos (FPS, MSAA level)
  */
 void Scene::drawVideoInfos()
 {
     static char txt[16];
 
-    if (state.fps_timer_l > 0) {
-        state.fps_timer += state.timer - state.fps_timer_l;
-
-        if (state.fps_timer > 1000) {
-            state.fps = float(state.fps_counter) / (float(state.fps_timer) * .001f);
-            state.fps_ready = true;
-            state.fps_counter = 0;
-            state.fps_timer = 0;
-        }
-    }
-
-    state.fps_counter++;
-    state.fps_timer_l = state.timer;
-
-    glLoadIdentity();
-
     // FPS
 
-    if (state.fps_ready) {
-        sprintf(txt, "FPS: %d", int(round(state.fps)));
-    } else {
-        sprintf(txt, "FPS: WAIT...");
-    }
-
-    drawTextA(txt, -.45f, -.25f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+    sprintf(txt, "FPS: %d", int(round(state.fps)));
+    state.fonts[F_ZEKTON]->draw(txt, 7.0f, 455.0f, 0.275f, 1.0f, 1.0f, 1.0f, .75f);
 
     // MSAA
 
@@ -533,8 +504,7 @@ void Scene::drawVideoInfos()
         sprintf(txt, "MSAA: OFF");
     }
 
-    //drawTextA(txt, -.45f, .05f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
-    state.fonts[F_ZEKTON]->draw(txt, -.45f, .05f, 1, .6f, .6f, .6f, 1.0f);
+    state.fonts[F_ZEKTON]->draw(txt, 7.0f, 445.0f, 0.275f, 1.0f, 1.0f, 1.0f, .75f);
 }
 
 /*
