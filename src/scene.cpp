@@ -578,8 +578,8 @@ void Scene::drawTitle()
 void Scene::drawMenu()
 {
     int i, numentries;
-    float mx, my, mh, mf, mo;
-    float m_a = state.global_alpha;
+    float mxf, myf, mhf, ms, my, mh, m_a = state.global_alpha;
+
     char *mtxt[5];
     char msg[255];
 
@@ -590,11 +590,14 @@ void Scene::drawMenu()
     switch (state.menu) {
         case 1: // main menu
             numentries = 3;
-            mx = -1.26f;
+
             my = -.25f;
             mh = 1.0f;
-            mf = 120;
-            mo = .27f;
+
+            mxf = 0;
+            myf = 2.0f;
+            mhf = 1.0f;
+            ms  = 0.37f;
 
             strcpy(mtxt[0], "LAUNCH");
             strcpy(mtxt[1], "SETTINGS");
@@ -639,11 +642,14 @@ void Scene::drawMenu()
 
         case 2: // settings submenu
             numentries = 4;
-            mx = -1.26f;
+
             my = 0.015f;
             mh = .75f;
-            mf = 105;
-            mo = .175f;
+
+            mxf = 8.0f;
+            myf = 16.0f;
+            mhf = 0.78f;
+            ms  = 0.325f;
 
             strcpy(mtxt[0], "VIDEO");
             strcpy(mtxt[1], "AUDIO");
@@ -691,11 +697,14 @@ void Scene::drawMenu()
 
         case 3: // video settings
             numentries = 5;
-            mx = -1.26f;
+
             my = .135f;
             mh = .625f;
-            mf = 70;
-            mo = .32f;
+
+            mxf = 15.0f;
+            myf = 35.75f;
+            mhf = 0.675f;
+            ms  = 0.26f;
 
             sprintf(mtxt[0], "VIDEO MODE:\n     %dx%d",
               state.vid_cap_modes[state.vid_mode].w,
@@ -763,11 +772,14 @@ void Scene::drawMenu()
 
         case 4: // audio settings
             numentries = 4;
-            mx = -1.26f;
+
             my = 0.015f;
-            mh = .75f;
-            mf = 75;
-            mo = .375f;
+            mh = 0.75f;
+
+            mxf = 15.0f;
+            myf = 30.0f;
+            mhf = 0.8f;
+            ms  = 0.28f;
 
             switch(state.config.aud_sfx) {
                 case 0:
@@ -900,11 +912,24 @@ void Scene::drawMenu()
     glEnd();
     glPopMatrix();
 
-    drawText("VECTOR ZERO MK. IX \"REDUX\"", -.1f, -2.3f, -10.0f, 65, 1, .9f, .85f, .0045f*m_a);
+    state.fonts[F_ZEKTON]->draw("VECTOR ZERO MK. IX \"REDUX\"", 314.0f, 152.0f, 0.27f, 1.0f, .9f, .85f, .0045f * m_a);
 
     // draw menu items
     for (i=0; i<numentries; i++) {
-        drawText(mtxt[i], mx-3.0f, my-(i*mh)+mo, -9.9f, mf, 1, .8f, .55f, .0085f*m_a);
+        state.fonts[F_ZEKTON]->draw(
+            mtxt[i],
+
+            180.0f + mxf,
+            220.0f + myf - (i * mhf * 34.5f),
+
+            ms,
+
+            1.00f,
+            0.80f,
+            0.55f,
+
+            0.0085f * m_a
+        );
 
         if (i == state.menu_pos) {
             glLoadIdentity();

@@ -44,7 +44,8 @@ Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
             texture, 
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-            face->glyph->advance.x
+            face->glyph->advance.x >> 6,
+            face->glyph->metrics.vertAdvance >> 6
         };
 
         glyphs.insert(std::pair<GLchar, Glyph>(c, glyph));
@@ -70,6 +71,8 @@ Font::~Font()
 
 void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a)
 {
+    float ox = x;
+
     shader->bind();
 
     shader->update(UNI_TEXT_COLOR, glm::vec4(r, g, b, a));
@@ -105,7 +108,12 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        x += (g.advance >> 6) * s;
+        if (*c == 10) {
+            x = ox;
+            y -= g.height * s;
+        } else {
+            x += g.advance * s;
+        }
     }
 
     glBindVertexArray(0);

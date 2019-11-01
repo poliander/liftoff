@@ -19,6 +19,7 @@ struct Glyph
     glm::ivec2 size;
     glm::ivec2 bearing;
     GLint      advance;
+    GLint      height;
 };
 
 class Font
