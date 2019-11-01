@@ -1,6 +1,6 @@
 bin_PROGRAMS = $(top_builddir)/liftoff
 
-__top_builddir__liftoff_CPPFLAGS = $(CXXFLAGS)
+__top_builddir__liftoff_CPPFLAGS = $(CPPFLAGS)
 __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
@@ -10,7 +10,6 @@ __top_builddir__liftoff_SOURCES = \
     shader.cpp \
     quad.cpp \
     framebuffer.cpp \
-    glyphmap.cpp \
     font.cpp \
     texture.cpp \
     model.cpp \

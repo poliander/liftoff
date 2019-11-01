@@ -21,6 +21,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - libGLEW
 - libvorbisfile
 - libogg
+- FreeType2
 - SDL 2.0
 - SDL\_mixer 2.0 (with ogg vorbis support)
 - glm.hpp (GL math headers)
@@ -47,7 +48,7 @@ Write debug information to "debug.log" (Windows only)
 
 Disable multisampling
 
-## External resources used
+## External resources
 
 Font "Zekton" from Typodermic Fonts Inc. (c) 2000 Ray Larabie
 

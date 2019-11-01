@@ -125,3 +125,11 @@ void Texture::bind()
 {
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 }
+
+void Texture::draw()
+{
+    bind();
+
+    glBindVertexArray(vertexArray);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}

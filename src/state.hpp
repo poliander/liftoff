@@ -25,6 +25,7 @@
 using namespace std;
 
 class Entity;
+class Font;
 
 class State
 {

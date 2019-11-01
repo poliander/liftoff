@@ -43,7 +43,10 @@ class Texture : public Quad
         ~Texture();
 
         void bind();
+        void draw();
 
     protected:
+        GLuint texColorBuffer;
+
         bool load(string filename, t_image *image);
 };

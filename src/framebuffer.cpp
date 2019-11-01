@@ -35,3 +35,10 @@ void Framebuffer::unbind()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
+
+void Framebuffer::draw()
+{
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+    glBindVertexArray(vertexArray);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}

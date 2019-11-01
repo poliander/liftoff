@@ -149,7 +149,7 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
 
     glDisable(GL_DEPTH_TEST);
 
-    s.shaders[S_TEXTURE_1]->bind();
+    s.shaders[S_TEXTURE_3D]->bind();
 
     // render particles
     for (int i = 0; i < pnum; i++) {
@@ -157,8 +157,8 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
             continue;
         }
 
-        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a));
-        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+        s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a));
+        s.shaders[S_TEXTURE_3D]->update(UNI_MVP, s.view.transform(
             px + (p[i].px * pscale),
             py + (p[i].py * pscale),
             pz,
@@ -175,7 +175,7 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
         s.textures[T_STAR]->draw();
     }
 
-    s.shaders[S_TEXTURE_1]->unbind();
+    s.shaders[S_TEXTURE_3D]->unbind();
 
     glEnable(GL_DEPTH_TEST);
 }

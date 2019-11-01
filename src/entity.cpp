@@ -411,15 +411,15 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         da -= .001f * (1000.0f + p_z);
     }
 
-    s.shaders[S_TEXTURE_1]->bind();
+    s.shaders[S_TEXTURE_3D]->bind();
 
     if (s.player->hasTarget(me)) {
         // target locked, auto-aiming active
 
         s.textures[T_HUD_3]->bind();
 
-        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
-        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+        s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
+        s.shaders[S_TEXTURE_3D]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
             (p_z + .01f),
@@ -448,8 +448,8 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             rot += 180.0f;
         }
 
-        s.shaders[S_TEXTURE_1]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * da));
-        s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+        s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * da));
+        s.shaders[S_TEXTURE_3D]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
             (p_z + .01f),
@@ -468,7 +468,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     s.textures[T_HUD_3]->bind();
 
-    s.shaders[S_TEXTURE_1]->update(UNI_MVP, s.view.transform(
+    s.shaders[S_TEXTURE_3D]->update(UNI_MVP, s.view.transform(
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
         (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
         (p_z + .01f),
@@ -484,7 +484,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     s.textures[T_HUD_3]->draw();
 
-    s.shaders[S_TEXTURE_1]->unbind();
+    s.shaders[S_TEXTURE_3D]->unbind();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

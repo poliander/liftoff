@@ -109,7 +109,6 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-shader.$(OBJEXT) \
 	__top_builddir__liftoff-quad.$(OBJEXT) \
 	__top_builddir__liftoff-framebuffer.$(OBJEXT) \
-	__top_builddir__liftoff-glyphmap.$(OBJEXT) \
 	__top_builddir__liftoff-font.$(OBJEXT) \
 	__top_builddir__liftoff-texture.$(OBJEXT) \
 	__top_builddir__liftoff-model.$(OBJEXT) \
@@ -240,13 +239,9 @@ PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 SDL2_CFLAGS = @SDL2_CFLAGS@
-SDL2_CONFIG = @SDL2_CONFIG@
-SDL2_FRAMEWORK = @SDL2_FRAMEWORK@
 SDL2_LIBS = @SDL2_LIBS@
 SDL2_mixer_CFLAGS = @SDL2_mixer_CFLAGS@
 SDL2_mixer_LIBS = @SDL2_mixer_LIBS@
-SDL_CFLAGS = @SDL_CFLAGS@
-SDL_LIBS = @SDL_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -273,6 +268,8 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+freetype2_CFLAGS = @freetype2_CFLAGS@
+freetype2_LIBS = @freetype2_LIBS@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -306,7 +303,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-__top_builddir__liftoff_CPPFLAGS = $(CXXFLAGS)
+__top_builddir__liftoff_CPPFLAGS = $(CPPFLAGS)
 __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
@@ -316,7 +313,6 @@ __top_builddir__liftoff_SOURCES = \
     shader.cpp \
     quad.cpp \
     framebuffer.cpp \
-    glyphmap.cpp \
     font.cpp \
     texture.cpp \
     model.cpp \
@@ -434,7 +430,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-font.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-framebuffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-functions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-glyphmap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-missile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-model.Po@am__quote@
@@ -561,20 +556,6 @@ __top_builddir__liftoff-framebuffer.obj: framebuffer.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='framebuffer.cpp' object='__top_builddir__liftoff-framebuffer.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-framebuffer.obj `if test -f 'framebuffer.cpp'; then $(CYGPATH_W) 'framebuffer.cpp'; else $(CYGPATH_W) '$(srcdir)/framebuffer.cpp'; fi`
-
-__top_builddir__liftoff-glyphmap.o: glyphmap.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-glyphmap.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-glyphmap.Tpo -c -o __top_builddir__liftoff-glyphmap.o `test -f 'glyphmap.cpp' || echo '$(srcdir)/'`glyphmap.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-glyphmap.Tpo $(DEPDIR)/__top_builddir__liftoff-glyphmap.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='glyphmap.cpp' object='__top_builddir__liftoff-glyphmap.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-glyphmap.o `test -f 'glyphmap.cpp' || echo '$(srcdir)/'`glyphmap.cpp
-
-__top_builddir__liftoff-glyphmap.obj: glyphmap.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-glyphmap.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-glyphmap.Tpo -c -o __top_builddir__liftoff-glyphmap.obj `if test -f 'glyphmap.cpp'; then $(CYGPATH_W) 'glyphmap.cpp'; else $(CYGPATH_W) '$(srcdir)/glyphmap.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-glyphmap.Tpo $(DEPDIR)/__top_builddir__liftoff-glyphmap.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='glyphmap.cpp' object='__top_builddir__liftoff-glyphmap.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-glyphmap.obj `if test -f 'glyphmap.cpp'; then $(CYGPATH_W) 'glyphmap.cpp'; else $(CYGPATH_W) '$(srcdir)/glyphmap.cpp'; fi`
 
 __top_builddir__liftoff-font.o: font.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-font.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-font.Tpo -c -o __top_builddir__liftoff-font.o `test -f 'font.cpp' || echo '$(srcdir)/'`font.cpp

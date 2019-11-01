@@ -12,8 +12,10 @@ class Framebuffer : public Quad
 
         void   bind();
         void   unbind();
+        void   draw();
 
     protected:
+        GLuint texColorBuffer;
         GLuint frameBuffer;
         GLint  viewport[4];
 };

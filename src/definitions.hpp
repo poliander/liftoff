@@ -68,8 +68,9 @@
 #define F_ZEKTON                0
 
 // shaders
-#define S_TEXTURE_1             0
-#define S_BASIC_1               1
+#define S_TEXTURE_2D            0
+#define S_TEXTURE_3D            1
+#define S_BASIC_1               2
 
 // objects
 #define OBJ_PLAYER              101 // player

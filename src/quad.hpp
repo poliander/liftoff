@@ -8,10 +8,7 @@ class Quad
         Quad();
         virtual ~Quad();
 
-        void draw();
-
     protected:
-        GLuint vertexArrayObject;
+        GLuint vertexArray;
         GLuint vertexArrayBuffers[2];
-        GLuint texColorBuffer;
 };

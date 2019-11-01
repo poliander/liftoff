@@ -112,10 +112,16 @@ void Scene::load()
 
     // shaders
 
-    state.log("Loading shader 'texture_1'\n");
-    state.shaders.insert(make_pair(S_TEXTURE_1, new Shader(
-        string(state.dir_resources).append("/shaders/texture_1.glvs"),
-        string(state.dir_resources).append("/shaders/texture_1.glfs")
+    state.log("Loading shader 'texture_2d'\n");
+    state.shaders.insert(make_pair(S_TEXTURE_2D, new Shader(
+        string(state.dir_resources).append("/shaders/texture_2d.glvs"),
+        string(state.dir_resources).append("/shaders/texture_2d.glfs")
+    )));
+
+    state.log("Loading shader 'texture_3d'\n");
+    state.shaders.insert(make_pair(S_TEXTURE_3D, new Shader(
+        string(state.dir_resources).append("/shaders/texture_3d.glvs"),
+        string(state.dir_resources).append("/shaders/texture_3d.glfs")
     )));
 
     state.log("Loading shader 'basic_1'\n");
@@ -128,8 +134,8 @@ void Scene::load()
 
     state.log("Loading font 'zekton'\n");
     state.fonts.insert(make_pair(F_ZEKTON, new Font(
-        make_shared<Texture>(string(state.dir_resources).append("/fonts/zekton.tga")),
-        make_shared<GlyphMap>(string(state.dir_resources).append("/fonts/zekton.map"))
+        string(state.dir_resources).append("/fonts/zekton.ttf"),
+        make_shared<Shader>(*state.shaders[S_TEXTURE_2D])
     )));
 
     // models
@@ -527,7 +533,8 @@ void Scene::drawVideoInfos()
         sprintf(txt, "MSAA: OFF");
     }
 
-    drawTextA(txt, -.45f, .05f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+    //drawTextA(txt, -.45f, .05f, -10.0f, 65, .6f, .6f, .6f, 1.0f);
+    state.fonts[F_ZEKTON]->draw(txt, -.45f, .05f, -10.0f, 1, .6f, .6f, .6f, 1.0f);
 }
 
 /*

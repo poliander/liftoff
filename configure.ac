@@ -29,10 +29,17 @@ PKG_PROG_PKG_CONFIG
 
 # GL, GLU, GLEW, GLM ----------------------------------------------------------
 
-AC_CHECK_HEADER([GL/gl.h],, [AC_MSG_ERROR([GL/gl.h not found, install libgl1-mesa-dev])])
-AC_CHECK_HEADER([GL/glu.h],, [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
-AC_CHECK_HEADER([GL/glew.h],, [AC_MSG_ERROR([GL/glew.h not found, install libglew-dev])])
-AC_CHECK_HEADER([glm/glm.hpp],, [AC_MSG_ERROR([glm/glm.hpp not found, install libglm-dev])])
+AC_CHECK_HEADER([GL/gl.h],,
+    [AC_MSG_ERROR([GL/gl.h not found, install libgl1-mesa-dev])])
+
+AC_CHECK_HEADER([GL/glu.h],,
+    [AC_MSG_ERROR([GL/glu.h not found, install libglu1-mesa-dev])])
+
+AC_CHECK_HEADER([GL/glew.h],,
+    [AC_MSG_ERROR([GL/glew.h not found, install libglew-dev])])
+
+AC_CHECK_HEADER([glm/glm.hpp],,
+    [AC_MSG_ERROR([glm/glm.hpp not found, install libglm-dev])])
 
 case $host_os in
     *mingw32*)
@@ -55,57 +62,70 @@ esac
 PKG_CHECK_MODULES(
     [SDL2],
     [sdl2 >= 2.0.0],
-    [],
-    [SDL2_VERSION=2.0
-     AM_PATH_SDL2($SDL2_VERSION, :,
-        AC_MSG_ERROR([SDL version $SDL2_VERSION not found! http://www.libsdl.org]))])
+    [
+        CPPFLAGS="$CPPFLAGS $SDL2_CFLAGS"
+        LIBS="$LIBS $SDL2_LIBS"
+    ],
+    [AC_MSG_NOTICE([SDL2 not located by pkg-config])]
+)
 
 # SDL2_mixer ------------------------------------------------------------------
 
 PKG_CHECK_MODULES(
     [SDL2_mixer],
     [SDL2_mixer >= 2.0.0],
-    [],
-    [AC_MSG_NOTICE([SDL2_mixer not located by pkg-config, checking with AC CHECK LIB:])
-     AC_CHECK_LIB([SDL2_mixer],
-        [Mix_OpenAudio],
-        [],
-        [AC_MSG_ERROR([SDL2_mixer not found! http://www.libsdl.org/projects/SDL_mixer])])])
+    [
+        CPPFLAGS="$CPPFLAGS $SDL2_mixer_CFLAGS"
+        LIBS="$LIBS $SDL2_mixer_LIBS"
+    ],
+    [AC_MSG_NOTICE([SDL2_mixer not located by pkg-config])]
+)
 
 # libvorbisfile ---------------------------------------------------------------
-
-AC_CHECK_HEADER([vorbis/vorbisfile.h],, [AC_MSG_ERROR([vorbis/vorbisfile.h not found, install libvorbis-dev])])
 
 PKG_CHECK_MODULES(
     [libvorbisfile],
     [vorbisfile >= 1.3.0],
-    [],
-    [AC_MSG_NOTICE([libvorbisfile not located by pkg-config, checking with AC CHECK LIB:])
-     AC_CHECK_LIB([vorbisfile],
-        [ov_test],
-        [],
-        [AC_MSG_ERROR([libvorbisfile not found! https://xiph.org/vorbis])])])
+    [
+        CPPFLAGS="$CPPFLAGS $libvorbisfile_CFLAGS"
+        LIBS="$LIBS $libvorbisfile_LIBS"
+        AC_CHECK_HEADER([vorbis/vorbisfile.h],,
+            [AC_MSG_ERROR([vorbis/vorbisfile.h not found, install libvorbis-dev])])
+    ],
+    [AC_MSG_NOTICE([libvorbisfile not located by pkg-config])]
+)
 
 # libogg ----------------------------------------------------------------------
-
-AC_CHECK_HEADER([ogg/ogg.h],, [AC_MSG_ERROR([ogg/ogg.h not found, install libogg-dev])])
 
 PKG_CHECK_MODULES(
     [libogg],
     [ogg >= 1.3.0],
-    [],
-    [AC_MSG_NOTICE([libogg not located by pkg-config, checking with AC CHECK LIB:])
-     AC_CHECK_LIB([ogg],
-        [ov_test],
-        [],
-        [AC_MSG_ERROR([libogg not found! https://xiph.org/vorbis])])])
+    [
+        CPPFLAGS="$CPPFLAGS $libogg_CFLAGS"
+        LIBS="$LIBS $libogg_LIBS"
+        AC_CHECK_HEADER([ogg/ogg.h],,
+            [AC_MSG_ERROR([ogg/ogg.h not found, install libogg-dev])])
+    ],
+    [AC_MSG_NOTICE([libogg not located by pkg-config])]
+)
+
+# FreeType2 -------------------------------------------------------------------
+
+PKG_CHECK_MODULES(
+    [freetype2],
+    [freetype2 >= 2.8.0],
+    [
+        CPPFLAGS="$CPPFLAGS $freetype2_CFLAGS"
+        LIBS="$LIBS $freetype2_LIBS"
+        AC_CHECK_HEADER([ft2build.h],,
+            [AC_MSG_ERROR([ft2build.h not found, install libfreetype-dev])])
+    ],
+    [AC_MSG_NOTICE([FreeType2 not located by pkg-config])]
+)
 
 # -----------------------------------------------------------------------------
 
-CXXFLAGS="$CXXFLAGS $SDL2_CFLAGS $SDL2_mixer_CFLAGS $libvorbisfile_CFLAGS $libogg_CFLAGS"
-LIBS="$LIBS $SDL2_LIBS $SDL2_mixer_LIBS $libvorbisfile_LIBS $libogg_LIBS"
-
-AC_SUBST(CXXFLAGS)
+AC_SUBST(CPPFLAGS)
 AC_SUBST(LIBS)
 
 AC_CONFIG_FILES([
