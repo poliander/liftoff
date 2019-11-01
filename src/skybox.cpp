@@ -63,14 +63,14 @@ void Skybox::draw(State &s)
     glClearColor(0, 0, 1, 0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    s.shaders[S_TEXTURE_3D]->bind();
+    s.shaders[S_TEXTURE]->bind();
 
     // background
 
     s.textures[T_BACKGROUND_1]->bind();
 
-    s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(.65f, .7f, .8f, 1.0f));
-    s.shaders[S_TEXTURE_3D]->update(UNI_MVP, View::transform2D(
+    s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.65f, .7f, .8f, 1.0f));
+    s.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
         0, 0, -1.0f,
         0, 0, 0,
         1.35f, 1.35f, 0
@@ -83,8 +83,8 @@ void Skybox::draw(State &s)
     s.textures[T_STAR]->bind();
 
     for (i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
-        s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        s.shaders[S_TEXTURE_3D]->update(UNI_MVP, View::transform2D(
+        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        s.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
             stars[i][0], stars[i][1], stars[i][2],
             0, 0, 0,
             stars[i][3], stars[i][3], 0
@@ -100,8 +100,8 @@ void Skybox::draw(State &s)
             a = (1000.0f + stars[i][2]) / 1250.0f;
             sl = pow(a * 1.45f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
 
-            s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (s.stars_speed - .3f)));
-            s.shaders[S_TEXTURE_3D]->update(UNI_MVP, View::transform2D(
+            s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (s.stars_speed - .3f)));
+            s.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
                 stars[i][0], stars[i][1], stars[i][2],
                 90.0f, stars[i][3], 0,
                 .9f, sl * (s.stars_speed - .3f), 0
@@ -113,14 +113,14 @@ void Skybox::draw(State &s)
 
     framebuffer->unbind();
 
-    s.shaders[S_TEXTURE_3D]->update(UNI_COLOR, glm::vec4(
+    s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(
         s.global_alpha * .01f,
         s.global_alpha * .01f,
         s.global_alpha * .01f,
         1.0f
     ));
 
-    s.shaders[S_TEXTURE_3D]->update(UNI_MVP, s.view.transform(
+    s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
         0, 0, -50.0f,
         0, 0, s.stars_rotation_pos,
         135.0f, 135.0f, 0
@@ -128,7 +128,7 @@ void Skybox::draw(State &s)
 
     framebuffer->draw();
 
-    s.shaders[S_TEXTURE_3D]->unbind();
+    s.shaders[S_TEXTURE]->unbind();
 
     glDepthMask(GL_TRUE);
 }

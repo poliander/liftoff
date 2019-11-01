@@ -112,22 +112,22 @@ void Scene::load()
 
     // shaders
 
-    state.log("Loading shader 'texture_2d'\n");
-    state.shaders.insert(make_pair(S_TEXTURE_2D, new Shader(
-        string(state.dir_resources).append("/shaders/texture_2d.glvs"),
-        string(state.dir_resources).append("/shaders/texture_2d.glfs")
+    state.log("Loading shader 'font'\n");
+    state.shaders.insert(make_pair(S_FONT, new Shader(
+        string(state.dir_resources).append("/shaders/font.glvs"),
+        string(state.dir_resources).append("/shaders/font.glfs")
     )));
 
-    state.log("Loading shader 'texture_3d'\n");
-    state.shaders.insert(make_pair(S_TEXTURE_3D, new Shader(
-        string(state.dir_resources).append("/shaders/texture_3d.glvs"),
-        string(state.dir_resources).append("/shaders/texture_3d.glfs")
+    state.log("Loading shader 'texture'\n");
+    state.shaders.insert(make_pair(S_TEXTURE, new Shader(
+        string(state.dir_resources).append("/shaders/texture.glvs"),
+        string(state.dir_resources).append("/shaders/texture.glfs")
     )));
 
-    state.log("Loading shader 'basic_1'\n");
-    state.shaders.insert(make_pair(S_BASIC_1, new Shader(
-        string(state.dir_resources).append("/shaders/basic_1.glvs"),
-        string(state.dir_resources).append("/shaders/basic_1.glfs")
+    state.log("Loading shader 'object'\n");
+    state.shaders.insert(make_pair(S_OBJECT, new Shader(
+        string(state.dir_resources).append("/shaders/object.glvs"),
+        string(state.dir_resources).append("/shaders/object.glfs")
     )));
 
     // fonts
@@ -135,7 +135,7 @@ void Scene::load()
     state.log("Loading font 'zekton'\n");
     state.fonts.insert(make_pair(F_ZEKTON, new Font(
         string(state.dir_resources).append("/fonts/zekton.ttf"),
-        make_shared<Shader>(*state.shaders[S_TEXTURE_2D])
+        make_shared<Shader>(*state.shaders[S_FONT])
     )));
 
     // models
@@ -144,28 +144,28 @@ void Scene::load()
     state.models.insert(make_pair(OBJ_PLAYER, new Model(
         make_shared<Object>(string(state.dir_resources).append("/models/ship_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/models/ship_1.tga")),
-        make_shared<Shader>(*state.shaders[S_BASIC_1])
+        make_shared<Shader>(*state.shaders[S_OBJECT])
     )));
 
     state.log("Loading model 'asteroid_1'\n");
     state.models.insert(make_pair(OBJ_ASTEROID_1, new Model(
         make_shared<Object>(string(state.dir_resources).append("/models/asteroid_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/models/asteroid_1.tga")),
-        make_shared<Shader>(*state.shaders[S_BASIC_1])
+        make_shared<Shader>(*state.shaders[S_OBJECT])
     )));
 
     state.log("Loading model 'debris_1'\n");
     state.models.insert(make_pair(OBJ_DEBRIS_1, new Model(
         make_shared<Object>(string(state.dir_resources).append("/models/debris_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/models/debris_1.tga")),
-        make_shared<Shader>(*state.shaders[S_BASIC_1])
+        make_shared<Shader>(*state.shaders[S_OBJECT])
     )));
 
     state.log("Loading model 'cargo_1'\n");
     state.models.insert(make_pair(OBJ_CARGO_1, new Model(
         make_shared<Object>(string(state.dir_resources).append("/models/cargo_1.obj")),
         make_shared<Texture>(string(state.dir_resources).append("/models/cargo_1.tga")),
-        make_shared<Shader>(*state.shaders[S_BASIC_1])
+        make_shared<Shader>(*state.shaders[S_OBJECT])
     )));
 
     // sound effects
