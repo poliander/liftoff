@@ -1044,19 +1044,31 @@ void Scene::drawDisplay()
       glTexCoord2i(0, 1);
       glVertex3f(-5.1f, -4.1f, 0);
     glEnd();
+    glPopMatrix();
 
     // money
 
     sprintf(msg, "%d $", player->getMoney());
-    drawText(msg, -4.6f, -1.2f, 0, 130, 1.0f, 1.0f, .3f, alpha * .85f);
-    glPopMatrix();
+    state.fonts[F_ZEKTON]->draw(
+        msg,
 
-    glLoadIdentity();
+        114.0f + (state.hud_x - state.tilt_x * .01f) * 18.0f * -1.0f,
+        127.5f + (state.hud_y - state.tilt_y * .01f) * 24.5f,
+
+        0.15f,
+
+        1.0f,
+        1.0f,
+        0.3f,
+
+        alpha * .85f
+    );
 
     // lower left screen
 
     state.textures[T_MENU_1]->bind();
 
+    glLoadIdentity();
     glPushMatrix();
     glTranslatef(state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
     glColor4f(1, 1, 1, alpha * .5f);
