@@ -19,9 +19,9 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - libGL
 - libGLU
 - libGLEW
-- libvorbisfile
-- libogg
-- FreeType2
+- libvorbisfile >= 1.3
+- libogg >= 1.3
+- FreeType2 >= 2.8 (no zlib/libpng support required)
 - SDL 2.0
 - SDL\_mixer 2.0 (with ogg vorbis support)
 - glm.hpp (GL math headers)
@@ -32,7 +32,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 ./configure && make && sudo make install
 ```
  
-Assumed you have a working cross-compiling environment available (congratulations), then creating win32 executables is possible:
+Assumed you have a working cross-compiling environment available, then creating a static linked win32 executables is possible:
 
 ```
 ./configure --prefix=/usr/x86_64-w64-mingw32 --host=x86_64-w64-mingw32 && make
