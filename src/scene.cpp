@@ -494,7 +494,7 @@ void Scene::drawVideoInfos()
     // FPS
 
     sprintf(txt, "FPS: %d", int(round(state.fps)));
-    state.fonts[F_ZEKTON]->draw(txt, 7.0f, 455.0f, 0.275f, 1.0f, 1.0f, 1.0f, .75f);
+    state.fonts[F_ZEKTON]->draw(txt, 5.0f, 288.0f, 0.075f, 1.0f, 1.0f, 1.0f, .75f);
 
     // MSAA
 
@@ -504,7 +504,7 @@ void Scene::drawVideoInfos()
         sprintf(txt, "MSAA: OFF");
     }
 
-    state.fonts[F_ZEKTON]->draw(txt, 7.0f, 445.0f, 0.275f, 1.0f, 1.0f, 1.0f, .75f);
+    state.fonts[F_ZEKTON]->draw(txt, 5.0f, 282.0f, 0.075f, 1.0f, 1.0f, 1.0f, .75f);
 }
 
 /*
@@ -578,7 +578,7 @@ void Scene::drawTitle()
 void Scene::drawMenu()
 {
     int i, numentries;
-    float mxf, myf, mhf, ms, my, mh, m_a = state.global_alpha;
+    float myf, mhf, mfs, my, mh, m_a = state.global_alpha;
 
     char *mtxt[5];
     char msg[255];
@@ -594,10 +594,9 @@ void Scene::drawMenu()
             my = -.25f;
             mh = 1.0f;
 
-            mxf = 0;
-            myf = 2.0f;
-            mhf = 1.0f;
-            ms  = 0.37f;
+            myf = 0.0f;
+            mhf = 23.8f;
+            mfs  = 0.15f;
 
             strcpy(mtxt[0], "LAUNCH");
             strcpy(mtxt[1], "SETTINGS");
@@ -644,12 +643,11 @@ void Scene::drawMenu()
             numentries = 4;
 
             my = 0.015f;
-            mh = .75f;
+            mh = 0.750f;
 
-            mxf = 8.0f;
-            myf = 16.0f;
-            mhf = 0.78f;
-            ms  = 0.325f;
+            myf = 3.5f;
+            mhf = 17.75f;
+            mfs = 0.14f;
 
             strcpy(mtxt[0], "VIDEO");
             strcpy(mtxt[1], "AUDIO");
@@ -701,10 +699,9 @@ void Scene::drawMenu()
             my = .135f;
             mh = .625f;
 
-            mxf = 15.0f;
-            myf = 35.75f;
-            mhf = 0.675f;
-            ms  = 0.26f;
+            myf = 9.0f;
+            mhf = 14.8f;
+            mfs = 0.075f;
 
             sprintf(mtxt[0], "VIDEO MODE:\n     %dx%d",
               state.vid_cap_modes[state.vid_mode].w,
@@ -776,10 +773,9 @@ void Scene::drawMenu()
             my = 0.015f;
             mh = 0.75f;
 
-            mxf = 15.0f;
-            myf = 30.0f;
-            mhf = 0.8f;
-            ms  = 0.28f;
+            myf = 8.0f;
+            mhf = 17.75f;
+            mfs = 0.075f;
 
             switch(state.config.aud_sfx) {
                 case 0:
@@ -912,17 +908,17 @@ void Scene::drawMenu()
     glEnd();
     glPopMatrix();
 
-    state.fonts[F_ZEKTON]->draw("VECTOR ZERO MK. IX \"REDUX\"", 314.0f, 152.0f, 0.27f, 1.0f, .9f, .85f, .0045f * m_a);
+    state.fonts[F_ZEKTON]->draw("VECTOR ZERO MK. IX \"REDUX\"", 197.0f, 100.0f, 0.075f, 1.0f, .9f, .85f, .0045f * m_a);
 
     // draw menu items
-    for (i=0; i<numentries; i++) {
+    for (i = 0; i < numentries; i++) {
         state.fonts[F_ZEKTON]->draw(
             mtxt[i],
 
-            180.0f + mxf,
-            220.0f + myf - (i * mhf * 34.5f),
+            122.0f,
+            152.0f + myf - (i * mhf),
 
-            ms,
+            mfs,
 
             1.00f,
             0.80f,

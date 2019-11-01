@@ -37,18 +37,6 @@ void View::lookAt(
     view = glm::lookAt(camera_pos, camera_pos + camera_target, camera_up);
 }
 
-glm::mat4 View::transformReal2D(
-    float px, float py,
-    float sx, float sy
-) {
-    glm::mat4 posMat = glm::translate(glm::vec3(px, py, 0));
-    glm::mat4 scaleMat = glm::scale(glm::vec3(sx, sy, 0));
-
-    glm::mat4 model = posMat * scaleMat;
-
-    return glm::ortho(0.0f, 800.0f, 0.0f, 600.0f) * model;
-}
-
 glm::mat4 View::transform2D(
     float px, float py, float pz,
     float rx, float ry, float rz,
