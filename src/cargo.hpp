@@ -12,7 +12,6 @@ class Cargo : public Entity
 
         bool  damage(State &s, int p);
         void  update(State &s);
-        void  draw(State &s);
 
     private:
         float counter = 0;

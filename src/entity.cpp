@@ -21,6 +21,11 @@ bool Entity::isCollider()
     return e_type == E_TYPE_COLLIDER;
 }
 
+bool Entity::isScenery()
+{
+    return e_type == E_TYPE_SCENERY;
+}
+
 bool Entity::isIdle()
 {
     return e_state == E_STATE_IDLE;
@@ -86,6 +91,11 @@ void Entity::setPosY(float y)
 void Entity::setPosZ(float z)
 {
     p_z = z;
+}
+
+glm::vec3 Entity::getPos()
+{
+    return glm::vec3(p_x, p_y, p_z);
 }
 
 float Entity::getPosX()
@@ -154,7 +164,7 @@ void Entity::setScale(float x, float y, float z)
 
 float Entity::getScale()
 {
-    return (s_x +  s_y + s_z) * .333f;
+    return (s_x + s_y + s_z) * .333f;
 }
 
 float Entity::getScaleX()
@@ -263,6 +273,17 @@ void Entity::setLife(int l)
     life = l;
 }
 
+float Entity::calcDistanceScale(State &s)
+{
+    float f = .0001f;
+
+    if (isScenery()) {
+        f *= .25f;
+    }
+
+    return f * (10000.0f - glm::distance(s.view.getCameraPos(), getPos()));
+}
+
 float Entity::calcDistance2D(State &s, shared_ptr<Entity> e)
 {
     float x1, y1, x2, y2;
@@ -330,9 +351,15 @@ bool Entity::damage(State &s, int p)
 
 void Entity::update(State &s)
 {
-    p_x += s.timer_adjustment * v_x;
-    p_y += s.timer_adjustment * v_y;
-    p_z += s.timer_adjustment * (v_z + E_BASE_SPEED);
+    float f = 1.0f;
+
+    if (isScenery()) {
+        f *= .5f;
+    }
+
+    p_x += f * s.timer_adjustment * v_x;
+    p_y += f * s.timer_adjustment * v_y;
+    p_z += f * s.timer_adjustment * (v_z + E_BASE_SPEED);
 
     r_x += s.timer_adjustment * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
@@ -484,3 +511,21 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     s.shaders[S_TEXTURE]->unbind();
 }
 
+void Entity::draw(State &s)
+{
+    float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
+
+    s.models[e_obj]->draw(s.view.transform(
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        getPosZ(),
+
+        getRotX() + s.tilt_y * -.035f,
+        getRotY() + s.tilt_x * -.035f,
+        getRotZ(),
+
+        getScaleX() * d,
+        getScaleY() * d,
+        getScaleZ() * d
+    ), glm::vec4(c_r * a, c_g * a, c_b * a, 1.0f));
+}

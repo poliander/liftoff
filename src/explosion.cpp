@@ -3,7 +3,7 @@
 Explosion::Explosion(unsigned short int type, float x, float y, float z) : Entity()
 {
     e_obj = type;
-    e_type = E_TYPE_SCENERY;
+    e_type = E_TYPE_DECORATION;
     e_state = E_STATE_ACTIVE;
 
     setPos(x, y, z);

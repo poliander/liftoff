@@ -20,6 +20,7 @@ class Entity
 
         bool               isCollectable();
         bool               isCollider();
+        bool               isScenery();
         bool               isFocusable();
         bool               isIdle();
         bool               isFading();
@@ -32,6 +33,8 @@ class Entity
         void               setPosX(float x);
         void               setPosY(float y);
         void               setPosZ(float z);
+
+        glm::vec3          getPos();
         float              getPosX();
         float              getPosY();
         float              getPosZ();
@@ -66,7 +69,6 @@ class Entity
         void               setSpin(float x, float y, float z);
 
         float              getAcceleration();
-
         void               setLife(int l);
         int                getLife();
 
@@ -81,7 +83,7 @@ class Entity
         virtual void       shoot(State &s);
 
         virtual void       update(State &s);
-        virtual void       draw(State &s) = 0;
+        virtual void       draw(State &s);
         void               drawCrosshair(State &s, shared_ptr<Entity> e);
 
         void               resetTarget();
@@ -137,4 +139,5 @@ class Entity
 
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
         float              calcDistance3D(State &s, shared_ptr<Entity> e);
+        float              calcDistanceScale(State &s);
 };

@@ -1115,7 +1115,7 @@ void Scene::updateScene()
     static GLuint nextdebris = state.timer;
 
     if ((state.timer > nextdebris) && (state.lvl_pos < float(state.lvl_length - 1000))) {
-        nextdebris = state.timer + 250 + rand() % 250;
+        nextdebris = state.timer + 200 + rand() % 200;
         state.entities.push_back(make_shared<Debris>());
     }
 
@@ -1373,7 +1373,7 @@ void Scene::draw()
         .0f
     );
 
-    state.view.lookAt(
+    state.view.update(
         p_x * -.01f + state.tilt_x * .4f,
         p_y * -.01f + player->getVelocityY() * 5.0f + state.tilt_y * .4f,
         .0f,

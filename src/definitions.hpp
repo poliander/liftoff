@@ -37,9 +37,10 @@
 #define E_STATE_GONE            9
 
 // entity types
-#define E_TYPE_PLAYER           1
-#define E_TYPE_SCENERY          2
-#define E_TYPE_COLLIDER         3
+#define E_TYPE_PLAYER           0
+#define E_TYPE_COLLIDER         1
+#define E_TYPE_DECORATION       2
+#define E_TYPE_SCENERY          3
 
 // messages types
 #define MSG_MONEY               1

@@ -9,5 +9,4 @@ class Debris : public Entity
         ~Debris();
 
         void update(State &s);
-        void draw(State &s);
 };

@@ -18,16 +18,10 @@ class View
             float zFar
         );
 
-        void lookAt(
+        void update(
             float camera_pos_x,    float camera_pos_y,    float camera_pos_z,
             float camera_target_x, float camera_target_y, float camera_target_z,
             float camera_up_x,     float camera_up_y,     float camera_up_z
-        );
-
-        static glm::mat4 transform2D(
-            float px, float py, float pz,
-            float rx, float ry, float rz,
-            float sx, float sy, float sz
         );
 
         glm::mat4 transform(
@@ -36,11 +30,19 @@ class View
             float sx, float sy, float sz
         );
 
+        static glm::mat4 transform2D(
+            float px, float py, float pz,
+            float rx, float ry, float rz,
+            float sx, float sy, float sz
+        );
+
+        glm::vec3 getCameraPos();
+
     private:
+        glm::mat4 projection;
+        glm::mat4 view;
+
         glm::vec3 camera_pos;
         glm::vec3 camera_target;
         glm::vec3 camera_up;
-
-        glm::mat4 projection;
-        glm::mat4 view;
 };

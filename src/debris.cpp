@@ -3,7 +3,7 @@
 Debris::Debris() : Entity()
 {
     e_obj = OBJ_DEBRIS_1;
-    e_type = E_TYPE_SCENERY;
+    e_type = E_TYPE_DECORATION;
     e_state = E_STATE_IDLE;
 
     p_x = -600.0f + float(rand() % 1200);
@@ -34,24 +34,4 @@ void Debris::update(State &s)
     if (p_z > 0) {
         e_state = E_STATE_GONE;
     }
-}
-
-void Debris::draw(State &s)
-{
-    float a = float(s.global_alpha) * .01f;
-    float scale = (10000.0f + p_z) * .0001f;
-
-    s.models[e_obj]->draw(s.view.transform(
-        E_RELATIVE_MOVEMENT * (p_x - s.cam_x),
-        E_RELATIVE_MOVEMENT * (p_y - s.cam_y),
-        p_z,
-
-        r_x,
-        r_y,
-        r_z,
-
-        s_x * scale,
-        s_y * scale,
-        s_z * scale
-    ), glm::vec4(c_r * a, c_g * a, c_b * a, c_a));
 }
