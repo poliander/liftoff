@@ -2,6 +2,9 @@
 
 Entity::Entity()
 {
+    money = 0;
+    life = 1;
+    focusable = false;
 }
 
 Entity::~Entity()
@@ -401,6 +404,8 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         da -= .001f * (1000.0f + p_z);
     }
 
+    glDisable(GL_DEPTH_TEST);
+
     s.shaders[S_TEXTURE]->bind();
 
     if (s.player->hasTarget(me)) {
@@ -412,7 +417,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-            (p_z + .01f),
+            p_z - .1f,
 
             s.tilt_y * -.035f,
             s.tilt_x * -.035f,
@@ -442,7 +447,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-            (p_z + .01f),
+            p_z - .1f,
 
             s.tilt_y * -.035f,
             s.tilt_x * -.035f,
@@ -461,7 +466,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
         (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (p_z + .01f),
+        p_z,
 
         s.tilt_y * -.035f,
         s.tilt_x * -.035f,
@@ -471,6 +476,8 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         scale * 1.5f,
         0
     ));
+
+    glEnable(GL_DEPTH_TEST);
 
     s.textures[T_HUD_3]->draw();
 

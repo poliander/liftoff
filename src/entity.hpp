@@ -130,9 +130,9 @@ class Entity
 
         shared_ptr<Entity> target;
 
-        unsigned short     money = 0;
-        int                life = 1;
-        bool               focusable = false;
+        int                money;
+        int                life;
+        bool               focusable;
         float              acceleration;
 
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
