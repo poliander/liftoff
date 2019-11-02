@@ -48,17 +48,7 @@ glm::mat4 View::transform(
     float rx, float ry, float rz,
     float sx, float sy, float sz
 ) {
-    glm::mat4 rotX = glm::rotate(glm::radians(-rx), glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 rotY = glm::rotate(glm::radians(-ry), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 rotZ = glm::rotate(glm::radians(-rz), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    glm::mat4 posMat = glm::translate(glm::vec3(-px, -py, pz));
-    glm::mat4 rotMat = rotX * rotY * rotZ;
-    glm::mat4 scaleMat = glm::scale(glm::vec3(sx, sy, sz));
-
-    glm::mat4 model = posMat * rotMat * scaleMat;
-
-    return projection * view * model;
+    return getProjection() * getView() * getModel(px, py, pz, rx, ry, rz, sx, sy, sz);
 }
 
 glm::mat4 View::transform2D(
@@ -84,4 +74,32 @@ glm::mat4 View::transform2D(
 glm::vec3 View::getCameraPos()
 {
     return camera_pos;
+}
+
+glm::mat4 View::getView()
+{
+    return view;
+}
+
+glm::mat4 View::getProjection()
+{
+    return projection;
+}
+
+glm::mat4 View::getModel(
+    float px, float py, float pz,
+    float rx, float ry, float rz,
+    float sx, float sy, float sz
+) {
+    glm::mat4 rotX = glm::rotate(glm::radians(-rx), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 rotY = glm::rotate(glm::radians(-ry), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 rotZ = glm::rotate(glm::radians(-rz), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    glm::mat4 posMat = glm::translate(glm::vec3(-px, -py, pz));
+    glm::mat4 rotMat = rotX * rotY * rotZ;
+    glm::mat4 scaleMat = glm::scale(glm::vec3(sx, sy, sz));
+
+    glm::mat4 model = posMat * rotMat * scaleMat;
+
+    return model;
 }

@@ -515,7 +515,10 @@ void Entity::draw(State &s)
 {
     float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
 
-    s.models[e_obj]->draw(s.view.transform(
+    glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
+    glm::mat4 view = s.view.getView();
+    glm::mat4 projection = s.view.getProjection();
+    glm::mat4 model = s.view.getModel(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
@@ -527,5 +530,7 @@ void Entity::draw(State &s)
         getScaleX() * d,
         getScaleY() * d,
         getScaleZ() * d
-    ), glm::vec4(c_r * a, c_g * a, c_b * a, 1.0f));
+    );
+
+    s.models[e_obj]->draw(model, view, projection, color);
 }

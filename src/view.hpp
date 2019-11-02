@@ -36,6 +36,14 @@ class View
             float sx, float sy, float sz
         );
 
+        glm::mat4 getProjection();
+        glm::mat4 getView();
+        glm::mat4 getModel(
+            float px, float py, float pz,
+            float rx, float ry, float rz,
+            float sx, float sy, float sz
+        );
+
         glm::vec3 getCameraPos();
 
     private:

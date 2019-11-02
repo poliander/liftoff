@@ -37,13 +37,15 @@ Model::~Model()
     glDeleteVertexArrays(1, &vertexArrayObject);
 }
 
-void Model::draw(glm::mat4 mvp, glm::vec4 color)
+void Model::draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec4 color)
 {
     shader->bind();
     texture->bind();
 
-    shader->update(UNI_MVP, mvp);
-    shader->update(UNI_COLOR, color);
+    shader->update(UNI_MODEL,      model);
+    shader->update(UNI_VIEW,       view);
+    shader->update(UNI_PROJECTION, projection);
+    shader->update(UNI_COLOR,      color);
 
     glBindVertexArray(vertexArrayObject);
     glDrawElements(GL_TRIANGLES, object->indices.size(), GL_UNSIGNED_INT, 0);

@@ -397,16 +397,19 @@ void Player::update(State &s)
 
 void Player::draw(State &s)
 {
-    float alpha, jlen;
+    float jlen, a = s.global_alpha * .01f;
 
     if (
-        s.get() >= STATE_GAME_LOOP &&
-        s.get() <= STATE_GAME_QUIT
+        s.get() < STATE_GAME_LOOP ||
+        s.get() > STATE_GAME_QUIT
     ) {
-        alpha = s.global_alpha * .01f;
-    } else {
-        alpha = s.menu_title_pos * .01f;
+        a = s.menu_title_pos * .01f;
     }
+
+    glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
+    glm::mat4 view = s.view.getView();
+    glm::mat4 projection = s.view.getProjection();
+    glm::mat4 model;
 
     if (
         s.get() >= STATE_GAME_LOOP &&
@@ -414,7 +417,7 @@ void Player::draw(State &s)
     ) {
         setScale(22.5f, 22.5f, 22.5f);
 
-        s.models[e_obj]->draw(s.view.transform(
+        model = s.view.getModel(
             ((getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT) + s.tilt_x * .15f,
             ((getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT) + s.tilt_y * .15f,
             ((getPosZ() + (s.tilt_x + s.tilt_y) * .15f)),
@@ -426,12 +429,12 @@ void Player::draw(State &s)
             getScaleX(),
             getScaleY(),
             getScaleZ()
-        ), glm::vec4(c_r, c_g, c_b, alpha));
+        );
     } else {
         setScale(2.0f, 2.0f, 2.0f);
         setPos(9.0f, -2.5f, -50.0f);
 
-        s.models[e_obj]->draw(s.view.transform(
+        model = s.view.getModel(
             getPosX(),
             getPosY(),
             getPosZ(),
@@ -443,8 +446,11 @@ void Player::draw(State &s)
             getScaleX(),
             getScaleY(),
             getScaleZ()
-        ), glm::vec4(c_r, c_g, c_b, alpha));
+        );
     }
+
+    s.models[e_obj]->draw(model, view, projection, color);
+
 /*
     glLoadIdentity();
     glPushMatrix();

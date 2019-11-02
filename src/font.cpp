@@ -75,7 +75,7 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
 
     shader->bind();
 
-    shader->update(UNI_TEXT_COLOR, glm::vec4(r, g, b, a));
+    shader->update(UNI_COLOR, glm::vec4(r, g, b, a));
     shader->update(UNI_MVP, glm::ortho(0.0f, 800.0f, 0.0f, 600.0f) * glm::translate(glm::vec3(x, y, 0)));
 
     glBindVertexArray(vertexArray);
