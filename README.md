@@ -50,11 +50,11 @@ Disable multisampling
 
 ## External resources
 
-Font "Zekton" from Typodermic Fonts Inc. (c) 2000 Ray Larabie\
+Font "Zekton" from Typodermic Fonts Inc. (c) 2000 Ray Larabie
 
-Title theme "Unknown Energy" by Dox | https://soundcloud.com/dox-free-music\
-Music promoted by [www.free-stock-music.com](https://www.free-stock-music.com)\
-Attribution-NoDerivs 3.0 Unported ([CC BY-ND 3.0](https://creativecommons.org/licenses/by-nd/3.0/))\
+Title theme "Unknown Energy" by Dox | https://soundcloud.com/dox-free-music
+Music promoted by [www.free-stock-music.com](https://www.free-stock-music.com)
+Attribution-NoDerivs 3.0 Unported ([CC BY-ND 3.0](https://creativecommons.org/licenses/by-nd/3.0/))
 
 ### Helpful links
 
