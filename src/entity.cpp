@@ -35,7 +35,7 @@ bool Entity::isGone()
 
 bool Entity::isFocusable()
 {
-    return focusable;
+    return focusable && e_state == E_STATE_ACTIVE && p_z > -8000.0f;
 }
 
 bool Entity::isAlive()
@@ -385,16 +385,6 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     float scale = 1.25f * (150.0f + ((p_z + 12500.0f) * .00005f));
     float rot, da;
 
-    if (
-        isFocusable() == false ||
-        isFading() ||
-        getPosZ() < -8000.0f
-    ) {
-        return;
-    }
-
-    glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
-
     // let cross-hair fade out when player dies
     if (isAlive()) {
         da = .85f;
@@ -485,7 +475,5 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     s.textures[T_HUD_3]->draw();
 
     s.shaders[S_TEXTURE]->unbind();
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 

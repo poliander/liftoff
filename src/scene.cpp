@@ -830,17 +830,15 @@ void Scene::drawMenu()
  */
 void Scene::drawScene()
 {
-    int i;
-    float alpha;
-
-    std::sort(state.entities.begin(), state.entities.end(), Entity::sort);
-
     auto e = state.entities.begin();
 
     while (e != state.entities.end()) {
         if ((*e)->isIdle() == false) {
             (*e)->draw(state);
-            (*e)->drawCrosshair(state, *e);
+
+            if ((*e)->isFocusable()) {
+                (*e)->drawCrosshair(state, *e);
+            }
         }
 
         ++e;
@@ -1136,15 +1134,15 @@ void Scene::updateScene()
             }
         }
 
-        if ((*e)->isFocusable()) {
-            state.player->checkTarget(state, *e);
-        }
-
         (*e)->update(state);
 
         if ((*e)->isGone()) {
             e = state.entities.erase(e);
             continue;
+        }
+
+        if ((*e)->isFocusable()) {
+            state.player->checkTarget(state, *e);
         }
 
         if ((*e)->isCollider()) {
@@ -1166,6 +1164,8 @@ void Scene::updateScene()
 
         ++e;
     }
+
+    sort(state.entities.begin(), state.entities.end(), Entity::sort);
 }
 
 /*
