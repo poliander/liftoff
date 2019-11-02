@@ -1,14 +1,18 @@
 #include "framebuffer.hpp"
 
-Framebuffer::Framebuffer()
+Framebuffer::Framebuffer(GLint w, GLint h, GLint f)
 {
+    width = w;
+    height = h;
+    format = f;
+
     glGenFramebuffers(1, &frameBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
     glGenTextures(1, &texColorBuffer);
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2048, 2048, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, f, w, h, 0, f, GL_UNSIGNED_BYTE, NULL);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -27,7 +31,7 @@ void Framebuffer::bind()
 {
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
     glGetIntegerv(GL_VIEWPORT, viewport);
-    glViewport(0, 0, 2048, 2048);
+    glViewport(0, 0, width, height);
 }
 
 void Framebuffer::unbind()

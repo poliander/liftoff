@@ -1,11 +1,10 @@
 #include "skybox.hpp"
 
-Skybox::Skybox() : framebuffer(new Framebuffer())
+Skybox::Skybox() : framebuffer(new Framebuffer(4096, 4096, GL_RGB))
 {
-    int i;
     float x, y;
 
-    for (i = 0; i < SKYBOX_NUM_STARS; i++) {
+    for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         x = 0;
         y = 0;
 
@@ -14,16 +13,14 @@ Skybox::Skybox() : framebuffer(new Framebuffer())
             y = .1f * (rand() % 2000 - 1000);
         }
 
+        stars[i][0] = x;
+        stars[i][1] = y;
+        stars[i][2] = -1000.0f + (rand() % 1000);
+
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
-            stars[i][0] = x;
-            stars[i][1] = y;
-            stars[i][2] = -1000.0f + (rand() % 1000);
             stars[i][3] = 90.0f + (atan(stars[i][1] / stars[i][0]) * 180.0f/ M_PI);
         } else  {
-            stars[i][0] = x;
-            stars[i][1] = y;
-            stars[i][2] = -1000.0f + (rand() % 1000);
-            stars[i][3] = (float)((rand() % 100) * .005f) + .35f;
+            stars[i][3] = 0.35f + (((float)(rand() % 100)) * .005f);
         }
     }
 }
@@ -70,11 +67,7 @@ void Skybox::draw(State &s)
     s.textures[T_BACKGROUND_1]->bind();
 
     s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.65f, .7f, .8f, 1.0f));
-    s.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
-        0, 0, -1.0f,
-        0, 0, 0,
-        1.35f, 1.35f, 0
-    ));
+    s.shaders[S_TEXTURE]->update(UNI_MVP, glm::ortho(-0.5f, 0.5f, -0.5f, 0.5f));
 
     s.textures[T_BACKGROUND_1]->draw();
 

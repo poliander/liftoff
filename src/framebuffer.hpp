@@ -7,7 +7,7 @@ using namespace std;
 class Framebuffer : public Quad
 {
     public:
-        Framebuffer();
+        Framebuffer(GLint w, GLint h, GLint f);
         ~Framebuffer();
 
         void   bind();
@@ -15,7 +15,12 @@ class Framebuffer : public Quad
         void   draw();
 
     protected:
+        GLint  viewport[4];
+
+        GLint width;
+        GLint height;
+        GLint format;
+
         GLuint texColorBuffer;
         GLuint frameBuffer;
-        GLint  viewport[4];
 };
