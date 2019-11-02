@@ -489,10 +489,7 @@ void Scene::drawMenu()
                             state.log("ok\n");
                             state.set(STATE_GAME_START);
 
-                            player->setEnergy(-200);
-                            player->setLife(player->getLifeMaximum());
-                            player->setMoney(0);
-                            player->collect(OBJ_POWERUP_0);
+                            player->reset(state);
                         } else {
                             state.log("failed\n");
                         }

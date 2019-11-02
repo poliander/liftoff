@@ -17,6 +17,7 @@ class Player : public Entity
         void            update(State &s);
         void            draw(State &s);
         void            shoot(State &s);
+        void            reset(State &s);
         void            collide(State &s, shared_ptr<Entity> e);
         void            collect(unsigned short e_obj);
 
@@ -48,6 +49,9 @@ class Player : public Entity
         float           j_l;              // jet axhaust animation
         float           jt_l;
         float           jr;
+
+        unsigned short  m_alt;
+        GLuint          m_next_shot;
 
         float           gun_flash[2];     // gun flashes
         float           gun_flash_rot[2];

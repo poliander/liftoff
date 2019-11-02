@@ -91,10 +91,23 @@ void Player::collide(State &s, shared_ptr<Entity> e)
 {
 }
 
+void Player::reset(State &s)
+{
+    money = 0;
+    energy = -200;
+    life = life_max;
+
+    m_alt = 0;
+    m_next_shot = s.timer;
+
+    powerup_booster_timer = 0;
+    powerup_booster_length = 0;
+
+    collect(OBJ_POWERUP_0);
+}
+
 void Player::shoot(State &s)
 {
-    static int m_alt = 0;
-    static GLuint m_next_shot = s.timer;
     float ax, ay, dx, dy, dz, hx, hy;
     Sint16 angle;
 
@@ -116,9 +129,8 @@ void Player::shoot(State &s)
     }
 
     energy -= 25;
-
-    // left/right alteration, randomize gun flash
     m_alt = 1 - m_alt;
+
     gun_flash[m_alt] = 1.0f;
     gun_flash_rot[m_alt] = float(rand() % 360);
 
@@ -250,7 +262,6 @@ void Player::update(State &s)
     p_z -= v_z * s.timer_adjustment;
 
     // engine exhausts
-
     jr += s.timer_adjustment * .2f;
 
     if (jr > (.3f + (rand()%200)*.001f)) {
