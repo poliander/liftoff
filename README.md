@@ -54,8 +54,8 @@ Font "Zekton" from Typodermic Fonts Inc. (c) 2000 Ray Larabie
 
 ### Helpful links
 
-[LearnOpenGL](https://learnopengl.com/)
-[Visual glBlendFunc + glBlendEquation Tool](https://www.andersriggelsen.dk/glblendfunc.php)
+- [LearnOpenGL](https://learnopengl.com/)
+- [Visual glBlendFunc + glBlendEquation Tool](https://www.andersriggelsen.dk/glblendfunc.php)
 
 ## License
 
