@@ -22,7 +22,7 @@ struct Glyph
     GLint      height;
 };
 
-class Font
+class Font : public Quad
 {
     public:
         Font(const string& filename, shared_ptr<Shader> s);
@@ -33,7 +33,4 @@ class Font
     private:
         shared_ptr<Shader> shader;
         map<GLchar, Glyph> glyphs;
-
-        GLuint vertexArray;
-        GLuint vertexArrayBuffer;
 };

@@ -53,16 +53,6 @@ Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
 
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-
-    glGenVertexArrays(1, &vertexArray);
-    glGenBuffers(1, &vertexArrayBuffer);
-    glBindVertexArray(vertexArray);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 }
 
 Font::~Font()
@@ -91,19 +81,19 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
         GLfloat h = g.size.y * s;
 
         GLfloat vertices[6][4] = {
-            { xp,     yp + h,   0.0, 0.0 },            
-            { xp,     yp,       0.0, 1.0 },
-            { xp + w, yp,       1.0, 1.0 },
+            { xp,     yp + h,   0.0f, 0.0f },
+            { xp,     yp,       0.0f, 1.0f },
+            { xp + w, yp,       1.0f, 1.0f },
 
-            { xp,     yp + h,   0.0, 0.0 },
-            { xp + w, yp,       1.0, 1.0 },
-            { xp + w, yp + h,   1.0, 0.0 }           
+            { xp,     yp + h,   0.0f, 0.0f },
+            { xp + w, yp,       1.0f, 1.0f },
+            { xp + w, yp + h,   1.0f, 0.0f } 
         };
 
         glBindTexture(GL_TEXTURE_2D, g.texture);
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glDrawArrays(GL_TRIANGLES, 0, 6);

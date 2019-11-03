@@ -10,5 +10,5 @@ class Quad
 
     protected:
         GLuint vertexArray;
-        GLuint vertexArrayBuffers[2];
+        GLuint vertexArrayBuffer;
 };

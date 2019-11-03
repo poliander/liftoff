@@ -131,5 +131,5 @@ void Texture::draw()
     bind();
 
     glBindVertexArray(vertexArray);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
