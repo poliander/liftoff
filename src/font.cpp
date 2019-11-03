@@ -77,25 +77,11 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
 
         GLfloat xp = x + g.bearing.x * s;
         GLfloat yp = y - (g.size.y - g.bearing.y) * s;
-        GLfloat w = g.size.x * s;
-        GLfloat h = g.size.y * s;
 
-        GLfloat vertices[6][4] = {
-            { xp,     yp + h,   0.0f, 0.0f },
-            { xp,     yp,       0.0f, 1.0f },
-            { xp + w, yp,       1.0f, 1.0f },
-
-            { xp,     yp + h,   0.0f, 0.0f },
-            { xp + w, yp,       1.0f, 1.0f },
-            { xp + w, yp + h,   1.0f, 0.0f } 
-        };
+        setPosition(glm::vec4(xp, yp, xp + g.size.x * s, yp + g.size.y * s));
+        update();
 
         glBindTexture(GL_TEXTURE_2D, g.texture);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         if (*c == 10) {
