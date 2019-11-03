@@ -6,9 +6,6 @@ Player::Player() : Entity()
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
 
-    particles = new ParticleEngine();
-    particles->setup(EMITTER_JET, 50, 0, 0, .35f, 1.0f, 1.0f);
-
     jr = 0;
     j_l = 3;
     jt_l = 3;
@@ -44,7 +41,6 @@ Player::Player() : Entity()
 
 Player::~Player()
 {
-    delete particles;
 }
 
 void Player::setEnergy(int e)
@@ -277,8 +273,6 @@ void Player::update(State &s)
         jt_l -= .1f * ((jt_l - j_l )+.05f) * s.timer_adjustment;
     }
 
-    particles->update(s);
-
     // rotate
     r_x += s.timer_adjustment * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
@@ -500,80 +494,5 @@ void Player::draw(State &s)
         glRotatef(gun_flash_rot[1], -1, 0, 0);
         glTranslatef(-1.5f, -1.0f, -.5f);
     }
-
-    // jet
-
-    if (
-        isAlive() &&
-        (s.get() >= STATE_GAME_LOOP) &&
-        (s.get() <= STATE_GAME_QUIT)
-    ) {
-        s.textures[T_STAR]->bind();
-
-        if (s.get() == STATE_GAME_NEXTLEVEL) {
-            particles->setSize(10.0f + s.menu_title_pos * .025f);
-            particles->setScale(1.0f + s.menu_title_pos * .015f);
-        } else {
-            particles->setSize(10.0f);
-            particles->setScale(1.0f);
-        }
-
-        // plasma
-        particles->update(s);
-        particles->draw(s, -4.25f, -.75f, .5f, .0f, -90.0f, -5.0f);
-        particles->draw(s, -4.25f, .75f, .5f, .0f, -90.0f, 5.0f);
-
-        // exhausts
-        glRotatef(90, 1, 0, 0);
-        glRotatef(-90, 0, 1, 0);
-        glTranslatef(0, .5f, 3.25f);
-        s.textures[T_JET_EXHAUST]->bind();
-        for (int j=1; j<6; j++) {
-            jlen = 3.0f + jt_l*j*.25f;
-
-            glTranslatef(-.7f-j*.05f, 0, (((int)s.lvl_pos % 3))*.03f*(j-1));
-            glRotatef(j*2, 0, 0, 1);
-            glBegin (GL_QUADS);
-                glColor4f(.8f, .8f, 1, 0);
-                glTexCoord2f(0, 0);
-                glVertex3f(-.25, -.125f+j*.05f, .6f);
-
-                glTexCoord2f(1, 0);
-                glVertex3f(.25, 0, .6f);
-
-                glColor4f(1-(.075f*j*jt_l), 1-(.05f*j*jt_l), 1-(.01f*j*jt_l), alpha*(1-j*.15f));
-                glTexCoord2f(1, .95f);
-                glVertex3f(.15, 0, jlen);
-
-                glTexCoord2f(0, .95f);
-                glVertex3f(-.25, 0, jlen);
-            glEnd();
-
-            glRotatef(-j*2, 0, 0, 1);
-
-            glTranslatef(1.4f+j*.1f, 0, 0);
-            glRotatef(-j*2, 0, 0, 1);
-            glBegin (GL_QUADS);
-                glColor4f(.8f, .8f, 1, 0);
-                glTexCoord2f(0, 0);
-                glVertex3f(-.25, 0, .6f);
-
-                glTexCoord2f(1, 0);
-                glVertex3f(.25, -.125f+j*.05f, .6f);
-
-                glColor4f(1-(.075f*j*jt_l), 1-(.05f*j*jt_l), 1-(.01f*j*jt_l), alpha*(1-j*.15f));
-                glTexCoord2f(1, .95f);
-                glVertex3f(.15, 0, jlen);
-
-                glTexCoord2f(0, .95f);
-                glVertex3f(-.25, 0, jlen);
-            glEnd();
-            glRotatef(j*2, 0, 0, 1);
-
-            glTranslatef(-.7f - j * .05f, 0, 0);
-        }
-    }
-
-    glPopMatrix();
 */
 }

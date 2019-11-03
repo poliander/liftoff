@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 
 #include "entity.hpp"
-#include "particles.hpp"
 #include "missile.hpp"
 
 class Player : public Entity
@@ -31,8 +30,6 @@ class Player : public Entity
         int             getLifeRegenerationEnergy();
 
     private:
-        ParticleEngine* particles;
-
         unsigned short  powerup;
         unsigned short  powerup_booster_length;
         int             powerup_booster_timer;
