@@ -75,6 +75,7 @@ class State
         Uint32                      vid_format;
         float                       vid_aspect;
         unsigned short              vid_quality;
+        unsigned short              vid_framebuffer_size;
         unsigned short              vid_fullscreen;
         unsigned short              vid_vsync;
         unsigned short              vid_multisampling;

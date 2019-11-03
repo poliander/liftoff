@@ -1,6 +1,6 @@
 #include "skybox.hpp"
 
-Skybox::Skybox() : framebuffer(new Framebuffer(4096, 4096, GL_RGB))
+Skybox::Skybox(unsigned short fb_size) : framebuffer(new Framebuffer(fb_size, fb_size, GL_RGB))
 {
     float x, y;
 

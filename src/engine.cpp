@@ -200,6 +200,38 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
+    switch (state.vid_quality)
+    {
+        case 5:
+            state.vid_multisampling = 8;
+            state.vid_framebuffer_size = 4096;
+            break;
+
+        case 4:
+            state.vid_multisampling = 4;
+            state.vid_framebuffer_size = 4096;
+            break;
+
+        case 3:
+            state.vid_multisampling = 4;
+            state.vid_framebuffer_size = 2048;
+            break;
+
+        case 2:
+            state.vid_multisampling = 2;
+            state.vid_framebuffer_size = 2048;
+            break;
+
+        case 1:
+            state.vid_multisampling = 2;
+            state.vid_framebuffer_size = 1024;
+            break;
+
+        default:
+            state.vid_multisampling = 0;
+            state.vid_framebuffer_size = 1024;
+    }
+
     Uint32 win_flags = SDL_WINDOW_OPENGL;
 
     if (state.vid_fullscreen) {

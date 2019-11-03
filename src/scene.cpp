@@ -3,7 +3,7 @@
 Scene::Scene(State &s) : 
     state(s),
     player(new Player()),
-    skybox(new Skybox())
+    skybox(new Skybox(s.vid_framebuffer_size))
 {
     state.player = player;
 }

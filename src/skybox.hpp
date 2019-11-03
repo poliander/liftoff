@@ -13,7 +13,7 @@
 class Skybox
 {
     public:
-        Skybox();
+        Skybox(unsigned short fb_size);
         ~Skybox();
 
         void                    update(State &s);
