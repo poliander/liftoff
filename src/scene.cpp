@@ -758,31 +758,22 @@ void Scene::drawMenu()
     }
 
     // draw menu background
-    glLoadIdentity();
-    glPushMatrix();
-    state.textures[T_MENU_1]->bind();
-    glTranslatef(0, -0.8f, -10);
-    glScalef(1, 1, 1);
-    glColor4f(1, 1, 1, .01f*m_a);
-    glBegin (GL_QUADS);
-      glTexCoord2f (0, 0);
-      glVertex3f (-5, 1.9f, 0);
 
-      glColor4f(0.75f, 0.75f, 0.75f, .01f*m_a);
-      glTexCoord2f (1, 0);
-      glVertex3f (5, 1.9f, 0);
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
+        0.000f,  0.081f, -1.000f,
+        0.000f,  0.000f,  0.000f,
+        0.563f,  0.379f,  0.000f
+    ));
+    state.textures[T_MENU_1]->draw();
+    state.shaders[S_TEXTURE]->unbind();
 
-      glColor4f(0.5f, 0.5f, 0.5f, .01f*m_a);
-      glTexCoord2f (1, 1);
-      glVertex3f (5, -1.9f, 0);
-
-      glColor4f(0.75f, 0.75f, 0.75f, .01f*m_a);
-      glTexCoord2f (0, 1);
-      glVertex3f (-5, -1.9f, 0);
-    glEnd();
-    glPopMatrix();
-
-    state.fonts[F_ZEKTON]->draw("VECTOR ZERO MK. IX \"REDUX\"", 197.0f, 100.0f, 0.075f, 1.0f, .9f, .85f, .0045f * m_a);
+    state.fonts[F_ZEKTON]->draw(
+        "VECTOR ZERO MK. IX \"REDUX\"",
+        197.0f, 100.0f, 0.075f,
+        1.0f, 0.9f, 0.85f, .0045f * m_a
+    );
 
     // draw menu items
     for (i = 0; i < numentries; i++) {
