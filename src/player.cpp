@@ -22,7 +22,7 @@ Player::Player() : Entity()
 
     // energy capacity and regeneration speed
     energy_max = 1500;
-    energy_reg = 5;
+    energy_reg = 10;
 
     // maximum life, life regeneration and regeneration energy draw
     life_max = 250;
@@ -360,8 +360,8 @@ void Player::update(State &s)
             if (powerup_booster_length > 0) {
                 powerup_booster_length--;
 
-                life += int(ceil((float)life_max * .075f));
-                energy += int(ceil((float)energy_max * .075f));
+                life += int(ceil((float)life_max * .1f));
+                energy += int(ceil((float)energy_max * .1f));
             } else {
                 // energy regeneration
                 energy += energy_reg;
