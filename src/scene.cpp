@@ -762,7 +762,7 @@ void Scene::drawMenu()
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
     state.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
-        0.000f,  0.081f, -1.000f,
+        0.000f,  0.075f, -1.000f,
         0.000f,  0.000f,  0.000f,
         0.563f,  0.379f,  0.000f
     ));
