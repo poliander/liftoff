@@ -764,10 +764,9 @@ void Scene::drawMenu()
 
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
-        0.000f,  0.080f, -1.000f,
-        0.000f,  0.000f,  0.000f,
-        0.563f,  0.379f,  0.000f
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(
+        0.0f,   -36.5f,
+        350.0f, 200.0f
     ));
     state.textures[T_MENU_1]->draw();
     state.shaders[S_TEXTURE]->unbind();
@@ -785,7 +784,7 @@ void Scene::drawMenu()
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(m_a * .005f, m_a * .005f, m_a * .005f, m_a * .0035f));
     state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(
-        -106.25f,
+        -104.75f,
         36.5f - (mrh * float(state.menu_pos) + mrh * 0.5f),
 
         135.0f,
