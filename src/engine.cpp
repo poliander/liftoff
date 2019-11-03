@@ -358,12 +358,15 @@ bool Engine::initDisplay()
     SDL_ShowCursor(0);
 
     glMatrixMode(GL_PROJECTION);
+
     glLoadIdentity();
     glFrustum(-400.0f * state.vid_aspect, 400.0f * state.vid_aspect, -300.0f, 300.0f, .1f, 10000.0f);
+    state.view.initOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
 
     glLoadIdentity();
     gluPerspective(65, state.vid_aspect, .1f, 10000.0f);
-    state.view.perspective(65, state.vid_aspect, .1f, 10000.0f);
+    state.view.initPerspective(65, state.vid_aspect, .1f, 10000.0f);
+
     glMatrixMode(GL_MODELVIEW);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);

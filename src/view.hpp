@@ -11,18 +11,18 @@ class View
         View();
         virtual ~View();
 
-        void perspective(
-            float fov,
-            float aspect,
-            float zNear,
-            float zFar
-        );
+        // perspective transformation (3D)
 
-        void update(
-            float camera_pos_x,    float camera_pos_y,    float camera_pos_z,
-            float camera_target_x, float camera_target_y, float camera_target_z,
-            float camera_up_x,     float camera_up_y,     float camera_up_z
+        void      initPerspective(float f, float a, float zNear, float zFar);
+        glm::mat4 getPerspective();
+
+        void setCamera(
+            float px, float py, float pz,
+            float tx, float ty, float tz,
+            float ux, float uy, float uz
         );
+        glm::mat4 getCamera();
+        glm::vec3 getCameraPos();
 
         glm::mat4 transform(
             float px, float py, float pz,
@@ -30,24 +30,37 @@ class View
             float sx, float sy, float sz
         );
 
-        static glm::mat4 transform2D(
-            float px, float py, float pz,
-            float rx, float ry, float rz,
-            float sx, float sy, float sz
-        );
-
-        glm::mat4 getProjection();
-        glm::mat4 getView();
         glm::mat4 getModel(
             float px, float py, float pz,
             float rx, float ry, float rz,
             float sx, float sy, float sz
         );
 
-        glm::vec3 getCameraPos();
+        // orthographic transformation (2D)
+
+        void      initOrthographic(float x1, float y1, float x2, float y2);
+        glm::mat4 getOrthographic();
+
+        glm::mat4 transform(
+            float px, float py,
+            float sx, float sy
+        );
+
+        glm::mat4 getModel(
+            float px, float py,
+            float sx, float sy
+        );
+
+        // DEPRECATED
+
+        static glm::mat4 transform2D(
+            float px, float py, float pz,
+            float rx, float ry, float rz,
+            float sx, float sy, float sz
+        );
 
     private:
-        glm::mat4 projection;
+        glm::mat4 projection[2];
         glm::mat4 view;
 
         glm::vec3 camera_pos;

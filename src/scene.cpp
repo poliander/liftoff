@@ -455,7 +455,11 @@ void Scene::drawTitle()
 void Scene::drawMenu()
 {
     int i, numentries;
-    float myf, mhf, mfs, my, mh, m_a = state.global_alpha;
+    float m_a = state.global_alpha;
+
+    float mfo; // font y-offset
+    float mfs; // font size
+    float mrh; // font row height
 
     char *mtxt[5];
     char msg[255];
@@ -468,11 +472,7 @@ void Scene::drawMenu()
         case 1: // main menu
             numentries = 3;
 
-            my = -.25f;
-            mh = 1.0f;
-
-            myf = 0.0f;
-            mhf = 23.8f;
+            mfo = 0.0f;
             mfs  = 0.15f;
 
             strcpy(mtxt[0], "LAUNCH");
@@ -516,11 +516,7 @@ void Scene::drawMenu()
         case 2: // settings submenu
             numentries = 4;
 
-            my = 0.015f;
-            mh = 0.750f;
-
-            myf = 3.5f;
-            mhf = 17.75f;
+            mfo = 3.5f;
             mfs = 0.14f;
 
             strcpy(mtxt[0], "VIDEO");
@@ -570,11 +566,7 @@ void Scene::drawMenu()
         case 3: // video settings
             numentries = 5;
 
-            my = .135f;
-            mh = .625f;
-
-            myf = 9.0f;
-            mhf = 14.8f;
+            mfo = 9.0f;
             mfs = 0.075f;
 
             sprintf(mtxt[0], "VIDEO MODE:\n     %dx%d",
@@ -644,11 +636,7 @@ void Scene::drawMenu()
         case 4: // audio settings
             numentries = 4;
 
-            my = 0.015f;
-            mh = 0.75f;
-
-            myf = 8.0f;
-            mhf = 17.75f;
+            mfo = 8.0f;
             mfs = 0.075f;
 
             switch(state.config.aud_sfx) {
@@ -762,7 +750,7 @@ void Scene::drawMenu()
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
     state.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
-        0.000f,  0.075f, -1.000f,
+        0.000f,  0.080f, -1.000f,
         0.000f,  0.000f,  0.000f,
         0.563f,  0.379f,  0.000f
     ));
@@ -776,43 +764,45 @@ void Scene::drawMenu()
     );
 
     // draw menu items
+
+    mrh = 150.0f * (1.0f / float(numentries));
+
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(m_a * .005f, m_a * .005f, m_a * .005f, m_a * .0035f));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(
+        -106.25f,
+        36.5f - (mrh * float(state.menu_pos) + mrh * 0.5f),
+
+        135.0f,
+        mrh
+    ));
+    state.textures[T_MENU_2]->draw();
+    state.shaders[S_TEXTURE]->unbind();
+
     for (i = 0; i < numentries; i++) {
+        float r, g, b;
+
+        if (i == state.menu_pos) {
+            r = 1.00f;
+            g = 0.90f;
+            b = 0.62f;
+        } else {
+            r = 1.00f;
+            g = 0.80f;
+            b = 0.55f;
+        }
+
         state.fonts[F_ZEKTON]->draw(
             mtxt[i],
 
             122.0f,
-            152.0f + myf - (i * mhf),
+            152.0f + mfo - (i * mrh * 0.5f),
 
             mfs,
 
-            1.00f,
-            0.80f,
-            0.55f,
-
+            r, g, b,
             0.0085f * m_a
         );
-
-        if (i == state.menu_pos) {
-            glLoadIdentity();
-            glPushMatrix();
-            state.textures[T_MENU_2]->bind();
-            glTranslatef(-4.9f, (my-(i*mh)), -9.95f);
-            glColor4f(.01f*m_a, .01f*m_a, .01f*m_a, 0.2f*m_a);
-            glBegin (GL_QUADS);
-              glTexCoord2f (0.2f, 0.04f);
-              glVertex3f (0, 0, 0);
-
-              glTexCoord2f (0.2f, 0.96f);
-              glVertex3f (0, mh, 0);
-
-              glTexCoord2f (1, 0.96f);
-              glVertex3f (3.8f, mh, 0);
-
-              glTexCoord2f (1, 0.04f);
-              glVertex3f (3.8f, 0, 0);
-            glEnd();
-            glPopMatrix();
-        }
     }
 }
 
@@ -1364,7 +1354,7 @@ void Scene::draw()
         .0f
     );
 
-    state.view.update(
+    state.view.setCamera(
         p_x * -.01f + state.tilt_x * .4f,
         p_y * -.01f + player->getVelocityY() * 5.0f + state.tilt_y * .4f,
         .0f,

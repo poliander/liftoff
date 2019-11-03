@@ -16,6 +16,10 @@
 #define DEFAULT_AUD_FORMAT      MIX_DEFAULT_FORMAT
 #define DEFAULT_GFX_PARTICLES   100
 
+// projection modes
+#define P_ORTHOGRAPHIC          0
+#define P_PERSPECTIVE           1
+
 // engine globals
 #define E_RELATIVE_MOVEMENT     2.5
 #define E_BASE_SPEED            25.0

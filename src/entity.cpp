@@ -516,8 +516,9 @@ void Entity::draw(State &s)
     float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
 
     glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
-    glm::mat4 view = s.view.getView();
-    glm::mat4 projection = s.view.getProjection();
+
+    glm::mat4 projection = s.view.getPerspective();
+    glm::mat4 view = s.view.getCamera();
     glm::mat4 model = s.view.getModel(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
