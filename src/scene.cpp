@@ -1286,7 +1286,7 @@ void Scene::update()
 
                 if (state.menu_title_pos > 80.0f) {
                     state.global_alpha = int(99.85f - (state.menu_title_pos - 80.0f) * 5.0f);
-                    player->setAccelerationZ(350.0f);
+                    player->setAccelerationZ(500.0f);
                 } else {
                     state.global_alpha = 100;
                     state.tilt(state.menu_title_pos * .05f);
@@ -1297,9 +1297,8 @@ void Scene::update()
                     state.stars_speed += (state.stars_speed - .1f) * .03f * state.timer_adjustment;
                 }
 
-                state.cam_x += state.timer_adjustment * ((player->getPosX() * state.cam_speed) - ((state.tilt_x * 2.0f + state.cam_x) * state.cam_speed)) * .15f;
-
-                state.cam_y += state.timer_adjustment * ((player->getPosY() * state.cam_speed) - ((state.tilt_y * 2.0f + state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
+                state.cam_x += state.timer_adjustment * ((player->getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
+                state.cam_y += state.timer_adjustment * ((player->getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
             } else {
                 player->setRot(115.0f, 0, 0);
                 player->setVelocity(0, 0, 0);
@@ -1355,31 +1354,23 @@ void Scene::draw()
     glViewport(0, 0, state.vid_width, state.vid_height);
 
     gluLookAt(
-        p_x * -.01f + state.tilt_x * .4f,
-        p_y * -.01f + player->getVelocityY() * 5.0f + state.tilt_y * .4f,
-        200.0f,
+        p_x * -.01f + state.tilt_x * .333f,
+        p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
+        0,
 
-        player->getVelocityX(),
-        .0f,
-        -10000.0f,
+        0, 0, -10000.0f,
 
-        player->getVelocityX() * .1f,
-        -1.0f,
-        .0f
+        player->getVelocityX() * .15f, -1.0f, 0
     );
 
     state.view.setCamera(
-        p_x * -.01f + state.tilt_x * .4f,
-        p_y * -.01f + player->getVelocityY() * 5.0f + state.tilt_y * .4f,
-        .0f,
+        p_x * -.01f + state.tilt_x * .333f,
+        p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
+        0,
 
-        player->getVelocityX(),
-        .0f,
-        -10000.0f,
+        0, 0, -10000.0f,
 
-        player->getVelocityX() * .1f,
-        -1.0f,
-        .0f
+        player->getVelocityX() * .15f, -1.0f, 0
     );
 
     // scenery

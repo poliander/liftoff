@@ -302,20 +302,20 @@ void Player::update(State &s)
         s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.timer_adjustment * .15f;
         s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.timer_adjustment * .15f;
     } else {
-        s.tilt_factor = .0f;
-        s.tilt_dx = .0f;
-        s.tilt_dy = .0f;
+        s.tilt_factor = 0;
+        s.tilt_dx = 0;
+        s.tilt_dy =0;
 
         if (fabs(s.tilt_x) > .05f) {
             s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.timer_adjustment * .15f;
         } else {
-            s.tilt_x = .0f;
+            s.tilt_x = 0;
         }
 
         if (fabs(s.tilt_y) > .05f) {
             s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.timer_adjustment * .15f;
         } else {
-            s.tilt_y = .0f;
+            s.tilt_y = 0;
         }
     }
 
@@ -412,9 +412,9 @@ void Player::draw(State &s)
         setScale(22.5f, 22.5f, 22.5f);
 
         model = s.view.getModel(
-            ((getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT) + s.tilt_x * .15f,
-            ((getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT) + s.tilt_y * .15f,
-            ((getPosZ() + (s.tilt_x + s.tilt_y) * .15f)),
+            (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+            (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+            getPosZ(),
 
             getRotX() + v_y * -20.0f,
             getRotY() + v_x *  50.0f,
