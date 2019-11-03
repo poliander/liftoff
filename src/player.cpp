@@ -133,9 +133,9 @@ void Player::shoot(State &s)
     auto missile = make_shared<Missile>();
 
     missile->setPos(
-        p_x - 7.5f + (m_alt * 15.0f),
+        p_x - 10.0f + (m_alt * 20.0f),
         p_y,
-        p_z - 300.0f
+        p_z - 50.0f
     );
 
     if (target && false == target->isCollectable()) {

@@ -7,6 +7,7 @@ Missile::Missile() : Entity()
     e_state = E_STATE_ACTIVE;
 
     setScale(2.25f, 2.25f, 2.25f);
+    setRot(90.0f, 0, 0);
 
     c_r = 0.5f;
     c_g = 1.0f;
@@ -15,7 +16,7 @@ Missile::Missile() : Entity()
 
     v_x = 0;
     v_y = 0;
-    v_z = -125.0f;
+    v_z = -(E_BASE_SPEED + 100.0f);
 
     power = 20;
 }
@@ -26,6 +27,10 @@ Missile::~Missile()
 
 void Missile::collide(State &s, shared_ptr<Entity> e)
 {
+    if (e->isPlayer()) {
+        return;
+    }
+
     if (e->damage(s, power)) {
         s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
         s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, getPosX(), getPosY(), getPosZ()));
@@ -47,50 +52,34 @@ void Missile::update(State &s)
 
 void Missile::draw(State &s)
 {
-    glLoadIdentity();
-    s.textures[T_MISSILE_1]->bind();
-    glColor4f(c_r, c_g, c_b, c_a);
+    float a = float(s.global_alpha) * .01f;
 
-    glPushMatrix();
+    glDisable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-    glTranslatef(
-        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (getPosZ())
-    );
+    s.shaders[S_TEXTURE]->bind();
+    s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a));
 
-    glRotatef(270, 0, 0, 1);
-    glScalef(getScaleX(), getScaleY(), getScaleZ());
+    for (int i = 0; i < 5; i++) {
+        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
+            (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+            (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+            getPosZ(),
 
-    glBegin (GL_QUADS);
-      glTexCoord2f (0, 0);
-      glVertex3f (-3.0f, 0, 0);
+            getRotX(),
+            getRotY() + float(i) * 30.0f,
+            getRotZ(),
 
-      glTexCoord2f (1, 0);
-      glVertex3f (3.0f, 0, 0);
+            20.0f,
+            250.0f,
+            0
+        ));
 
-      glTexCoord2f (1, .95f);
-      glVertex3f (3.0f, 0, 150.0f);
+        s.textures[T_MISSILE_1]->draw();
+    }
 
-      glTexCoord2f (0, .95f);
-      glVertex3f (-3.0f, 0, 150.0f);
-    glEnd();
+    s.shaders[S_TEXTURE]->unbind();
 
-    glRotatef(90, 0, 0, 1);
-
-    glBegin (GL_QUADS);
-      glTexCoord2f (0, 0);
-      glVertex3f (-3.0f, 0, 0);
-
-      glTexCoord2f (1, 0);
-      glVertex3f (3.0f, 0, 0);
-
-      glTexCoord2f (1, .95f);
-      glVertex3f (3.0f, 0, 150.0f);
-
-      glTexCoord2f (0, .95f);
-      glVertex3f (-3.0f, 0, 150.0f);
-    glEnd();
-
-    glPopMatrix();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
 }

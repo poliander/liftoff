@@ -120,17 +120,15 @@ void Explosion::draw(State &s)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
     }
-/*
-    glRotatef(s.tilt_x * -.035f, 0, 1, 0);
-    glRotatef(s.tilt_y * -.035f, 1, 0, 0);
-*/
+
     particles->draw(s,
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
-        (getPosZ()),
-        (getRotX()),
-        (getRotY()),
-        (getRotZ())
+        getPosZ(),
+
+        getRotX(),
+        getRotY(),
+        getRotZ()
     );
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

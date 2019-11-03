@@ -524,8 +524,8 @@ void Entity::draw(State &s)
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
 
-        getRotX() + s.tilt_y * -.035f,
-        getRotY() + s.tilt_x * -.035f,
+        getRotX(),
+        getRotY(),
         getRotZ(),
 
         getScaleX() * d,
