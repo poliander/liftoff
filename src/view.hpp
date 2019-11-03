@@ -51,14 +51,6 @@ class View
             float sx, float sy
         );
 
-        // DEPRECATED
-
-        static glm::mat4 transform2D(
-            float px, float py, float pz,
-            float rx, float ry, float rz,
-            float sx, float sy, float sz
-        );
-
     private:
         glm::mat4 projection[2];
         glm::mat4 view;

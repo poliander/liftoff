@@ -1,6 +1,8 @@
 #include "skybox.hpp"
 
-Skybox::Skybox(unsigned short fb_size) : framebuffer(new Framebuffer(fb_size, fb_size, GL_RGB))
+Skybox::Skybox(unsigned short fb_size) :
+    framebuffer(new Framebuffer(fb_size, fb_size, GL_RGB)),
+    view(new View())
 {
     float x, y;
 
@@ -23,6 +25,8 @@ Skybox::Skybox(unsigned short fb_size) : framebuffer(new Framebuffer(fb_size, fb
             stars[i][3] = 0.35f + (((float)(rand() % 100)) * .005f);
         }
     }
+
+    view->initPerspective(65.0f, 1.0f, .1f, 10000.0f);
 }
 
 Skybox::~Skybox()
@@ -77,7 +81,7 @@ void Skybox::draw(State &s)
 
     for (i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
+        s.shaders[S_TEXTURE]->update(UNI_MVP, view->getPerspective() * view->getModel(
             stars[i][0], stars[i][1], stars[i][2],
             0, 0, 0,
             stars[i][3], stars[i][3], 0
@@ -94,7 +98,7 @@ void Skybox::draw(State &s)
             sl = pow(a * 1.45f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
 
             s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (s.stars_speed - .3f)));
-            s.shaders[S_TEXTURE]->update(UNI_MVP, View::transform2D(
+            s.shaders[S_TEXTURE]->update(UNI_MVP, view->getPerspective() * view->getModel(
                 stars[i][0], stars[i][1], stars[i][2],
                 90.0f, stars[i][3], 0,
                 .9f, sl * (s.stars_speed - .3f), 0

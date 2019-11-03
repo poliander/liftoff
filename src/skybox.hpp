@@ -21,5 +21,7 @@ class Skybox
 
     private:
         float                   stars[SKYBOX_NUM_STARS][4];
+
+        shared_ptr<View>        view;
         shared_ptr<Framebuffer> framebuffer;
 };
