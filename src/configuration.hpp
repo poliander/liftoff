@@ -4,7 +4,7 @@ struct Configuration
 {
     short           vid_width;
     short           vid_height;
-    unsigned short  vid_aspect;
+    unsigned short  vid_quality;
     unsigned short  vid_fullscreen;
     unsigned short  vid_vsync;
 

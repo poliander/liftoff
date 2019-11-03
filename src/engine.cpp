@@ -81,12 +81,7 @@ bool Engine::init(int argc, char **argv)
 
     if (argc >= 0) {
         for (int i=0; i<argc; i++) {
-            if (strcmp(argv[i], "-noms") == 0) {
-                state.vid_multisampling = 0;
-                continue;
-            }
-
-            if (strcmp(argv[i], "-d") == 0) {
+            if (strcmp(argv[i], "/d") == 0) {
                 state.log_file = true;
                 continue;
             }
@@ -198,7 +193,7 @@ bool Engine::init(int argc, char **argv)
                 state.vid_width = state.config.vid_width;
                 state.vid_height = state.config.vid_height;
                 state.vid_fullscreen = state.config.vid_fullscreen;
-                state.vid_aspect = state.config.vid_aspect;
+                state.vid_quality = state.config.vid_quality;
                 state.vid_vsync = state.config.vid_vsync;
                 break;
             }
@@ -260,22 +255,7 @@ bool Engine::initDisplay()
     int cfg_multisampling = -1, sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
     char msg[255];
 
-    switch (state.config.vid_aspect) {
-        case 1:
-            state.vid_aspect = 4.0f / 3.0f;
-            break;
-
-        case 2:
-            state.vid_aspect = 16.0f / 9.0f;
-            break;
-
-        case 3:
-            state.vid_aspect = 16.0f / 10.0f;
-            break;
-
-        default:
-            state.vid_aspect = (float)state.vid_width / (float)state.vid_height;
-    }
+    state.vid_aspect = (float)state.vid_width / (float)state.vid_height;
 
     if (state.config.vid_fullscreen) {
         sdl_mode |= SDL_WINDOW_FULLSCREEN;
@@ -380,7 +360,7 @@ bool Engine::initDisplay()
 
     state.vid_width = state.config.vid_width;
     state.vid_height = state.config.vid_height;
-    state.vid_aspect_mode = state.config.vid_aspect;
+    state.vid_quality = state.config.vid_quality;
     state.vid_fullscreen = state.config.vid_fullscreen;
     state.vid_vsync = state.config.vid_vsync;
 
@@ -481,7 +461,7 @@ bool Engine::handleKeyboard()
                             }
                         }
 
-                        state.config.vid_aspect = state.vid_aspect_mode;
+                        state.config.vid_quality = state.vid_quality;
                         state.config.vid_fullscreen = state.vid_fullscreen;
                         state.config.vid_vsync = state.vid_vsync;
                         break;

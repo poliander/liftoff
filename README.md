@@ -38,15 +38,24 @@ Assumed you have a working cross-compiling environment available, then creating 
 ./configure --prefix=/usr/x86_64-w64-mingw32 --host=x86_64-w64-mingw32 && make
 ```
 
-## Command line options
+## Options
 
-```liftoff -d```
+### Display quality levels
+
+|  Quality  | MSAA  | Framebuffer  |
+| :------------ | :------------ | :------------ |
+| very low  | off  | 1024x1024 |
+| low  | 2x  | 1024x1024 |
+| medium  | 2x  | 2048x2048 |
+|  high | 4x  | 2048x2048 |
+|  very high | 4x  | 4096x4096 |
+|  ultra | 8x  | 4096x4096 |
+
+### Command line
+
+```liftoff.exe /d```
 
 Write debug information to "debug.log" (Windows only)
-
-```liftoff -noms```
-
-Disable multisampling
 
 ## External resources
 

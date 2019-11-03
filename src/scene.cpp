@@ -548,7 +548,7 @@ void Scene::drawMenu()
                                  state.vid_mode = i;
                             }
                         }
-                        state.config.vid_aspect = state.vid_aspect_mode;
+                        state.config.vid_quality = state.vid_quality;
                         state.config.vid_fullscreen = state.vid_fullscreen;
                         state.config.vid_vsync = state.vid_vsync;
                         break;
@@ -569,22 +569,37 @@ void Scene::drawMenu()
             mfo = 9.0f;
             mfs = 0.075f;
 
-            sprintf(mtxt[0], "VIDEO MODE:\n     %dx%d",
-              state.vid_cap_modes[state.vid_mode].w,
-              state.vid_cap_modes[state.vid_mode].h);
+            sprintf(
+                mtxt[0],
+                "VIDEO MODE:\n     %dx%d",
+                state.vid_cap_modes[state.vid_mode].w,
+                state.vid_cap_modes[state.vid_mode].h
+            );
 
-            switch(state.config.vid_aspect) {
+            switch (state.config.vid_quality) {
+                case 0:
+                    strcpy(mtxt[1], "QUALITY:\n     VERY LOW");
+                    break;
+
                 case 1:
-                    strcpy(mtxt[1], "ASPECT RATIO:\n     4:3");
+                    strcpy(mtxt[1], "QUALITY:\n     LOW");
                     break;
+
                 case 2:
-                    strcpy(mtxt[1], "ASPECT RATIO:\n     16:9");
+                    strcpy(mtxt[1], "QUALITY:\n     MEDIUM");
                     break;
+
                 case 3:
-                    strcpy(mtxt[1], "ASPECT RATIO:\n     16:10");
+                    strcpy(mtxt[1], "QUALITY:\n     HIGH");
                     break;
-                default:
-                    strcpy(mtxt[1], "ASPECT RATIO:\n     AUTO");
+
+                case 4:
+                    strcpy(mtxt[1], "QUALITY:\n     VERY HIGH");
+                    break;
+
+                case 5:
+                    strcpy(mtxt[1], "QUALITY:\n     ULTRA");
+                    break;
             }
 
             if (state.config.vid_fullscreen)
@@ -609,11 +624,11 @@ void Scene::drawMenu()
                         }
                         break;
 
-                    case 1: // toggle aspect ratio
-                        state.config.vid_aspect++;
+                    case 1: // toggle display quality
+                        state.config.vid_quality++;
 
-                        if (state.config.vid_aspect > 3) {
-                            state.config.vid_aspect = 0;
+                        if (state.config.vid_quality > 5) {
+                            state.config.vid_quality = 0;
                         }
                         break;
 

@@ -24,7 +24,7 @@ State::State()
     config.vid_height       = DEFAULT_VID_HEIGHT;
     config.vid_fullscreen   = DEFAULT_VID_FULLSCREEN;
     config.vid_vsync        = DEFAULT_VID_VSYNC;
-    config.vid_aspect       = 0;
+    config.vid_quality      = 0;
 
     config.aud_mixfreq      = DEFAULT_AUD_MIXFREQ;
     config.aud_sfx          = 2;
