@@ -67,7 +67,8 @@ License: Attribution-NoDerivs 3.0 Unported ([CC BY-ND 3.0](https://creativecommo
 
 ### Helpful links
 
-- [LearnOpenGL](https://learnopengl.com/)
+- [learnopengl.com](https://learnopengl.com/)
+- [opengl-tutorial.org](http://www.opengl-tutorial.org/)
 - [Visual glBlendFunc + glBlendEquation Tool](https://www.andersriggelsen.dk/glblendfunc.php)
 
 ## License
