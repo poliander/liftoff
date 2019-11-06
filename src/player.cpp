@@ -400,30 +400,65 @@ void Player::draw(State &s)
         a = s.menu_title_pos * .01f;
     }
 
-    glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
-    glm::mat4 view = s.view.getCamera();
     glm::mat4 projection = s.view.getPerspective();
-    glm::mat4 model;
+    glm::mat4 view = s.view.getCamera();
+    glm::mat4 model = s.view.getModel(
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        getPosZ() - 50.0f,
+
+        getRotX() + v_y * -20.0f,
+        getRotY() + v_x *  50.0f,
+        getRotZ(),
+
+        getScaleX(),
+        getScaleY(),
+        getScaleZ()
+    );
+
+    // flashing gun fire
+
+    if (gun_flash[0] > 0) {
+        s.shaders[S_TEXTURE]->bind();
+        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[0] * a));
+
+        glm::mat4 m = glm::translate(model, glm::vec3(1.5f, -1.25f, 0.5f));
+        m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
+        m = glm::rotate(m, glm::radians(gun_flash_rot[0]), glm::vec3(0, 0, 1.0f));
+        m = glm::scale(m, glm::vec3(2.5f, 2.5f, 0));
+
+        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
+
+        glDepthMask(GL_FALSE);
+        s.textures[T_GLOW]->draw();
+        glDepthMask(GL_TRUE);
+
+       s.shaders[S_TEXTURE]->unbind();
+    }
+
+    if (gun_flash[1] > 0) {
+        s.shaders[S_TEXTURE]->bind();
+        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[1] * a));
+
+        glm::mat4 m = glm::translate(model, glm::vec3(1.5f, 1.25f, 0.5f));
+        m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
+        m = glm::rotate(m, glm::radians(gun_flash_rot[1]), glm::vec3(0, 0, 1.0f));
+        m = glm::scale(m, glm::vec3(2.5f, 2.5f, 0));
+
+        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
+
+        glDepthMask(GL_FALSE);
+        s.textures[T_GLOW]->draw();
+        glDepthMask(GL_TRUE);
+
+       s.shaders[S_TEXTURE]->unbind();
+    }
 
     if (
         s.get() >= STATE_GAME_LOOP &&
         s.get() <= STATE_GAME_QUIT
     ) {
         setScale(22.5f, 22.5f, 22.5f);
-
-        model = s.view.getModel(
-            (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-            (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
-            getPosZ(),
-
-            getRotX() + v_y * -20.0f,
-            getRotY() + v_x *  50.0f,
-            getRotZ(),
-
-            getScaleX(),
-            getScaleY(),
-            getScaleZ()
-        );
     } else {
         setScale(2.0f, 2.0f, 2.0f);
         setPos(9.0f, -2.5f, -50.0f);
@@ -443,56 +478,5 @@ void Player::draw(State &s)
         );
     }
 
-    s.models[e_obj]->draw(model, view, projection, color);
-
-/*
-    glLoadIdentity();
-    glPushMatrix();
-
-    // flashing gun fire
-
-    s.textures[T_GLOW]->bind();
-
-    if (gun_flash[0] > 0) {
-        glTranslatef(1.5f, -1.0f, .5f);
-        glRotatef(gun_flash_rot[0], 1, 0, 0);
-        glColor4f(.5f, 1.0f, .8f, gun_flash[0]);
-        glBegin (GL_QUADS);
-          glTexCoord2f(0, 0);
-          glVertex3f(0, -1.25f, -1.25f);
-
-          glTexCoord2f(1, 0);
-          glVertex3f(0, 1.25f, -1.25f);
-
-          glTexCoord2f(1, 1);
-          glVertex3f(0, 1.25f, 1.25f);
-
-          glTexCoord2f(0, 1);
-          glVertex3f(0, -1.25f, 1.25f);
-        glEnd();
-        glRotatef(gun_flash_rot[0], -1, 0, 0);
-        glTranslatef(-1.5f, 1.0f, -.5f);
-    }
-
-    if (gun_flash[1] > 0) {
-        glTranslatef(1.5f, 1.0f, .5f);
-        glRotatef(gun_flash_rot[1], 1, 0, 0);
-        glColor4f(.5f, 1.0f, .8f, gun_flash[1]);
-        glBegin (GL_QUADS);
-          glTexCoord2f(0, 0);
-          glVertex3f(0, -1.25f, -1.25f);
-
-          glTexCoord2f(1, 0);
-          glVertex3f(0, 1.25f, -1.25f);
-
-          glTexCoord2f(1, 1);
-          glVertex3f(0, 1.25f, 1.25f);
-
-          glTexCoord2f(0, 1);
-          glVertex3f(0, -1.25f, 1.25f);
-        glEnd();
-        glRotatef(gun_flash_rot[1], -1, 0, 0);
-        glTranslatef(-1.5f, -1.0f, -.5f);
-    }
-*/
+    s.models[e_obj]->draw(model, view, projection, glm::vec4(c_r * a, c_g * a, c_b * a, a));
 }
