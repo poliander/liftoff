@@ -405,7 +405,7 @@ void Player::draw(State &s)
     glm::mat4 model = s.view.getModel(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
-        getPosZ() - 50.0f,
+        getPosZ(),
 
         getRotX() + v_y * -20.0f,
         getRotY() + v_x *  50.0f,
@@ -419,14 +419,15 @@ void Player::draw(State &s)
     // flashing gun fire
 
     if (gun_flash[0] > 0) {
-        s.shaders[S_TEXTURE]->bind();
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[0] * a));
+        glm::mat4 m;
 
-        glm::mat4 m = glm::translate(model, glm::vec3(1.5f, -1.25f, 0.5f));
+        m = glm::translate(model, glm::vec3(0.5f, -1.25f, 0.5f));
         m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
         m = glm::rotate(m, glm::radians(gun_flash_rot[0]), glm::vec3(0, 0, 1.0f));
         m = glm::scale(m, glm::vec3(2.5f, 2.5f, 0));
 
+        s.shaders[S_TEXTURE]->bind();
+        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[0] * a));
         s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
 
         glDepthMask(GL_FALSE);
@@ -437,14 +438,15 @@ void Player::draw(State &s)
     }
 
     if (gun_flash[1] > 0) {
-        s.shaders[S_TEXTURE]->bind();
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[1] * a));
-
-        glm::mat4 m = glm::translate(model, glm::vec3(1.5f, 1.25f, 0.5f));
+        glm::mat4 m;
+        
+        m = glm::translate(model, glm::vec3(0.5f, 1.25f, 0.5f));
         m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
         m = glm::rotate(m, glm::radians(gun_flash_rot[1]), glm::vec3(0, 0, 1.0f));
         m = glm::scale(m, glm::vec3(2.5f, 2.5f, 0));
 
+        s.shaders[S_TEXTURE]->bind();
+        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[1] * a));
         s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
 
         glDepthMask(GL_FALSE);
@@ -452,30 +454,6 @@ void Player::draw(State &s)
         glDepthMask(GL_TRUE);
 
        s.shaders[S_TEXTURE]->unbind();
-    }
-
-    if (
-        s.get() >= STATE_GAME_LOOP &&
-        s.get() <= STATE_GAME_QUIT
-    ) {
-        setScale(22.5f, 22.5f, 22.5f);
-    } else {
-        setScale(2.0f, 2.0f, 2.0f);
-        setPos(9.0f, -2.5f, -50.0f);
-
-        model = s.view.getModel(
-            getPosX(),
-            getPosY(),
-            getPosZ(),
-
-            getRotX(),
-            getRotY(),
-            getRotZ(),
-
-            getScaleX(),
-            getScaleY(),
-            getScaleZ()
-        );
     }
 
     s.models[e_obj]->draw(model, view, projection, glm::vec4(c_r * a, c_g * a, c_b * a, a));

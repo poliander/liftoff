@@ -1199,9 +1199,17 @@ void Scene::update()
                 state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .025f;
                 state.global_alpha = (int)state.menu_title_pos;
             }
+
+            state.cam_x = 0;
+            state.cam_y = 0;
+
             player->setSpin(0, 0, 3.5f);
             player->setVelocity(0, 0, 0);
             player->setAcceleration(0, 0, 0);
+            player->setScale(2.0f, 2.0f, 2.0f);
+            player->setPos(3.5f, -1.0f, -50.0f);
+            player->setRotX(115.0f);
+            player->setRotY(0);
             player->update(state);
             break;
 
@@ -1228,6 +1236,7 @@ void Scene::update()
                 player->setPos(0, -90.0f, 50.0f);
                 player->setRot(90.0f, 0, 270.0f);
                 player->setSpin(0, 0, 0);
+                player->setScale(22.5f, 22.5f, 22.5f);
 
                 state.set(STATE_GAME_LOOP);
             } else {
@@ -1300,9 +1309,6 @@ void Scene::update()
                 state.cam_x += state.timer_adjustment * ((player->getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
                 state.cam_y += state.timer_adjustment * ((player->getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
             } else {
-                player->setRot(115.0f, 0, 0);
-                player->setVelocity(0, 0, 0);
-                player->setAcceleration(0, 0, 0);
                 state.set(STATE_MENU);
             }
             break;
@@ -1319,7 +1325,6 @@ void Scene::update()
                 state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .075f;
                 state.global_alpha = (int)(100.1f - state.menu_title_pos);
             } else {
-                player->setRot(115.0f, 0, 0);
                 state.set(STATE_MENU);
             }
             break;
