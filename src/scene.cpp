@@ -405,17 +405,17 @@ void Scene::drawTitle()
 
     glBegin (GL_QUADS);
       glColor4f(a*.075f, a*.075f, a*.075f, a);
-      glTexCoord2f (0, 0);
+      glTexCoord2f (0, 1);
       glVertex3f (-4, 1, 0);
 
-      glTexCoord2f (1, 0);
+      glTexCoord2f (1, 1);
       glVertex3f (4, 1, 0);
 
       glColor4f(a, a, a, a);
-      glTexCoord2f (1, .6f);
+      glTexCoord2f (1, .4f);
       glVertex3f (4, -.4f, 0);
 
-      glTexCoord2f (0, .6f);
+      glTexCoord2f (0, .4f);
       glVertex3f (-4, -.4f, 0);
     glEnd();
     glPopMatrix();
@@ -432,16 +432,16 @@ void Scene::drawTitle()
 
     glColor4f(a, a, a, a);
     glBegin (GL_QUADS);
-      glTexCoord2f (0, .6f);
+      glTexCoord2f (0, .4f);
       glVertex3f (-4*sc, .75f*sc, 0);
 
-      glTexCoord2f (1, .6f);
+      glTexCoord2f (1, .4f);
       glVertex3f (4*sc, .75f*sc, 0);
 
-      glTexCoord2f (1, 1);
+      glTexCoord2f (1, 0);
       glVertex3f (4*sc, 0, 0);
 
-      glTexCoord2f (0, 1);
+      glTexCoord2f (0, 0);
       glVertex3f (-4*sc, 0, 0);
     glEnd();
     glPopMatrix();
@@ -965,16 +965,16 @@ void Scene::drawDisplay()
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
       glTexCoord2i (0, 0);
-      glVertex3f(-.17f, .17f, 0);
+      glVertex3f(-.17f, -.17f, 0);
 
       glTexCoord2i(1, 0);
-      glVertex3f(.17f, .17f, 0);
-
-      glTexCoord2i(1, 1);
       glVertex3f(.17f, -.17f, 0);
 
+      glTexCoord2i(1, 1);
+      glVertex3f(.17f, .17f, 0);
+
       glTexCoord2i(0, 1);
-      glVertex3f(-.17f, -.17f, 0);
+      glVertex3f(-.17f, .17f, 0);
     glEnd();
 
     // life bar
@@ -1006,16 +1006,16 @@ void Scene::drawDisplay()
     glColor4f(1.0f, .8f, .55f, alpha * .85f);
     glBegin (GL_QUADS);
       glTexCoord2i (0, 0);
-      glVertex3f(-.17f, .17f, 0);
+      glVertex3f(-.17f, -.17f, 0);
 
       glTexCoord2i(1, 0);
-      glVertex3f(.17f, .17f, 0);
-
-      glTexCoord2i(1, 1);
       glVertex3f(.17f, -.17f, 0);
 
+      glTexCoord2i(1, 1);
+      glVertex3f(.17f, .17f, 0);
+
       glTexCoord2i(0, 1);
-      glVertex3f(-.17f, -.17f, 0);
+      glVertex3f(-.17f, .17f, 0);
     glEnd();
 
     // energy bar

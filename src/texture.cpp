@@ -32,7 +32,6 @@ bool Texture::load(string filename, t_image *image)
     t_tga_header header;
     unsigned char raw[4], trans[4];
     int rle_count = 0, rle_repeat = 0, read_next = 1, pixels, r;
-    GLubyte *buffer;
     FILE *fd = fopen(filename.c_str(), "rb");
 
     if (!fd) {
@@ -41,9 +40,12 @@ bool Texture::load(string filename, t_image *image)
 
     fread(&header, sizeof(header), 1, fd);
 
+    pixels = header.width * header.height;
+
     image->width = header.width;
     image->height = header.height;
     image->bpp = header.bpp;
+    image->data = (GLubyte *)malloc((image->bpp / 8) * pixels * sizeof(GLubyte));
 
     switch (header.bpp) {
         case 24:
@@ -59,9 +61,6 @@ bool Texture::load(string filename, t_image *image)
             return false;
     }
     
-    pixels = image->width * image->height;
-    buffer = (GLubyte *)malloc((image->bpp / 8) * pixels * sizeof(GLubyte));
-
     for (int i = 0; i < pixels; ++i) {
         if (header.data_type == 10) {
             if (rle_count == 0) {
@@ -88,16 +87,16 @@ bool Texture::load(string filename, t_image *image)
 
         switch (image->format) {
             case GL_RGB:
-                buffer[i * 3 + 0] = raw[2];
-                buffer[i * 3 + 1] = raw[1];
-                buffer[i * 3 + 2] = raw[0];
+                image->data[i * 3 + 0] = raw[2];
+                image->data[i * 3 + 1] = raw[1];
+                image->data[i * 3 + 2] = raw[0];
                 break;
 
             case GL_RGBA:
-                buffer[i * 4 + 0] = raw[2];
-                buffer[i * 4 + 1] = raw[1];
-                buffer[i * 4 + 2] = raw[0];
-                buffer[i * 4 + 3] = raw[3];
+                image->data[i * 4 + 0] = raw[2];
+                image->data[i * 4 + 1] = raw[1];
+                image->data[i * 4 + 2] = raw[0];
+                image->data[i * 4 + 3] = raw[3];
                 break;
         }
 
@@ -106,18 +105,6 @@ bool Texture::load(string filename, t_image *image)
 
     fclose(fd);
     
-    image->data = (GLubyte *)malloc((image->bpp / 8) * pixels * sizeof(GLubyte));
-    r = image->width * image->bpp / 8;
-
-    for (int i = 0; i < image->height; ++i) {
-        const GLubyte* srcBegin = buffer + (r * (image->height - i - 1));
-        const GLubyte* srcEnd   = srcBegin + r;
-
-        copy(srcBegin, srcEnd, image->data + r * i);
-    }
-
-    delete [] buffer;
-
     return true;
 }
 
