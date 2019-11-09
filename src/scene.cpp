@@ -1389,10 +1389,6 @@ void Scene::draw()
         drawScene();
     }
 
-    if (state.menu) {
-        player->draw(state);
-    }
-
     // menu
 
     glDisable(GL_DEPTH_TEST);
@@ -1415,4 +1411,9 @@ void Scene::draw()
     }
 
     glEnable(GL_DEPTH_TEST);
+
+    if (state.menu) {
+        player->draw(state);
+    }
+
 }
