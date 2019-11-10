@@ -1413,8 +1413,8 @@ void Scene::draw()
     }
 
     if (
-        state.get() >= STATE_MENU &&
-        state.get() <= STATE_GAME_START
+        (state.get() >= STATE_MENU && state.get() <= STATE_GAME_START) ||
+        (state.get() >= STATE_GAME_QUIT)
     ) {
         drawMenu();
     }
