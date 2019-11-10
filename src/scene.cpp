@@ -760,6 +760,8 @@ void Scene::drawMenu()
         m_a = (float)state.menu_title_pos;
     }
 
+    glDisable(GL_DEPTH_TEST);
+
     // draw menu background
 
     state.shaders[S_TEXTURE]->bind();
@@ -818,6 +820,11 @@ void Scene::drawMenu()
             0.0085f * m_a
         );
     }
+
+    drawTitle();
+    glEnable(GL_DEPTH_TEST);
+
+    player->draw(state);
 }
 
 /*
@@ -886,6 +893,7 @@ void Scene::drawDisplay()
             alpha = .01f * (100.0f - float(state.menu_title_pos));
     }
 
+    glDisable(GL_DEPTH_TEST);
     glLoadIdentity();
 
     // lower right screen
@@ -1017,6 +1025,7 @@ void Scene::drawDisplay()
       glTexCoord2i(0, 1);
       glVertex3f(-.17f, .17f, 0);
     glEnd();
+    glPopMatrix();
 
     // energy bar
 
@@ -1039,7 +1048,7 @@ void Scene::drawDisplay()
         );
     }
 
-    glPopMatrix();
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Scene::drawMessages()
@@ -1048,6 +1057,7 @@ void Scene::drawMessages()
     float r = 1.0f, g = .8f, b = .55f;
     float x, y, z;
 
+    glDisable(GL_DEPTH_TEST);
     glLoadIdentity();
     glPushMatrix();
     glTranslatef(.0f, -1.75f, -10.0f);
@@ -1100,6 +1110,7 @@ void Scene::drawMessages()
     }
 
     glPopMatrix();
+    glEnable(GL_DEPTH_TEST);
 }
 
 /*
@@ -1378,20 +1389,20 @@ void Scene::draw()
         player->getVelocityX() * .15f, -1.0f, 0
     );
 
-    // scenery
+    // background
 
     skybox->draw(state);
 
+    // scenery
+
     if (
-        state.get() >= STATE_GAME_START &&
+        state.get() >= STATE_GAME_LOOP &&
         state.get() <= STATE_GAME_QUIT
     ) {
         drawScene();
     }
 
-    // menu
-
-    glDisable(GL_DEPTH_TEST);
+    // overlays
 
     if (
         state.get() >= STATE_GAME_START &&
@@ -1401,19 +1412,14 @@ void Scene::draw()
         drawDisplay();
     }
 
-    if (state.menu) {
+    if (
+        state.get() >= STATE_MENU &&
+        state.get() <= STATE_GAME_START
+    ) {
         drawMenu();
-        drawTitle();
     }
 
     if (state.fps_visible) {
         drawVideoInfos();
     }
-
-    glEnable(GL_DEPTH_TEST);
-
-    if (state.menu) {
-        player->draw(state);
-    }
-
 }
