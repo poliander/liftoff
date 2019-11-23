@@ -205,31 +205,37 @@ bool Engine::init(int argc, char **argv)
         case 5:
             state.vid_multisampling = 8;
             state.vid_framebuffer_size = 4096;
+            state.vid_font_resolution = 7;
             break;
 
         case 4:
             state.vid_multisampling = 4;
             state.vid_framebuffer_size = 4096;
+            state.vid_font_resolution = 7;
             break;
 
         case 3:
             state.vid_multisampling = 4;
             state.vid_framebuffer_size = 2048;
+            state.vid_font_resolution = 6;
             break;
 
         case 2:
             state.vid_multisampling = 2;
             state.vid_framebuffer_size = 2048;
+            state.vid_font_resolution = 6;
             break;
 
         case 1:
             state.vid_multisampling = 2;
             state.vid_framebuffer_size = 1024;
+            state.vid_font_resolution = 5;
             break;
 
         default:
             state.vid_multisampling = 0;
             state.vid_framebuffer_size = 1024;
+            state.vid_font_resolution = 5;
     }
 
     Uint32 win_flags = SDL_WINDOW_OPENGL;

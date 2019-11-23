@@ -130,7 +130,8 @@ void Scene::load()
     state.log("Loading font 'zekton'\n");
     state.fonts.insert(make_pair(F_ZEKTON, new Font(
         string(state.dir_resources).append("/fonts/zekton.ttf"),
-        make_shared<Shader>(*state.shaders[S_FONT])
+        make_shared<Shader>(*state.shaders[S_FONT]),
+        state.vid_font_resolution
     )));
 
     // models
@@ -1366,7 +1367,6 @@ void Scene::draw()
     glClearColor(0, 0, 0, 0);
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glViewport(0, 0, state.vid_width, state.vid_height);
 
     gluLookAt(

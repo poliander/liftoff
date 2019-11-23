@@ -1,13 +1,16 @@
 #include "font.hpp"
 
-Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
+Font::Font(const string& filename, shared_ptr<Shader> s, unsigned short q) : shader(s)
 {
     FT_Library ft;
     FT_Face face;
 
+    quality = q;
+    scale = 128.0f / pow(2, quality);
+
     FT_Init_FreeType(&ft);
     FT_New_Face(ft, filename.c_str(), 0, &face);
-    FT_Set_Pixel_Sizes(face, 0, 128);
+    FT_Set_Pixel_Sizes(face, 0, pow(2, quality));
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -57,11 +60,14 @@ Font::Font(const string& filename, shared_ptr<Shader> s) : shader(s)
 
 Font::~Font()
 {
+    for (auto i = glyphs.begin(); i != glyphs.end(); i++) {
+        glDeleteTextures(1, &i->second.texture);
+    }
 }
 
 void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a)
 {
-    float ox = x;
+    float ox = x, qs = scale * s;
 
     shader->bind();
 
@@ -75,10 +81,10 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
     for (c = txt.begin(); c != txt.end(); c++) {
         Glyph g = glyphs[*c];
 
-        GLfloat xp = x + g.bearing.x * s;
-        GLfloat yp = y - (g.size.y - g.bearing.y) * s;
+        GLfloat xp = x + g.bearing.x * qs;
+        GLfloat yp = y - (g.size.y - g.bearing.y) * qs;
 
-        setPosition(glm::vec4(xp, yp, xp + g.size.x * s, yp + g.size.y * s));
+        setPosition(glm::vec4(xp, yp, xp + g.size.x * qs, yp + g.size.y * qs));
         update();
 
         glBindTexture(GL_TEXTURE_2D, g.texture);
@@ -86,9 +92,9 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
 
         if (*c == 10) {
             x = ox;
-            y -= g.height * s;
+            y -= g.height * qs;
         } else {
-            x += g.advance * s;
+            x += g.advance * qs;
         }
     }
 

@@ -16,14 +16,14 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 
 ### Display quality levels
 
-|  Quality  | MSAA  | Framebuffer  |
-| :------------ | :------------ | :------------ |
-| very low  | off  | 1024x1024 |
-| low  | 2x  | 1024x1024 |
-| medium  | 2x  | 2048x2048 |
-|  high | 4x  | 2048x2048 |
-|  very high | 4x  | 4096x4096 |
-|  ultra | 8x  | 4096x4096 |
+|  Quality  | MSAA  | Framebuffer  | Font res. |
+| :------------ | :------------ | :------------ | :------------ |
+| very low  | off  | 1024x1024 | 5 bit |
+| low  | 2x  | 1024x1024 | 5 bit |
+| medium  | 2x  | 2048x2048 | 6 bit |
+|  high | 4x  | 2048x2048 | 6 bit |
+|  very high | 4x  | 4096x4096 | 7 bit |
+|  ultra | 8x  | 4096x4096 | 7 bit |
 
 ### Command line
 
