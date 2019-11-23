@@ -25,6 +25,7 @@ Texture::Texture(string filename)
 
 Texture::~Texture()
 {
+    glDeleteTextures(1, &texColorBuffer);
 }
 
 bool Texture::load(string filename, t_image *image)
