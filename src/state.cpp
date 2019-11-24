@@ -163,13 +163,13 @@ bool State::set(int s)
             break;
 
         case STATE_QUIT:
-            menu_title_pos = 99.85f;
+            menu_title_pos = 100.0f;
             audio.stopMusic(1000);
             break;
 
         case STATE_GAME_START:
             global_alpha = 99;
-            menu_title_pos = 99.85f;
+            menu_title_pos = 100.0f;
             cam_x = .0f;
             cam_y = .0f;
             hud_x = -20.0f;

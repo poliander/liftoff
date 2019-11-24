@@ -390,64 +390,40 @@ void Scene::drawVideoInfos()
  */
 void Scene::drawTitle()
 {
-    float sc, a = state.menu_title_pos * .01f;
-
-    glDisable(GL_DEPTH_TEST);
-
-    glLoadIdentity();
-    state.textures[T_TITLE]->bind();
-    glPushMatrix();
+    float s, x, y1, y2, a = state.menu_title_pos * .01f;
 
     if (state.get() == STATE_MENU) {
-        glTranslatef(0, 7.75f-((a*2)*(a*2)), -10.0f);
+        x = 0;
+        y1 = 400.0f - powf(state.menu_title_pos, 2) * .02f;
+        y2 = 60.0f + powf(state.menu_title_pos, 2) * .01f;
+        s = powf(state.menu_title_pos * .01f, 2) * 1.5f;
     } else {
-        glTranslatef(-16.0f+((a*4)*(a*4)), 3.75f, -10.0f);
+        x = -400.0f + powf(state.menu_title_pos, 2) * .04f;
+        y1 = 200.0f;
+        y2 = 160.0f;
+        s = 1.5f;
     }
 
-    glBegin (GL_QUADS);
-      glColor4f(a*.075f, a*.075f, a*.075f, a);
-      glTexCoord2f (0, 1);
-      glVertex3f (-4, 1, 0);
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a));
 
-      glTexCoord2f (1, 1);
-      glVertex3f (4, 1, 0);
+    // "LIFT-OFF"
 
-      glColor4f(a, a, a, a);
-      glTexCoord2f (1, .4f);
-      glVertex3f (4, -.4f, 0);
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(x, y1, 280.0f, 70.0f));
 
-      glTexCoord2f (0, .4f);
-      glVertex3f (-4, -.4f, 0);
-    glEnd();
-    glPopMatrix();
+    state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
+    state.textures[T_TITLE]->update();
+    state.textures[T_TITLE]->draw();
 
-    glPushMatrix();
+    // "BEYOND GLAXIUM"
 
-    if (state.get() == STATE_MENU) {
-        sc = a*a*1.5f;
-        glTranslatef(0, 2.65f, -30+(a*20));
-    } else {
-        sc = 1.5f;
-        glTranslatef(16.0f-(a*4)*(a*4), 2.65f, -10.02929f);
-    }
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(-x, y2, 280.0f * s, 40.0f * s));
 
-    glColor4f(a, a, a, a);
-    glBegin (GL_QUADS);
-      glTexCoord2f (0, .4f);
-      glVertex3f (-4*sc, .75f*sc, 0);
+    state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
+    state.textures[T_TITLE]->update();
+    state.textures[T_TITLE]->draw();
 
-      glTexCoord2f (1, .4f);
-      glVertex3f (4*sc, .75f*sc, 0);
-
-      glTexCoord2f (1, 0);
-      glVertex3f (4*sc, 0, 0);
-
-      glTexCoord2f (0, 0);
-      glVertex3f (-4*sc, 0, 0);
-    glEnd();
-    glPopMatrix();
-
-    glEnable(GL_DEPTH_TEST);
+    state.shaders[S_TEXTURE]->unbind();
 }
 
 /*
@@ -1207,7 +1183,7 @@ void Scene::update()
 
     switch (state.get()) {
         case STATE_MENU:
-            if (state.menu_title_pos < 99.85f) {
+            if (state.menu_title_pos < 100.0f) {
                 state.menu_title_pos += (100.1f - state.menu_title_pos) * state.timer_adjustment * .025f;
                 state.global_alpha = (int)state.menu_title_pos;
             }
@@ -1301,12 +1277,12 @@ void Scene::update()
             updateScene();
             updateMessages();
 
-            if (state.menu_title_pos < 99.85f) {
+            if (state.menu_title_pos < 100.0f) {
                 state.menu_title_pos += state.timer_adjustment * .375;
                 state.cam_y_offset = 35.0f + state.menu_title_pos * .85f;
 
                 if (state.menu_title_pos > 80.0f) {
-                    state.global_alpha = int(99.85f - (state.menu_title_pos - 80.0f) * 5.0f);
+                    state.global_alpha = int(100.0f - (state.menu_title_pos - 80.0f) * 5.0f);
                     player->setAccelerationZ(500.0f);
                 } else {
                     state.global_alpha = 100;
@@ -1329,7 +1305,7 @@ void Scene::update()
             updateScene();
             updateMessages();
 
-            if (state.menu_title_pos < 99.85f) {
+            if (state.menu_title_pos < 100.0f) {
                 if (player->isAlive()) {
                     player->setAccelerationZ(-25.0f);
                 }
