@@ -71,9 +71,12 @@ void Skybox::draw(State &s)
     s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.65f, .7f, .8f, 1.0f));
     s.shaders[S_TEXTURE]->update(UNI_MVP, glm::ortho(-0.5f, 0.5f, -0.5f, 0.5f));
 
+    s.textures[T_BACKGROUND_1]->bind();
     s.textures[T_BACKGROUND_1]->draw();
 
     // far stars
+
+    s.textures[T_STAR]->bind();
 
     for (i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));

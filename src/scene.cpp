@@ -411,6 +411,7 @@ void Scene::drawTitle()
 
     state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(x, y1, 280.0f, 70.0f));
 
+    state.textures[T_TITLE]->bind();
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
     state.textures[T_TITLE]->draw();
 
@@ -745,6 +746,7 @@ void Scene::drawMenu()
         0.0f,   -39.0f,
         350.0f, 180.0f
     ));
+    state.textures[T_MENU_1]->bind();
     state.textures[T_MENU_1]->draw();
     state.shaders[S_TEXTURE]->unbind();
 
@@ -767,6 +769,7 @@ void Scene::drawMenu()
         135.0f,
         mrh
     ));
+    state.textures[T_MENU_2]->bind();
     state.textures[T_MENU_2]->draw();
     state.shaders[S_TEXTURE]->unbind();
 

@@ -60,6 +60,8 @@ void Missile::draw(State &s)
     s.shaders[S_TEXTURE]->bind();
     s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a));
 
+    s.textures[T_MISSILE_1]->bind();
+
     for (int i = 0; i < 5; i++) {
         s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
             (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,

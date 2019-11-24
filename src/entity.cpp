@@ -453,6 +453,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             0
         ));
 
+        s.textures[T_HUD_3]->bind();
         s.textures[T_HUD_3]->draw();
     } else {
         // aiming help
@@ -481,6 +482,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             0
         ));
 
+        s.textures[T_HUD_4]->bind();
         s.textures[T_HUD_4]->draw();
     }
 
@@ -500,6 +502,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     glEnable(GL_DEPTH_TEST);
 
+    s.textures[T_HUD_3]->bind();
     s.textures[T_HUD_3]->draw();
 
     s.shaders[S_TEXTURE]->unbind();

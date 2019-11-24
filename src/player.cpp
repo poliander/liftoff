@@ -431,6 +431,7 @@ void Player::draw(State &s)
         s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
 
         glDepthMask(GL_FALSE);
+        s.textures[T_GLOW]->bind();
         s.textures[T_GLOW]->draw();
         glDepthMask(GL_TRUE);
 
@@ -450,6 +451,7 @@ void Player::draw(State &s)
         s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
 
         glDepthMask(GL_FALSE);
+        s.textures[T_GLOW]->bind();
         s.textures[T_GLOW]->draw();
         glDepthMask(GL_TRUE);
 

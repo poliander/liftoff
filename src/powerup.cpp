@@ -63,8 +63,7 @@ void Powerup::draw(State &s)
 {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-    glRotatef(s.tilt_x * -.035f, 0, 1, 0);
-    glRotatef(s.tilt_y * -.035f, 1, 0, 0);
+    s.textures[T_STAR]->bind();
 
     particles->setSize(150.0f / (1.0f + counter * 75.0f));
     particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
