@@ -72,8 +72,8 @@ void Explosion::draw(State &s)
             counter = (750.0f - timer) * .001333f;
             particles->setAlpha(.5f - counter);
             particles->setColor(.5f, 1.0f, .8f);
-            particles->setSize(24.0f - 32.0f * counter);
-            particles->setScale(counter * 4.0f);
+            particles->setSize(25.0f - 20.0f * counter);
+            particles->setScale(counter * 5.0f);
             s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
@@ -83,15 +83,15 @@ void Explosion::draw(State &s)
             counter = (4000.0f - timer) * .00025f;
             particles->setColor(.5f - counter, .5f - counter, .45f - counter);
             particles->setAlpha(.5f - counter * .5f);
-            particles->setSize(5.0f + ((1.0f - (counter * counter)) * 75.0f));
-            particles->setScale(1.0f + 7.5f * (counter * counter));
+            particles->setSize(10.0f + ((1.0f - (counter * counter)) * 75.0f));
+            particles->setScale(1.0f + 6.5f * (counter * counter));
             s.textures[T_EXPLOSION_2]->bind();
             break;
 
         // explosion sparks
         case OBJ_EXPLOSION_3:
             counter = (2000.0f - timer) * .0005f;
-            particles->setSize(10.0f - ((counter * counter) * 10.0f));
+            particles->setSize(12.5f - ((counter * counter) * 10.0f));
             s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
@@ -101,8 +101,8 @@ void Explosion::draw(State &s)
             counter = (1000.0f - timer) * .001f;
             particles->setColor(1.0f, 1.0f - counter * .15f, 1.0f - counter * .3f);
             particles->setAlpha(.35f - counter * .35f);
-            particles->setScale(.5f + counter * 12.5f);
-            particles->setSize(10.0f + ((1.0f - (counter * counter)) * 10.0f));
+            particles->setScale(1.0f + counter * 12.5f);
+            particles->setSize(20.0f + ((1.0f - (counter * counter)) * 15.0f));
             s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
