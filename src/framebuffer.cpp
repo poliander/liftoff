@@ -43,6 +43,6 @@ void Framebuffer::unbind()
 void Framebuffer::draw()
 {
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-    glBindVertexArray(vertexArray);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    Quad::draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

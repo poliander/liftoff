@@ -28,11 +28,13 @@ Quad::~Quad()
 void Quad::setPosition(glm::vec4 p)
 {
     pos = p;
+    changed = true;
 }
 
 void Quad::setTextureCoordinates(glm::vec4 u)
 {
     uv = u;
+    changed = true;
 }
 
 void Quad::update()
@@ -50,4 +52,15 @@ void Quad::update()
     glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 6, vertices);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    changed = false;
+}
+
+void Quad::draw()
+{
+    if (changed) update();
+
+    glBindVertexArray(vertexArray);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
 }

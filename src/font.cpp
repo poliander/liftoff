@@ -84,11 +84,10 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
         GLfloat xp = x + g.bearing.x * qs;
         GLfloat yp = y - (g.size.y - g.bearing.y) * qs;
 
-        setPosition(glm::vec4(xp, yp, xp + g.size.x * qs, yp + g.size.y * qs));
-        update();
-
         glBindTexture(GL_TEXTURE_2D, g.texture);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        Quad::setPosition(glm::vec4(xp, yp, xp + g.size.x * qs, yp + g.size.y * qs));
+        Quad::draw();
 
         if (*c == 10) {
             x = ox;
@@ -98,7 +97,6 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
         }
     }
 
-    glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     shader->unbind();

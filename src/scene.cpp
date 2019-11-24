@@ -412,7 +412,6 @@ void Scene::drawTitle()
     state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(x, y1, 280.0f, 70.0f));
 
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
-    state.textures[T_TITLE]->update();
     state.textures[T_TITLE]->draw();
 
     // "BEYOND GLAXIUM"
@@ -420,7 +419,6 @@ void Scene::drawTitle()
     state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(-x, y2, 280.0f * s, 40.0f * s));
 
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
-    state.textures[T_TITLE]->update();
     state.textures[T_TITLE]->draw();
 
     state.shaders[S_TEXTURE]->unbind();

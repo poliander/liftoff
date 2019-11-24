@@ -438,8 +438,6 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
     if (s.player->hasTarget(me)) {
         // target locked, auto-aiming active
 
-        s.textures[T_HUD_3]->bind();
-
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
         s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
@@ -458,8 +456,6 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         s.textures[T_HUD_3]->draw();
     } else {
         // aiming help
-
-        s.textures[T_HUD_4]->bind();
 
         rot = (-180.0f / M_PI) * atan(
             (s.player->getPosY() - getPosY()) /
@@ -487,8 +483,6 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
         s.textures[T_HUD_4]->draw();
     }
-
-    s.textures[T_HUD_3]->bind();
 
     s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,

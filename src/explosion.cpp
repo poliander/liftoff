@@ -74,8 +74,6 @@ void Explosion::draw(State &s)
             particles->setColor(.5f, 1.0f, .8f);
             particles->setSize(24.0f - 32.0f * counter);
             particles->setScale(counter * 4.0f);
-
-            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -86,16 +84,12 @@ void Explosion::draw(State &s)
             particles->setAlpha(.5f - counter * .5f);
             particles->setSize(5.0f + ((1.0f - (counter * counter)) * 75.0f));
             particles->setScale(1.0f + 7.5f * (counter * counter));
-
-            s.textures[T_EXPLOSION_2]->bind();
             break;
 
         // explosion sparks
         case OBJ_EXPLOSION_3:
             counter = (2000.0f - timer) * .0005f;
             particles->setSize(10.0f - ((counter * counter) * 10.0f));
-
-            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -106,8 +100,6 @@ void Explosion::draw(State &s)
             particles->setAlpha(.35f - counter * .35f);
             particles->setScale(.5f + counter * 12.5f);
             particles->setSize(10.0f + ((1.0f - (counter * counter)) * 10.0f));
-
-            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
 
@@ -115,8 +107,6 @@ void Explosion::draw(State &s)
         case OBJ_EXPLOSION_5:
             counter = (200.0f - timer) * .005f;
             particles->setSize(10.0f - ((counter * counter) * 10.0f));
-
-            s.textures[T_EXPLOSION_1]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             break;
     }

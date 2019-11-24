@@ -43,6 +43,7 @@ class Texture : public Quad
         ~Texture();
 
         void bind();
+        void unbind();
         void draw();
 
     protected:

@@ -114,10 +114,14 @@ void Texture::bind()
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 }
 
+void Texture::unbind()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void Texture::draw()
 {
     bind();
-
-    glBindVertexArray(vertexArray);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    Quad::draw();
+    unbind();
 }
