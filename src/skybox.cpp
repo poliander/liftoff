@@ -3,7 +3,7 @@
 Skybox::Skybox(State& s) : state(s)
 {
     view = View::createPerspective(65.0f, 1.0f, .01f, 10000.0f);
-    framebuffer = make_unique<Framebuffer>(state.vid_framebuffer_size, GL_RGB);
+    framebuffer = make_unique<Framebuffer>(state.vid_framebuffer_size, state.vid_framebuffer_size, GL_RGB);
 
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         float x = 0;

@@ -3,7 +3,6 @@
 Overlay::Overlay(State& s, shared_ptr<Player> p) : state(s), player(p)
 {
     view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
-    framebuffer = make_unique<Framebuffer>(s.vid_framebuffer_size, GL_RGB);
 }
 
 Overlay::~Overlay()
