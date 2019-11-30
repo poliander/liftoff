@@ -297,6 +297,8 @@ bool Engine::initDisplay()
 
     if (state.config.vid_fullscreen) {
         sdl_mode |= SDL_WINDOW_FULLSCREEN;
+    } else {
+        sdl_mode |= SDL_WINDOW_RESIZABLE;
     }
 
 //  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -668,6 +670,13 @@ bool Engine::main()
 
             case SDL_KEYDOWN:
                 handleKeyboard();
+                break;
+
+            case SDL_WINDOWEVENT:
+                if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+                    state.vid_width = event.window.data1;
+                    state.vid_height = event.window.data2;
+                }
                 break;
         }
     }

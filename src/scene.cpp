@@ -547,7 +547,7 @@ void Scene::drawMenu()
 
             sprintf(
                 mtxt[0],
-                "VIDEO MODE:\n     %dx%d",
+                "SCREEN SIZE:\n     %dx%d",
                 state.vid_cap_modes[state.vid_mode].w,
                 state.vid_cap_modes[state.vid_mode].h
             );
