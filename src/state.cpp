@@ -175,7 +175,7 @@ bool State::set(int s)
             hud_x = -20.0f;
             hud_y = -10.0f;
             lvl_pos = 0;
-            lvl_loaded = true;
+            lvl_loaded = false;
             engine_boundary = true;
             stars_warp = true;
             stars_speed = 1.75f;

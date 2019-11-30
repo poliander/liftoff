@@ -16,7 +16,7 @@ class Player : public Entity
         void            update(State &s);
         void            draw(State &s);
         void            shoot(State &s);
-        void            reset(State &s);
+        void            init(State &s);
         void            collide(State &s, shared_ptr<Entity> e);
         void            collect(unsigned short e_obj);
 

@@ -47,12 +47,6 @@ class Scene
         unique_ptr<Skybox>  skybox;
         unique_ptr<Overlay> overlay;
 
-        void                drawVideoInfos();
-        void                drawMenu();
-        void                drawScene();
-        void                drawDisplay();
-        void                drawMessages();
-
         void                updateScene();
         void                updateMessages();
 

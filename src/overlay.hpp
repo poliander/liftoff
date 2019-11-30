@@ -1,6 +1,7 @@
 #pragma once
 
 #include "framebuffer.hpp"
+#include "player.hpp"
 #include "state.hpp"
 
 using namespace std;
@@ -8,7 +9,7 @@ using namespace std;
 class Overlay
 {
     public:
-        Overlay(State& s);
+        Overlay(State& s, shared_ptr<Player> p);
         ~Overlay();
 
         void draw();
@@ -18,4 +19,11 @@ class Overlay
 
         unique_ptr<View>        view;
         unique_ptr<Framebuffer> framebuffer;
+        shared_ptr<Player>      player;
+
+        void                    drawVideoInfos();
+        void                    drawMenu();
+        void                    drawScene();
+        void                    drawDisplay();
+        void                    drawMessages();
 };

@@ -87,7 +87,7 @@ void Player::collide(State &s, shared_ptr<Entity> e)
 {
 }
 
-void Player::reset(State &s)
+void Player::init(State &s)
 {
     money = 0;
     energy = -200;
