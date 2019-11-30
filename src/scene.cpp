@@ -7,6 +7,7 @@ Scene::Scene(State &s) : state(s)
     overlay = make_unique<Overlay>(state, player);
 
     state.player = player;
+    state.buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
 }
 
 Scene::~Scene()
@@ -29,6 +30,9 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio.sample[1]);
         Mix_FreeChunk(state.audio.sample[0]);
     }
+
+    state.player.reset();
+    state.buffer.reset();
 }
 
 /*
@@ -622,11 +626,6 @@ void Scene::draw()
         if (p_y < -400.0f) p_y = -400.0f;
         if (p_y >  400.0f) p_y =  400.0f;
     }
-
-    glClearColor(0, 0, 0, 0);
-    glClearDepth(1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, state.vid_width, state.vid_height);
 
     gluLookAt(
         p_x * -.01f + state.tilt_x * .333f,

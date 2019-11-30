@@ -2,12 +2,10 @@
 
 #include "quad.hpp"
 
-using namespace std;
-
 class Framebuffer : public Quad
 {
     public:
-        Framebuffer(GLint w, GLint h, GLint f);
+        Framebuffer(GLuint w, GLuint h, GLuint f);
         ~Framebuffer();
 
         void   bind();
@@ -15,10 +13,12 @@ class Framebuffer : public Quad
         void   draw();
 
     protected:
-        GLint  viewport[4];
-        GLint  width;
-        GLint  height;
+        GLuint width;
+        GLuint height;
 
-        GLuint texColorBuffer;
-        GLuint frameBuffer;
+        GLint  originalViewport[4];
+        GLint  originalFramebuffer;
+
+        GLuint texture;
+        GLuint framebuffer;
 };

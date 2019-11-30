@@ -675,6 +675,9 @@ bool Engine::main()
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                     state.vid_width = event.window.data1;
                     state.vid_height = event.window.data2;
+
+                    state.buffer.reset();
+                    state.buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
                 }
                 break;
         }
@@ -685,7 +688,10 @@ bool Engine::main()
     }
 
     scene->update();
+
+    state.buffer->bind();
     scene->draw();
+    state.buffer->blit();
 
     SDL_GL_SwapWindow(window);
 

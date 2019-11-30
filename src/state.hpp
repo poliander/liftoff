@@ -18,6 +18,7 @@
 #include "font.hpp"
 #include "model.hpp"
 #include "message.hpp"
+#include "renderbuffer.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 #include "view.hpp"
@@ -45,6 +46,7 @@ class State
         unique_ptr<View>            view;
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
+        unique_ptr<Renderbuffer>    buffer;
 
         // timer
         Uint32                      timer;
@@ -61,17 +63,15 @@ class State
         bool                        engine_restart;
         bool                        engine_boundary;
 
-        // video capabilities
-        int                         vid_cap_modes_num;
+        // video capabilities and configuration
         SDL_DisplayMode             vid_cap_modes[128];
-
-        // hardware configuration
+        int                         vid_cap_modes_num;
         int                         vid_display;
         int                         vid_mode;
         int                         vid_width;
         int                         vid_height;
         int                         vid_refresh_rate;
-        Uint32                      vid_format;
+        int                         vid_format;
         float                       vid_aspect;
         unsigned short              vid_quality;
         unsigned short              vid_framebuffer_size;
