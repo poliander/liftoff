@@ -1,7 +1,9 @@
 #include "view.hpp"
 
-View::View()
+View::View(unsigned short t, glm::mat4 p)
 {
+    type = t;
+    projection = p;
 }
 
 View::~View()
@@ -9,35 +11,27 @@ View::~View()
 }
 
 /*
- * Initalize perspective projection
+ * Create a perspective projection view
  */
-void View::initPerspective(float f, float a, float zNear, float zFar)
+unique_ptr<View> View::createPerspective(float f, float a, float zNear, float zFar)
 {
-    projection[P_PERSPECTIVE] = glm::perspective(glm::radians(f), a, zNear, zFar);
+    return make_unique<View>(P_PERSPECTIVE, glm::perspective(glm::radians(f), a, zNear, zFar));
 }
 
 /*
- * Get perspective projection matrix
+ * Create a orthographic projection view
  */
-glm::mat4 View::getPerspective()
+unique_ptr<View> View::createOrthographic(float x1, float y1, float x2, float y2)
 {
-    return projection[P_PERSPECTIVE];
+    return make_unique<View>(P_ORTHOGRAPHIC, glm::ortho(x1, x2, y1, y2));
 }
 
 /*
- * Initialize orthographic projection
+ * Get projection matrix
  */
-void View::initOrthographic(float x1, float y1, float x2, float y2)
+glm::mat4 View::getProjection()
 {
-    projection[P_ORTHOGRAPHIC] = glm::ortho(x1, x2, y1, y2);
-}
-
-/*
- * Get orthographic projection matrix
- */
-glm::mat4 View::getOrthographic()
-{
-    return projection[P_ORTHOGRAPHIC];
+    return projection;
 }
 
 /*
@@ -84,7 +78,7 @@ glm::mat4 View::transform(
     float rx, float ry, float rz,
     float sx, float sy, float sz
 ) {
-    return projection[P_PERSPECTIVE] * getCamera() * getModel(px, py, pz, rx, ry, rz, sx, sy, sz);
+    return getProjection() * getCamera() * getModel(px, py, pz, rx, ry, rz, sx, sy, sz);
 }
 
 glm::mat4 View::getModel(
@@ -112,7 +106,7 @@ glm::mat4 View::transform(
     float px, float py,
     float sx, float sy
 ) {
-    return projection[P_ORTHOGRAPHIC] * getModel(px, py, sx, sy);
+    return getProjection() * getModel(px, py, sx, sy);
 }
 
 glm::mat4 View::getModel(

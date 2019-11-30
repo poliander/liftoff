@@ -25,7 +25,6 @@
 using namespace std;
 
 class Entity;
-class Font;
 
 class State
 {
@@ -35,7 +34,6 @@ class State
 
         Audio                       audio;
         Configuration               config;
-        View                        view;
 
         // resources
         map<unsigned int, Texture*> textures;
@@ -44,6 +42,8 @@ class State
         map<unsigned int, Font*>    fonts;
 
         // scenery
+        unique_ptr<View>            perspective;
+        unique_ptr<View>            orthographic;
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
 

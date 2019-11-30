@@ -23,6 +23,7 @@
 #include "cargo.hpp"
 #include "debris.hpp"
 #include "explosion.hpp"
+#include "overlay.hpp"
 #include "player.hpp"
 #include "powerup.hpp"
 #include "skybox.hpp"
@@ -32,28 +33,28 @@ using namespace std;
 class Scene
 {
     public:
-        Scene(State &s);
+        Scene(State& s);
         ~Scene();
 
-        void               load();
-        void               update();
-        void               draw();
+        void                load();
+        void                update();
+        void                draw();
 
     private:
-        State&             state;
+        State&              state;
 
-        shared_ptr<Player> player;
-        shared_ptr<Skybox> skybox;
+        shared_ptr<Player>  player;
+        unique_ptr<Skybox>  skybox;
+        unique_ptr<Overlay> overlay;
 
-        void               drawVideoInfos();
-        void               drawTitle();
-        void               drawMenu();
-        void               drawScene();
-        void               drawDisplay();
-        void               drawMessages();
+        void                drawVideoInfos();
+        void                drawMenu();
+        void                drawScene();
+        void                drawDisplay();
+        void                drawMessages();
 
-        void               updateScene();
-        void               updateMessages();
+        void                updateScene();
+        void                updateMessages();
 
-        bool               loadLevel();
+        bool                loadLevel();
 };

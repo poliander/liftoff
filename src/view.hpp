@@ -1,26 +1,32 @@
 #pragma once
 
-#include "definitions.hpp"
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include "definitions.hpp"
+
+using namespace std;
+
 class View
 {
     public:
-        View();
+        View(unsigned short t, glm::mat4 p);
         virtual ~View();
+
+        glm::mat4 getProjection();
 
         // perspective transformation (3D)
 
-        void      initPerspective(float f, float a, float zNear, float zFar);
-        glm::mat4 getPerspective();
+        static unique_ptr<View> createPerspective(float f, float a, float zNear, float zFar);
 
         void setCamera(
             float px, float py, float pz,
             float tx, float ty, float tz,
             float ux, float uy, float uz
         );
+
         glm::mat4 getCamera();
         glm::vec3 getCameraPos();
 
@@ -38,8 +44,7 @@ class View
 
         // orthographic transformation (2D)
 
-        void      initOrthographic(float x1, float y1, float x2, float y2);
-        glm::mat4 getOrthographic();
+        static unique_ptr<View> createOrthographic(float x1, float y1, float x2, float y2);
 
         glm::mat4 transform(
             float px, float py,
@@ -52,7 +57,9 @@ class View
         );
 
     private:
-        glm::mat4 projection[2];
+        unsigned short type;
+
+        glm::mat4 projection;
         glm::mat4 view;
 
         glm::vec3 camera_pos;

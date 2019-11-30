@@ -118,6 +118,7 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-missile.$(OBJEXT) \
 	__top_builddir__liftoff-skybox.$(OBJEXT) \
 	__top_builddir__liftoff-state.$(OBJEXT) \
+	__top_builddir__liftoff-overlay.$(OBJEXT) \
 	__top_builddir__liftoff-powerup.$(OBJEXT) \
 	__top_builddir__liftoff-player.$(OBJEXT) \
 	__top_builddir__liftoff-cargo.$(OBJEXT) \
@@ -322,6 +323,7 @@ __top_builddir__liftoff_SOURCES = \
     missile.cpp \
     skybox.cpp \
     state.cpp \
+    overlay.cpp \
     powerup.cpp \
     player.cpp \
     cargo.cpp \
@@ -434,6 +436,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-missile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-model.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-object.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-overlay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-particles.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-powerup.Po@am__quote@
@@ -682,6 +685,20 @@ __top_builddir__liftoff-state.obj: state.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='state.cpp' object='__top_builddir__liftoff-state.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-state.obj `if test -f 'state.cpp'; then $(CYGPATH_W) 'state.cpp'; else $(CYGPATH_W) '$(srcdir)/state.cpp'; fi`
+
+__top_builddir__liftoff-overlay.o: overlay.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-overlay.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-overlay.Tpo -c -o __top_builddir__liftoff-overlay.o `test -f 'overlay.cpp' || echo '$(srcdir)/'`overlay.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-overlay.Tpo $(DEPDIR)/__top_builddir__liftoff-overlay.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='overlay.cpp' object='__top_builddir__liftoff-overlay.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-overlay.o `test -f 'overlay.cpp' || echo '$(srcdir)/'`overlay.cpp
+
+__top_builddir__liftoff-overlay.obj: overlay.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-overlay.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-overlay.Tpo -c -o __top_builddir__liftoff-overlay.obj `if test -f 'overlay.cpp'; then $(CYGPATH_W) 'overlay.cpp'; else $(CYGPATH_W) '$(srcdir)/overlay.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-overlay.Tpo $(DEPDIR)/__top_builddir__liftoff-overlay.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='overlay.cpp' object='__top_builddir__liftoff-overlay.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-overlay.obj `if test -f 'overlay.cpp'; then $(CYGPATH_W) 'overlay.cpp'; else $(CYGPATH_W) '$(srcdir)/overlay.cpp'; fi`
 
 __top_builddir__liftoff-powerup.o: powerup.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-powerup.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-powerup.Tpo -c -o __top_builddir__liftoff-powerup.o `test -f 'powerup.cpp' || echo '$(srcdir)/'`powerup.cpp

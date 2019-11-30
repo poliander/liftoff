@@ -13,15 +13,17 @@
 class Skybox
 {
     public:
-        Skybox(unsigned short fb_size);
+        Skybox(State& s);
         ~Skybox();
 
-        void                    update(State &s);
-        void                    draw(State &s);
+        void                    update();
+        void                    draw();
 
     private:
         float                   stars[SKYBOX_NUM_STARS][4];
 
-        shared_ptr<View>        view;
-        shared_ptr<Framebuffer> framebuffer;
+        State&                  state;
+
+        unique_ptr<View>        view;
+        unique_ptr<Framebuffer> framebuffer;
 };

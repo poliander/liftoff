@@ -158,7 +158,7 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
         }
 
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view.transform(
+        s.shaders[S_TEXTURE]->update(UNI_MVP, s.perspective->transform(
             px + (p[i].px * pscale),
             py + (p[i].py * pscale),
             pz,

@@ -19,6 +19,7 @@ __top_builddir__liftoff_SOURCES = \
     missile.cpp \
     skybox.cpp \
     state.cpp \
+    overlay.cpp \
     powerup.cpp \
     player.cpp \
     cargo.cpp \

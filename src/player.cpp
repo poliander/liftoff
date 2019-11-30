@@ -400,9 +400,9 @@ void Player::draw(State &s)
         a = s.menu_title_pos * .01f;
     }
 
-    glm::mat4 projection = s.view.getPerspective();
-    glm::mat4 view = s.view.getCamera();
-    glm::mat4 model = s.view.getModel(
+    glm::mat4 projection = s.perspective->getProjection();
+    glm::mat4 camera = s.perspective->getCamera();
+    glm::mat4 model = s.perspective->getModel(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
@@ -428,7 +428,7 @@ void Player::draw(State &s)
 
         s.shaders[S_TEXTURE]->bind();
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[0] * a));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
+        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
 
         glDepthMask(GL_FALSE);
         s.textures[T_GLOW]->bind();
@@ -448,7 +448,7 @@ void Player::draw(State &s)
 
         s.shaders[S_TEXTURE]->bind();
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[1] * a));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * view * m);
+        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
 
         glDepthMask(GL_FALSE);
         s.textures[T_GLOW]->bind();
@@ -458,5 +458,5 @@ void Player::draw(State &s)
        s.shaders[S_TEXTURE]->unbind();
     }
 
-    s.models[e_obj]->draw(model, view, projection, glm::vec4(c_r * a, c_g * a, c_b * a, a));
+    s.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, a));
 }

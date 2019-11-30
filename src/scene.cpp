@@ -1,10 +1,11 @@
 #include "scene.hpp"
 
-Scene::Scene(State &s) : 
-    state(s),
-    player(new Player()),
-    skybox(new Skybox(s.vid_framebuffer_size))
+Scene::Scene(State &s) : state(s)
 {
+    player = make_shared<Player>();
+    skybox = make_unique<Skybox>(state);
+    overlay = make_unique<Overlay>(state);
+
     state.player = player;
 }
 
@@ -386,52 +387,13 @@ void Scene::drawVideoInfos()
 }
 
 /*
- * draw title
- */
-void Scene::drawTitle()
-{
-    float s, x, y1, y2, a = state.menu_title_pos * .01f;
-
-    if (state.get() == STATE_MENU) {
-        x = 0;
-        y1 = 400.0f - powf(state.menu_title_pos, 2) * .02f;
-        y2 = 60.0f + powf(state.menu_title_pos, 2) * .01f;
-        s = powf(state.menu_title_pos * .01f, 2) * 1.5f;
-    } else {
-        x = -400.0f + powf(state.menu_title_pos, 2) * .04f;
-        y1 = 200.0f;
-        y2 = 160.0f;
-        s = 1.5f;
-    }
-
-    state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a));
-
-    // "LIFT-OFF"
-
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(x, y1, 280.0f, 70.0f));
-
-    state.textures[T_TITLE]->bind();
-    state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
-    state.textures[T_TITLE]->draw();
-
-    // "BEYOND GLAXIUM"
-
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(-x, y2, 280.0f * s, 40.0f * s));
-
-    state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
-    state.textures[T_TITLE]->draw();
-
-    state.shaders[S_TEXTURE]->unbind();
-}
-
-/*
  * draw menu
  */
 void Scene::drawMenu()
 {
     int i, numentries;
     float m_a = state.global_alpha;
+    float s, x, y1, y2, a = state.menu_title_pos * .01f;
 
     float mfo; // font y-offset
     float mfs; // font size
@@ -464,7 +426,6 @@ void Scene::drawMenu()
                         if (loadLevel()) {
                             state.log("ok\n");
                             state.set(STATE_GAME_START);
-
                             player->reset(state);
                         } else {
                             state.log("failed\n");
@@ -742,7 +703,7 @@ void Scene::drawMenu()
 
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(
         0.0f,   -39.0f,
         350.0f, 180.0f
     ));
@@ -762,7 +723,7 @@ void Scene::drawMenu()
 
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(m_a * .005f, m_a * .005f, m_a * .005f, m_a * .0035f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view.transform(
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(
         -104.75f,
         36.5f - (mrh * float(state.menu_pos) + mrh * 0.5f),
 
@@ -799,30 +760,41 @@ void Scene::drawMenu()
         );
     }
 
-    drawTitle();
+    if (state.get() == STATE_MENU) {
+        x = 0;
+        y1 = 400.0f - powf(state.menu_title_pos, 2) * .02f;
+        y2 = 60.0f + powf(state.menu_title_pos, 2) * .01f;
+        s = powf(state.menu_title_pos * .01f, 2) * 1.5f;
+    } else {
+        x = -400.0f + powf(state.menu_title_pos, 2) * .04f;
+        y1 = 200.0f;
+        y2 = 160.0f;
+        s = 1.5f;
+    }
+
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a));
+
+    // "LIFT-OFF"
+
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(x, y1, 280.0f, 70.0f));
+
+    state.textures[T_TITLE]->bind();
+    state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
+    state.textures[T_TITLE]->draw();
+
+    // "BEYOND GLAXIUM"
+
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(-x, y2, 280.0f * s, 40.0f * s));
+
+    state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
+    state.textures[T_TITLE]->draw();
+
+    state.shaders[S_TEXTURE]->unbind();
+
     glEnable(GL_DEPTH_TEST);
 
     player->draw(state);
-}
-
-/*
- * draw game scene
- */
-void Scene::drawScene()
-{
-    auto e = state.entities.begin();
-
-    while (e != state.entities.end()) {
-        if ((*e)->isIdle() == false) {
-            (*e)->draw(state);
-
-            if ((*e)->isFocusable()) {
-                (*e)->drawCrosshair(state, *e);
-            }
-        }
-
-        ++e;
-    }
 }
 
 /*
@@ -1103,7 +1075,7 @@ void Scene::updateScene()
         state.entities.push_back(make_shared<Debris>());
     }
 
-    state.player->resetTarget();
+    player->resetTarget();
 
     auto e = state.entities.begin();
 
@@ -1126,7 +1098,7 @@ void Scene::updateScene()
         }
 
         if ((*e)->isFocusable()) {
-            state.player->checkTarget(state, *e);
+            player->checkTarget(state, *e);
         }
 
         if ((*e)->isCollider()) {
@@ -1180,7 +1152,7 @@ void Scene::update()
 {
     int i;
 
-    skybox->update(state);
+    skybox->update();
 
     switch (state.get()) {
         case STATE_MENU:
@@ -1356,7 +1328,7 @@ void Scene::draw()
         player->getVelocityX() * .15f, -1.0f, 0
     );
 
-    state.view.setCamera(
+    state.perspective->setCamera(
         p_x * -.01f + state.tilt_x * .333f,
         p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
         0,
@@ -1368,29 +1340,39 @@ void Scene::draw()
 
     // background
 
-    skybox->draw(state);
+    skybox->draw();
 
-    // scenery
+    // entities
 
     if (
         state.get() >= STATE_GAME_LOOP &&
         state.get() <= STATE_GAME_QUIT
     ) {
-        drawScene();
+        auto e = state.entities.begin();
+
+        while (e != state.entities.end()) {
+            if ((*e)->isIdle() == false) {
+                (*e)->draw(state);
+
+                if ((*e)->isFocusable()) {
+                    (*e)->drawCrosshair(state, *e);
+                }
+            }
+
+            ++e;
+        }
     }
 
-    // overlays
+    // overlay
 
-    if (
-        state.get() >= STATE_GAME_START &&
+    if (state.get() >= STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
     ) {
         drawMessages();
         drawDisplay();
     }
 
-    if (
-        (state.get() >= STATE_MENU && state.get() <= STATE_GAME_START) ||
+    if ((state.get() >= STATE_MENU && state.get() <= STATE_GAME_START) ||
         (state.get() >= STATE_GAME_QUIT)
     ) {
         drawMenu();
@@ -1399,4 +1381,6 @@ void Scene::draw()
     if (state.fps_visible) {
         drawVideoInfos();
     }
+
+    overlay->draw();
 }
