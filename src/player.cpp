@@ -400,9 +400,9 @@ void Player::draw(State &s)
         a = s.menu_title_pos * .01f;
     }
 
-    glm::mat4 projection = s.perspective->getProjection();
-    glm::mat4 camera = s.perspective->getCamera();
-    glm::mat4 model = s.perspective->getModel(
+    glm::mat4 projection = s.view->getProjection();
+    glm::mat4 camera = s.view->getCamera();
+    glm::mat4 model = s.view->getModel(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
@@ -458,5 +458,5 @@ void Player::draw(State &s)
        s.shaders[S_TEXTURE]->unbind();
     }
 
-    s.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, a));
+    s.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, 1.0f));
 }

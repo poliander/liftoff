@@ -2,7 +2,7 @@
 
 Overlay::Overlay(State& s, shared_ptr<Player> p) : state(s), player(p)
 {
-    view = View::createPerspective(65.0f, 1.0f, .01f, 10000.0f);
+    view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
     framebuffer = make_unique<Framebuffer>(s.vid_framebuffer_size, GL_RGB);
 }
 
@@ -12,16 +12,11 @@ Overlay::~Overlay()
 
 void Overlay::drawMessages()
 {
-    int i;
-    float r = 1.0f, g = .8f, b = .55f;
-    float x, y, z;
+    float r, g, b;
+    float x, y;
 
-    glLoadIdentity();
-    glPushMatrix();
-    glTranslatef(.0f, -1.75f, -10.0f);
-
-    for (i=0; i<state.msg_num; i++) {
-        switch(state.msg[i].type) {
+    for (int i = 0; i < state.msg_num; i++) {
+        switch (state.msg[i].type) {
             case MSG_DAMAGE:
                 r = 1.0f;
                 g = .25f + state.msg[i].counter * .0055f;
@@ -63,8 +58,6 @@ void Overlay::drawMessages()
             r, g, b, 1.0f - state.msg[i].counter * .01f
         );
     }
-
-    glPopMatrix();
 }
 
 /*
@@ -73,12 +66,10 @@ void Overlay::drawMessages()
 void Overlay::drawDisplay()
 {
     int i, s, e;
-    static float alpha = 1.0f;
-    float t;
+    float t, alpha = 1.0f;
     char msg[16];
 
     switch (state.get()) {
-
         case STATE_GAME_START:
             t = (-6.413f * state.vid_aspect - state.hud_x) * .055f * state.timer_adjustment;
             state.hud_x += t;
@@ -574,7 +565,7 @@ void Overlay::drawMenu()
 
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
         0.0f,   -39.0f,
         350.0f, 180.0f
     ));
@@ -594,7 +585,7 @@ void Overlay::drawMenu()
 
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(m_a * .005f, m_a * .005f, m_a * .005f, m_a * .0035f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
         -104.75f,
         36.5f - (mrh * float(state.menu_pos) + mrh * 0.5f),
 
@@ -648,7 +639,7 @@ void Overlay::drawMenu()
 
     // "LIFT-OFF"
 
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(x, y1, 280.0f, 70.0f));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(x, y1, 280.0f, 70.0f));
 
     state.textures[T_TITLE]->bind();
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
@@ -656,7 +647,7 @@ void Overlay::drawMenu()
 
     // "BEYOND GLAXIUM"
 
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.orthographic->transform(-x, y2, 280.0f * s, 40.0f * s));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(-x, y2, 280.0f * s, 40.0f * s));
 
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
     state.textures[T_TITLE]->draw();

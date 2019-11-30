@@ -113,7 +113,7 @@ void Skybox::draw()
         1.0f
     ));
 
-    state.shaders[S_TEXTURE]->update(UNI_MVP, state.perspective->transform(
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view->transform(
         0, 0, -50.0f,
         0, 0, state.stars_rotation_pos,
         135.0f, 135.0f, 0

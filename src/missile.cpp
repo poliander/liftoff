@@ -63,7 +63,7 @@ void Missile::draw(State &s)
     s.textures[T_MISSILE_1]->bind();
 
     for (int i = 0; i < 5; i++) {
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.perspective->transform(
+        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
             (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
             (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
             getPosZ(),

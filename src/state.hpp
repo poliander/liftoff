@@ -42,8 +42,7 @@ class State
         map<unsigned int, Font*>    fonts;
 
         // scenery
-        unique_ptr<View>            perspective;
-        unique_ptr<View>            orthographic;
+        unique_ptr<View>            view;
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
 

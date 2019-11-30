@@ -281,7 +281,7 @@ float Entity::calcDistanceScale(State &s)
         f *= .25f;
     }
 
-    return f * (10000.0f - glm::distance(s.perspective->getCameraPos(), getPos()));
+    return f * (10000.0f - glm::distance(s.view->getCameraPos(), getPos()));
 }
 
 float Entity::calcDistance2D(State &s, shared_ptr<Entity> e)
@@ -439,7 +439,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         // target locked, auto-aiming active
 
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.perspective->transform(
+        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
             p_z - .1f,
@@ -468,7 +468,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         }
 
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * da));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.perspective->transform(
+        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
             (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
             (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
             p_z - .1f,
@@ -486,7 +486,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         s.textures[T_HUD_4]->draw();
     }
 
-    s.shaders[S_TEXTURE]->update(UNI_MVP, s.perspective->transform(
+    s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
         (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
         (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
         p_z,
@@ -514,9 +514,9 @@ void Entity::draw(State &s)
 
     glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
 
-    glm::mat4 projection = s.perspective->getProjection();
-    glm::mat4 camera = s.perspective->getCamera();
-    glm::mat4 model = s.perspective->getModel(
+    glm::mat4 projection = s.view->getProjection();
+    glm::mat4 camera = s.view->getCamera();
+    glm::mat4 model = s.view->getModel(
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
