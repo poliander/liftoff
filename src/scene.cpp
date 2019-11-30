@@ -638,7 +638,7 @@ void Scene::draw()
         player->getVelocityX() * .15f, -1.0f, 0
     );
 
-    state.perspective->setCamera(
+    state.view->setCamera(
         p_x * -.01f + state.tilt_x * .333f,
         p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
         0,
