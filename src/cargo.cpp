@@ -43,3 +43,63 @@ void Cargo::update(State &s)
         e_state = E_STATE_GONE;
     }
 }
+
+void Cargo::draw(State &s)
+{
+    float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
+
+    glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
+    glm::mat4 m;
+
+    glm::mat4 projection = s.view->getProjection();
+    glm::mat4 camera = s.view->getCamera();
+    glm::mat4 model = s.view->getModel(
+        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        getPosZ(),
+
+        getRotX(),
+        getRotY(),
+        getRotZ(),
+
+        getScaleX() * d,
+        getScaleY() * d,
+        getScaleZ() * d
+    );
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE);
+
+    s.textures[T_GLOW]->bind();
+
+    s.shaders[S_TEXTURE]->bind();
+    s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, 0.5f * a));
+
+    m = model;
+    m = glm::rotate(m, glm::radians(90.0f), glm::vec3(1.0f, 0, 0));
+    m = glm::scale(m, glm::vec3(15.0f, 15.0f, 0));
+
+    s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+    s.textures[T_GLOW]->draw();
+
+    m = model;
+    m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
+    m = glm::scale(m, glm::vec3(15.0f, 15.0f, 0));
+
+    s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+    s.textures[T_GLOW]->draw();
+
+    m = model;
+    m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 0, 1.0f));
+    m = glm::scale(m, glm::vec3(15.0f, 15.0f, 0));
+
+    s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+    s.textures[T_GLOW]->draw();
+
+    s.shaders[S_TEXTURE]->unbind();
+
+    glDepthMask(GL_TRUE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    s.models[e_obj]->draw(model, camera, projection, color);
+}
