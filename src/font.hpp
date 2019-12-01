@@ -28,12 +28,11 @@ class Font : public Quad
         Font(const string& filename, shared_ptr<Shader> s, unsigned short q);
         ~Font();
 
-        void draw(const string& txt, float x, float y, float s, float r, float g, float b, float a);
+        void               draw(const string& txt, float x, float y, float s, float r, float g, float b, float a);
 
     private:
         shared_ptr<Shader> shader;
         map<GLchar, Glyph> glyphs;
 
-        unsigned short quality;
-        float          scale;
+        float              scale;
 };

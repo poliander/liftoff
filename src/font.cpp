@@ -1,16 +1,16 @@
 #include "font.hpp"
 
-Font::Font(const string& filename, shared_ptr<Shader> s, unsigned short q) : shader(s)
+Font::Font(const string& filename, shared_ptr<Shader> s, unsigned short q) : Quad()
 {
     FT_Library ft;
     FT_Face face;
 
-    quality = q;
-    scale = 128.0f / pow(2, quality);
+    shader = s;
+    scale = 128.0f / pow(2, q);
 
     FT_Init_FreeType(&ft);
     FT_New_Face(ft, filename.c_str(), 0, &face);
-    FT_Set_Pixel_Sizes(face, 0, pow(2, quality));
+    FT_Set_Pixel_Sizes(face, 0, pow(2, q));
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

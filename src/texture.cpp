@@ -1,6 +1,6 @@
 #include "texture.hpp"
 
-Texture::Texture(string filename)
+Texture::Texture(string filename) : Quad()
 {
     t_image *image = (t_image *)malloc(sizeof(t_image));
 

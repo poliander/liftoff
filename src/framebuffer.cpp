@@ -1,6 +1,6 @@
 #include "framebuffer.hpp"
 
-Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint f)
+Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint f) : Quad()
 {
     width = w;
     height = h;
