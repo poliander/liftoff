@@ -200,41 +200,46 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
-    switch (state.vid_quality)
-    {
-        case 5:
+    switch (state.vid_quality) {
+        case QL_ULTRA:
             state.vid_multisampling = 8;
             state.vid_fb_size = 4096;
+            state.vid_fb_filter = GL_LINEAR;
             state.vid_font_resolution = 7;
             break;
 
-        case 4:
+        case QL_VERY_HIGH:
             state.vid_multisampling = 4;
             state.vid_fb_size = 4096;
+            state.vid_fb_filter = GL_LINEAR;
             state.vid_font_resolution = 7;
             break;
 
-        case 3:
+        case QL_HIGH:
             state.vid_multisampling = 4;
             state.vid_fb_size = 2048;
+            state.vid_fb_filter = GL_LINEAR;
             state.vid_font_resolution = 6;
             break;
 
-        case 2:
+        case QL_MEDIUM:
             state.vid_multisampling = 2;
             state.vid_fb_size = 2048;
+            state.vid_fb_filter = GL_NEAREST;
             state.vid_font_resolution = 6;
             break;
 
-        case 1:
+        case QL_LOW:
             state.vid_multisampling = 2;
             state.vid_fb_size = 1024;
+            state.vid_fb_filter = GL_NEAREST;
             state.vid_font_resolution = 5;
             break;
 
         default:
             state.vid_multisampling = 0;
             state.vid_fb_size = 1024;
+            state.vid_fb_filter = GL_NEAREST;
             state.vid_font_resolution = 5;
     }
 

@@ -262,8 +262,7 @@ void Overlay::drawDisplay()
 void Overlay::drawMenu()
 {
     int i, numentries;
-    float m_a = state.global_alpha;
-    float s, x, y1, y2, a = state.menu_title_pos * .01f;
+    float s, x, y1, y2;
 
     float mfo; // font y-offset
     float mfs; // font size
@@ -554,14 +553,10 @@ void Overlay::drawMenu()
         state.menu_pos = 0;
     }
 
-    if (state.get() >= STATE_GAME_START) {
-        m_a = (float)state.menu_title_pos;
-    }
-
     // draw menu background
 
     state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, m_a * .01f));
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
         0.0f,   -39.0f,
         350.0f, 180.0f
@@ -573,7 +568,7 @@ void Overlay::drawMenu()
     state.fonts[F_ZEKTON]->draw(
         "VECTOR ZERO MK. IX \"REDUX\"",
         197.0f, 100.0f, 0.075f,
-        1.0f, 0.9f, 0.85f, .0045f * m_a
+        1.0f, 0.9f, 0.85f, .45f
     );
 
     // draw menu items
@@ -581,7 +576,7 @@ void Overlay::drawMenu()
     mrh = 150.0f * (1.0f / float(numentries));
 
     state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(m_a * .005f, m_a * .005f, m_a * .005f, m_a * .0035f));
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f, .5f, .5f, .35f));
     state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
         -104.75f,
         36.5f - (mrh * float(state.menu_pos) + mrh * 0.5f),
@@ -615,7 +610,7 @@ void Overlay::drawMenu()
             mfs,
 
             r, g, b,
-            0.0085f * m_a
+            0.85f
         );
     }
 
@@ -632,7 +627,7 @@ void Overlay::drawMenu()
     }
 
     state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a));
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
     // "LIFT-OFF"
 
@@ -681,13 +676,44 @@ void Overlay::drawVideoInfos()
 
 void Overlay::draw()
 {
+    float alpha;
+
+    if (state.get() < STATE_GAME_START) {
+        alpha = 0.01f * float(state.global_alpha);
+    } else {
+        alpha = 0.01f * state.menu_title_pos;
+    }
+
     glDisable(GL_DEPTH_TEST);
-    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    framebuffer->bind();
+    if ((state.get() >= STATE_MENU && state.get() <= STATE_GAME_START) ||
+        (state.get() >= STATE_GAME_QUIT)
+    ) {
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        framebuffer->bind();
+
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        drawMenu();
+
+        framebuffer->unbind();
+
+        state.shaders[S_TEXTURE]->bind();
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(alpha, alpha, alpha, alpha));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
+            0, 0,
+            1400.0f / state.vid_aspect, -600.0f
+        ));
+
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        framebuffer->draw();
+        state.shaders[S_TEXTURE]->unbind();
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
 
     if (state.get() >= STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
@@ -696,36 +722,9 @@ void Overlay::draw()
         drawDisplay();
     }
 
-    if ((state.get() >= STATE_MENU && state.get() <= STATE_GAME_START) ||
-        (state.get() >= STATE_GAME_QUIT)
-    ) {
-        drawMenu();
-    }
-
-    framebuffer->unbind();
-
-    state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(
-        1.0f,
-        1.0f,
-        1.0f,
-        1.0f
-    ));
-
-    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
-        0, 0,
-        1400.0f / state.vid_aspect, -600.0f
-    ));
-
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-    framebuffer->draw();
-    state.shaders[S_TEXTURE]->unbind();
-
-    glEnable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     if (state.fps_visible) {
         drawVideoInfos();
     }
+
+    glEnable(GL_DEPTH_TEST);
 }

@@ -458,5 +458,5 @@ void Player::draw(State &s)
        s.shaders[S_TEXTURE]->unbind();
     }
 
-    s.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, a));
+    s.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, 1.0f));
 }

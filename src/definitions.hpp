@@ -20,6 +20,14 @@
 #define P_ORTHOGRAPHIC          0
 #define P_PERSPECTIVE           1
 
+// display quality levels
+#define QL_VERY_LOW             0
+#define QL_LOW                  1
+#define QL_MEDIUM               2
+#define QL_HIGH                 3
+#define QL_VERY_HIGH            4
+#define QL_ULTRA                5
+
 // engine globals
 #define E_RELATIVE_MOVEMENT     2.5
 #define E_BASE_SPEED            25.0
