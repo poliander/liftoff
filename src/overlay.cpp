@@ -65,7 +65,7 @@ void Overlay::drawMessages()
 void Overlay::drawDisplay()
 {
     int i, s, e;
-    float t, alpha = 1.0f;
+    float t, alpha = .01f * (100.0f - float(state.menu_title_pos));
     char msg[16];
 
     switch (state.get()) {
@@ -74,7 +74,6 @@ void Overlay::drawDisplay()
             state.hud_x += t;
             t = (4.905f + state.hud_y) * .055f * state.timer_adjustment;
             state.hud_y -= t;
-            alpha = float(100 - state.menu_title_pos) * .01f;
             break;
 
         case STATE_GAME_NEXTLEVEL:
@@ -83,7 +82,6 @@ void Overlay::drawDisplay()
                 state.hud_x -= state.menu_title_pos * .001f;
                 state.hud_y -= state.menu_title_pos * .001f;
             }
-            alpha = float(100 - state.menu_title_pos) * .01f;
             break;
 
         case STATE_GAME_LOOP:
@@ -100,7 +98,6 @@ void Overlay::drawDisplay()
         default:
             state.hud_x = .0f;
             state.hud_y = -.8f;
-            alpha = .01f * (100.0f - float(state.menu_title_pos));
     }
 
     glLoadIdentity();
