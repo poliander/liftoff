@@ -2,10 +2,16 @@
 
 #include "quad.hpp"
 
+enum E_BUFFERS
+{
+    FB_BUFFER_COLOR,
+    FB_BUFFER_DEPTH,
+};
+
 class Framebuffer : public Quad
 {
     public:
-        Framebuffer(GLuint w, GLuint h, GLuint f);
+        Framebuffer(GLuint w, GLuint h, GLuint fo, GLuint fi, bool d);
         ~Framebuffer();
 
         void   bind();
@@ -19,6 +25,6 @@ class Framebuffer : public Quad
         GLint  originalViewport[4];
         GLint  originalFramebuffer;
 
-        GLuint texture;
+        GLuint buffers[2];
         GLuint framebuffer;
 };

@@ -3,7 +3,7 @@
 Skybox::Skybox(State& s) : state(s)
 {
     view = View::createPerspective(65.0f, 1.0f, .01f, 10000.0f);
-    framebuffer = make_unique<Framebuffer>(state.vid_framebuffer_size, state.vid_framebuffer_size, GL_RGB);
+    framebuffer = make_unique<Framebuffer>(state.vid_fb_size, state.vid_fb_size, GL_RGB, GL_NEAREST, false);
 
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         float x = 0;
@@ -55,10 +55,11 @@ void Skybox::draw()
     float a, c, sl;
 
     glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
 
     framebuffer->bind();
 
-    glClearColor(0, 0, 1, 0);
+    glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     state.shaders[S_TEXTURE]->bind();
@@ -120,8 +121,8 @@ void Skybox::draw()
     ));
 
     framebuffer->draw();
-
     state.shaders[S_TEXTURE]->unbind();
 
+    glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
 }

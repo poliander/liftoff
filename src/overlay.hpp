@@ -18,6 +18,7 @@ class Overlay
         State&                  state;
 
         unique_ptr<View>        view;
+        unique_ptr<Framebuffer> framebuffer;
         shared_ptr<Player>      player;
 
         void                    drawVideoInfos();

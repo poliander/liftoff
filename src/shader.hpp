@@ -8,7 +8,7 @@
 
 using namespace std;
 
-enum UNIFORMS
+enum E_UNIFORMS
 {
     UNI_MODEL,
     UNI_VIEW,

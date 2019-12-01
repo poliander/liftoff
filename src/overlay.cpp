@@ -3,6 +3,7 @@
 Overlay::Overlay(State& s, shared_ptr<Player> p) : state(s), player(p)
 {
     view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
+    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, GL_RGBA, GL_LINEAR, true);
 }
 
 Overlay::~Overlay()
@@ -280,7 +281,7 @@ void Overlay::drawMenu()
             numentries = 3;
 
             mfo = 0.0f;
-            mfs  = 0.15f;
+            mfs  = 0.14f;
 
             strcpy(mtxt[0], "LAUNCH");
             strcpy(mtxt[1], "SETTINGS");
@@ -681,6 +682,12 @@ void Overlay::drawVideoInfos()
 void Overlay::draw()
 {
     glDisable(GL_DEPTH_TEST);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+    framebuffer->bind();
+
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (state.get() >= STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
@@ -695,9 +702,30 @@ void Overlay::draw()
         drawMenu();
     }
 
+    framebuffer->unbind();
+
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(
+        1.0f,
+        1.0f,
+        1.0f,
+        1.0f
+    ));
+
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
+        0, 0,
+        1400.0f / state.vid_aspect, -600.0f
+    ));
+
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+    framebuffer->draw();
+    state.shaders[S_TEXTURE]->unbind();
+
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     if (state.fps_visible) {
         drawVideoInfos();
     }
-
-    glEnable(GL_DEPTH_TEST);
 }

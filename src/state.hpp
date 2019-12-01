@@ -63,22 +63,24 @@ class State
         bool                        engine_restart;
         bool                        engine_boundary;
 
-        // video capabilities and configuration
+        // display
         SDL_DisplayMode             vid_cap_modes[128];
         int                         vid_cap_modes_num;
-        int                         vid_display;
         int                         vid_mode;
+        int                         vid_display;
         int                         vid_width;
         int                         vid_height;
         int                         vid_refresh_rate;
         int                         vid_format;
+
         float                       vid_aspect;
-        unsigned short              vid_quality;
-        unsigned short              vid_framebuffer_size;
-        unsigned short              vid_font_resolution;
         unsigned short              vid_fullscreen;
         unsigned short              vid_vsync;
+
+        unsigned short              vid_quality;
+        unsigned short              vid_fb_size;
         unsigned short              vid_multisampling;
+        unsigned short              vid_font_resolution;
 
         // money/damage messages
         unsigned short              msg_num = 0;
