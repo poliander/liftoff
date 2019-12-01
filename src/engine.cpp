@@ -684,6 +684,9 @@ bool Engine::main()
 
                     state.buffer.reset();
                     state.buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
+
+                    state.view.reset();
+                    state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);
                 }
                 break;
         }
