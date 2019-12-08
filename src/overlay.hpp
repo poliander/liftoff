@@ -9,7 +9,7 @@ using namespace std;
 class Overlay
 {
     public:
-        Overlay(State& s, shared_ptr<Player> p);
+        Overlay(State& s);
         ~Overlay();
 
         void draw();
@@ -18,8 +18,8 @@ class Overlay
         State&                  state;
 
         unique_ptr<View>        view;
+        unique_ptr<View>        perspective;
         unique_ptr<Framebuffer> framebuffer;
-        shared_ptr<Player>      player;
 
         void                    drawVideoInfos();
         void                    drawMenu();

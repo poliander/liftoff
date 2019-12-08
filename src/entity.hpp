@@ -72,10 +72,20 @@ class Entity
         void               setLife(int l);
         int                getLife();
 
+        void               setEnergy(int e);
+        int                getEnergy();
+        int                getEnergyMaximum();
+        int                getEnergyRegeneration();
+
+        int                getLifeMaximum();
+        int                getLifeRegeneration();
+        int                getLifeRegenerationEnergy();
+
         void               addMoney(unsigned short m);
         void               setMoney(unsigned short m);
         unsigned short     getMoney();
 
+        void               init(State &s);
         void               activate();
         virtual bool       damage(State &s, int p);
         virtual void       collect(unsigned short e_obj);
@@ -136,6 +146,19 @@ class Entity
         int                life;
         bool               focusable;
         float              acceleration;
+
+        unsigned short     powerup;
+        unsigned short     powerup_booster_length;
+        int                powerup_booster_timer;
+        int                powerup_booster_ltimer;
+
+        int                energy;
+        int                energy_max;
+        int                energy_reg;
+
+        int                life_max;
+        int                life_reg;
+        int                life_reg_energy;
 
         float              calcDistance2D(State &s, shared_ptr<Entity> e);
         float              calcDistance3D(State &s, shared_ptr<Entity> e);

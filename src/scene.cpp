@@ -4,7 +4,7 @@ Scene::Scene(State &s) : state(s)
 {
     player = make_shared<Player>();
     skybox = make_unique<Skybox>(state);
-    overlay = make_unique<Overlay>(state, player);
+    overlay = make_unique<Overlay>(state);
 
     state.player = player;
     state.buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
@@ -471,15 +471,6 @@ void Scene::update()
 
             state.cam_x = 0;
             state.cam_y = 0;
-
-            player->setSpin(0, 0, 3.5f);
-            player->setVelocity(0, 0, 0);
-            player->setAcceleration(0, 0, 0);
-            player->setScale(2.0f, 2.0f, 2.0f);
-            player->setPos(3.5f, -1.0f, -50.0f);
-            player->setRotX(115.0f);
-            player->setRotY(0);
-            player->update(state);
             break;
 
         case STATE_QUIT:
@@ -498,6 +489,8 @@ void Scene::update()
 
                 if (state.lvl_loaded == false) {
                     state.set(STATE_QUIT);
+                } else {
+                    player->init(state);
                 }
             }
 
@@ -508,13 +501,7 @@ void Scene::update()
 
             if (state.stars_speed > .3f) {
                 state.stars_speed -= (state.stars_speed - .2f) * .02f * state.timer_adjustment;
-                player->update(state);
             } else {
-                player->setPos(0, -90.0f, 50.0f);
-                player->setRot(90.0f, 0, 270.0f);
-                player->setSpin(0, 0, 0);
-                player->setScale(22.5f, 22.5f, 22.5f);
-
                 state.set(STATE_GAME_LOOP);
             }
             break;
@@ -522,8 +509,7 @@ void Scene::update()
         case STATE_GAME_LOOP:
             state.lvl_pos += state.timer_adjustment * 1.5f;
 
-            if (
-                player->isAlive() &&
+            if (player->isAlive() &&
                 state.lvl_pos > state.lvl_length
             ) {
                 state.set(STATE_GAME_NEXTLEVEL);

@@ -273,6 +273,41 @@ void Entity::setLife(int l)
     life = l;
 }
 
+void Entity::setEnergy(int e)
+{
+    energy = e;
+}
+
+int Entity::getEnergy()
+{
+    return energy;
+}
+
+int Entity::getEnergyMaximum()
+{
+    return energy_max;
+}
+
+int Entity::getEnergyRegeneration()
+{
+    return energy_reg;
+}
+
+int Entity::getLifeMaximum()
+{
+    return life_max;
+}
+
+int Entity::getLifeRegeneration()
+{
+    return life_reg;
+}
+
+int Entity::getLifeRegenerationEnergy()
+{
+    return life_reg_energy;
+}
+
 float Entity::calcDistanceScale(State &s)
 {
     float f = .0001f;

@@ -1,8 +1,9 @@
 #include "overlay.hpp"
 
-Overlay::Overlay(State& s, shared_ptr<Player> p) : state(s), player(p)
+Overlay::Overlay(State& s) : state(s)
 {
     view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
+    perspective = View::createPerspective(45.0f, 4.0f / 3.0f, .01f, 100.0f);
     framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, GL_RGBA, GL_LINEAR, true);
 }
 
@@ -86,14 +87,8 @@ void Overlay::drawDisplay()
             break;
 
         case STATE_GAME_LOOP:
-            if (player->isAlive()) {
-                state.hud_x = -6.413f * state.vid_aspect;
-                state.hud_y = -4.905f;
-            } else {
-                state.hud_x -= state.timer_adjustment * .01f;
-                state.hud_y -= state.timer_adjustment * .01f;
-                alpha -= state.timer_adjustment * .01f;
-            }
+            state.hud_x = -6.413f * state.vid_aspect;
+            state.hud_y = -4.905f;
             break;
 
         default:
@@ -130,7 +125,7 @@ void Overlay::drawDisplay()
 
     // money
 
-    sprintf(msg, "%d $", player->getMoney());
+    sprintf(msg, "%d $", state.player->getMoney());
     state.fonts[F_ZEKTON]->draw(
         msg,
 
@@ -194,7 +189,7 @@ void Overlay::drawDisplay()
 
     // life bar
 
-    s = int(50.0f / ((float(player->getLifeMaximum() + 1) / float(player->getLife() + 1))));
+    s = int(50.0f / ((float(state.player->getLifeMaximum() + 1) / float(state.player->getLife() + 1))));
 
     for (i = 0; i < s; i++) {
         state.fonts[F_ZEKTON]->draw(
@@ -236,7 +231,7 @@ void Overlay::drawDisplay()
 
     // energy bar
 
-    e = int(50.0f / (((float)player->getEnergyMaximum() + 1) / (float(player->getEnergy() + 1))));
+    e = int(50.0f / (((float)state.player->getEnergyMaximum() + 1) / (float(state.player->getEnergy() + 1))));
 
     for (i = 0; i < e; i++) {
         state.fonts[F_ZEKTON]->draw(
@@ -263,6 +258,7 @@ void Overlay::drawMenu()
 {
     int i, numentries;
     float s, x, y1, y2;
+    static float p_rot = 0;
 
     float mfo; // font y-offset
     float mfs; // font size
@@ -290,7 +286,6 @@ void Overlay::drawMenu()
                 switch (state.menu_pos) {
                     case 0: // launch
                         state.set(STATE_GAME_START);
-                        player->init(state);
                         break;
 
                     case 1: // enter settings
@@ -632,7 +627,6 @@ void Overlay::drawMenu()
     // "LIFT-OFF"
 
     state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(x, y1, 280.0f, 70.0f));
-
     state.textures[T_TITLE]->bind();
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
     state.textures[T_TITLE]->draw();
@@ -640,14 +634,27 @@ void Overlay::drawMenu()
     // "BEYOND GLAXIUM"
 
     state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(-x, y2, 280.0f * s, 40.0f * s));
-
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
     state.textures[T_TITLE]->draw();
 
     state.shaders[S_TEXTURE]->unbind();
 
+    // Player's ship
+
     glEnable(GL_DEPTH_TEST);
-    player->draw(state);
+
+    p_rot -= state.timer_adjustment * 0.3f;
+    if (p_rot > 360.0f) p_rot -= 360.0f;
+
+    glm::mat4 projection = perspective->getProjection();
+    glm::mat4 camera = perspective->getCamera();
+    glm::mat4 model = perspective->getModel(
+        -4.0f, 1.0f, -42.5f,
+        -115.0f, 0, p_rot,
+        1.0f, 1.0f, 1.0f
+    );
+
+    state.models[OBJ_PLAYER]->draw(model, camera, projection, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     glDisable(GL_DEPTH_TEST);
 }
 

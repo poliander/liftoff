@@ -20,29 +20,7 @@ class Player : public Entity
         void            collide(State &s, shared_ptr<Entity> e);
         void            collect(unsigned short e_obj);
 
-        void            setEnergy(int e);
-        int             getEnergy();
-        int             getEnergyMaximum();
-        int             getEnergyRegeneration();
-
-        int             getLifeMaximum();
-        int             getLifeRegeneration();
-        int             getLifeRegenerationEnergy();
-
     private:
-        unsigned short  powerup;
-        unsigned short  powerup_booster_length;
-        int             powerup_booster_timer;
-        int             powerup_booster_ltimer;
-
-        int             energy;
-        int             energy_max;
-        int             energy_reg;
-
-        int             life_max;
-        int             life_reg;
-        int             life_reg_energy;
-
         float           j_l;              // jet axhaust animation
         float           jt_l;
         float           jr;

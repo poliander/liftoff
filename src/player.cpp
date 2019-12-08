@@ -10,23 +10,15 @@ Player::Player() : Entity()
     j_l = 3;
     jt_l = 3;
 
-    r_x = 115.0f;
-    r_y = 0;
-    r_z = 0;
+    s_x = 22.5f;
+    s_y = 22.5f;
+    s_z = 22.5f;
 
-    powerup_booster_timer = 0;
-    powerup_booster_length = 0;
-
-    // speed/acceleration
+    // stats
     acceleration = 120;
-
-    // energy capacity and regeneration speed
     energy_max = 1500;
     energy_reg = 10;
-
-    // maximum life, life regeneration and regeneration energy draw
     life_max = 250;
-    life = life_max;
     life_reg = 1;
     life_reg_energy = 10;
 
@@ -34,48 +26,10 @@ Player::Player() : Entity()
     gun_power = 10;
     gun_flash[0] = 0;
     gun_flash[1] = 0;
-
-    energy = 1;
-    money = 0;
 }
 
 Player::~Player()
 {
-}
-
-void Player::setEnergy(int e)
-{
-    energy = e;
-}
-
-int Player::getEnergy()
-{
-    return energy;
-}
-
-int Player::getEnergyMaximum()
-{
-    return energy_max;
-}
-
-int Player::getEnergyRegeneration()
-{
-    return energy_reg;
-}
-
-int Player::getLifeMaximum()
-{
-    return life_max;
-}
-
-int Player::getLifeRegeneration()
-{
-    return life_reg;
-}
-
-int Player::getLifeRegenerationEnergy()
-{
-    return life_reg_energy;
 }
 
 void Player::collect(unsigned short e_obj)
@@ -89,9 +43,15 @@ void Player::collide(State &s, shared_ptr<Entity> e)
 
 void Player::init(State &s)
 {
-    money = 0;
-    energy = -200;
-    life = life_max;
+    setPos(0, -90.0f, 50.0f);
+    setRot(90.0f, 0, 270.0f);
+    setSpin(0, 0, 0);
+    setVelocity(0, 0, 0);
+    setAcceleration(0, 0, 0);
+
+    setMoney(0);
+    setEnergy(-200);
+    setLife(getLifeMaximum());
 
     m_alt = 0;
     m_next_shot = s.timer;
