@@ -12,7 +12,4 @@ class Asteroid : public Entity
 
         bool damage(State &s, int p);
         void update(State &s);
-
-    private:
-        bool exploded;
 };
