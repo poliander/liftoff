@@ -11,11 +11,12 @@ enum E_BUFFERS
 class Framebuffer : public Quad
 {
     public:
-        Framebuffer(GLuint w, GLuint h, GLuint fo, GLuint fi, bool d);
+        Framebuffer(GLuint w, GLuint h);
         ~Framebuffer();
 
         void   bind();
         void   unbind();
+        void   clear();
         void   draw();
 
     protected:

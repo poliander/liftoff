@@ -3,7 +3,7 @@
 Skybox::Skybox(State& s) : state(s)
 {
     view = View::createPerspective(65.0f, 1.0f, .01f, 10000.0f);
-    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, GL_RGB, s.vid_fb_filter, false);
+    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size);
 
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         float x = 0;
@@ -58,9 +58,7 @@ void Skybox::draw()
     glDisable(GL_DEPTH_TEST);
 
     framebuffer->bind();
-
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    framebuffer->clear();
 
     state.shaders[S_TEXTURE]->bind();
 

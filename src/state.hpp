@@ -79,7 +79,6 @@ class State
 
         unsigned short              vid_quality;
         unsigned short              vid_fb_size;
-        unsigned short              vid_fb_filter;
         unsigned short              vid_multisampling;
         unsigned short              vid_font_resolution;
 

@@ -4,7 +4,7 @@ Overlay::Overlay(State& s) : state(s)
 {
     view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
     perspective = View::createPerspective(45.0f, 4.0f / 3.0f, .01f, 100.0f);
-    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, GL_RGBA, GL_LINEAR, true);
+    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size);
 }
 
 Overlay::~Overlay()
@@ -699,9 +699,7 @@ void Overlay::draw()
         glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         framebuffer->bind();
-
-        glClearColor(0, 0, 0, 0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        framebuffer->clear();
 
         drawMenu();
 
