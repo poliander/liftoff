@@ -1,5 +1,6 @@
 #pragma once
 
+#include "debris.hpp"
 #include "entity.hpp"
 #include "explosion.hpp"
 
@@ -11,4 +12,7 @@ class Asteroid : public Entity
 
         bool damage(State &s, int p);
         void update(State &s);
+
+    private:
+        bool exploded;
 };
