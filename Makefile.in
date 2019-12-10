@@ -789,10 +789,7 @@ uninstall-am:
 
 install-data-hook:
 	@mkdir -p $(resourcesdir)
-	@cp -rv $(srcdir)/resources/gfx $(resourcesdir)
-	@cp -rv $(srcdir)/resources/sfx $(resourcesdir)
-	@cp -rv $(srcdir)/resources/obj $(resourcesdir)
-	@cp -rv $(srcdir)/resources/lvl $(resourcesdir)
+	@cp -rv $(srcdir)/resources/* $(resourcesdir)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

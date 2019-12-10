@@ -18,8 +18,8 @@ struct Glyph
     GLuint     texture;
     glm::ivec2 size;
     glm::ivec2 bearing;
-    GLint      advance;
-    GLint      height;
+    FT_Pos     advance;
+    FT_Pos     height;
 };
 
 class Font : public Quad
