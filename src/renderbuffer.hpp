@@ -16,11 +16,6 @@ class Renderbuffer
         GLuint height;
 
         GLuint framebuffer;
-        GLuint framebufferMSAA;
-
-        GLuint renderbuffer;
         GLuint renderbufferColor;
         GLuint renderbufferDepth;
-
-        GLuint texture;
 };

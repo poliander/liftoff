@@ -48,7 +48,7 @@ void Cargo::draw(State &s)
 {
     float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
 
-    glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
+    glm::vec4 color = glm::vec4(a, a, a, 1.0f);
     glm::mat4 m;
 
     glm::mat4 projection = s.view->getProjection();
@@ -73,7 +73,7 @@ void Cargo::draw(State &s)
     s.textures[T_GLOW]->bind();
 
     s.shaders[S_TEXTURE]->bind();
-    s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, 0.5f * a));
+    s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, 0.45f * a));
 
     m = model;
     m = glm::rotate(m, glm::radians(90.0f), glm::vec3(1.0f, 0, 0));
