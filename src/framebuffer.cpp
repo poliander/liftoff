@@ -1,27 +1,38 @@
 #include "framebuffer.hpp"
 
-Framebuffer::Framebuffer(GLuint w, GLuint h) : Quad()
+Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint s) : Quad()
 {
     width = w;
     height = h;
+    samples = s;
 
-    // color buffer
+    // color
     glGenTextures(1, &buffers[FB_BUFFER_COLOR]);
     glBindTexture(GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    if (s == 0) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    }
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    // depth buffer
+    // depth
     glGenRenderbuffers(1, &buffers[FB_BUFFER_DEPTH]);
     glBindRenderbuffer(GL_RENDERBUFFER, buffers[FB_BUFFER_DEPTH]);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
 
+    // framebuffer
     glGenFramebuffers(1, &framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR], 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffers[FB_BUFFER_DEPTH]);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, buffers[FB_BUFFER_COLOR], 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -56,6 +67,12 @@ void Framebuffer::clear()
 void Framebuffer::draw()
 {
     glBindTexture(GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR]);
+
+    if (samples > 0) {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
     Quad::draw();
+
     glBindTexture(GL_TEXTURE_2D, 0);
 }
