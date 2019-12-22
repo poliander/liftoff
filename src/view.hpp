@@ -2,10 +2,10 @@
 
 #include <memory>
 
+#include "definitions.hpp"
+
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-
-#include "definitions.hpp"
 
 using namespace std;
 
