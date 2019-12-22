@@ -277,7 +277,7 @@ void Player::update(State &s)
     if (gun_flash[1] > 0) gun_flash[1] -= s.timer_adjustment * .2f;
 
     // one tick every 0.25s
-    if (SDL_GetTicks() - tick_timer > 250) {
+    if (SDL_GetTicks() - tick_timer > E_TICK_TIMING) {
         tick_timer = SDL_GetTicks();
 
         if (powerup > 0) {
