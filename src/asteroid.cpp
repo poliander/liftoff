@@ -20,9 +20,9 @@ bool Asteroid::damage(State &s, int p)
 
         s.audio.playSample(SFX_EXPLOSION_2, 192, 180);
 
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_2, p_x, p_y, p_z));
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z + 5.0f));
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_4, p_x, p_y, p_z + 10.0f));
+        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_2, p_x, p_y, p_z));
+        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z + 5.0f));
+        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_4, p_x, p_y, p_z + 10.0f));
 
         for (int i = 0; i < 4 + rand() % 4; i++) {
             auto debris = make_shared<Debris>();
@@ -35,7 +35,7 @@ bool Asteroid::damage(State &s, int p)
                 .1f * float(rand() % 80) - 4.0f
             );
 
-            s.entities.push_back(debris);
+            s.spawn(debris);
         }
 
         s.addMessage(m, MSG_MONEY);

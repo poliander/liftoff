@@ -2,78 +2,83 @@
 
 ParticleEngine::ParticleEngine()
 {
-    pemitter = EMITTER_JET;
-
     c_r = 1.0f;
     c_g = 1.0f;
     c_b = 1.0f;
     c_a = 1.0f;
 
-    pscale = 1.0f;
+    pinflation = 0;
+    pincrease = 0;
 }
 
 ParticleEngine::~ParticleEngine()
 {
 }
 
-void ParticleEngine::setup(short emitter, short particles, float dx, float dy, float dz, float decay, float size)
+void ParticleEngine::setup(short emitter, short num, float dx, float dy, float dz, float decay, float size)
 {
-    int i;
+    particles.clear();
 
-    if (particles > DEFAULT_GFX_PARTICLES) {
-        pnum = DEFAULT_GFX_PARTICLES;
-    } else {
-        pnum = particles;
-    }
-
-    pdecay = decay;
     psize = size;
-    pdx = dx;
-    pdy = dy;
-    pdz = dz;
     pemitter = emitter;
-    pnum_max = pnum;
+    pcontinuous = false;
+    pvolume = 1.0f;
 
     switch (pemitter) {
-        case EMITTER_JET:
-            continuous = true;
+        case EMIT_JET:
+            pcontinuous = true;
             c_a = .5f;
 
-            for (i=0; i<pnum; i++) {
-                p[i].lifetime = 1.0f;
-                p[i].fading = float(10 + rand() % 10) / 80.0f;
+            for (int i = 0; i < num; i++) {
+                particles.push_back({
+                    1.0f,
+                    float(10 + rand() % 10) / 80.0f,
 
-                p[i].dx = dx;
-                p[i].dy = dy;
-                p[i].dz = dz;
+                    0,
+                    0,
+                    float(rand() % 1000) * .001f,
 
-                p[i].px = .0f;
-                p[i].py = .0f;
-                p[i].pz = float(rand() % 1000) * .001f;
+                    dx,
+                    dy,
+                    dz
+                });
             }
             break;
 
-        case EMITTER_EXPLOSION:
-            continuous = false;
+        case EMIT_EXPLOSION:
+            for (int i = 0; i < num; i++) {
+                float pdx = -dx * .5f + float(rand() % int(dx * 100)) * .01f;
+                float pdy = -dy * .5f + float(rand() % int(dy * 100)) * .01f;
+                float pdz = -dz * .5f + float(rand() % int(dz * 100)) * .01f;
 
-            for (i=0; i<pnum; i++) {
-                p[i].lifetime = 1.0f;
-                p[i].fading = decay * (float(rand() % 100) * .001f + .05f);
-                p[i].dx = -pdx*.5f + float(rand() % int(pdx*100.0f)) *.01f;
-                p[i].dy = -pdy*.5f + float(rand() % int(pdy*100.0f)) *.01f;
-                p[i].dz = -pdz*.5f + float(rand() % int(pdz*100.0f)) *.01f;
-                if ((p[i].dx < -pdx) || (p[i].dx > pdx)) p[i].dx *= .5f;
-                if ((p[i].dy < -pdy) || (p[i].dy > pdy)) p[i].dy *= .5f;
-                if ((p[i].dz < -pdz) || (p[i].dz > pdz)) p[i].dz *= .5f;
-                if ((p[i].dx > -.05f) && (p[i].dx < .05f)) p[i].dx += -.05f + float(rand() % 20)*.01f;
-                if ((p[i].dy > -.05f) && (p[i].dy < .05f)) p[i].dy += -.05f + float(rand() % 20)*.01f;
-                if ((p[i].dz > -.05f) && (p[i].dz < .05f)) p[i].dz += -.05f + float(rand() % 20)*.01f;
-                p[i].px = -psize*.5f + float(rand() % int(psize*100)) * .01f;
-                p[i].py = -psize*.5f + float(rand() % int(psize*100)) * .01f;
-                p[i].pz = -psize*.5f + float(rand() % int(psize*100)) * .01f;
+                if ((pdx < -dx) || (pdx > dx)) pdx *= .5f;
+                if ((pdy < -dy) || (pdy > dy)) pdy *= .5f;
+                if ((pdz < -dz) || (pdz > dz)) pdz *= .5f;
+
+                if ((pdx > -.05f) && (pdx < .05f)) pdx += -.05f + float(rand() % 20) * .01f;
+                if ((pdy > -.05f) && (pdy < .05f)) pdy += -.05f + float(rand() % 20) * .01f;
+                if ((pdz > -.05f) && (pdz < .05f)) pdz += -.05f + float(rand() % 20) * .01f;
+
+                particles.push_back({
+                    1.0f,
+                    decay * (float(50 + rand() % 100) * .01f),
+
+                    -psize * .5f + float(rand() % int(psize * 100)) * .01f,
+                    -psize * .5f + float(rand() % int(psize * 100)) * .01f,
+                    -psize * .5f + float(rand() % int(psize * 100)) * .01f,
+
+                    pdx,
+                    pdy,
+                    pdz
+                });
             }
             break;
     }
+}
+
+bool ParticleEngine::isGone()
+{
+    return particles.size() == 0;
 }
 
 void ParticleEngine::setColor(float r, float g, float b)
@@ -88,55 +93,89 @@ void ParticleEngine::setAlpha(float a)
     c_a = a;
 }
 
-void ParticleEngine::setSize(float size)
+void ParticleEngine::setSize(float s)
 {
-    psize = size;
+    psize = s;
 }
 
-void ParticleEngine::setScale(float scale)
+void ParticleEngine::setVolume(float v)
 {
-    pscale = scale;
+    pvolume = v;
+}
+
+void ParticleEngine::setInflation(float i)
+{
+    pinflation = i;
+}
+
+float ParticleEngine::getInflation()
+{
+    return pinflation;
+}
+
+void ParticleEngine::setIncrease(float i)
+{
+    pincrease = i;
+}
+
+float ParticleEngine::getIncrease()
+{
+    return pincrease;
 }
 
 void ParticleEngine::setContinuous(bool c)
 {
-    // explosion emitter + continuous mode = plasma ball
-    continuous = c;
+    pcontinuous = c;
 }
 
 void ParticleEngine::update(State &s)
 {
-    if (pemitter == EMITTER_EXPLOSION) {
-        for (int i = 0; i < pnum_max; i++) {
-            p[i].px += p[i].dx * p[i].lifetime * s.timer_adjustment;
-            p[i].py += p[i].dy * p[i].lifetime * s.timer_adjustment;
-            p[i].pz += p[i].dz * p[i].lifetime * s.timer_adjustment;
+    pvolume  = pvolume * (1.0f + (pinflation * s.timer_adjustment));
+    psize   += pincrease * s.timer_adjustment;
 
-            p[i].lifetime -= p[i].fading * s.timer_adjustment;
+    if (psize < 0) {
+        particles.clear();
+        return;
+    }
 
-            if (continuous && p[i].lifetime < 0) {
-                p[i].px = 0;
-                p[i].py = 0;
-                p[i].pz = 0;
+    if (pemitter == EMIT_EXPLOSION) {
+        for (auto p = particles.begin(); p < particles.end(); ++p) {
+            p->lifetime -= s.timer_adjustment * p->fading;
 
-                p[i].lifetime += 1.0f;
-                p[i].fading = pdecay * (float(rand() % 100) * .001f + .05f);
+            p->px += p->dx * pvolume * s.timer_adjustment;
+            p->py += p->dy * pvolume * s.timer_adjustment;
+            p->pz += p->dz * pvolume * s.timer_adjustment;
+
+            if (p->lifetime < 0) {
+                if (pcontinuous) {
+                    p->lifetime += 1.0f;
+
+                    p->px = 0;
+                    p->py = 0;
+                    p->pz = 0;
+                } else {
+                    p = particles.erase(p);
+                }
             }
         }
     } else {
-        for (int i = 0; i<pnum_max; i++) {
-            p[i].lifetime -= s.timer_adjustment * p[i].fading;
-            p[i].px += (p[i].dx * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
-            p[i].py += (p[i].dy * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
-            p[i].pz += (p[i].dz * (.75f + .25f * p[i].fading)) * s.timer_adjustment;
+        for (auto p = particles.begin(); p < particles.end(); ++p) {
+            p->lifetime -= s.timer_adjustment * p->fading;
 
-            if (continuous && p[i].lifetime < 0) {
-                p[i].px = 0;
-                p[i].py = 0;
-                p[i].pz = 0;
+            p->px += (p->dx * (.75f + .25f * p->fading)) * s.timer_adjustment;
+            p->py += (p->dy * (.75f + .25f * p->fading)) * s.timer_adjustment;
+            p->pz += (p->dz * (.75f + .25f * p->fading)) * s.timer_adjustment;
 
-                p[i].lifetime += 1.0f;
-                p[i].fading = float(10 + rand() % 10) / 80.0f;
+            if (p->lifetime < 0) {
+                if (pcontinuous) {
+                    p->lifetime += 1.0f;
+
+                    p->px = 0;
+                    p->py = 0;
+                    p->pz = 0;
+                } else {
+                    p = particles.erase(p);
+                }
             }
         }
     }
@@ -151,17 +190,12 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
 
     s.shaders[S_TEXTURE]->bind();
 
-    // render particles
-    for (int i = 0; i < pnum; i++) {
-        if (p[i].lifetime <= 0) {
-            continue;
-        }
-
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * p[i].lifetime * a));
+    for (auto p = particles.begin(); p < particles.end(); ++p) {
+        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a * p->lifetime));
         s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
-            px + (p[i].px * pscale),
-            py + (p[i].py * pscale),
-            pz,
+            px + p->px,
+            py + p->py,
+            pz + p->pz,
 
             0,
             0,

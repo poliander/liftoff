@@ -110,8 +110,7 @@ void Player::shoot(State &s)
         missile->setVelocityY(-ay * E_BASE_SPEED * 5.0f);
     }
 
-    s.entities.push_back(missile);
-
+    s.spawn(missile);
 
     angle = int(.5f * (p_x - s.cam_x));
 

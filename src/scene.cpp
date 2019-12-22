@@ -205,7 +205,7 @@ bool Scene::loadLevel()
     float w_x, w_y, w_z;
 
     state.entities.clear();
-    state.entities.push_back(player);
+    state.spawn(player);
 
     sprintf(msg, "Loading 'lvl/mission_%d.dat'... ", state.lvl_id);
     state.log(msg);
@@ -305,7 +305,7 @@ bool Scene::loadLevel()
                                 asteroid->setSpin(w_x, w_y, w_z);
                                 asteroid->setLife(life);
 
-                                state.entities.push_back(asteroid);
+                                state.spawn(asteroid);
                             }
                             break;
 
@@ -319,7 +319,7 @@ bool Scene::loadLevel()
                                 cargo->setSpin(w_x, w_y, w_z);
                                 cargo->setLife(life);
 
-                                state.entities.push_back(cargo);
+                                state.spawn(cargo);
                             }
                             break;
                     }
@@ -357,7 +357,7 @@ bool Scene::loadLevel()
                                 asteroid->setSpin(w_x, w_y, w_z);
                                 asteroid->setLife(life);
 
-                                state.entities.push_back(asteroid);
+                                state.spawn(asteroid);
                             }
                             break;
                     }
@@ -380,24 +380,39 @@ void Scene::updateScene()
 
     if ((state.timer > nextdebris) && (state.lvl_pos < float(state.lvl_length - 1000))) {
         nextdebris = state.timer + 200 + rand() % 200;
-        state.entities.push_back(make_shared<Debris>());
+        state.spawn(make_shared<Debris>());
     }
 
     player->resetTarget();
 
-    auto e = state.entities.begin();
+    auto s = state.spawns.begin();
 
-    while (e != state.entities.end()) {
-        if ((*e)->isIdle()) {
-            if ((*e)->getPosZ() < state.lvl_pos) {
-                (*e)->setPosZ(-9999.0f);
-                (*e)->activate();
-            } else {
-                ++e;
-                continue;
+    while (s != state.spawns.end()) {
+        bool enter = true;
+
+        if ((*s)->isIdle()) {
+            enter = false;
+
+            if ((*s)->getPosZ() < state.lvl_pos) {
+                (*s)->setPosZ(-9999.0f);
+                (*s)->activate();
+
+                enter = true;
             }
         }
 
+        if (enter) {
+            state.entities.push_back(*s);
+            s = state.spawns.erase(s);
+            continue;
+        }
+
+        ++s;
+    }
+
+    auto e = state.entities.begin();
+
+    while (e != state.entities.end()) {
         (*e)->update(state);
 
         if ((*e)->isGone()) {

@@ -11,7 +11,7 @@
 
 using namespace std;
 
-enum VerexArrayBufferIndex
+enum vbo_buffer_indices_e
 {
     VAB_INDICES,
     VAB_POSITIONS,

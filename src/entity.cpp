@@ -3,7 +3,7 @@
 Entity::Entity()
 {
     money = 0;
-    life = 1;
+    life = 0;
     focusable = false;
 }
 

@@ -33,7 +33,7 @@ void Missile::collide(State &s, shared_ptr<Entity> e)
 
     if (e->damage(s, power)) {
         s.audio.playSample(SFX_GUN_IMPACT, 192, 180);
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_1, getPosX(), getPosY(), getPosZ()));
+        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_1, getPosX(), getPosY(), getPosZ()));
 
         e_state = E_STATE_GONE;
     }

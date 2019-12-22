@@ -57,6 +57,9 @@ State::State()
 
     id                      = 0;
     lvl_id                  = 1;
+
+    entities.clear();
+    spawns.clear();
 }
 
 State::~State()
@@ -68,17 +71,15 @@ State::~State()
  */
 void State::log(const char *msg)
 {
-#ifdef _WIN32
     if (log_file) {
         FILE *fp;
 
-        fp = fopen("debug.log", "a");
+        fp = fopen("liftoff.log", "a");
         fprintf(fp, "%s", msg);
         fclose(fp);
+    } else {
+        printf("%s", msg);
     }
-#else
-    printf("%s", msg);
-#endif
 }
 
 /*
@@ -89,6 +90,11 @@ void State::tilt(float t)
     if (tilt_factor < fabs(t)) {
         tilt_factor = fabs(t);
     }
+}
+
+void State::spawn(shared_ptr<Entity> e)
+{
+    spawns.push_back(e);
 }
 
 /*

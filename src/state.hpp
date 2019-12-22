@@ -44,9 +44,10 @@ class State
 
         // scenery
         unique_ptr<View>            view;
+        unique_ptr<Renderbuffer>    buffer;
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
-        unique_ptr<Renderbuffer>    buffer;
+        vector<shared_ptr<Entity>>  spawns;
 
         // timer
         Uint32                      timer;
@@ -143,6 +144,7 @@ class State
         // state
         bool                        set(int s);
         int                         get();
+        void                        spawn(shared_ptr<Entity> e);
 
         void                        log(const char *msg);
 

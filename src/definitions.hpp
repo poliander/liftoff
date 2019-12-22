@@ -14,7 +14,6 @@
 #define DEFAULT_VID_MSAA        4
 #define DEFAULT_AUD_MIXFREQ     MIX_DEFAULT_FREQUENCY
 #define DEFAULT_AUD_FORMAT      MIX_DEFAULT_FORMAT
-#define DEFAULT_GFX_PARTICLES   100
 
 // projection modes
 #define P_ORTHOGRAPHIC          0
@@ -90,11 +89,10 @@
 #define OBJ_ASTEROID_1          301 // asteroid
 #define OBJ_DEBRIS_1            311 // space debris
 #define OBJ_MISSILE_1           401 // green laser
-#define OBJ_EXPLOSION_1         501 // explosion (gun impact)
+#define OBJ_EXPLOSION_1         501 // explosion (gun)
 #define OBJ_EXPLOSION_2         502 // explosion (smoke)
 #define OBJ_EXPLOSION_3         503 // explosion (sparks)
-#define OBJ_EXPLOSION_4         504 // explosion (collision sparks)
-#define OBJ_EXPLOSION_5         505 // explosion (halo)
+#define OBJ_EXPLOSION_4         504 // explosion (fireball)
 #define OBJ_POWERUP_0           601 // energy and life boost at level start
 #define OBJ_POWERUP_1           602 // energy and life boost
 

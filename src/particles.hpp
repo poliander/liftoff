@@ -7,8 +7,10 @@
 
 #include "state.hpp"
 
-#define EMITTER_JET       1
-#define EMITTER_EXPLOSION 2
+enum emitters_e {
+    EMIT_JET,
+    EMIT_EXPLOSION
+};
 
 struct particle_t
 {
@@ -30,29 +32,38 @@ class ParticleEngine
         ParticleEngine();
         ~ParticleEngine();
 
-        void            setup(short emitter, short particles, float dx, float dy, float dz, float decay, float size);
+        void               setAlpha(float a);
+        void               setColor(float r, float g, float b);
+        void               setContinuous(bool c);
 
-        void            setAlpha(float global_alpha);
-        void            setColor(float r, float g, float b);
-        void            setSize(float size);
-        void            setScale(float scale);
-        void            setContinuous(bool c);
+        void               setVolume(float v);
+        void               setInflation(float i);
+        float              getInflation();
 
-        void            update(State &s);
-        void            draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
+        void               setSize(float s);
+        void               setIncrease(float i);
+        float              getIncrease();
+
+        bool               isGone();
+
+        void               setup(short e, short particles, float dx, float dy, float dz, float decay, float size);
+        void               update(State &s);
+        void               draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
 
     private:
-        particle_t      p[DEFAULT_GFX_PARTICLES];
+        vector<particle_t> particles;
 
-        bool            continuous;
-        short           pemitter;
-        short           pnum_max;
-        short           pnum;
+        short              pemitter;    // emitter type
+        bool               pcontinuous; // continuously respawn every particle
 
-        float           c_r, c_g, c_b, c_a;
+        float              pvolume;     // volume
+        float              pinflation;  // volume increase over time
 
-        float           pscale;
-        float           psize;
-        float           pdecay;
-        float           pdx, pdy, pdz;
+        float              psize;       // particle size
+        float              pincrease;   // particle size increase over time
+
+        float              c_r;
+        float              c_g;
+        float              c_b;
+        float              c_a;
 };

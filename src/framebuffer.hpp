@@ -2,7 +2,7 @@
 
 #include "quad.hpp"
 
-enum E_BUFFERS
+enum fbo_buffer_indices_e
 {
     FB_BUFFER_COLOR,
     FB_BUFFER_DEPTH,

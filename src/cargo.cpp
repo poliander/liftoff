@@ -24,8 +24,8 @@ bool Cargo::damage(State &s, int p)
         s.addMessage(money, MSG_MONEY);
         s.player->addMoney(money);
 
-        s.entities.push_back(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z));
-        s.entities.push_back(make_shared<Powerup>(p_x, p_y, p_z));
+        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z, .6f, .75f, 1.0f));
+        s.spawn(make_shared<Powerup>(p_x, p_y, p_z));
 
         yield = true;
     }

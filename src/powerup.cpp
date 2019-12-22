@@ -8,12 +8,13 @@ Powerup::Powerup(float x, float y, float z) : Entity()
 
     focusable = true;
     counter = 0;
+    life = 1;
 
     particles = new ParticleEngine();
-    particles->setup(EMITTER_EXPLOSION, 15, .5f, .5f, .5f, .5f, 1.0f);
+    particles->setup(EMIT_EXPLOSION, 15, .5f, .5f, .5f, .05f, 1.0f);
     particles->setColor(.6f, .75f, 1.0f);
     particles->setAlpha(.5f);
-    particles->setScale(10.0f);
+    particles->setVolume(10.0f);
     particles->setContinuous(true);
 
     setPos(x, y, z);
@@ -67,7 +68,6 @@ void Powerup::draw(State &s)
 
     particles->setSize(150.0f / (1.0f + counter * 75.0f));
     particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
-    particles->setScale(10.0f + (7.5f * sin(counter * M_PI)));
     particles->draw(s,
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,

@@ -25,15 +25,6 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 |  very high | 4x  | 4096x4096 | 7 bit |
 |  ultra | 8x  | 4096x4096 | 7 bit |
 
-### Command line
-
-```liftoff.exe /d```
-
-Write debug information to "debug.log" (Windows only)
-
-
-## Build
-
 ### Requirements
 
 - libGL
