@@ -29,18 +29,19 @@ Explosion::Explosion(short int type, float x, float y, float z) : Entity()
 
         // explosion sparks
         case OBJ_EXPLOSION_3:
-            particles->setup(EMIT_EXPLOSION, 30, 50.0f, 50.0f, 50.0f, .04f, 40.0f);
+            particles->setup(EMIT_EXPLOSION, 30, 30.0f, 30.0f, 30.0f, .02f, 40.0f);
             particles->setColor(1.0f, 1.0f, 0.8f);
-            particles->setInflation(-.15f);
+            particles->setInflation(-.125f);
             particles->setIncrease(-1.0f);
             break;
 
         // explosion fireball
         case OBJ_EXPLOSION_4:
-            particles->setup(EMIT_EXPLOSION, 20, .01f, .01f, .01f, .05f, 50.0f);
+            particles->setup(EMIT_EXPLOSION, 20, .1f, .1f, .1f, .05f, 50.0f);
             particles->setColor(1.0f, 0.8f, 0.6f);
             particles->setAlpha(0.5f);
             particles->setIncrease(1.05f);
+            particles->setInflation(-.01f);
             break;
     }
 }
@@ -85,10 +86,6 @@ void Explosion::draw(State &s)
         case OBJ_EXPLOSION_3:
             s.textures[T_STAR]->bind();
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            if (particles->getInflation() > .1f) {
-                particles->setInflation(particles->getInflation() * .9f * s.timer_adjustment);
-            }
-
             break;
 
         // explosion fireball
