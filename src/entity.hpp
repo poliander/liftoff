@@ -146,11 +146,9 @@ class Entity
         int                life;
         bool               focusable;
         float              acceleration;
+        short              gun_power;
 
-        unsigned short     powerup;
-        unsigned short     powerup_booster_length;
-        int                powerup_booster_timer;
-        int                powerup_booster_ltimer;
+        short              powerup;
 
         int                energy;
         int                energy_max;

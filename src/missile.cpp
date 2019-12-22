@@ -1,6 +1,6 @@
 #include "missile.hpp"
 
-Missile::Missile() : Entity()
+Missile::Missile(short p) : Entity()
 {
     e_obj = OBJ_MISSILE_1;
     e_type = E_TYPE_COLLIDER;
@@ -18,7 +18,7 @@ Missile::Missile() : Entity()
     v_y = 0;
     v_z = -(E_BASE_SPEED + 100.0f);
 
-    power = 20;
+    power = p;
 }
 
 Missile::~Missile()

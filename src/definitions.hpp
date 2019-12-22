@@ -30,7 +30,6 @@
 // engine globals
 #define E_RELATIVE_MOVEMENT     2.5
 #define E_BASE_SPEED            25.0
-#define E_MAX_MESSAGES          64
 
 // engine states
 #define STATE_MENU              1
@@ -52,11 +51,6 @@
 #define E_TYPE_COLLIDER         1
 #define E_TYPE_DECORATION       2
 #define E_TYPE_SCENERY          3
-
-// messages types
-#define MSG_MONEY               1
-#define MSG_DAMAGE              2
-#define MSG_ENERGY              3
 
 // textures
 #define T_LOGO                  0

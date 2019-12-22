@@ -39,6 +39,7 @@ void Powerup::collide(State &s, shared_ptr<Entity> e)
 {
     if (e_state == E_STATE_ACTIVE && e->isPlayer()) {
         s.audio.playSample(SFX_POWERUP_1, 192, 180);
+        s.notify(MSG_ENERGY, 500);
         e->collect(e_obj);
         e_state = E_STATE_FADING;
         v_z = -.5f * E_BASE_SPEED;

@@ -38,7 +38,7 @@ bool Asteroid::damage(State &s, int p)
             s.spawn(debris);
         }
 
-        s.addMessage(m, MSG_MONEY);
+        s.notify(MSG_MONEY, m);
         s.player->addMoney(m);
     }
 

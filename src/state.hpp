@@ -48,6 +48,7 @@ class State
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
         vector<shared_ptr<Entity>>  spawns;
+        vector<shared_ptr<Message>> messages;
 
         // timer
         Uint32                      timer;
@@ -82,10 +83,6 @@ class State
         unsigned short              vid_fb_size;
         unsigned short              vid_multisampling;
         unsigned short              vid_font_resolution;
-
-        // money/damage messages
-        unsigned short              msg_num = 0;
-        Message                     msg[E_MAX_MESSAGES];
 
         // game menu
         int                         menu;
@@ -135,9 +132,6 @@ class State
         float                       hud_x;
         float                       hud_y;
 
-        // add message
-        void                        addMessage(int value, unsigned short type);
-
         // view related
         void                        tilt(float t);
 
@@ -145,6 +139,7 @@ class State
         bool                        set(int s);
         int                         get();
         void                        spawn(shared_ptr<Entity> e);
+        void                        notify(short t, short v);
 
         void                        log(const char *msg);
 

@@ -21,14 +21,11 @@ class Player : public Entity
         void            collect(unsigned short e_obj);
 
     private:
-        float           j_l;              // jet axhaust animation
-        float           jt_l;
-        float           jr;
-
         unsigned short  m_alt;
         GLuint          m_next_shot;
 
-        float           gun_flash[2];     // gun flashes
+        float           gun_flash[2];
         float           gun_flash_rot[2];
-        unsigned short  gun_power;
+
+        Uint32          tick_timer;
 };

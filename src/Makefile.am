@@ -7,6 +7,7 @@ __top_builddir__liftoff_SOURCES = \
     audio.cpp \
     view.cpp \
     object.cpp \
+    message.cpp \
     shader.cpp \
     quad.cpp \
     framebuffer.cpp \

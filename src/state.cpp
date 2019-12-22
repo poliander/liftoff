@@ -60,6 +60,7 @@ State::State()
 
     entities.clear();
     spawns.clear();
+    messages.clear();
 }
 
 State::~State()
@@ -98,39 +99,11 @@ void State::spawn(shared_ptr<Entity> e)
 }
 
 /*
- * add money/energy message
+ * add notification
  */
-void State::addMessage(int value, unsigned short type)
+void State::notify(short type, short value)
 {
-    if (msg_num >= E_MAX_MESSAGES-1) return;
-
-    switch(type) {
-        case MSG_DAMAGE:
-            msg[msg_num].direction_x = -1;
-            msg[msg_num].direction_y = -1;
-            sprintf(msg[msg_num].text, "-%d", value);
-            break;
-
-        case MSG_MONEY:
-            msg[msg_num].direction_x = 1;
-            msg[msg_num].direction_y = -1;
-            sprintf(msg[msg_num].text, "%d $", value);
-            break;
-
-        case MSG_ENERGY:
-            msg[msg_num].direction_x = -1;
-            msg[msg_num].direction_y = -1;
-            sprintf(msg[msg_num].text, "+%d", value);
-            break;
-
-        default:
-            return;
-    }
-
-    msg[msg_num].type = type;
-    msg[msg_num].counter = .0f;
-
-    msg_num++;
+    messages.push_back(make_unique<Message>(type, value));
 }
 
 /*

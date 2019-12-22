@@ -452,19 +452,11 @@ void Scene::updateScene()
  */
 void Scene::updateMessages()
 {
-    int i;
+    auto m = state.messages.begin();
 
-    for (i=0; i<state.msg_num; i++) {
-        state.msg[i].counter += state.timer_adjustment * (.5f + state.msg[i].counter * .035f);
-
-        if (state.msg[i].counter > 100.0f) {
-            state.msg_num--;
-
-            if (i < state.msg_num) {
-                memcpy(&state.msg[i], &state.msg[state.msg_num], sizeof(Message));
-                i--;
-            }
-        }
+    while (m != state.messages.end()) {
+        (*m)->counter += state.timer_adjustment * (.5f + (*m)->counter * .035f);
+        ++m;
     }
 }
 

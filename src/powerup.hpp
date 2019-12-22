@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.hpp"
+#include "message.hpp"
 #include "particles.hpp"
 
 class Powerup : public Entity

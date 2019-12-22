@@ -21,7 +21,7 @@ bool Cargo::damage(State &s, int p)
     if (damaged && e_state == E_STATE_GONE && yield == false) {
         s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
 
-        s.addMessage(money, MSG_MONEY);
+        s.notify(MSG_MONEY, money);
         s.player->addMoney(money);
 
         s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z, .6f, .75f, 1.0f));

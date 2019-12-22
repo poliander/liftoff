@@ -13,51 +13,36 @@ Overlay::~Overlay()
 
 void Overlay::drawMessages()
 {
-    float r, g, b;
-    float x, y;
+    float x, y, a;
+    auto m = state.messages.begin();
 
-    for (int i = 0; i < state.msg_num; i++) {
-        switch (state.msg[i].type) {
-            case MSG_DAMAGE:
-                r = 1.0f;
-                g = .25f + state.msg[i].counter * .0055f;
-                b = .15f + state.msg[i].counter * .004f;
-                break;
+    while (m != state.messages.end()) {
+        a = 1.0f - (*m)->counter * .01f;
 
-            case MSG_MONEY:
-                r = 1.0f;
-                g = 1.0f - state.msg[i].counter * .002f;
-                b = .3f + state.msg[i].counter * .0025f;
-                break;
-
-            case MSG_ENERGY:
-                r = .3f + state.msg[i].counter * .0025f;
-                g = .75f - state.msg[i].counter * .002f;
-                b = 1.0f;
-                break;
-
-            default:
-                continue;
-        }
-
-        if (state.msg[i].direction_x > 0) {
-            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_aspect * .0003f);
+        if ((*m)->dir_x > 0) {
+            x = (*m)->dir_x * (pow((*m)->counter, 2) * state.vid_aspect * .0003f);
         } else {
-            x = state.msg[i].direction_x * (state.msg[i].counter * state.msg[i].counter * state.vid_aspect * .0004f);
+            x = (*m)->dir_x * (pow((*m)->counter, 2) * state.vid_aspect * .0004f);
         }
 
-        x += state.msg[i].direction_x * 1.0f;
-        y = -1.5f + state.msg[i].direction_y * (state.msg[i].counter * .0265f);
+        x += (*m)->dir_x;
+        y = -1.5f + (*m)->dir_y * ((*m)->counter * .0265f);
 
         state.fonts[F_ZEKTON]->draw(
-            state.msg[i].text,
+            (*m)->text,
 
             200.0f + x * 13.5f,
             150.0f + y * 32.0f,
 
             0.1f,
-            r, g, b, 1.0f - state.msg[i].counter * .01f
+            (*m)->c_r, (*m)->c_g, (*m)->c_b, a
         );
+
+        if (a < 0) {
+            m = state.messages.erase(m);
+        } else {
+            ++m;
+        }
     }
 }
 

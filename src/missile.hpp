@@ -8,7 +8,7 @@ class State;
 class Missile : public Entity
 {
     public:
-        Missile();
+        Missile(short p);
         ~Missile();
 
         void update(State &s);

@@ -6,26 +6,28 @@ Player::Player() : Entity()
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
 
-    jr = 0;
-    j_l = 3;
-    jt_l = 3;
-
     s_x = 22.5f;
     s_y = 22.5f;
     s_z = 22.5f;
 
-    // stats
-    acceleration = 120;
+    gun_flash[0] = 0;
+    gun_flash[1] = 0;
+
+    tick_timer = 0;
+
+    // player stats
+
+    acceleration = 100;
+    powerup = 0;
+
+    gun_power = 25;
+
     energy_max = 1500;
     energy_reg = 10;
+
     life_max = 250;
     life_reg = 1;
     life_reg_energy = 10;
-
-    // weapons
-    gun_power = 10;
-    gun_flash[0] = 0;
-    gun_flash[1] = 0;
 }
 
 Player::~Player()
@@ -34,7 +36,15 @@ Player::~Player()
 
 void Player::collect(unsigned short e_obj)
 {
-    powerup = e_obj;
+    switch (e_obj) {
+        case OBJ_POWERUP_0:
+            powerup += 15;
+            break;
+
+        case OBJ_POWERUP_1:
+            powerup += 5;
+            break;
+    }
 }
 
 void Player::collide(State &s, shared_ptr<Entity> e)
@@ -56,8 +66,8 @@ void Player::init(State &s)
     m_alt = 0;
     m_next_shot = s.timer;
 
-    powerup_booster_timer = 0;
-    powerup_booster_length = 0;
+    tick_timer = SDL_GetTicks();
+    powerup = 0;
 
     collect(OBJ_POWERUP_0);
 }
@@ -90,7 +100,7 @@ void Player::shoot(State &s)
     gun_flash[m_alt] = 1.0f;
     gun_flash_rot[m_alt] = float(rand() % 360);
 
-    auto missile = make_shared<Missile>();
+    auto missile = make_shared<Missile>(gun_power);
 
     missile->setPos(
         p_x - 10.0f + (m_alt * 20.0f),
@@ -216,22 +226,6 @@ void Player::update(State &s)
 
     p_z -= v_z * s.timer_adjustment;
 
-    // engine exhausts
-    jr += s.timer_adjustment * .2f;
-
-    if (jr > (.3f + (rand()%200)*.001f)) {
-        jr = 0;
-        j_l = 1.5f+((rand()%40)*.1);
-    }
-
-    if (jt_l < j_l) {
-        jt_l += .1f * ((j_l - jt_l )+.05f) * s.timer_adjustment;
-    }
-
-    if (jt_l > j_l) {
-        jt_l -= .1f * ((jt_l - j_l )+.05f) * s.timer_adjustment;
-    }
-
     // rotate
     r_x += s.timer_adjustment * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
@@ -282,60 +276,20 @@ void Player::update(State &s)
     if (gun_flash[0] > 0) gun_flash[0] -= s.timer_adjustment * .2f;
     if (gun_flash[1] > 0) gun_flash[1] -= s.timer_adjustment * .2f;
 
-    if (life <= 0) {
-        return;
-    }
-
-    // power-ups
-    switch (powerup) {
-        case OBJ_POWERUP_0:
-            powerup_booster_length += 15;
-            powerup_booster_ltimer = SDL_GetTicks();
-            powerup = 0;
-            break;
-
-        case OBJ_POWERUP_1:
-            powerup_booster_length += 5;
-            powerup_booster_ltimer = SDL_GetTicks();
-            powerup = 0;
-            break;
-    }
-
-    powerup_booster_timer += (SDL_GetTicks() - powerup_booster_ltimer);
-    powerup_booster_ltimer = SDL_GetTicks();
-
     // one tick every 0.25s
-    if (powerup_booster_timer > 250) {
-        powerup_booster_timer -= 250;
+    if (SDL_GetTicks() - tick_timer > 250) {
+        tick_timer = SDL_GetTicks();
 
-        if (life <= 0) {
-            energy -= int(ceil((float)energy_max * .05f));
+        if (powerup > 0) {
+            powerup--;
+            energy += int(ceil((float)energy_max * .1f));
+        }
 
-            if (energy <= 0) {
-                s.set(STATE_GAME_QUIT);
-            }
-        } else {
-            // life/energy boost
-            if (powerup_booster_length > 0) {
-                powerup_booster_length--;
+        energy += energy_reg;
 
-                life += int(ceil((float)life_max * .1f));
-                energy += int(ceil((float)energy_max * .1f));
-            } else {
-                // energy regeneration
-                energy += energy_reg;
-
-                // life regeneration
-                if (life < life_max) {
-                    if (energy > life_reg_energy) {
-                        life += life_reg;
-
-                        if (powerup_booster_length <= 0) {
-                            energy -= life_reg_energy;
-                        }
-                    }
-                }
-            }
+        if (life < life_max && energy > life_reg_energy) {
+            life += life_reg;
+            energy -= life_reg_energy;
         }
     }
 
@@ -350,10 +304,9 @@ void Player::update(State &s)
 
 void Player::draw(State &s)
 {
-    float jlen, a = s.global_alpha * .01f;
+    float a = s.global_alpha * .01f;
 
-    if (
-        s.get() < STATE_GAME_LOOP ||
+    if (s.get() < STATE_GAME_LOOP ||
         s.get() > STATE_GAME_QUIT
     ) {
         a = s.menu_title_pos * .01f;
