@@ -17,7 +17,7 @@ Player::Player() : Entity()
 
     // player stats
 
-    acceleration = 100;
+    acceleration = 120;
     powerup = 0;
 
     gun_power = 25;
