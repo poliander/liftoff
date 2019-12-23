@@ -4,7 +4,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 
 [Download 64-bit Windows ZIP](https://github.com/poliander/liftoff/releases/download/2019%2F06%2F10/liftoff-20190610-win32-x64.zip)
 
-## Controls
+### Controls
 
 - JOYSTICK or GAMEPAD is supported
 - CURSOR KEYS or W/A/S/D will move your ship
@@ -12,9 +12,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - F12 toggles frame rate display
 - ESCAPE quits the game at any time
 
-## Options
-
-### Display quality levels
+### Quality levels
 
 |  Quality  | MSAA  | Framebuffer  | Font res. |
 | :------------ | :------------ | :------------ | :------------ |
@@ -25,7 +23,9 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 |  very high | 4x  | 4096x4096 | 7 bit |
 |  ultra | 8x  | 4096x4096 | 7 bit |
 
-### Requirements
+## Building from source
+
+### Prerequisites
 
 - libGL
 - libGLU
@@ -37,7 +37,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - SDL\_mixer 2.0 (with ogg vorbis support)
 - glm.hpp (GL math headers)
 
-### Compilation
+### Compile
 
 ```
 ./configure && make && sudo make install
