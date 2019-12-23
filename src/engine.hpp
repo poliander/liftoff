@@ -29,6 +29,7 @@ class Engine
         SDL_GLContext            context;
 
         unique_ptr<Renderbuffer> buffer;
+        Uint32                   timer;
 
         bool                     initDisplay();
 

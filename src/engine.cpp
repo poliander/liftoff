@@ -3,6 +3,7 @@
 Engine::Engine()
 {
     srand((int)time(NULL));
+    timer = SDL_GetTicks();
 }
 
 Engine::~Engine()
@@ -274,6 +275,8 @@ bool Engine::init(int argc, char **argv)
 
     scene = new Scene(state);
     scene->load();
+
+    timer = SDL_GetTicks();
 
     state.set(STATE_MENU);
 
@@ -580,6 +583,8 @@ void Engine::handleJoystick()
  */
 void Engine::halt()
 {
+    state.set(STATE_QUIT);
+
     if (state.config.vid_fullscreen == 0) {
         SDL_ShowCursor(1);
     }
@@ -622,13 +627,12 @@ void Engine::halt()
 bool Engine::main()
 {
     SDL_Event event;
-    static Uint32 otimer = SDL_GetTicks();
 
-    state.global_timer = float(SDL_GetTicks() - otimer) * .05f;
-    otimer = SDL_GetTicks();
+    state.global_timer = float(SDL_GetTicks() - timer) * .05f;
+    timer = SDL_GetTicks();
 
     if (state.fps_timer_l > 0) {
-        state.fps_timer += otimer - state.fps_timer_l;
+        state.fps_timer += timer - state.fps_timer_l;
 
         if (state.fps_timer > 1000) {
             state.fps = float(state.fps_counter) / (float(state.fps_timer) * .001f);
@@ -638,23 +642,28 @@ bool Engine::main()
     }
 
     state.fps_counter++;
-    state.fps_timer_l = otimer;
+    state.fps_timer_l = timer;
 
     // complete restart of game engine
     if (state.engine_restart) {
         state.log("Restarting game engine.\n");
+
         state.config.vid_width = state.vid_cap_modes[state.vid_mode].w;
         state.config.vid_height = state.vid_cap_modes[state.vid_mode].h;
-        state.set(STATE_QUIT);
 
         halt();
-        bool ok = init(-1, NULL);
 
-        state.fps_timer = 0;
-        state.fps_timer_l = 0;
-        state.fps_counter = 0;
+        if (init(-1, NULL)) {
+            timer = SDL_GetTicks();
 
-        return ok;
+            state.fps_timer = 0;
+            state.fps_timer_l = 0;
+            state.fps_counter = 0;
+
+            return true;
+        }
+
+        return false;
     }
 
     while (SDL_PollEvent(&event)) {
