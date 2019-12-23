@@ -1,22 +1,22 @@
 #include "renderbuffer.hpp"
 
-Renderbuffer::Renderbuffer(GLuint w, GLuint h, GLuint s)
+Renderbuffer::Renderbuffer(State& s) : state(s)
 {
-    width = w;
-    height = h;
+    view = View::createOrthographic(-s.vid_width * .5f, s.vid_height * .5f, s.vid_width * .5f, -s.vid_height * .5f);
+    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, s.vid_multisampling);
 
     glGenRenderbuffers(1, &renderbufferColor);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbufferColor);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, s, GL_RGB8, w, h);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, s.vid_multisampling, GL_RGB8, s.vid_fb_size, s.vid_fb_size);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glGenRenderbuffers(1, &renderbufferDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbufferDepth);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, s, GL_DEPTH_COMPONENT, w, h);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, s.vid_multisampling, GL_DEPTH_COMPONENT, s.vid_fb_size, s.vid_fb_size);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glGenFramebuffers(1, &renderbuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, renderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbufferColor);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbufferDepth);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -24,29 +24,40 @@ Renderbuffer::Renderbuffer(GLuint w, GLuint h, GLuint s)
 
 Renderbuffer::~Renderbuffer()
 {
-    glDeleteFramebuffers(1, &framebuffer);
+    glDeleteFramebuffers(1, &renderbuffer);
     glDeleteRenderbuffers(1, &renderbufferDepth);
     glDeleteRenderbuffers(1, &renderbufferColor);
 }
 
 void Renderbuffer::bind()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, renderbuffer);
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, state.vid_fb_size, state.vid_fb_size);
 }
 
 void Renderbuffer::blit()
 {
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, renderbuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *framebuffer);
     glBlitFramebuffer(
-        0, 0, width, height,
-        0, 0, width, height,
+        0, 0, state.vid_fb_size, state.vid_fb_size,
+        0, 0, state.vid_fb_size, state.vid_fb_size,
         GL_COLOR_BUFFER_BIT,
         GL_NEAREST
     );
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0, 0, 0, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, state.vid_width, state.vid_height);
+
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
+        0, 0, state.vid_width, state.vid_height
+    ));
+
+    framebuffer->draw();
 }

@@ -205,7 +205,7 @@ bool Engine::init(int argc, char **argv)
         case QL_ULTRA:
             state.vid_multisampling = 8;
             state.vid_fb_size = 4096;
-            state.vid_font_resolution = 7;
+            state.vid_font_resolution = 8;
             break;
 
         case QL_VERY_HIGH:
@@ -217,7 +217,7 @@ bool Engine::init(int argc, char **argv)
         case QL_HIGH:
             state.vid_multisampling = 4;
             state.vid_fb_size = 2048;
-            state.vid_font_resolution = 6;
+            state.vid_font_resolution = 7;
             break;
 
         case QL_MEDIUM:
@@ -229,7 +229,7 @@ bool Engine::init(int argc, char **argv)
         case QL_LOW:
             state.vid_multisampling = 2;
             state.vid_fb_size = 1024;
-            state.vid_font_resolution = 5;
+            state.vid_font_resolution = 6;
             break;
 
         default:
@@ -271,7 +271,7 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
-    buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
+    buffer = make_unique<Renderbuffer>(state);
 
     scene = new Scene(state);
     scene->load();
@@ -678,15 +678,19 @@ bool Engine::main()
 
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-                    state.vid_width = event.window.data1;
-                    state.vid_height = event.window.data2;
-                    state.vid_aspect = float(state.vid_width) / float(state.vid_height);
+                    if (state.vid_width != event.window.data1 ||
+                        state.vid_height != event.window.data2
+                    ) {
+                        state.vid_width = event.window.data1;
+                        state.vid_height = event.window.data2;
+                        state.vid_aspect = float(state.vid_width) / float(state.vid_height);
 
-                    buffer.reset();
-                    buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
+                        state.view.reset();
+                        state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);
 
-                    state.view.reset();
-                    state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);
+                        buffer.reset();
+                        buffer = make_unique<Renderbuffer>(state);
+                    }
                 }
                 break;
         }

@@ -22,6 +22,10 @@ class Framebuffer : public Quad
         void   clear();
         void   draw();
 
+        operator GLuint() {
+            return framebuffer;
+        };
+
     protected:
         GLuint width;
         GLuint height;
@@ -32,5 +36,4 @@ class Framebuffer : public Quad
 
         GLuint buffers[4];
         GLuint framebuffer;
-        GLuint framebufferMSAA;
 };

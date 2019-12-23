@@ -1,21 +1,24 @@
 #pragma once
 
-#include <GL/glew.h>
+#include <state.hpp>
+#include <framebuffer.hpp>
 
 class Renderbuffer
 {
     public:
-        Renderbuffer(GLuint w, GLuint h, GLuint s);
+        Renderbuffer(State& s);
         ~Renderbuffer();
 
         void bind();
         void blit();
 
     protected:
-        GLuint width;
-        GLuint height;
+        State&                  state;
 
-        GLuint framebuffer;
-        GLuint renderbufferColor;
-        GLuint renderbufferDepth;
+        unique_ptr<View>        view;
+        unique_ptr<Framebuffer> framebuffer;
+
+        GLuint                  renderbuffer;
+        GLuint                  renderbufferColor;
+        GLuint                  renderbufferDepth;
 };

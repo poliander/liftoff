@@ -4,7 +4,7 @@ Overlay::Overlay(State& s) : state(s)
 {
     view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
     perspective = View::createPerspective(45.0f, 4.0f / 3.0f, .01f, 100.0f);
-    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, s.vid_multisampling);
+    framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, 0);
 }
 
 Overlay::~Overlay()
