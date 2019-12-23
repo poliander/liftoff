@@ -64,7 +64,7 @@ void Player::init(State &s)
     setLife(getLifeMaximum());
 
     m_alt = 0;
-    m_next_shot = s.timer;
+    m_next_shot = SDL_GetTicks();
 
     tick_timer = SDL_GetTicks();
     powerup = 0;
@@ -82,12 +82,12 @@ void Player::shoot(State &s)
         return;
     }
 
-    if (m_next_shot > s.timer) {
+    if (m_next_shot > SDL_GetTicks()) {
         // timing
         return;
     }
 
-    m_next_shot = s.timer + 90 + rand() % 60;
+    m_next_shot = SDL_GetTicks() + 90 + rand() % 60;
 
     if (energy < 25) {
         // low energy
@@ -194,85 +194,85 @@ void Player::update(State &s)
 
     // accelerate horizontally
     if ((a_x - v_x) > .0005f) {
-        v_x += (a_x - v_x) * s.timer_adjustment * acceleration * deceleration;
+        v_x += (a_x - v_x) * s.global_timer * acceleration * deceleration;
     } else if ((v_x - a_x) > .0005f) {
-        v_x -= (v_x - a_x) * s.timer_adjustment * acceleration * deceleration;
+        v_x -= (v_x - a_x) * s.global_timer * acceleration * deceleration;
     }
 
     // move horizontally
-    p_x -= v_x * s.timer_adjustment * 10.0f;
+    p_x -= v_x * s.global_timer * 10.0f;
 
     // accelerate vertically
     if ((a_y - v_y) > .0005f) {
-        v_y += (a_y - v_y) * s.timer_adjustment * acceleration * deceleration;
+        v_y += (a_y - v_y) * s.global_timer * acceleration * deceleration;
     } else if ((v_y - a_y) > .0005f) {
-        v_y -= (v_y - a_y) * s.timer_adjustment * acceleration * deceleration;
+        v_y -= (v_y - a_y) * s.global_timer * acceleration * deceleration;
     }
 
     // move vertically
-    p_y -= v_y * s.timer_adjustment * 10.0f;
+    p_y -= v_y * s.global_timer * 10.0f;
 
     a_x = 0;
     a_y = 0;
 
     // accelerate and move forward/backward
     if (v_z < a_z) {
-        v_z += .04f * ((a_z - v_z) + .01f) * s.timer_adjustment;
+        v_z += .04f * ((a_z - v_z) + .01f) * s.global_timer;
     } else if (v_z > a_z) {
-        v_z -= .04f * ((v_z - a_z) + .01f) * s.timer_adjustment;
+        v_z -= .04f * ((v_z - a_z) + .01f) * s.global_timer;
     }
 
-    p_z -= v_z * s.timer_adjustment;
+    p_z -= v_z * s.global_timer;
 
     // rotate
-    r_x += s.timer_adjustment * w_x * .1f;
+    r_x += s.global_timer * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
     if (r_x > 360.0f) r_x -= 360.0f;
 
-    r_y += s.timer_adjustment * w_y * .1f;
+    r_y += s.global_timer * w_y * .1f;
     if (r_y < 0) r_y += 360.0f;
     if (r_y > 360.0f) r_y -= 360.0f;
 
-    r_z += s.timer_adjustment * w_z * .1f;
+    r_z += s.global_timer * w_z * .1f;
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 
     // camera tilt
     if (s.tilt_factor > .05f) {
-        static GLuint next_tilt_impulse = s.timer;
+        static GLuint next_tilt_impulse = SDL_GetTicks();
 
-        if (next_tilt_impulse <= s.timer) {
-            next_tilt_impulse = s.timer + 100 + rand() % 50;
+        if (next_tilt_impulse < SDL_GetTicks()) {
+            next_tilt_impulse = SDL_GetTicks() + 100 + rand() % 50;
 
             s.tilt_dx = -s.tilt_factor + float(rand() % int(s.tilt_factor * 200.0f)) * .0075f;
             s.tilt_dy = -s.tilt_factor + float(rand() % int(s.tilt_factor * 200.0f)) * .0075f;
         }
 
-        s.tilt_factor -= s.timer_adjustment * .35f;
+        s.tilt_factor -= s.global_timer * .35f;
 
-        s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.timer_adjustment * .15f;
-        s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.timer_adjustment * .15f;
+        s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.global_timer * .15f;
+        s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.global_timer * .15f;
     } else {
         s.tilt_factor = 0;
         s.tilt_dx = 0;
         s.tilt_dy =0;
 
         if (fabs(s.tilt_x) > .05f) {
-            s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.timer_adjustment * .15f;
+            s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.global_timer * .15f;
         } else {
             s.tilt_x = 0;
         }
 
         if (fabs(s.tilt_y) > .05f) {
-            s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.timer_adjustment * .15f;
+            s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.global_timer * .15f;
         } else {
             s.tilt_y = 0;
         }
     }
 
     // gun flash animation
-    if (gun_flash[0] > 0) gun_flash[0] -= s.timer_adjustment * .2f;
-    if (gun_flash[1] > 0) gun_flash[1] -= s.timer_adjustment * .2f;
+    if (gun_flash[0] > 0) gun_flash[0] -= s.global_timer * .15f;
+    if (gun_flash[1] > 0) gun_flash[1] -= s.global_timer * .15f;
 
     // one tick every 0.25s
     if (SDL_GetTicks() - tick_timer > E_TICK_TIMING) {

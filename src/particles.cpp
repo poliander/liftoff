@@ -144,8 +144,8 @@ bool ParticleEngine::done()
 
 void ParticleEngine::update(State &s)
 {
-    pvolume  = pvolume * (1.0f + (pinflation * s.timer_adjustment));
-    psize   += pincrease * s.timer_adjustment;
+    pvolume = pvolume * (1.0f + (pinflation * s.global_timer));
+    psize += pincrease * s.global_timer;
 
     if (psize < 0) {
         particles.clear();
@@ -154,11 +154,11 @@ void ParticleEngine::update(State &s)
 
     if (pemitter == EMIT_EXPLOSION) {
         for (auto p = particles.begin(); p < particles.end(); ++p) {
-            p->lifetime -= s.timer_adjustment * p->fading;
+            p->lifetime -= s.global_timer * p->fading;
 
-            p->px += p->dx * pvolume * s.timer_adjustment;
-            p->py += p->dy * pvolume * s.timer_adjustment;
-            p->pz += p->dz * pvolume * s.timer_adjustment;
+            p->px += p->dx * pvolume * s.global_timer;
+            p->py += p->dy * pvolume * s.global_timer;
+            p->pz += p->dz * pvolume * s.global_timer;
 
             if (p->lifetime < 0) {
                 if (pcontinuous) {
@@ -174,11 +174,11 @@ void ParticleEngine::update(State &s)
         }
     } else {
         for (auto p = particles.begin(); p < particles.end(); ++p) {
-            p->lifetime -= s.timer_adjustment * p->fading;
+            p->lifetime -= s.global_timer * p->fading;
 
-            p->px += (p->dx * (.75f + .25f * p->fading)) * s.timer_adjustment;
-            p->py += (p->dy * (.75f + .25f * p->fading)) * s.timer_adjustment;
-            p->pz += (p->dz * (.75f + .25f * p->fading)) * s.timer_adjustment;
+            p->px += (p->dx * (.75f + .25f * p->fading)) * s.global_timer;
+            p->py += (p->dy * (.75f + .25f * p->fading)) * s.global_timer;
+            p->pz += (p->dz * (.75f + .25f * p->fading)) * s.global_timer;
 
             if (p->lifetime < 0) {
                 if (pcontinuous) {

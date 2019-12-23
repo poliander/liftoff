@@ -57,9 +57,9 @@ void Overlay::drawDisplay()
 
     switch (state.get()) {
         case STATE_GAME_START:
-            t = (-6.413f * state.vid_aspect - state.hud_x) * .055f * state.timer_adjustment;
+            t = (-6.413f * state.vid_aspect - state.hud_x) * .055f * state.global_timer;
             state.hud_x += t;
-            t = (4.905f + state.hud_y) * .055f * state.timer_adjustment;
+            t = (4.905f + state.hud_y) * .055f * state.global_timer;
             state.hud_y -= t;
             break;
 
@@ -628,7 +628,7 @@ void Overlay::drawMenu()
 
     glEnable(GL_DEPTH_TEST);
 
-    p_rot -= state.timer_adjustment * 0.3f;
+    p_rot -= state.global_timer * 0.3f;
     if (p_rot > 360.0f) p_rot -= 360.0f;
 
     glm::mat4 projection = perspective->getProjection();

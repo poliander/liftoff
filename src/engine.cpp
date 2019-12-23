@@ -417,14 +417,16 @@ bool Engine::handleKeyboard()
 {
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
-    static GLuint timer = state.timer - 51;
-    static GLuint nextrelease = state.timer - 100;
+    static GLuint timer = SDL_GetTicks() - 51;
+    static GLuint nextrelease = timer - 100;
 
     bool moved = false;
 
-    if ((state.get() < 11) && ((state.timer - timer) < 50)) {
+    if ((state.get() < 11) && ((SDL_GetTicks() - timer) < 50)) {
         return moved;
     }
+
+    timer = SDL_GetTicks();
 
     // STRG+C: Quit immediately
     if (keys[SDL_SCANCODE_LCTRL] && keys[SDL_SCANCODE_C]) {
@@ -434,21 +436,20 @@ bool Engine::handleKeyboard()
 
     // F12: toggle FPS display
     if (keys[SDL_SCANCODE_F12]) {
-        if (state.timer > nextrelease) {
+        if (SDL_GetTicks() > nextrelease) {
             state.fps_visible =! state.fps_visible;
-            nextrelease = state.timer + 100;
+
             if (state.fps_visible) {
                 state.fps_counter = 0;
                 state.fps_timer = 0;
                 state.fps_timer_l = 0;
             }
-        } else nextrelease = state.timer + 100;
+        }
+
+        nextrelease = SDL_GetTicks() + 100;
     }
 
-    timer = state.timer;
-
     switch (state.get()) {
-
         case STATE_GAME_LOOP:
             if (keys[SDL_SCANCODE_ESCAPE])
                 state.set(STATE_GAME_QUIT);
@@ -621,16 +622,13 @@ void Engine::halt()
 bool Engine::main()
 {
     SDL_Event event;
-
-    // timer adjustment
     static Uint32 otimer = SDL_GetTicks();
-    GLuint ntimer = SDL_GetTicks();
-    state.timer_adjustment = float(ntimer-otimer) * .05f;
-    state.timer = ntimer;
-    otimer = ntimer;
+
+    state.global_timer = float(SDL_GetTicks() - otimer) * .05f;
+    otimer = SDL_GetTicks();
 
     if (state.fps_timer_l > 0) {
-        state.fps_timer += state.timer - state.fps_timer_l;
+        state.fps_timer += otimer - state.fps_timer_l;
 
         if (state.fps_timer > 1000) {
             state.fps = float(state.fps_counter) / (float(state.fps_timer) * .001f);
@@ -640,7 +638,7 @@ bool Engine::main()
     }
 
     state.fps_counter++;
-    state.fps_timer_l = state.timer;
+    state.fps_timer_l = otimer;
 
     // complete restart of game engine
     if (state.engine_restart) {
@@ -651,9 +649,6 @@ bool Engine::main()
 
         halt();
         bool ok = init(-1, NULL);
-
-        otimer = SDL_GetTicks();
-        state.timer = otimer;
 
         state.fps_timer = 0;
         state.fps_timer_l = 0;

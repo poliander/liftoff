@@ -54,7 +54,7 @@ void Powerup::update(State &s)
     particles->update(s);
 
     if (e_state == E_STATE_FADING) {
-        counter += s.timer_adjustment * .01f;
+        counter += s.global_timer * .01f;
         particles->setContinuous(false);
         particles->setIncrease(-10.0f);
     }

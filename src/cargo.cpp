@@ -37,7 +37,7 @@ void Cargo::update(State &s)
 {
     Entity::update(s);
 
-    counter += s.timer_adjustment * 0.1f;
+    counter += s.global_timer * .1f;
 
     if (p_z > 0) {
         e_state = E_STATE_GONE;

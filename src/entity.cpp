@@ -323,11 +323,11 @@ float Entity::calcDistance2D(State &s, shared_ptr<Entity> e)
 {
     float x1, y1, x2, y2;
 
-    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.timer_adjustment * v_x) - s.cam_x);
-    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.timer_adjustment * v_y) - s.cam_y);
+    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.global_timer * v_x) - s.cam_x);
+    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.global_timer * v_y) - s.cam_y);
 
-    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.timer_adjustment * e->getVelocityX()) - s.cam_x);
-    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.timer_adjustment * e->getVelocityY()) - s.cam_y);
+    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.global_timer * e->getVelocityX()) - s.cam_x);
+    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.global_timer * e->getVelocityY()) - s.cam_y);
 
     return (1.0f / isqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
 }
@@ -336,13 +336,13 @@ float Entity::calcDistance3D(State &s, shared_ptr<Entity> e)
 {
     float ds, x1, y1, z1, x2, y2, z2;
 
-    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.timer_adjustment * v_x) - s.cam_x);
-    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.timer_adjustment * v_y) - s.cam_y);
-    z1 = p_z + s.timer_adjustment * (v_z + E_BASE_SPEED);
+    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.global_timer * v_x) - s.cam_x);
+    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.global_timer * v_y) - s.cam_y);
+    z1 = p_z + s.global_timer * (v_z + E_BASE_SPEED);
 
-    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.timer_adjustment * e->getVelocityX()) - s.cam_x);
-    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.timer_adjustment * e->getVelocityY()) - s.cam_y);
-    z2 = e->getPosZ() + s.timer_adjustment * e->getVelocityZ();
+    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.global_timer * e->getVelocityX()) - s.cam_x);
+    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.global_timer * e->getVelocityY()) - s.cam_y);
+    z2 = e->getPosZ() + s.global_timer * e->getVelocityZ();
 
     return (1.0f / isqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2)));
 }
@@ -392,19 +392,19 @@ void Entity::update(State &s)
         f *= .5f;
     }
 
-    p_x += f * s.timer_adjustment * v_x;
-    p_y += f * s.timer_adjustment * v_y;
-    p_z += f * s.timer_adjustment * (v_z + E_BASE_SPEED);
+    p_x += f * s.global_timer * v_x;
+    p_y += f * s.global_timer * v_y;
+    p_z += f * s.global_timer * (v_z + E_BASE_SPEED);
 
-    r_x += s.timer_adjustment * w_x * .1f;
+    r_x += s.global_timer * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
     if (r_x > 360.0f) r_x -= 360.0f;
 
-    r_y += s.timer_adjustment * w_y * .1f;
+    r_y += s.global_timer * w_y * .1f;
     if (r_y < 0) r_y += 360.0f;
     if (r_y > 360.0f) r_y -= 360.0f;
 
-    r_z += s.timer_adjustment * w_z * .1f;
+    r_z += s.global_timer * w_z * .1f;
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 }
@@ -455,7 +455,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         da = .85f;
     } else {
         if (da > .01f) {
-            da -= s.timer_adjustment * .01f;
+            da -= s.global_timer * .01f;
         } else {
             da = .0f;
         }

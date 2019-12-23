@@ -48,10 +48,8 @@ class State
         vector<shared_ptr<Entity>>  spawns;
         vector<shared_ptr<Message>> messages;
 
-        // timer
-        Uint32                      timer;
-        float                       timer_adjustment;
-
+        // globals
+        float                       global_timer;
         int                         global_alpha;
 
         bool                        log_file;

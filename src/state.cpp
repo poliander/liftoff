@@ -119,10 +119,8 @@ bool State::set(int s)
     sprintf(msg, "Entering state %d\n", s);
     log(msg);
 
-    switch(s) {
+    switch (s) {
         case STATE_MENU:
-            timer_adjustment = 0;
-
             stars_warp = true;
             stars_speed = 1.75f;
             stars_rotation = true;
@@ -135,6 +133,8 @@ bool State::set(int s)
             menu_selected = false;
 
             global_alpha = 0;
+            global_timer = 0;
+
             engine_restart = false;
 
             audio.playMusic(0, 1000);

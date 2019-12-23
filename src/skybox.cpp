@@ -34,9 +34,9 @@ void Skybox::update()
 {
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
-            stars[i][2] += state.timer_adjustment * state.stars_speed * 1.25f;
+            stars[i][2] += state.global_timer * state.stars_speed * 1.25f;
         } else {
-            stars[i][2] += state.timer_adjustment * state.stars_speed * 0.25f;
+            stars[i][2] += state.global_timer * state.stars_speed * 0.25f;
         }
 
         if (stars[i][2] > 0) {
@@ -45,7 +45,7 @@ void Skybox::update()
     }
 
     if (state.stars_rotation) {
-        state.stars_rotation_pos -= state.timer_adjustment * state.stars_rotation_speed;
+        state.stars_rotation_pos -= state.global_timer * state.stars_rotation_speed;
     }
 }
 
