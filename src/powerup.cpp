@@ -11,7 +11,8 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     life = 1;
 
     particles = make_unique<ParticleEngine>();
-    particles->setup(EMIT_EXPLOSION, 15, .5f, .5f, .5f, .05f, 200.0f);
+    particles->setup(EMIT_EXPLOSION, 15, .5f, .5f, .5f, .05f, 1.0f);
+    particles->setSize(200.0f);
     particles->setTexture(T_STAR);
     particles->setColor(.6f, .75f, 1.0f);
     particles->setAlpha(.5f);
