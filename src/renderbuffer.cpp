@@ -7,7 +7,7 @@ Renderbuffer::Renderbuffer(State& s) : state(s)
 
     glGenRenderbuffers(1, &renderbufferColor);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbufferColor);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, s.vid_multisampling, GL_RGB8, s.vid_fb_size, s.vid_fb_size);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, s.vid_multisampling, GL_RGBA8, s.vid_fb_size, s.vid_fb_size);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glGenRenderbuffers(1, &renderbufferDepth);
@@ -49,9 +49,9 @@ void Renderbuffer::blit()
     );
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0, 0, 0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, state.vid_width, state.vid_height);
+    glDisable(GL_DEPTH_TEST);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
     state.shaders[S_TEXTURE]->bind();
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -60,4 +60,6 @@ void Renderbuffer::blit()
     ));
 
     framebuffer->draw();
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

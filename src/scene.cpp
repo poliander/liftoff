@@ -7,6 +7,8 @@ Scene::Scene(State &s) : state(s)
     overlay = make_unique<Overlay>(state);
 
     state.player = player;
+
+    load();
 }
 
 Scene::~Scene()
@@ -603,13 +605,12 @@ void Scene::update()
 /*
  * draw everything
  */
-void Scene::draw()
+void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
 {
     float p_x = .0f;
     float p_y = -90.0f;
 
-    if (
-        state.get() >  STATE_GAME_START &&
+    if (state.get() >  STATE_GAME_START &&
         state.get() <= STATE_GAME_QUIT
     ) {
         p_x = player->getPosX();
@@ -637,10 +638,11 @@ void Scene::draw()
 
     // entities
 
-    if (
-        state.get() >= STATE_GAME_LOOP &&
+    if (state.get() >= STATE_GAME_LOOP &&
         state.get() <= STATE_GAME_QUIT
     ) {
+        buffer->bind();
+
         auto e = state.entities.begin();
 
         while (e != state.entities.end()) {
@@ -652,6 +654,8 @@ void Scene::draw()
 
             ++e;
         }
+
+        buffer->blit();
     }
 
     // overlay

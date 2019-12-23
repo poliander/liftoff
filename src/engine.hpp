@@ -23,13 +23,14 @@ class Engine
 
     private:
         State                    state;
-        Scene*                   scene;
 
         SDL_Window*              window;
         SDL_GLContext            context;
 
-        unique_ptr<Renderbuffer> buffer;
         Uint32                   timer;
+
+        unique_ptr<Scene>        scene;
+        unique_ptr<Renderbuffer> buffer;
 
         bool                     initDisplay();
 

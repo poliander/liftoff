@@ -26,6 +26,7 @@
 #include "overlay.hpp"
 #include "player.hpp"
 #include "powerup.hpp"
+#include "renderbuffer.hpp"
 #include "skybox.hpp"
 
 using namespace std;
@@ -38,7 +39,7 @@ class Scene
 
         void                load();
         void                update();
-        void                draw();
+        void                draw(const unique_ptr<Renderbuffer> &b);
 
     private:
         State&              state;

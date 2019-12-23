@@ -272,9 +272,7 @@ bool Engine::init(int argc, char **argv)
     }
 
     buffer = make_unique<Renderbuffer>(state);
-
-    scene = new Scene(state);
-    scene->load();
+    scene = make_unique<Scene>(state);
 
     timer = SDL_GetTicks();
 
@@ -613,12 +611,11 @@ void Engine::halt()
     state.log("Closing display\n");
 
     buffer.reset();
+    scene.reset();
 
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
     SDL_Quit();
-
-    delete scene;
 }
 
 /*
@@ -700,10 +697,13 @@ bool Engine::main()
         handleJoystick();
     }
 
-    buffer->bind();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, state.vid_width, state.vid_height);
+
     scene->update();
-    scene->draw();
-    buffer->blit();
+    scene->draw(buffer);
 
     SDL_GL_SwapWindow(window);
 
