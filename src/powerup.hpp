@@ -16,6 +16,6 @@ class Powerup : public Entity
         void            draw(State &s);
 
     private:
-        float           counter = 0;
-        ParticleEngine* particles;
+        unique_ptr<ParticleEngine> particles;
+        float                      counter;
 };

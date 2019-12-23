@@ -10,8 +10,9 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     counter = 0;
     life = 1;
 
-    particles = new ParticleEngine();
-    particles->setup(EMIT_EXPLOSION, 15, .5f, .5f, .5f, .05f, 1.0f);
+    particles = make_unique<ParticleEngine>();
+    particles->setup(EMIT_EXPLOSION, 15, .5f, .5f, .5f, .05f, 200.0f);
+    particles->setTexture(T_STAR);
     particles->setColor(.6f, .75f, 1.0f);
     particles->setAlpha(.5f);
     particles->setVolume(10.0f);
@@ -27,7 +28,6 @@ Powerup::Powerup(float x, float y, float z) : Entity()
 
 Powerup::~Powerup()
 {
-    delete particles;
 }
 
 bool Powerup::damage(State &s, int p)
@@ -53,22 +53,18 @@ void Powerup::update(State &s)
     particles->update(s);
 
     if (e_state == E_STATE_FADING) {
-        counter += s.timer_adjustment * .1f;
+        counter += s.timer_adjustment * .01f;
+        particles->setContinuous(false);
+        particles->setIncrease(-10.0f);
     }
 
-    if (getPosZ() > 0 || counter > 1.5f) {
+    if (getPosZ() > 0 || counter > 5.0f) {
         e_state = E_STATE_GONE;
     }
 }
 
 void Powerup::draw(State &s)
 {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-    s.textures[T_STAR]->bind();
-
-    particles->setSize(150.0f / (1.0f + counter * 75.0f));
-    particles->setAlpha(1.0f - (counter * (1.0f / 1.5f)));
     particles->draw(s,
         (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
@@ -77,6 +73,4 @@ void Powerup::draw(State &s)
         (getRotY()),
         (getRotZ())
     );
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

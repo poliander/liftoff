@@ -32,10 +32,13 @@ class ParticleEngine
         ParticleEngine();
         ~ParticleEngine();
 
-        void               setAlpha(float a);
-        void               setColor(float r, float g, float b);
-        void               setContinuous(bool c);
+        void               setTexture(GLuint t);
+        void               setBlendFunc(GLenum s, GLenum d);
 
+        void               setColor(float r, float g, float b);
+        void               setAlpha(float a);
+
+        void               setContinuous(bool c);
         void               setVolume(float v);
         void               setInflation(float i);
         float              getInflation();
@@ -44,14 +47,18 @@ class ParticleEngine
         void               setIncrease(float i);
         float              getIncrease();
 
-        bool               isGone();
-
         void               setup(short e, short particles, float dx, float dy, float dz, float decay, float size);
+        bool               done();
+
         void               update(State &s);
         void               draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
 
     private:
         vector<particle_t> particles;
+
+        GLuint             texture;
+        GLenum             blendSourceFactor;
+        GLenum             blendDestFactor;
 
         short              pemitter;    // emitter type
         bool               pcontinuous; // continuously respawn every particle

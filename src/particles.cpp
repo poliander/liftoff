@@ -9,6 +9,9 @@ ParticleEngine::ParticleEngine()
 
     pinflation = 0;
     pincrease = 0;
+
+    blendSourceFactor = GL_SRC_ALPHA;
+    blendDestFactor = GL_ONE;
 }
 
 ParticleEngine::~ParticleEngine()
@@ -76,9 +79,15 @@ void ParticleEngine::setup(short emitter, short num, float dx, float dy, float d
     }
 }
 
-bool ParticleEngine::isGone()
+void ParticleEngine::setTexture(GLuint t)
 {
-    return particles.size() == 0;
+    texture = t;
+}
+
+void ParticleEngine::setBlendFunc(GLenum s, GLenum d)
+{
+    blendSourceFactor = s;
+    blendDestFactor = d;
 }
 
 void ParticleEngine::setColor(float r, float g, float b)
@@ -126,6 +135,11 @@ float ParticleEngine::getIncrease()
 void ParticleEngine::setContinuous(bool c)
 {
     pcontinuous = c;
+}
+
+bool ParticleEngine::done()
+{
+    return particles.size() == 0;
 }
 
 void ParticleEngine::update(State &s)
@@ -187,8 +201,10 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
     float a = s.global_alpha * .01f;
 
     glDisable(GL_DEPTH_TEST);
+    glBlendFunc(blendSourceFactor, blendDestFactor);
 
     s.shaders[S_TEXTURE]->bind();
+    s.textures[texture]->bind();
 
     for (auto p = particles.begin(); p < particles.end(); ++p) {
         s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a * p->lifetime));
@@ -206,10 +222,11 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
             0
         ));
 
-        s.textures[T_STAR]->draw();
+        s.textures[texture]->draw();
     }
 
     s.shaders[S_TEXTURE]->unbind();
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
 }
