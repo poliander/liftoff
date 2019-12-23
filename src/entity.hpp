@@ -146,6 +146,7 @@ class Entity
         int                life;
         bool               focusable;
         float              acceleration;
+        float              deceleration;
         short              gun_power;
 
         short              powerup;

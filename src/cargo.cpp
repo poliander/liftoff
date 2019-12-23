@@ -48,7 +48,7 @@ void Cargo::draw(State &s)
 {
     float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
 
-    glm::vec4 color = glm::vec4(a, a, a, 1.0f);
+    glm::vec4 color = glm::vec4(a, a, a, a);
     glm::mat4 m;
 
     glm::mat4 projection = s.view->getProjection();

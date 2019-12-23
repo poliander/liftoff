@@ -22,10 +22,9 @@ class Player : public Entity
 
     private:
         unsigned short  m_alt;
-        GLuint          m_next_shot;
+        Uint32          m_next_shot_timer;
+        Uint32          powerup_timer;
 
         float           gun_flash[2];
         float           gun_flash_rot[2];
-
-        Uint32          tick_timer;
 };

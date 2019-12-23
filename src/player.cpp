@@ -9,25 +9,6 @@ Player::Player() : Entity()
     s_x = 22.5f;
     s_y = 22.5f;
     s_z = 22.5f;
-
-    gun_flash[0] = 0;
-    gun_flash[1] = 0;
-
-    tick_timer = 0;
-
-    // player stats
-
-    acceleration = 120;
-    powerup = 0;
-
-    gun_power = 25;
-
-    energy_max = 1500;
-    energy_reg = 10;
-
-    life_max = 250;
-    life_reg = 1;
-    life_reg_energy = 10;
 }
 
 Player::~Player()
@@ -36,6 +17,8 @@ Player::~Player()
 
 void Player::collect(unsigned short e_obj)
 {
+    powerup_timer = SDL_GetTicks();
+
     switch (e_obj) {
         case OBJ_POWERUP_0:
             powerup += 15;
@@ -59,15 +42,29 @@ void Player::init(State &s)
     setVelocity(0, 0, 0);
     setAcceleration(0, 0, 0);
 
-    setMoney(0);
-    setEnergy(-200);
-    setLife(getLifeMaximum());
-
     m_alt = 0;
-    m_next_shot = SDL_GetTicks();
+    m_next_shot_timer = SDL_GetTicks();
+    powerup_timer = SDL_GetTicks();
 
-    tick_timer = SDL_GetTicks();
-    powerup = 0;
+    gun_flash[0] = 0;
+    gun_flash[1] = 0;
+
+    // player stats
+
+    acceleration = 120;
+    deceleration = 0.00035f;
+
+    money = 0;
+    gun_power = 25;
+
+    energy = -200;
+    energy_max = 1500;
+    energy_reg = 10;
+
+    life = 100;
+    life_max = life;
+    life_reg = 1;
+    life_reg_energy = 10;
 
     collect(OBJ_POWERUP_0);
 }
@@ -82,12 +79,12 @@ void Player::shoot(State &s)
         return;
     }
 
-    if (m_next_shot > SDL_GetTicks()) {
+    if (m_next_shot_timer > SDL_GetTicks()) {
         // timing
         return;
     }
 
-    m_next_shot = SDL_GetTicks() + 90 + rand() % 60;
+    m_next_shot_timer = SDL_GetTicks() + 90 + rand() % 60;
 
     if (energy < 25) {
         // low energy
@@ -133,14 +130,6 @@ void Player::shoot(State &s)
 
 void Player::update(State &s)
 {
-    float deceleration;
-
-    if (life > 0) {
-        deceleration = .00035f;
-    } else {
-        deceleration = .0002f;
-    }
-
     // check boundary
     if (p_x < -600.0f) {
         p_x = -600.0f;
@@ -275,8 +264,8 @@ void Player::update(State &s)
     if (gun_flash[1] > 0) gun_flash[1] -= s.global_timer * .15f;
 
     // one tick every 0.25s
-    if (SDL_GetTicks() - tick_timer > E_TICK_TIMING) {
-        tick_timer = SDL_GetTicks();
+    if (SDL_GetTicks() - powerup_timer > E_TICK_TIMING) {
+        powerup_timer = SDL_GetTicks();
 
         if (powerup > 0) {
             powerup--;
