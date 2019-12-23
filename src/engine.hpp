@@ -9,6 +9,7 @@
 
 #include "scene.hpp"
 #include "state.hpp"
+#include "renderbuffer.hpp"
 
 class Engine
 {
@@ -16,21 +17,24 @@ class Engine
         Engine();
         ~Engine();
 
-        bool          init(int argc, char **argv);
-        bool          main();
-        void          halt();
+        bool                     init(int argc, char **argv);
+        bool                     main();
+        void                     halt();
 
     private:
-        State         state;
-        Scene*        scene;
+        State                    state;
+        Scene*                   scene;
 
-        SDL_Window*   window;
-        SDL_GLContext context;
+        SDL_Window*              window;
+        SDL_GLContext            context;
 
-        bool          initDisplay();
-        bool          loadConfiguration();
-        bool          writeConfiguration();
+        unique_ptr<Renderbuffer> buffer;
 
-        bool          handleKeyboard();
-        void          handleJoystick();
+        bool                     initDisplay();
+
+        bool                     loadConfiguration();
+        bool                     writeConfiguration();
+
+        bool                     handleKeyboard();
+        void                     handleJoystick();
 };

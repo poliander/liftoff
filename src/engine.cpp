@@ -270,6 +270,8 @@ bool Engine::init(int argc, char **argv)
         }
     }
 
+    buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
+
     scene = new Scene(state);
     scene->load();
 
@@ -395,6 +397,7 @@ bool Engine::initDisplay()
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_TRUE);
     glShadeModel(GL_SMOOTH);
     glLoadIdentity();
 
@@ -592,8 +595,7 @@ void Engine::halt()
         state.log("failed\n");
     }
 
-    if (
-        state.config.aud_sfx   != -1 ||
+    if (state.config.aud_sfx   != -1 ||
         state.config.aud_music != -1
     ) {
         state.log("Closing audio device\n");
@@ -604,9 +606,7 @@ void Engine::halt()
 
     state.log("Closing display\n");
 
-    if (state.vid_multisampling > 0) {
-        glDisable(GL_MULTISAMPLE);
-    }
+    buffer.reset();
 
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
@@ -678,8 +678,8 @@ bool Engine::main()
                     state.vid_height = event.window.data2;
                     state.vid_aspect = float(state.vid_width) / float(state.vid_height);
 
-                    state.buffer.reset();
-                    state.buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
+                    buffer.reset();
+                    buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
 
                     state.view.reset();
                     state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);
@@ -692,11 +692,10 @@ bool Engine::main()
         handleJoystick();
     }
 
+    buffer->bind();
     scene->update();
-
-    state.buffer->bind();
     scene->draw();
-    state.buffer->blit();
+    buffer->blit();
 
     SDL_GL_SwapWindow(window);
 

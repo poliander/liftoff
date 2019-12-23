@@ -7,7 +7,6 @@ Scene::Scene(State &s) : state(s)
     overlay = make_unique<Overlay>(state);
 
     state.player = player;
-    state.buffer = make_unique<Renderbuffer>(state.vid_width, state.vid_height, state.vid_multisampling);
 }
 
 Scene::~Scene()
@@ -32,7 +31,6 @@ Scene::~Scene()
     }
 
     state.player.reset();
-    state.buffer.reset();
 }
 
 /*
@@ -205,6 +203,7 @@ bool Scene::loadLevel()
     float w_x, w_y, w_z;
 
     state.entities.clear();
+    state.spawns.clear();
     state.spawn(player);
 
     sprintf(msg, "Loading 'lvl/mission_%d.dat'... ", state.lvl_id);
@@ -620,16 +619,6 @@ void Scene::draw()
         if (p_y >  400.0f) p_y =  400.0f;
     }
 
-    gluLookAt(
-        p_x * -.01f + state.tilt_x * .333f,
-        p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
-        0,
-
-        0, 0, -10000.0f,
-
-        player->getVelocityX() * .15f, -1.0f, 0
-    );
-
     state.view->setCamera(
         p_x * -.01f + state.tilt_x * .333f,
         p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
@@ -653,12 +642,10 @@ void Scene::draw()
         auto e = state.entities.begin();
 
         while (e != state.entities.end()) {
-            if ((*e)->isIdle() == false) {
-                (*e)->draw(state);
+            (*e)->draw(state);
 
-                if ((*e)->isFocusable()) {
-                    (*e)->drawCrosshair(state, *e);
-                }
+            if ((*e)->isFocusable()) {
+                (*e)->drawCrosshair(state, *e);
             }
 
             ++e;

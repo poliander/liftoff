@@ -18,7 +18,6 @@
 #include "font.hpp"
 #include "model.hpp"
 #include "message.hpp"
-#include "renderbuffer.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 #include "view.hpp"
@@ -44,7 +43,6 @@ class State
 
         // scenery
         unique_ptr<View>            view;
-        unique_ptr<Renderbuffer>    buffer;
         shared_ptr<Entity>          player;
         vector<shared_ptr<Entity>>  entities;
         vector<shared_ptr<Entity>>  spawns;
