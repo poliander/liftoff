@@ -56,12 +56,10 @@ class State
 
         bool                        log_file;
         bool                        cfg_loaded;
+        bool                        engine_restart;
 
         char                        dir_configuration[255];
         char                        dir_resources[255];
-
-        bool                        engine_restart;
-        bool                        engine_boundary;
 
         // display
         SDL_DisplayMode             vid_cap_modes[128];
@@ -130,15 +128,13 @@ class State
         float                       hud_x;
         float                       hud_y;
 
-        // view related
-        void                        tilt(float t);
-
         // state
         bool                        set(int s);
         int                         get();
+
+        void                        tilt(float t);
         void                        spawn(shared_ptr<Entity> e);
         void                        notify(short t, short v);
-
         void                        log(const char *msg);
 
     private:

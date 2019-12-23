@@ -155,7 +155,6 @@ bool State::set(int s)
             hud_y = -10.0f;
             lvl_pos = 0;
             lvl_loaded = false;
-            engine_boundary = true;
             stars_warp = true;
             stars_speed = 1.75f;
 
@@ -193,7 +192,6 @@ bool State::set(int s)
 
         case STATE_GAME_NEXTLEVEL:
             stars_warp = true;
-            engine_boundary = false;
             audio.playSample(10, 255, 0);
             audio.stopSampleLoop(1000);
             audio.stopMusic(2500);

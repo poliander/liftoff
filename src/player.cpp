@@ -142,37 +142,35 @@ void Player::update(State &s)
     }
 
     // check boundary
-    if (s.engine_boundary) {
-        if (p_x < -600.0f) {
-            p_x = -600.0f;
+    if (p_x < -600.0f) {
+        p_x = -600.0f;
 
-            if (a_x > 0) {
-                a_x = 0;
-            }
+        if (a_x > 0) {
+            a_x = 0;
         }
+    }
 
-        if (p_x > 600.0f) {
-            p_x = 600.0f;
+    if (p_x > 600.0f) {
+        p_x = 600.0f;
 
-            if (a_x < 0) {
-                a_x = 0;
-            }
+        if (a_x < 0) {
+            a_x = 0;
         }
+    }
 
-        if (p_y < -400.0f) {
-            p_y = -400.0f;
+    if (p_y < -400.0f) {
+        p_y = -400.0f;
 
-            if (a_y > 0) {
-                a_y = 0;
-            }
+        if (a_y > 0) {
+            a_y = 0;
         }
+    }
 
-        if (p_y > 400.0f) {
-            p_y = 400.0f;
+    if (p_y > 400.0f) {
+        p_y = 400.0f;
 
-            if (a_y < 0) {
-                a_y = 0;
-            }
+        if (a_y < 0) {
+            a_y = 0;
         }
     }
 
