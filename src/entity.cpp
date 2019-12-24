@@ -316,7 +316,7 @@ float Entity::calcDistanceScale(State &s)
         f *= .25f;
     }
 
-    return f * (10000.0f - glm::distance(s.view->getCameraPos(), getPos()));
+    return f * (10000.0f - fabs(glm::distance(s.view->getCameraPos(), getPos())));
 }
 
 float Entity::calcDistance2D(State &s, shared_ptr<Entity> e)

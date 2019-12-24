@@ -105,9 +105,14 @@ void Scene::load()
         string(state.dir_resources).append("/textures/background_1.tga")
     )));
 
-    state.log("Loading 'glow_1.tga'\n");
+    state.log("Loading 'glow.tga'\n");
     state.textures.insert(make_pair(T_GLOW, new Texture(
-        string(state.dir_resources).append("/textures/glow_1.tga")
+        string(state.dir_resources).append("/textures/glow.tga")
+    )));
+
+    state.log("Loading 'halo.tga'\n");
+    state.textures.insert(make_pair(T_HALO, new Texture(
+        string(state.dir_resources).append("/textures/halo.tga")
     )));
 
     // shaders

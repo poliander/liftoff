@@ -69,6 +69,7 @@
 #define T_BACKGROUND_1          12
 #define T_JET_EXHAUST           13
 #define T_GLOW                  14
+#define T_HALO                  15
 
 // fonts
 #define F_ZEKTON                0
