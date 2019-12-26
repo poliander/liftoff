@@ -15,25 +15,6 @@ Player::~Player()
 {
 }
 
-void Player::collect(unsigned short e_obj)
-{
-    powerup_timer = SDL_GetTicks();
-
-    switch (e_obj) {
-        case OBJ_POWERUP_0:
-            powerup += 15;
-            break;
-
-        case OBJ_POWERUP_1:
-            powerup += 5;
-            break;
-    }
-}
-
-void Player::collide(State &s, shared_ptr<Entity> e)
-{
-}
-
 void Player::init(State &s)
 {
     setPos(0, -90.0f, 50.0f);
@@ -54,6 +35,7 @@ void Player::init(State &s)
     acceleration = 120;
     deceleration = 0.00035f;
 
+    powerup = 0;
     money = 0;
     gun_power = 25;
 
@@ -67,6 +49,25 @@ void Player::init(State &s)
     life_reg_energy = 10;
 
     collect(OBJ_POWERUP_0);
+}
+
+void Player::collect(unsigned short e_obj)
+{
+    powerup_timer = SDL_GetTicks();
+
+    switch (e_obj) {
+        case OBJ_POWERUP_0:
+            powerup += 15;
+            break;
+
+        case OBJ_POWERUP_1:
+            powerup += 5;
+            break;
+    }
+}
+
+void Player::collide(State &s, shared_ptr<Entity> e)
+{
 }
 
 void Player::shoot(State &s)
