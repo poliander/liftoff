@@ -2,7 +2,7 @@
 
 Renderbuffer::Renderbuffer(State& s) : state(s)
 {
-    view = View::createOrthographic(-s.vid_width * .5f, s.vid_height * .5f, s.vid_width * .5f, -s.vid_height * .5f);
+    view = View::createOrthographic(-s.vid_width * .5f, s.vid_width * .5f, s.vid_height * .5f, -s.vid_height * .5f);
     framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, s.vid_multisampling);
 
     glGenRenderbuffers(1, &renderbufferColor);

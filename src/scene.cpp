@@ -32,7 +32,12 @@ Scene::~Scene()
         Mix_FreeChunk(state.audio.sample[0]);
     }
 
-    state.player.reset();
+    overlay.reset();
+    skybox.reset();
+    player.reset();
+
+    state.fonts.clear();
+    state.textures.clear();
 }
 
 /*
@@ -63,16 +68,6 @@ void Scene::load()
     state.log("Loading 'hud_2.tga'\n");
     state.textures.insert(make_pair(T_HUD_2, new Texture(
         string(state.dir_resources).append("/textures/hud_2.tga")
-    )));
-
-    state.log("Loading 'hud_3.tga'\n");
-    state.textures.insert(make_pair(T_HUD_3, new Texture(
-        string(state.dir_resources).append("/textures/hud_3.tga")
-    )));
-
-    state.log("Loading 'hud_4.tga'\n");
-    state.textures.insert(make_pair(T_HUD_4, new Texture(
-        string(state.dir_resources).append("/textures/hud_4.tga")
     )));
 
     state.log("Loading 'star.tga'\n");
@@ -456,46 +451,16 @@ void Scene::updateScene()
 }
 
 /*
- * update money/damage messages
- */
-void Scene::updateMessages()
-{
-    auto m = state.messages.begin();
-
-    while (m != state.messages.end()) {
-        (*m)->counter += state.global_timer * (.5f + (*m)->counter * .035f);
-        ++m;
-    }
-}
-
-/*
  * update everything
  */
 void Scene::update()
 {
-    int i;
-
     skybox->update();
+    overlay->update();
 
     switch (state.get()) {
         case STATE_MENU:
-            if (state.menu_title_pos < 100.0f) {
-                state.menu_title_pos += (100.1f - state.menu_title_pos) * state.global_timer * .025f;
-                state.global_alpha = (int)state.menu_title_pos;
-            }
-
-            state.cam_x = 0;
-            state.cam_y = 0;
-            break;
-
-        case STATE_QUIT:
-            if (state.menu_title_pos > 0) {
-                state.menu_title_pos -= (100.1f - state.menu_title_pos) * state.global_timer * .15f;
-                state.global_alpha = (int)state.menu_title_pos;
-                player->update(state);
-            } else {
-                state.set(STATE_CLOSE);
-            }
+            state.global_alpha = state.global_counter;
             break;
 
         case STATE_GAME_START:
@@ -505,17 +470,13 @@ void Scene::update()
                 if (state.lvl_loaded == false) {
                     state.set(STATE_QUIT);
                 } else {
-                    player->init(state);
+                    player->init();
                 }
             }
 
-            if (state.menu_title_pos > 0) {
-                state.menu_title_pos -= (100.1f - state.menu_title_pos) * state.global_timer * .15f;
-                state.stars_rotation_speed = .05f * state.menu_title_pos * .01f;
-            }
-
-            if (state.stars_speed > .3f) {
-                state.stars_speed -= (state.stars_speed - .2f) * .02f * state.global_timer;
+            if (state.global_counter2 < 1.0f) {
+                state.stars_speed = 1.75f - state.global_counter2 * 1.4f;
+                state.stars_rotation_speed = 0.05f - state.global_counter2 * 0.05f;
             } else {
                 state.set(STATE_GAME_LOOP);
             }
@@ -531,9 +492,8 @@ void Scene::update()
             }
 
             updateScene();
-            updateMessages();
 
-            if (state.lvl_pos < 50) {
+            if (player->getPosZ() > -225.0f) {
                 player->setAccelerationZ(17.5f);
             } else {
                 if (player->isAlive()) {
@@ -563,27 +523,8 @@ void Scene::update()
 
         case STATE_GAME_NEXTLEVEL:
             updateScene();
-            updateMessages();
 
-            if (state.menu_title_pos < 100.0f) {
-                state.menu_title_pos += state.global_timer * .375;
-                state.cam_y_offset = 35.0f + state.menu_title_pos * .85f;
-
-                if (state.menu_title_pos > 80.0f) {
-                    state.global_alpha = int(100.0f - (state.menu_title_pos - 80.0f) * 5.0f);
-                    player->setAccelerationZ(500.0f);
-                } else {
-                    state.global_alpha = 100;
-                    state.tilt(state.menu_title_pos * .05f);
-                    player->setAccelerationZ(state.menu_title_pos * state.menu_title_pos * -.0001f);
-                }
-
-                if (state.stars_speed < 1.75f) {
-                    state.stars_speed += (state.stars_speed - .1f) * .03f * state.global_timer;
-                }
-
-                state.cam_x += state.global_timer * ((player->getPosX() * state.cam_speed) - (state.cam_x * state.cam_speed)) * .15f;
-                state.cam_y += state.global_timer * ((player->getPosY() * state.cam_speed) - ((state.cam_y - state.cam_y_offset) * state.cam_speed)) * .15f;
+            if (state.global_counter < 1.0f) {
             } else {
                 state.set(STATE_MENU);
             }
@@ -591,17 +532,25 @@ void Scene::update()
 
         case STATE_GAME_QUIT:
             updateScene();
-            updateMessages();
 
-            if (state.menu_title_pos < 100.0f) {
+            if (state.global_counter < 1.0f) {
                 if (player->isAlive()) {
                     player->setAccelerationZ(-25.0f);
                 }
 
-                state.menu_title_pos += (100.1f - state.menu_title_pos) * state.global_timer * .075f;
-                state.global_alpha = (int)(100.1f - state.menu_title_pos);
+                state.global_alpha = 1.0f - state.global_counter;
             } else {
                 state.set(STATE_MENU);
+            }
+            break;
+
+        case STATE_QUIT:
+            state.global_alpha = 1.0f - state.global_counter;
+
+            if (state.global_counter < 1.0f) {
+                player->update(state);
+            } else {
+                state.set(STATE_CLOSE);
             }
             break;
     }

@@ -6,19 +6,18 @@ Player::Player() : Entity()
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
 
-    s_x = 22.5f;
-    s_y = 22.5f;
-    s_z = 22.5f;
+    init();
 }
 
 Player::~Player()
 {
 }
 
-void Player::init(State &s)
+void Player::init()
 {
     setPos(0, -90.0f, 50.0f);
     setRot(90.0f, 0, 270.0f);
+    setScale(22.5f, 22.5f, 22.5f);
     setSpin(0, 0, 0);
     setVelocity(0, 0, 0);
     setAcceleration(0, 0, 0);
@@ -292,13 +291,7 @@ void Player::update(State &s)
 
 void Player::draw(State &s)
 {
-    float a = s.global_alpha * .01f;
-
-    if (s.get() < STATE_GAME_LOOP ||
-        s.get() > STATE_GAME_QUIT
-    ) {
-        a = s.menu_title_pos * .01f;
-    }
+    float a = s.global_alpha;
 
     glm::mat4 projection = s.view->getProjection();
     glm::mat4 camera = s.view->getCamera();

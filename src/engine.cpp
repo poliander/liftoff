@@ -3,7 +3,6 @@
 Engine::Engine()
 {
     srand((int)time(NULL));
-    timer = SDL_GetTicks();
 }
 
 Engine::~Engine()
@@ -205,37 +204,37 @@ bool Engine::init(int argc, char **argv)
         case QL_ULTRA:
             state.vid_multisampling = 8;
             state.vid_fb_size = 4096;
-            state.vid_font_resolution = 8;
+            state.vid_font_resolution = 7;
             break;
 
         case QL_VERY_HIGH:
             state.vid_multisampling = 4;
             state.vid_fb_size = 4096;
-            state.vid_font_resolution = 7;
+            state.vid_font_resolution = 6;
             break;
 
         case QL_HIGH:
             state.vid_multisampling = 4;
             state.vid_fb_size = 2048;
-            state.vid_font_resolution = 7;
+            state.vid_font_resolution = 6;
             break;
 
         case QL_MEDIUM:
             state.vid_multisampling = 2;
             state.vid_fb_size = 2048;
-            state.vid_font_resolution = 6;
+            state.vid_font_resolution = 5;
             break;
 
         case QL_LOW:
             state.vid_multisampling = 2;
             state.vid_fb_size = 1024;
-            state.vid_font_resolution = 6;
+            state.vid_font_resolution = 5;
             break;
 
         default:
             state.vid_multisampling = 0;
             state.vid_fb_size = 1024;
-            state.vid_font_resolution = 5;
+            state.vid_font_resolution = 4;
     }
 
     state.vid_mode = -1;
@@ -273,8 +272,6 @@ bool Engine::init(int argc, char **argv)
 
     buffer = make_unique<Renderbuffer>(state);
     scene = make_unique<Scene>(state);
-
-    timer = SDL_GetTicks();
 
     state.set(STATE_MENU);
 
@@ -613,21 +610,7 @@ bool Engine::main()
 {
     SDL_Event event;
 
-    state.global_timer = float(SDL_GetTicks() - timer) * .05f;
-    timer = SDL_GetTicks();
-
-    if (state.fps_timer_l > 0) {
-        state.fps_timer += timer - state.fps_timer_l;
-
-        if (state.fps_timer > 1000) {
-            state.fps = float(state.fps_counter) / (float(state.fps_timer) * .001f);
-            state.fps_counter = 0;
-            state.fps_timer = 0;
-        }
-    }
-
-    state.fps_counter++;
-    state.fps_timer_l = timer;
+    state.update();
 
     // complete restart of game engine
     if (state.engine_restart) {
@@ -639,8 +622,7 @@ bool Engine::main()
         halt();
 
         if (init(-1, NULL)) {
-            timer = SDL_GetTicks();
-
+            state.timer = SDL_GetTicks();
             state.fps_timer = 0;
             state.fps_timer_l = 0;
             state.fps_counter = 0;

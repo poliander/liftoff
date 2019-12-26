@@ -446,7 +446,7 @@ bool Entity::hasTarget(shared_ptr<Entity> e)
 
 void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 {
-    float a = float(s.global_alpha) * .01f;
+    float a = s.global_alpha;
     float scale = 1.25f * (150.0f + ((p_z + 12500.0f) * .00005f));
     float rot, da;
 
@@ -488,8 +488,8 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             0
         ));
 
-        s.textures[T_HUD_3]->bind();
-        s.textures[T_HUD_3]->draw();
+        s.textures[T_HUD_1]->bind();
+        s.textures[T_HUD_1]->draw();
     } else {
         // aiming help
 
@@ -517,8 +517,8 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             0
         ));
 
-        s.textures[T_HUD_4]->bind();
-        s.textures[T_HUD_4]->draw();
+        s.textures[T_HUD_2]->bind();
+        s.textures[T_HUD_2]->draw();
     }
 
     s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
@@ -537,15 +537,15 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     glEnable(GL_DEPTH_TEST);
 
-    s.textures[T_HUD_3]->bind();
-    s.textures[T_HUD_3]->draw();
+    s.textures[T_HUD_1]->bind();
+    s.textures[T_HUD_1]->draw();
 
     s.shaders[S_TEXTURE]->unbind();
 }
 
 void Entity::draw(State &s)
 {
-    float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
+    float a = s.global_alpha, d = calcDistanceScale(s);
 
     glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
 

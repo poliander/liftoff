@@ -49,7 +49,5 @@ class Scene
         unique_ptr<Overlay> overlay;
 
         void                updateScene();
-        void                updateMessages();
-
         bool                loadLevel();
 };

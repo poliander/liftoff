@@ -43,7 +43,7 @@ void Missile::update(State &s)
 {
     Entity::update(s);
 
-    c_a = (s.global_alpha * .005f) + ((getPosZ() + 200.0f) * .00002f);
+    c_a = (s.global_alpha * .5f) + ((getPosZ() + 200.0f) * .00002f);
 
     if (c_a < 0 || getPosZ() < -10000.0f) {
         e_state = E_STATE_GONE;
@@ -52,7 +52,7 @@ void Missile::update(State &s)
 
 void Missile::draw(State &s)
 {
-    float a = float(s.global_alpha) * .01f;
+    float a = s.global_alpha;
 
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);

@@ -21,7 +21,7 @@ unique_ptr<View> View::createPerspective(float f, float a, float zNear, float zF
 /*
  * Create a orthographic projection view
  */
-unique_ptr<View> View::createOrthographic(float x1, float y1, float x2, float y2)
+unique_ptr<View> View::createOrthographic(float x1, float x2, float y1, float y2)
 {
     return make_unique<View>(P_ORTHOGRAPHIC, glm::ortho(x1, x2, y1, y2));
 }

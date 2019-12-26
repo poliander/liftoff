@@ -58,6 +58,8 @@ State::State()
     id                      = 0;
     lvl_id                  = 1;
 
+    timer                   = SDL_GetTicks();
+
     entities.clear();
     spawns.clear();
     messages.clear();
@@ -107,6 +109,47 @@ void State::notify(short type, short value)
 }
 
 /*
+ * update global_*, fps_*
+ */
+void State::update()
+{
+    global_timer = float(SDL_GetTicks() - timer) * .05f;
+
+    if (global_counter < 1.0f) {
+        global_counter += global_timer * .02f;
+        global_transition1 = 0.5f + 0.5f * cos(M_PI + global_counter * M_PI);
+    } else {
+        global_counter = 1.0f;
+        global_transition1 = 1.0f;
+    }
+
+    if (global_counter2 < 1.0f) {
+        global_counter2 += global_timer * .01f;
+        global_transition2 = -pow(-global_counter2 + 1.0f, 3) + 1.0f;
+    } else {
+        global_counter2 = 1.0f;
+        global_transition2 = 1.0f;
+    }
+
+    // frames per second
+
+    if (fps_timer_l > 0) {
+        fps_timer += timer - fps_timer_l;
+
+        if (fps_timer > 1000) {
+            fps = float(fps_counter) / (float(fps_timer) * .001f);
+            fps_counter = 0;
+            fps_timer = 0;
+        }
+    }
+
+    fps_counter++;
+    fps_timer_l = timer;
+
+    timer = SDL_GetTicks();
+}
+
+/*
  * set or change engine state
  */
 bool State::set(int s)
@@ -114,26 +157,31 @@ bool State::set(int s)
     if (id == s) return false;
 
     char msg[255];
-    int x, y;
-
     sprintf(msg, "Entering state %d\n", s);
     log(msg);
 
+    global_counter = 0;
+    global_counter2 = 0;
+    global_transition1 = 0;
+    global_transition2 = 0;
+
     switch (s) {
         case STATE_MENU:
+            timer = SDL_GetTicks();
+
+            global_alpha = 0;
+            global_timer = 0;
+
             stars_warp = true;
             stars_speed = 1.75f;
-            stars_rotation = true;
-            stars_rotation_pos = .0f;
             stars_rotation_speed = .05f;
 
             menu = 1;
             menu_pos = 0;
-            menu_title_pos = 0;
             menu_selected = false;
 
-            global_alpha = 0;
-            global_timer = 0;
+            cam_x = 0;
+            cam_y = 0;
 
             engine_restart = false;
 
@@ -141,22 +189,11 @@ bool State::set(int s)
             audio.stopSampleLoop(0);
             break;
 
-        case STATE_QUIT:
-            menu_title_pos = 100.0f;
-            audio.stopMusic(1000);
-            break;
-
         case STATE_GAME_START:
-            global_alpha = 99;
-            menu_title_pos = 100.0f;
-            cam_x = .0f;
-            cam_y = .0f;
-            hud_x = -20.0f;
-            hud_y = -10.0f;
+            global_alpha = 1.0f;
+
             lvl_pos = 0;
             lvl_loaded = false;
-            stars_warp = true;
-            stars_speed = 1.75f;
 
             audio.stopMusic(1000);
 
@@ -169,8 +206,8 @@ bool State::set(int s)
             menu = 0;
 
             stars_warp = false;
-            stars_rotation = false;
             stars_speed = .35f;
+            stars_rotation_speed = 0;
 
             cam_x = -250.0f;
             if ((rand() % 2) == 1) cam_x = -cam_x;
@@ -185,7 +222,6 @@ bool State::set(int s)
             break;
 
         case STATE_GAME_QUIT:
-            menu_title_pos = 0;
             audio.stopMusic(1000);
             audio.stopSampleLoop(1000);
             break;
@@ -195,6 +231,10 @@ bool State::set(int s)
             audio.playSample(10, 255, 0);
             audio.stopSampleLoop(1000);
             audio.stopMusic(2500);
+            break;
+
+        case STATE_QUIT:
+            audio.stopMusic(1000);
             break;
     }
 

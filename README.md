@@ -16,12 +16,12 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 
 |  Quality  | Recommended for | MSAA  | Framebuffer  | Font res. |
 | :------------ | :------------ | :------------ | :------------ | :------------ |
-| very low | 720p or lower | off  | 1024x1024 | 5 bit |
-| low  | 720p | 2x  | 1024x1024 | 6 bit | 720p |
-| medium | 1080p | 2x  | 2048x2048 | 6 bit | 1080p |
-|  high | 1080p | 4x  | 2048x2048 | 7 bit | 1080p |
-|  very high | 1440p | 4x  | 4096x4096 | 7 bit |
-|  ultra | 4K or higher | 8x  | 4096x4096 | 8 bit |
+| very low | 720p or lower | off  | 1024x1024 | 4 bit |
+| low  | 720p | 2x  | 1024x1024 | 5 bit | 720p |
+| medium | 1080p | 2x  | 2048x2048 | 5 bit | 1080p |
+|  high | 1080p | 4x  | 2048x2048 | 6 bit | 1080p |
+|  very high | 1440p | 4x  | 4096x4096 | 6 bit |
+|  ultra | 4K or higher | 8x  | 4096x4096 | 7 bit |
 
 ## Building from source
 

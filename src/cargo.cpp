@@ -22,12 +22,10 @@ bool Cargo::damage(State &s, int p)
     if (damaged && e_state == E_STATE_GONE && yield == false) {
         s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
 
-        s.notify(MSG_MONEY, money);
-        s.player->addMoney(money);
-
         s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z, .6f, .75f, 1.0f));
         s.spawn(make_shared<Powerup>(p_x, p_y, p_z));
 
+        s.notify(MSG_MONEY, money);
         e_state = E_STATE_FADING;
         yield = true;
     }
@@ -50,7 +48,7 @@ void Cargo::update(State &s)
 
 void Cargo::draw(State &s)
 {
-    float a = float(s.global_alpha) * .01f, d = calcDistanceScale(s);
+    float a = s.global_alpha, d = calcDistanceScale(s);
 
     glm::vec4 color = glm::vec4(a, a, a, a);
     glm::mat4 projection = s.view->getProjection();

@@ -13,10 +13,10 @@ class Player : public Entity
         Player();
         ~Player();
 
+        void            init();
         void            update(State &s);
         void            draw(State &s);
         void            shoot(State &s);
-        void            init(State &s);
         void            collide(State &s, shared_ptr<Entity> e);
         void            collect(unsigned short e_obj);
 

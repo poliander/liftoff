@@ -198,7 +198,7 @@ void ParticleEngine::update(State &s)
 void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, float ry, float rz)
 {
     float m[16];
-    float a = s.global_alpha * .01f;
+    float a = s.global_alpha;
 
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(blendSourceFactor, blendDestFactor);

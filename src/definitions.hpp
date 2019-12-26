@@ -60,16 +60,14 @@
 #define T_MENU_2                3
 #define T_HUD_1                 4
 #define T_HUD_2                 5
-#define T_HUD_3                 6
-#define T_HUD_4                 7
-#define T_STAR                  8
-#define T_MISSILE_1             9
-#define T_EXPLOSION_1           10
-#define T_EXPLOSION_2           11
-#define T_BACKGROUND_1          12
-#define T_JET_EXHAUST           13
-#define T_GLOW                  14
-#define T_HALO                  15
+#define T_STAR                  6
+#define T_MISSILE_1             7
+#define T_EXPLOSION_1           8
+#define T_EXPLOSION_2           9
+#define T_BACKGROUND_1          10
+#define T_JET_EXHAUST           11
+#define T_GLOW                  12
+#define T_HALO                  13
 
 // fonts
 #define F_ZEKTON                0

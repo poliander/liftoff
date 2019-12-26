@@ -15,6 +15,8 @@ class Message
         virtual ~Message();
 
         char  text[64];
+        short type;
+        short value;
         float counter;
 
         short dir_x;

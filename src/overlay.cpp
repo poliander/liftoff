@@ -2,13 +2,61 @@
 
 Overlay::Overlay(State& s) : state(s)
 {
-    view = View::createOrthographic(-400.0f, -300.0f, 400.0f, 300.0f);
+    view = View::createOrthographic(-400.0f, 400.0f, -300.0f, 300.0f);
     perspective = View::createPerspective(45.0f, 4.0f / 3.0f, .01f, 100.0f);
     framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, s.vid_multisampling);
 }
 
 Overlay::~Overlay()
 {
+}
+
+void Overlay::update()
+{
+    auto m = state.messages.begin();
+
+    while (m != state.messages.end()) {
+        (*m)->counter += state.global_timer * (.5f + (*m)->counter * .035f);
+        ++m;
+    }
+
+    switch (state.get()) {
+        case STATE_MENU:
+            menu_visible        = true;
+            menu_cursor_visible = true;
+            menu_alpha          = 1.0f;
+            status_visible      = false;
+            screen_y            = 50.0f;
+            ship_y              = -1.5f;
+            logo1_x             = 0;
+            logo1_y             = state.global_transition2 * 100.0f - 300.0f;
+            logo2_x             = 0;
+            logo2_y             = -150.0f;
+            break;
+
+        case STATE_GAME_START:
+            menu_visible        = true;
+            menu_cursor_visible = false;
+            menu_alpha          = 1.0f - pow(state.global_transition1, 3);
+            status_visible      = true;
+            status_alpha        = pow(state.global_transition1, 3);
+            screen_y            = pow(state.global_transition1, 3) * 290.0f + 50.0f;
+            ship_y              = -1.5f - pow(state.global_transition1, 3) * 16.0f;
+            logo1_x             = pow(state.global_transition1, 3) * 500.0f * -1.0f;
+            logo2_x             = pow(state.global_transition1, 3) * 500.0f;
+            break;
+
+        case STATE_GAME_LOOP:
+            screen_y            = 340.0f;
+            menu_visible        = false;
+            status_visible      = true;
+            status_alpha        = 1.0f;
+            break;
+
+        case STATE_GAME_QUIT:
+            screen_y            = state.global_transition2 * 100.0f + 350.0f;
+            break;
+    }
 }
 
 void Overlay::drawMessages()
@@ -20,229 +68,89 @@ void Overlay::drawMessages()
         a = 1.0f - (*m)->counter * .01f;
 
         if ((*m)->dir_x > 0) {
-            x = (*m)->dir_x * (pow((*m)->counter, 2) * state.vid_aspect * .0003f);
+            x = (*m)->dir_x * ((*m)->counter + 1.0f) * 1.8f;
         } else {
-            x = (*m)->dir_x * (pow((*m)->counter, 2) * state.vid_aspect * .0004f);
+            x = (*m)->dir_x * ((*m)->counter + 1.0f) * 2.2f;
         }
 
-        x += (*m)->dir_x;
-        y = -1.5f + (*m)->dir_y * ((*m)->counter * .0265f);
+        y = (*m)->dir_y * pow(((*m)->counter + 1.0f) * .05f, 2) * 10.0f;
 
         state.fonts[F_ZEKTON]->draw(
             (*m)->text,
-
-            200.0f + x * 13.5f,
-            150.0f + y * 32.0f,
-
-            0.1f,
+            x, 25.0f + y,
+            0.125f,
             (*m)->c_r, (*m)->c_g, (*m)->c_b, a
         );
 
         if (a < 0) {
+            if ((*m)->type == MSG_MONEY) state.player->addMoney((*m)->value);
             m = state.messages.erase(m);
-        } else {
-            ++m;
+            continue;
         }
+
+        ++m;
     }
 }
 
-/*
- * draw head-up-display (energy, shields, money)
- */
-void Overlay::drawDisplay()
+void Overlay::drawStatus()
 {
-    int i, s, e;
-    float t, alpha = .01f * (100.0f - float(state.menu_title_pos));
     char msg[16];
-
-    switch (state.get()) {
-        case STATE_GAME_START:
-            t = (-6.413f * state.vid_aspect - state.hud_x) * .055f * state.global_timer;
-            state.hud_x += t;
-            t = (4.905f + state.hud_y) * .055f * state.global_timer;
-            state.hud_y -= t;
-            break;
-
-        case STATE_GAME_NEXTLEVEL:
-        case STATE_GAME_QUIT:
-            if (state.menu_title_pos > 0) {
-                state.hud_x -= state.menu_title_pos * .001f;
-                state.hud_y -= state.menu_title_pos * .001f;
-            }
-            break;
-
-        case STATE_GAME_LOOP:
-            state.hud_x = -6.413f * state.vid_aspect;
-            state.hud_y = -4.905f;
-            break;
-
-        default:
-            state.hud_x = .0f;
-            state.hud_y = -.8f;
-    }
-
-    glLoadIdentity();
-
-    // lower right screen
-
-    state.textures[T_MENU_1]->bind();
-
-    glPushMatrix();
-    glTranslatef(-state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
-    glBegin (GL_QUADS);
-      glColor4f(1, 1, 1, alpha * .5f);
-      glTexCoord2i(0, 0);
-      glVertex3f(-5.1f, -.3f, 0);
-
-      glColor4f(0.75f, 0.75f, 0.75f, alpha * .5f);
-      glTexCoord2i(1, 0);
-      glVertex3f(4.9f, -.3f, 0);
-
-      glColor4f(0.5f, 0.5f, 0.5f, alpha * .5f);
-      glTexCoord2i(1, 1);
-      glVertex3f(4.9f, -4.1f, 0);
-
-      glColor4f(0.75f, 0.75f, 0.75f, alpha * .5f);
-      glTexCoord2i(0, 1);
-      glVertex3f(-5.1f, -4.1f, 0);
-    glEnd();
-    glPopMatrix();
 
     // money
 
     sprintf(msg, "%d $", state.player->getMoney());
     state.fonts[F_ZEKTON]->draw(
         msg,
-
-        114.0f + (state.hud_x - state.tilt_x * .01f) * 18.0f * -1.0f,
-        127.5f + (state.hud_y - state.tilt_y * .01f) * 24.5f,
-
-        0.15f,
-
-        1.0f,
-        1.0f,
-        0.3f,
-
-        alpha * .85f
+        -228.0f, screen_y - 52.0f,
+        0.2f,
+        1.0f, 1.0f, 0.3f, 1.0f * status_alpha
     );
-
-    // lower left screen
-
-    state.textures[T_MENU_1]->bind();
-
-    glLoadIdentity();
-    glPushMatrix();
-    glTranslatef(state.hud_x - state.tilt_x * .01f, state.hud_y - state.tilt_y * .01f, -10);
-    glColor4f(1, 1, 1, alpha * .5f);
-    glBegin (GL_QUADS);
-      glTexCoord2i(0, 0);
-      glVertex3f(-5.1f, -.3f, 0);
-
-      glTexCoord2i(1, 0);
-      glVertex3f(4.9f, -.3f, 0);
-
-      glTexCoord2i(1, 1);
-      glVertex3f(4.9f, -4.1f, 0);
-
-      glTexCoord2i(0, 1);
-      glVertex3f(-5.1f, -4.1f, 0);
-    glEnd();
-    glPopMatrix();
-
-    glLoadIdentity();
-    glPushMatrix();
-
-    // life symbol
-
-    state.textures[T_HUD_1]->bind();
-
-    glTranslatef(state.hud_x + .5f - state.tilt_x*.01f, state.hud_y - .7f - state.tilt_y*.01f, -9.9f);
-    glColor4f(1.0f, .8f, .55f, alpha * .85f);
-    glBegin (GL_QUADS);
-      glTexCoord2i (0, 0);
-      glVertex3f(-.17f, -.17f, 0);
-
-      glTexCoord2i(1, 0);
-      glVertex3f(.17f, -.17f, 0);
-
-      glTexCoord2i(1, 1);
-      glVertex3f(.17f, .17f, 0);
-
-      glTexCoord2i(0, 1);
-      glVertex3f(-.17f, .17f, 0);
-    glEnd();
 
     // life bar
 
-    s = int(50.0f / ((float(state.player->getLifeMaximum() + 1) / float(state.player->getLife() + 1))));
+    int s = int(80.0f / ((float(state.player->getLifeMaximum() + 1) / float(state.player->getLife() + 1))));
 
-    for (i = 0; i < s; i++) {
+    for (int i = 0; i < s; i++) {
         state.fonts[F_ZEKTON]->draw(
             "I",
-
-            213.0f - ((state.hud_x - state.tilt_x * .01f) * -18.0f) + 1.45f * i,
-            134.5f + ((state.hud_y - state.tilt_y * .01f) *  24.5f),
-
-            0.09f,
-
-            1.0f,
-            0.4f,
-            0.2f,
-
-            0.85f * (1.0f - (.02f * ((s + 1) - i))) * alpha
+            225.0f - i * 4.0f, screen_y - 65.0f,
+            0.1f,
+            1.0f, 0.4f, 0.2f, 0.85f * status_alpha
         );
     }
 
-    // energy symbol
-
-    state.textures[T_HUD_2]->bind();
-
-    glTranslatef(0, -.375f, 0);
-    glColor4f(1.0f, .8f, .55f, alpha * .85f);
-    glBegin (GL_QUADS);
-      glTexCoord2i (0, 0);
-      glVertex3f(-.17f, -.17f, 0);
-
-      glTexCoord2i(1, 0);
-      glVertex3f(.17f, -.17f, 0);
-
-      glTexCoord2i(1, 1);
-      glVertex3f(.17f, .17f, 0);
-
-      glTexCoord2i(0, 1);
-      glVertex3f(-.17f, .17f, 0);
-    glEnd();
-    glPopMatrix();
-
     // energy bar
 
-    e = int(50.0f / (((float)state.player->getEnergyMaximum() + 1) / (float(state.player->getEnergy() + 1))));
+    int e = int(80.0f / (((float)state.player->getEnergyMaximum() + 1) / (float(state.player->getEnergy() + 1))));
 
-    for (i = 0; i < e; i++) {
+    for (int i = 0; i < e; i++) {
         state.fonts[F_ZEKTON]->draw(
             "I",
-
-            213.0f - ((state.hud_x - state.tilt_x * .01f) * -18.0f) + 1.45f * i,
-            126.0f + ((state.hud_y - state.tilt_y * .01f) *  24.5f),
-
-            0.09f,
-
-            0.2f,
-            0.65f,
-            1.0f,
-
-            0.85f * (1.0f - (.02f * ((s + 1) - i))) * alpha
+            225.0f - i * 4.0f, screen_y - 50.0f,
+            0.1f,
+            0.2f, 0.65f, 1.0f, 0.85f * status_alpha
         );
     }
 }
 
-/*
- * draw menu
- */
+void Overlay::drawScreen()
+{
+    state.shaders[S_TEXTURE]->bind();
+
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
+        0.0f,   screen_y,
+        500.0f, 180.0f
+    ));
+
+    state.textures[T_MENU_1]->bind();
+    state.textures[T_MENU_1]->draw();
+}
+
 void Overlay::drawMenu()
 {
-    int i, numentries;
-    float s, x, y1, y2;
+    int numentries;
+    float s;
     static float p_rot = 0;
 
     float mfo; // font y-offset
@@ -252,7 +160,7 @@ void Overlay::drawMenu()
     char *mtxt[5];
     char msg[255];
 
-    for (i=0; i<5; i++) {
+    for (int i = 0; i < 5; i++) {
         mtxt[i] = (char*)malloc(sizeof(char)*64);
     }
 
@@ -293,7 +201,7 @@ void Overlay::drawMenu()
         case 2: // settings submenu
             numentries = 4;
 
-            mfo = 3.5f;
+            mfo = -5.75f;
             mfs = 0.14f;
 
             strcpy(mtxt[0], "VIDEO");
@@ -343,7 +251,7 @@ void Overlay::drawMenu()
         case 3: // video settings
             numentries = 5;
 
-            mfo = 9.0f;
+            mfo = -18.25f;
             mfs = 0.075f;
 
             sprintf(
@@ -428,7 +336,7 @@ void Overlay::drawMenu()
         case 4: // audio settings
             numentries = 4;
 
-            mfo = 8.0f;
+            mfo = -13.75f;
             mfs = 0.075f;
 
             switch(state.config.aud_sfx) {
@@ -533,42 +441,25 @@ void Overlay::drawMenu()
         state.menu_pos = 0;
     }
 
-    // draw menu background
-
-    state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
-        0.0f,   -39.0f,
-        350.0f, 180.0f
-    ));
-    state.textures[T_MENU_1]->bind();
-    state.textures[T_MENU_1]->draw();
-    state.shaders[S_TEXTURE]->unbind();
-
-    state.fonts[F_ZEKTON]->draw(
-        "VECTOR ZERO MK. IX \"REDUX\"",
-        197.0f, 100.0f, 0.075f,
-        1.0f, 0.9f, 0.85f, .45f
-    );
-
-    // draw menu items
-
     mrh = 150.0f * (1.0f / float(numentries));
 
-    state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f, .5f, .5f, .35f));
-    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
-        -104.75f,
-        36.5f - (mrh * float(state.menu_pos) + mrh * 0.5f),
+    // menu cursor
 
-        135.0f,
-        mrh
-    ));
-    state.textures[T_MENU_2]->bind();
-    state.textures[T_MENU_2]->draw();
-    state.shaders[S_TEXTURE]->unbind();
+    if (menu_cursor_visible) {
+        state.shaders[S_TEXTURE]->bind();
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f, .5f, .5f, .35f * menu_alpha));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
+            -146.5f, -25.0f + (mrh * float(state.menu_pos) + mrh * 0.5f),
+            200.0f, mrh
+        ));
 
-    for (i = 0; i < numentries; i++) {
+        state.textures[T_MENU_2]->bind();
+        state.textures[T_MENU_2]->draw();
+    }
+
+    // menu items
+
+    for (int i = 0; i < numentries; i++) {
         float r, g, b;
 
         if (i == state.menu_pos) {
@@ -584,47 +475,47 @@ void Overlay::drawMenu()
         state.fonts[F_ZEKTON]->draw(
             mtxt[i],
 
-            122.0f,
-            152.0f + mfo - (i * mrh * 0.5f),
+            -220.0f,
+            -43.0f + screen_y + mfo + (i * mrh),
 
             mfs,
 
-            r, g, b,
-            0.85f
+            r, g, b, .85f * menu_alpha
         );
     }
 
     if (state.get() == STATE_MENU) {
-        x = 0;
-        y1 = 400.0f - powf(state.menu_title_pos, 2) * .02f;
-        y2 = 60.0f + powf(state.menu_title_pos, 2) * .01f;
-        s = powf(state.menu_title_pos * .01f, 2) * 1.5f;
+        s = 1.5f * state.global_transition2;
     } else {
-        x = -400.0f + powf(state.menu_title_pos, 2) * .04f;
-        y1 = 200.0f;
-        y2 = 160.0f;
         s = 1.5f;
     }
 
     state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, menu_alpha));
+
+    state.textures[T_TITLE]->bind();
 
     // "LIFT-OFF"
 
-    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(x, y1, 280.0f, 70.0f));
-    state.textures[T_TITLE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(logo1_x, logo1_y, 400.0f, -80.0f));
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, 1.0f, 1.0f, .4f));
     state.textures[T_TITLE]->draw();
 
     // "BEYOND GLAXIUM"
 
-    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(-x, y2, 280.0f * s, 40.0f * s));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(logo2_x, logo2_y, 400.0f * s, -50.0f * s));
     state.textures[T_TITLE]->setTextureCoordinates(glm::vec4(0, .4f, 1.0f, 0));
     state.textures[T_TITLE]->draw();
 
     state.shaders[S_TEXTURE]->unbind();
 
     // Player's ship
+
+    state.fonts[F_ZEKTON]->draw(
+        "VECTOR ZERO MK. IX \"REDUX\"",
+        23.0f, screen_y + 70.0f, 0.075f,
+        1.0f, 0.9f, 0.85f, .45f * menu_alpha
+    );
 
     glEnable(GL_DEPTH_TEST);
 
@@ -634,87 +525,54 @@ void Overlay::drawMenu()
     glm::mat4 projection = perspective->getProjection();
     glm::mat4 camera = perspective->getCamera();
     glm::mat4 model = perspective->getModel(
-        -4.0f, 1.0f, -42.5f,
-        -115.0f, 0, p_rot,
+        -5.0f, ship_y, -35.0f,
+        -75.0f, 180.0f, p_rot,
         1.0f, 1.0f, 1.0f
     );
 
-    state.models[OBJ_PLAYER]->draw(model, camera, projection, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    state.models[OBJ_PLAYER]->draw(model, camera, projection, glm::vec4(1.0f, 1.0f, 1.0f, menu_alpha));
+
     glDisable(GL_DEPTH_TEST);
-}
-
-/*
- * display video infos (FPS, MSAA level)
- */
-void Overlay::drawVideoInfos()
-{
-    static char txt[16];
-
-    // FPS
-
-    sprintf(txt, "FPS: %d", int(round(state.fps)));
-    state.fonts[F_ZEKTON]->draw(txt, 5.0f, 288.0f, 0.075f, 1.0f, 1.0f, 1.0f, .75f);
-
-    // MSAA
-
-    if (state.vid_multisampling > 0) {
-        sprintf(txt, "MSAA: %dx", int(state.vid_multisampling));
-    } else {
-        sprintf(txt, "MSAA: OFF");
-    }
-
-    state.fonts[F_ZEKTON]->draw(txt, 5.0f, 282.0f, 0.075f, 1.0f, 1.0f, 1.0f, .75f);
 }
 
 void Overlay::draw()
 {
-    float alpha;
-
-    if (state.get() < STATE_GAME_START) {
-        alpha = 0.01f * float(state.global_alpha);
-    } else {
-        alpha = 0.01f * state.menu_title_pos;
-    }
+    float alpha = state.global_alpha;
 
     glDisable(GL_DEPTH_TEST);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    if ((state.get() >= STATE_MENU && state.get() <= STATE_GAME_START) ||
-        (state.get() >= STATE_GAME_QUIT)
-    ) {
-        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    framebuffer->bind();
+    framebuffer->clear();
 
-        framebuffer->bind();
-        framebuffer->clear();
+    drawScreen();
 
+    if (menu_visible) {
         drawMenu();
-
-        framebuffer->unbind();
-
-        state.shaders[S_TEXTURE]->bind();
-        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(alpha, alpha, alpha, alpha));
-        state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
-            0, 0,
-            1400.0f / state.vid_aspect, -600.0f
-        ));
-
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-        framebuffer->draw();
-        state.shaders[S_TEXTURE]->unbind();
-
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    if (state.get() >= STATE_GAME_START &&
-        state.get() <= STATE_GAME_QUIT
-    ) {
+    if (status_visible) {
         drawMessages();
-        drawDisplay();
+        drawStatus();
     }
 
     if (state.fps_visible) {
-        drawVideoInfos();
+        static char txt[16];
+
+        sprintf(txt, "%.01f FPS", state.fps);
+        state.fonts[F_ZEKTON]->draw(txt, -40.0f, -270.0f, 0.12f, 1.0f, 1.0f, 1.0f, .75f);
     }
+
+    framebuffer->unbind();
+
+    state.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(alpha, alpha, alpha, alpha));
+    state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(0, 0, 1000.0f / state.vid_aspect, 600.0f));
+
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    framebuffer->draw();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_DEPTH_TEST);
 }

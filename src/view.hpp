@@ -44,7 +44,7 @@ class View
 
         // orthographic transformation (2D)
 
-        static unique_ptr<View> createOrthographic(float x1, float y1, float x2, float y2);
+        static unique_ptr<View> createOrthographic(float x1, float x2, float y1, float y2);
 
         glm::mat4 transform(
             float px, float py,

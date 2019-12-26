@@ -5,8 +5,9 @@ Font::Font(const string& filename, shared_ptr<Shader> s, unsigned short q) : Qua
     FT_Library ft;
     FT_Face face;
 
+    view = View::createOrthographic(-400.0f, 400.0f, -300.0f, 300.0f);
     shader = s;
-    scale = 128.0f / pow(2, q);
+    scale = 256.0f / pow(2, q);
 
     FT_Init_FreeType(&ft);
     FT_New_Face(ft, filename.c_str(), 0, &face);
@@ -66,33 +67,34 @@ Font::~Font()
 
 void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a)
 {
-    float ox = x, qs = scale * s;
+    x *= .5f;
+    y *= .5f;
+    s *= .5f * scale;
+
+    float ox = x;
 
     shader->bind();
-
     shader->update(UNI_COLOR, glm::vec4(r, g, b, a));
-    shader->update(UNI_MVP, glm::ortho(0.0f, 800.0f, 0.0f, 600.0f) * glm::translate(glm::vec3(x, y, 0)));
+    shader->update(UNI_MVP, view->transform(x, y, 1.0f, 1.0f));
 
     glBindVertexArray(vertexArray);
 
-    string::const_iterator c;
-
-    for (c = txt.begin(); c != txt.end(); c++) {
+    for (string::const_iterator c = txt.begin(); c != txt.end(); c++) {
         Glyph g = glyphs[*c];
 
-        GLfloat xp = x + g.bearing.x * qs;
-        GLfloat yp = y - (g.size.y - g.bearing.y) * qs;
+        GLfloat xp = x + g.bearing.x * s;
+        GLfloat yp = y - g.bearing.y * s;
 
         glBindTexture(GL_TEXTURE_2D, g.texture);
 
-        Quad::setPosition(glm::vec4(xp, yp, xp + g.size.x * qs, yp + g.size.y * qs));
+        Quad::setPosition(glm::vec4(xp, yp + (g.size.y * s), xp + (g.size.x * s) * 1.25f, yp));
         Quad::draw();
 
         if (*c == 10) {
             x = ox;
-            y -= g.height * qs;
+            y += g.height * s;
         } else {
-            x += g.advance * qs;
+            x += g.advance * s * 1.25f;
         }
     }
 

@@ -44,14 +44,11 @@ void Skybox::update()
         }
     }
 
-    if (state.stars_rotation) {
-        state.stars_rotation_pos -= state.global_timer * state.stars_rotation_speed;
-    }
+    state.stars_rotation_pos -= state.global_timer * state.stars_rotation_speed;
 }
 
 void Skybox::draw()
 {
-    unsigned short i;
     float a, c, s = max(float(state.vid_height) / float(state.vid_width), state.vid_aspect);
 
     glDepthMask(GL_FALSE);
@@ -74,7 +71,7 @@ void Skybox::draw()
 
     state.textures[T_STAR]->bind();
 
-    for (i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
+    for (int i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
         state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         state.shaders[S_TEXTURE]->update(UNI_MVP, view->getProjection() * view->getModel(
             stars[i][0], stars[i][1], stars[i][2],
@@ -88,7 +85,7 @@ void Skybox::draw()
     // warp stars
 
     if (state.stars_warp) {
-        for (i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
+        for (int i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
             a = (1000.0f + stars[i][2]) / 1250.0f;
             float sl = pow(a * 1.45f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
 
@@ -106,9 +103,9 @@ void Skybox::draw()
     framebuffer->unbind();
 
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(
-        state.global_alpha * .01f,
-        state.global_alpha * .01f,
-        state.global_alpha * .01f,
+        state.global_alpha,
+        state.global_alpha,
+        state.global_alpha,
         1.0f
     ));
 

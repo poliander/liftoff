@@ -39,7 +39,6 @@ bool Asteroid::damage(State &s, int p)
         }
 
         s.notify(MSG_MONEY, m);
-        s.player->addMoney(m);
     }
 
     return damaged;

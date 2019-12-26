@@ -31,6 +31,7 @@ class Font : public Quad
         void               draw(const string& txt, float x, float y, float s, float r, float g, float b, float a);
 
     private:
+        unique_ptr<View>   view;
         shared_ptr<Shader> shader;
         map<GLchar, Glyph> glyphs;
 
