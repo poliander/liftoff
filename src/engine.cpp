@@ -381,26 +381,14 @@ bool Engine::initDisplay()
         return false;
     }
 
-    glMatrixMode(GL_PROJECTION);
-
-    glLoadIdentity();
-    glFrustum(-400.0f * state.vid_aspect, 400.0f * state.vid_aspect, -300.0f, 300.0f, .1f, 10000.0f);
-
-    glLoadIdentity();
-    gluPerspective(65, state.vid_aspect, .1f, 10000.0f);
-    state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);
-
-    glMatrixMode(GL_MODELVIEW);
-
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    if (state.vid_multisampling > 0) glEnable(GL_MULTISAMPLE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_TRUE);
-    glShadeModel(GL_SMOOTH);
-    glLoadIdentity();
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    state.view = View::createPerspective(65, state.vid_aspect, 1.0f, 10000.0f);
 
     state.vid_width = state.config.vid_width;
     state.vid_height = state.config.vid_height;
