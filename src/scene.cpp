@@ -612,10 +612,10 @@ void Scene::update()
  */
 void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
 {
-    float p_x = .0f;
+    float p_x = 0;
     float p_y = -90.0f;
 
-    if (state.get() >  STATE_GAME_START &&
+    if (state.get() >= STATE_GAME_LOOP &&
         state.get() <= STATE_GAME_QUIT
     ) {
         p_x = player->getPosX();
@@ -632,7 +632,7 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
         p_y * -.01f + state.tilt_y * .333f + player->getVelocityY() * 5.0f,
         0,
 
-        0, 0, -10000.0f,
+        0, 0, -1.0f,
 
         player->getVelocityX() * .15f, -1.0f, 0
     );
@@ -647,6 +647,7 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
         state.get() <= STATE_GAME_QUIT
     ) {
         buffer->bind();
+        buffer->clear();
 
         auto e = state.entities.begin();
 
@@ -661,6 +662,8 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
         }
 
         buffer->blit();
+        buffer->unbind();
+        buffer->draw();
     }
 
     // overlay

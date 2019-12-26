@@ -10,7 +10,10 @@ class Renderbuffer
         ~Renderbuffer();
 
         void bind();
+        void unbind();
+        void clear();
         void blit();
+        void draw();
 
     protected:
         State&                  state;
