@@ -22,7 +22,7 @@ uniform vec3  u_DiffuseColor      = vec3(1.0f, 1.0f, 1.0f);
 uniform float u_DiffuseIntensity  = 1.5f;
 
 uniform vec3  u_SpecularColor     = vec3(1.0f, 1.0f, 1.0f);
-uniform float u_SpecularIntensity = 1.0f;
+uniform float u_SpecularIntensity = 0.9f;
 uniform int   u_SpecularShininess = 32;
 
 vec3 calcAmbient()
@@ -39,8 +39,8 @@ vec3 calcDiffuse(vec3 normal, vec3 lightDir)
 
 vec3 calcSpecular(vec3 normal, vec3 lightDir, vec3 viewDir)
 {
-    vec3 reflectionDir = reflect(-lightDir, normal);
-    float c = 1.0f + pow(max(dot(viewDir, reflectionDir), 0.0), u_SpecularShininess);
+    vec3 halfDir = normalize(lightDir + viewDir);
+    float c = 1.0f + pow(max(dot(halfDir, normal), 0.0), u_SpecularShininess);
 
     return c * u_SpecularColor * u_SpecularIntensity;
 }
