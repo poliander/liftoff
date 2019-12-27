@@ -12,16 +12,23 @@ out vec4 color;
 
 uniform sampler2D image;
 
-uniform vec3  u_LightPos          = vec3(1000.0f, -1000.0f, 0.0f);
+uniform vec3  u_LightPos          = vec3(0.0f, -10000.0f, -1000.0f);
 uniform vec3  u_CameraPos         = vec3(0.0f, 0.0f, 0.0f);
-uniform float u_Attenuation       = 0.333f;
+uniform float u_Attenuation       = 0.5f;
 
-uniform vec3  u_SpecularColor     = vec3(1.0f, 1.0f, 1.0f);
-uniform float u_SpecularIntensity = 2.0f;
-uniform int   u_SpecularShininess = 32;
+uniform float u_AmbientIntensity  = 0.75f;
 
 uniform vec3  u_DiffuseColor      = vec3(1.0f, 1.0f, 1.0f);
-uniform float u_DiffuseIntensity  = 2.0f;
+uniform float u_DiffuseIntensity  = 1.5f;
+
+uniform vec3  u_SpecularColor     = vec3(1.0f, 1.0f, 1.0f);
+uniform float u_SpecularIntensity = 0.75f;
+uniform int   u_SpecularShininess = 32;
+
+vec3 calcAmbient()
+{
+    return fragment.color.xyz * u_AmbientIntensity;
+}
 
 vec3 calcDiffuse(vec3 normal, vec3 lightDir)
 {
@@ -33,7 +40,7 @@ vec3 calcDiffuse(vec3 normal, vec3 lightDir)
 vec3 calcSpecular(vec3 normal, vec3 lightDir, vec3 viewDir)
 {
     vec3 reflectionDir = reflect(-lightDir, normal);
-    float c = pow(max(dot(viewDir, reflectionDir), 0.0), u_SpecularShininess);
+    float c = 1.0f + pow(max(dot(viewDir, reflectionDir), 0.0), u_SpecularShininess);
 
     return c * u_SpecularColor * u_SpecularIntensity;
 }
@@ -46,9 +53,9 @@ void main()
     vec3 lightDir = normalize(u_LightPos - position);
     vec3 viewDir = normalize(u_CameraPos - position);
 
-    vec4 ambient  = fragment.color;
+    vec3 ambient  = calcAmbient();
     vec3 diffuse  = calcDiffuse(normal, lightDir);
     vec3 specular = calcSpecular(normal, lightDir, viewDir);
 
-    color = vec4(texture(image, fragment.uv).xyz * u_Attenuation * (ambient.xyz + diffuse + specular), ambient.w);
+    color = vec4(texture(image, fragment.uv).xyz * u_Attenuation * (ambient + diffuse) * specular, fragment.color.w);
 }
