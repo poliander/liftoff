@@ -114,20 +114,20 @@ void Scene::load()
 
     state.log("Loading shader 'font'\n");
     state.shaders.insert(make_pair(S_FONT, new Shader(
-        string(state.dir_resources).append("/shaders/font.glvs"),
-        string(state.dir_resources).append("/shaders/font.glfs")
+        string(state.dir_resources).append("/shaders/font.vert.glsl"),
+        string(state.dir_resources).append("/shaders/font.frag.glsl")
     )));
 
     state.log("Loading shader 'texture'\n");
     state.shaders.insert(make_pair(S_TEXTURE, new Shader(
-        string(state.dir_resources).append("/shaders/texture.glvs"),
-        string(state.dir_resources).append("/shaders/texture.glfs")
+        string(state.dir_resources).append("/shaders/texture.vert.glsl"),
+        string(state.dir_resources).append("/shaders/texture.frag.glsl")
     )));
 
     state.log("Loading shader 'object'\n");
     state.shaders.insert(make_pair(S_OBJECT, new Shader(
-        string(state.dir_resources).append("/shaders/object.glvs"),
-        string(state.dir_resources).append("/shaders/object.glfs")
+        string(state.dir_resources).append("/shaders/object.vert.glsl"),
+        string(state.dir_resources).append("/shaders/object.frag.glsl")
     )));
 
     // fonts

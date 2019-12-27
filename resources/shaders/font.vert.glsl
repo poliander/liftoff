@@ -2,12 +2,14 @@
 
 layout (location = 0) in vec4 vertex;
 
-out vec2 uv0;
-
 uniform mat4 mvp;
+
+out Data {
+    vec2 uv;
+} output;
 
 void main()
 {
     gl_Position = mvp * vec4(vertex.xy, 0.0, 1.0);
-    uv0 = vertex.zw;
+    output.uv = vertex.zw;
 }

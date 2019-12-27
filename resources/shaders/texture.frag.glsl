@@ -1,6 +1,8 @@
 #version 330 core
 
-in vec2 uv0;
+in Data {
+    vec2 uv;
+} input;
 
 out vec4 color0;
 
@@ -9,6 +11,6 @@ uniform vec4 color;
 
 void main()
 {
-    color0 = texture(image, uv0) * color;
+    color0 = texture(image, input.uv) * color;
 }
 
