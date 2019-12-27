@@ -12,17 +12,17 @@ out vec4 color;
 
 uniform sampler2D image;
 
-uniform vec3  u_LightPos          = vec3(0.0f, -10000.0f, -1000.0f);
+uniform vec3  u_LightPos          = vec3(5000.0f, -10000.0f, 0.0f);
 uniform vec3  u_CameraPos         = vec3(0.0f, 0.0f, 0.0f);
-uniform float u_Attenuation       = 0.5f;
+uniform float u_Attenuation       = 0.4f;
 
-uniform float u_AmbientIntensity  = 0.75f;
+uniform float u_AmbientIntensity  = 0.8f;
 
 uniform vec3  u_DiffuseColor      = vec3(1.0f, 1.0f, 1.0f);
 uniform float u_DiffuseIntensity  = 1.5f;
 
 uniform vec3  u_SpecularColor     = vec3(1.0f, 1.0f, 1.0f);
-uniform float u_SpecularIntensity = 0.75f;
+uniform float u_SpecularIntensity = 1.0f;
 uniform int   u_SpecularShininess = 32;
 
 vec3 calcAmbient()
@@ -32,9 +32,9 @@ vec3 calcAmbient()
 
 vec3 calcDiffuse(vec3 normal, vec3 lightDir)
 {
-    float c = max(0.0, dot(normal, lightDir));
+    float c = max(dot(normal, lightDir), 0.0);
 
-    return max(0.0, dot(normal, lightDir)) * u_DiffuseColor * u_DiffuseIntensity;
+    return c * u_DiffuseColor * u_DiffuseIntensity;
 }
 
 vec3 calcSpecular(vec3 normal, vec3 lightDir, vec3 viewDir)
