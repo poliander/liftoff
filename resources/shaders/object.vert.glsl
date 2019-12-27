@@ -13,15 +13,17 @@ out Data {
     vec2 uv;
     vec4 color;
     vec3 normal;
-    vec3 fpos;
-} output;
+    vec3 position;
+    mat4 model;
+} fragment;
 
 void main()
 {
     gl_Position = projection * view * model * vec4(position, 1.0);
 
-    output.uv = uv;
-    output.color = color;
-    output.normal = mat3(transpose(inverse(model))) * normal;
-    output.fpos = vec3(model * vec4(position, 1.0));
+    fragment.uv = uv;
+    fragment.color = color;
+    fragment.normal = normal;
+    fragment.position = position;
+    fragment.model = model;
 }
