@@ -22,10 +22,10 @@ void Overlay::update()
 
     switch (state.get()) {
         case STATE_MENU:
+            status_visible      = false;
             menu_visible        = true;
             menu_cursor_visible = true;
             menu_alpha          = 1.0f;
-            status_visible      = false;
             screen_y            = 50.0f;
             ship_y              = -1.5f;
             logo1_x             = 0;
@@ -35,15 +35,15 @@ void Overlay::update()
             break;
 
         case STATE_GAME_START:
+            status_visible      = true;
             menu_visible        = true;
             menu_cursor_visible = false;
-            menu_alpha          = 1.0f - pow(state.global_transition1, 3);
-            status_visible      = true;
+            menu_alpha          = pow(state.global_transition1, 3) * -1.0f + 1.0f;
             status_alpha        = pow(state.global_transition1, 3);
             screen_y            = pow(state.global_transition1, 3) * 290.0f + 50.0f;
-            ship_y              = -1.5f - pow(state.global_transition1, 3) * 16.0f;
-            logo1_x             = pow(state.global_transition1, 3) * 500.0f * -1.0f;
-            logo2_x             = pow(state.global_transition1, 3) * 500.0f;
+            ship_y              = pow(state.global_transition1, 3) * -15.0f - 1.5f;
+            logo1_x             = pow(state.global_transition1, 2) * 500.0f * -1.0f;
+            logo2_x             = pow(state.global_transition1, 2) * 500.0f;
             break;
 
         case STATE_GAME_LOOP:
@@ -55,6 +55,11 @@ void Overlay::update()
 
         case STATE_GAME_QUIT:
             screen_y            = state.global_transition2 * 100.0f + 350.0f;
+            break;
+
+        case STATE_QUIT:
+            logo1_x             = pow(state.global_transition1, 2) * 500.0f * -1.0f;
+            logo2_x             = pow(state.global_transition1, 2) * 500.0f;
             break;
     }
 }
