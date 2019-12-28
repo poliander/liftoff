@@ -5,8 +5,8 @@
 class Debris : public Entity
 {
     public:
-        Debris();
+        Debris(State &s);
         ~Debris();
 
-        void update(State &s);
+        void update();
 };

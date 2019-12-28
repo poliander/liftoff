@@ -1,6 +1,6 @@
 #include "explosion.hpp"
 
-Explosion::Explosion(short int type, float x, float y, float z) : Entity()
+Explosion::Explosion(State &s, short int type, float x, float y, float z) : Entity(s)
 {
     e_obj = type;
     e_type = E_TYPE_DECORATION;
@@ -9,7 +9,7 @@ Explosion::Explosion(short int type, float x, float y, float z) : Entity()
     setPos(x, y, z);
     setRot(float(rand() % 360), float(rand() % 360), float(rand() % 360));
 
-    particles = make_unique<ParticleEngine>();
+    particles = make_unique<ParticleEngine>(s);
 
     switch (type) {
         // green laser gun impact
@@ -51,7 +51,7 @@ Explosion::Explosion(short int type, float x, float y, float z) : Entity()
     }
 }
 
-Explosion::Explosion(short int type, float x, float y, float z, float r, float g, float b) : Explosion(type, x, y, z)
+Explosion::Explosion(State &s, short int type, float x, float y, float z, float r, float g, float b) : Explosion(s, type, x, y, z)
 {
     particles->setColor(r, g, b);
 }
@@ -60,22 +60,22 @@ Explosion::~Explosion()
 {
 }
 
-void Explosion::update(State &s)
+void Explosion::update()
 {
-    Entity::update(s);
+    Entity::update();
 
-    particles->update(s);
+    particles->update();
 
     if (getPosZ() > 0 || particles->done()) {
         e_state = E_STATE_GONE;
     }
 }
 
-void Explosion::draw(State &s)
+void Explosion::draw()
 {
-    particles->draw(s,
-        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+    particles->draw(
+        (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
 
         getRotX(),

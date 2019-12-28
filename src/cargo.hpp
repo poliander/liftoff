@@ -7,12 +7,12 @@
 class Cargo : public Entity
 {
     public:
-        Cargo();
+        Cargo(State &s);
         ~Cargo();
 
-        bool  damage(State &s, int p);
-        void  update(State &s);
-        void  draw(State &s);
+        bool  damage(int p);
+        void  update();
+        void  draw();
 
     private:
         float counter = 0;

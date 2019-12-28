@@ -462,7 +462,7 @@ bool Engine::handleKeyboard()
 
                 // Keyboard CTRL
                 if (keys[SDL_SCANCODE_LCTRL] || keys[SDL_SCANCODE_RCTRL]) {
-                    state.player->shoot(state);
+                    state.player->shoot();
                 }
             }
             break;
@@ -557,7 +557,7 @@ void Engine::handleJoystick()
     }
 
     if (SDL_JoystickGetButton(state.joystick, 0) != 0) {
-        state.player->shoot(state);
+        state.player->shoot();
     }
 }
 

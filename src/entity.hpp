@@ -13,7 +13,7 @@ using namespace std;
 class Entity
 {
     public:
-        Entity();
+        Entity(State &s);
         virtual ~Entity();
 
         void               setType(unsigned short t);
@@ -27,7 +27,7 @@ class Entity
         bool               isGone();
         bool               isAlive();
         bool               isPlayer();
-        bool               isColliding(State &s, shared_ptr<Entity> e);
+        bool               isColliding(shared_ptr<Entity> e);
 
         void               setPos(float x, float y, float z);
         void               setPosX(float x);
@@ -85,19 +85,19 @@ class Entity
         void               setMoney(unsigned short m);
         unsigned short     getMoney();
 
-        void               init(State &s);
+        void               init();
         void               activate();
-        virtual bool       damage(State &s, int p);
+        virtual bool       damage(int p);
         virtual void       collect(unsigned short e_obj);
-        virtual void       collide(State &s, shared_ptr<Entity> e);
-        virtual void       shoot(State &s);
+        virtual void       collide(shared_ptr<Entity> e);
+        virtual void       shoot();
 
-        virtual void       update(State &s);
-        virtual void       draw(State &s);
-        void               drawCrosshair(State &s, shared_ptr<Entity> e);
+        virtual void       update();
+        virtual void       draw();
+        void               drawCrosshair(shared_ptr<Entity> e);
 
         void               resetTarget();
-        void               checkTarget(State &s, shared_ptr<Entity> e);
+        void               checkTarget(shared_ptr<Entity> e);
         bool               hasTarget(shared_ptr<Entity> e);
 
         static bool        sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2);
@@ -106,6 +106,8 @@ class Entity
         unsigned short     e_obj;
         unsigned short     e_type;
         unsigned short     e_state;
+
+        State              &state;
  
         float              p_x;                  // position
         float              p_y;
@@ -159,7 +161,7 @@ class Entity
         int                life_reg;
         int                life_reg_energy;
 
-        float              calcDistance2D(State &s, shared_ptr<Entity> e);
-        float              calcDistance3D(State &s, shared_ptr<Entity> e);
-        float              calcDistanceScale(State &s);
+        float              calcDistance2D(shared_ptr<Entity> e);
+        float              calcDistance3D(shared_ptr<Entity> e);
+        float              calcDistanceScale();
 };

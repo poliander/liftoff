@@ -1,6 +1,6 @@
 #include "debris.hpp"
 
-Debris::Debris() : Entity()
+Debris::Debris(State &s) : Entity(s)
 {
     e_obj = OBJ_DEBRIS_1;
     e_type = E_TYPE_DECORATION;
@@ -27,9 +27,9 @@ Debris::~Debris()
 {
 }
 
-void Debris::update(State &s)
+void Debris::update()
 {
-    Entity::update(s);
+    Entity::update();
 
     if (p_z > 0) {
         e_state = E_STATE_GONE;

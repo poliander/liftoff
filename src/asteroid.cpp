@@ -1,6 +1,6 @@
 #include "asteroid.hpp"
 
-Asteroid::Asteroid() : Entity()
+Asteroid::Asteroid(State &s) : Entity(s)
 {
     e_obj = OBJ_ASTEROID_1;
     e_type = E_TYPE_COLLIDER;
@@ -11,21 +11,21 @@ Asteroid::~Asteroid()
 {
 }
 
-bool Asteroid::damage(State &s, int p)
+bool Asteroid::damage(int p)
 {
-    bool damaged = Entity::damage(s, p);
+    bool damaged = Entity::damage(p);
 
     if (damaged && !isAlive()) {
         unsigned short m = int(getScale() * .5f);
 
-        s.audio.playSample(SFX_EXPLOSION_2, 192, 180);
+        state.audio.playSample(SFX_EXPLOSION_2, 192, 180);
 
-        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_2, p_x, p_y, p_z));
-        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z + 5.0f));
-        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_4, p_x, p_y, p_z + 10.0f));
+        state.spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_2, p_x, p_y, p_z));
+        state.spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_3, p_x, p_y, p_z + 5.0f));
+        state.spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_4, p_x, p_y, p_z + 10.0f));
 
         for (int i = 0; i < 4 + rand() % 4; i++) {
-            auto debris = make_shared<Debris>();
+            auto debris = make_shared<Debris>(state);
 
             debris->activate();
             debris->setPos(p_x, p_y, p_z);
@@ -35,18 +35,18 @@ bool Asteroid::damage(State &s, int p)
                 .1f * float(rand() % 80) - 4.0f
             );
 
-            s.spawn(debris);
+            state.spawn(debris);
         }
 
-        s.notify(MSG_MONEY, m);
+        state.notify(MSG_MONEY, m);
     }
 
     return damaged;
 }
 
-void Asteroid::update(State &s)
+void Asteroid::update()
 {
-    Entity::update(s);
+    Entity::update();
 
     if (p_z > 0) {
         e_state = E_STATE_GONE;

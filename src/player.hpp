@@ -10,14 +10,14 @@
 class Player : public Entity
 {
     public:
-        Player();
+        Player(State &s);
         ~Player();
 
         void            init();
-        void            update(State &s);
-        void            draw(State &s);
-        void            shoot(State &s);
-        void            collide(State &s, shared_ptr<Entity> e);
+        void            update();
+        void            draw();
+        void            shoot();
+        void            collide(shared_ptr<Entity> e);
         void            collect(unsigned short e_obj);
 
     private:

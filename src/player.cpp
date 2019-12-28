@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-Player::Player() : Entity()
+Player::Player(State &s) : Entity(s)
 {
     e_obj = OBJ_PLAYER;
     e_type = E_TYPE_COLLIDER;
@@ -65,11 +65,11 @@ void Player::collect(unsigned short e_obj)
     }
 }
 
-void Player::collide(State &s, shared_ptr<Entity> e)
+void Player::collide(shared_ptr<Entity> e)
 {
 }
 
-void Player::shoot(State &s)
+void Player::shoot()
 {
     float ax, ay, dx, dy, dz, hx, hy;
     Sint16 angle;
@@ -97,7 +97,7 @@ void Player::shoot(State &s)
     gun_flash[m_alt] = 1.0f;
     gun_flash_rot[m_alt] = float(rand() % 360);
 
-    auto missile = make_shared<Missile>(gun_power);
+    auto missile = make_shared<Missile>(state, gun_power);
 
     missile->setPos(
         p_x - 10.0f + (m_alt * 20.0f),
@@ -117,18 +117,18 @@ void Player::shoot(State &s)
         missile->setVelocityY(-ay * E_BASE_SPEED * 5.0f);
     }
 
-    s.spawn(missile);
+    state.spawn(missile);
 
-    angle = int(.5f * (p_x - s.cam_x));
+    angle = int(.5f * (p_x - state.cam_x));
 
     if (angle < 0) {
         angle += 360;
     }
 
-    s.audio.playSample(2, 255, angle);
+    state.audio.playSample(2, 255, angle);
 }
 
-void Player::update(State &s)
+void Player::update()
 {
     // check boundary
     if (p_x < -600.0f) {
@@ -183,85 +183,85 @@ void Player::update(State &s)
 
     // accelerate horizontally
     if ((a_x - v_x) > .0005f) {
-        v_x += (a_x - v_x) * s.global_timer * acceleration * deceleration;
+        v_x += (a_x - v_x) * state.global_timer * acceleration * deceleration;
     } else if ((v_x - a_x) > .0005f) {
-        v_x -= (v_x - a_x) * s.global_timer * acceleration * deceleration;
+        v_x -= (v_x - a_x) * state.global_timer * acceleration * deceleration;
     }
 
     // move horizontally
-    p_x -= v_x * s.global_timer * 10.0f;
+    p_x -= v_x * state.global_timer * 10.0f;
 
     // accelerate vertically
     if ((a_y - v_y) > .0005f) {
-        v_y += (a_y - v_y) * s.global_timer * acceleration * deceleration;
+        v_y += (a_y - v_y) * state.global_timer * acceleration * deceleration;
     } else if ((v_y - a_y) > .0005f) {
-        v_y -= (v_y - a_y) * s.global_timer * acceleration * deceleration;
+        v_y -= (v_y - a_y) * state.global_timer * acceleration * deceleration;
     }
 
     // move vertically
-    p_y -= v_y * s.global_timer * 10.0f;
+    p_y -= v_y * state.global_timer * 10.0f;
 
     a_x = 0;
     a_y = 0;
 
     // accelerate and move forward/backward
     if (v_z < a_z) {
-        v_z += .04f * ((a_z - v_z) + .01f) * s.global_timer;
+        v_z += .04f * ((a_z - v_z) + .01f) * state.global_timer;
     } else if (v_z > a_z) {
-        v_z -= .04f * ((v_z - a_z) + .01f) * s.global_timer;
+        v_z -= .04f * ((v_z - a_z) + .01f) * state.global_timer;
     }
 
-    p_z -= v_z * s.global_timer;
+    p_z -= v_z * state.global_timer;
 
     // rotate
-    r_x += s.global_timer * w_x * .1f;
+    r_x += state.global_timer * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
     if (r_x > 360.0f) r_x -= 360.0f;
 
-    r_y += s.global_timer * w_y * .1f;
+    r_y += state.global_timer * w_y * .1f;
     if (r_y < 0) r_y += 360.0f;
     if (r_y > 360.0f) r_y -= 360.0f;
 
-    r_z += s.global_timer * w_z * .1f;
+    r_z += state.global_timer * w_z * .1f;
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 
     // camera tilt
-    if (s.tilt_factor > .05f) {
+    if (state.tilt_factor > .05f) {
         static GLuint next_tilt_impulse = SDL_GetTicks();
 
         if (next_tilt_impulse < SDL_GetTicks()) {
             next_tilt_impulse = SDL_GetTicks() + 100 + rand() % 50;
 
-            s.tilt_dx = -s.tilt_factor + float(rand() % int(s.tilt_factor * 200.0f)) * .0075f;
-            s.tilt_dy = -s.tilt_factor + float(rand() % int(s.tilt_factor * 200.0f)) * .0075f;
+            state.tilt_dx = -state.tilt_factor + float(rand() % int(state.tilt_factor * 200.0f)) * .0075f;
+            state.tilt_dy = -state.tilt_factor + float(rand() % int(state.tilt_factor * 200.0f)) * .0075f;
         }
 
-        s.tilt_factor -= s.global_timer * .35f;
+        state.tilt_factor -= state.global_timer * .35f;
 
-        s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.global_timer * .15f;
-        s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.global_timer * .15f;
+        state.tilt_x += (.025f + (state.tilt_dx - state.tilt_x)) * state.global_timer * .15f;
+        state.tilt_y += (.025f + (state.tilt_dy - state.tilt_y)) * state.global_timer * .15f;
     } else {
-        s.tilt_factor = 0;
-        s.tilt_dx = 0;
-        s.tilt_dy =0;
+        state.tilt_factor = 0;
+        state.tilt_dx = 0;
+        state.tilt_dy =0;
 
-        if (fabs(s.tilt_x) > .05f) {
-            s.tilt_x += (.025f + (s.tilt_dx - s.tilt_x)) * s.global_timer * .15f;
+        if (fabs(state.tilt_x) > .05f) {
+            state.tilt_x += (.025f + (state.tilt_dx - state.tilt_x)) * state.global_timer * .15f;
         } else {
-            s.tilt_x = 0;
+            state.tilt_x = 0;
         }
 
-        if (fabs(s.tilt_y) > .05f) {
-            s.tilt_y += (.025f + (s.tilt_dy - s.tilt_y)) * s.global_timer * .15f;
+        if (fabs(state.tilt_y) > .05f) {
+            state.tilt_y += (.025f + (state.tilt_dy - state.tilt_y)) * state.global_timer * .15f;
         } else {
-            s.tilt_y = 0;
+            state.tilt_y = 0;
         }
     }
 
     // gun flash animation
-    if (gun_flash[0] > 0) gun_flash[0] -= s.global_timer * .15f;
-    if (gun_flash[1] > 0) gun_flash[1] -= s.global_timer * .15f;
+    if (gun_flash[0] > 0) gun_flash[0] -= state.global_timer * .15f;
+    if (gun_flash[1] > 0) gun_flash[1] -= state.global_timer * .15f;
 
     // one tick every 0.25s
     if (SDL_GetTicks() - powerup_timer > E_TICK_TIMING) {
@@ -289,15 +289,15 @@ void Player::update(State &s)
     }
 }
 
-void Player::draw(State &s)
+void Player::draw()
 {
-    float a = s.global_alpha;
+    float a = state.global_alpha;
 
-    glm::mat4 projection = s.view->getProjection();
-    glm::mat4 camera = s.view->getCamera();
-    glm::mat4 model = s.view->getModel(
-        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+    glm::mat4 projection = state.view->getProjection();
+    glm::mat4 camera = state.view->getCamera();
+    glm::mat4 model = state.view->getModel(
+        (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
 
         getRotX() + v_y * -20.0f,
@@ -319,16 +319,16 @@ void Player::draw(State &s)
         m = glm::rotate(m, glm::radians(gun_flash_rot[0]), glm::vec3(0, 0, 1.0f));
         m = glm::scale(m, glm::vec3(2.5f, 2.5f, 0));
 
-        s.shaders[S_TEXTURE]->bind();
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[0] * a));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+        state.shaders[S_TEXTURE]->bind();
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[0] * a));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
 
         glDepthMask(GL_FALSE);
-        s.textures[T_GLOW]->bind();
-        s.textures[T_GLOW]->draw();
+        state.textures[T_GLOW]->bind();
+        state.textures[T_GLOW]->draw();
         glDepthMask(GL_TRUE);
 
-       s.shaders[S_TEXTURE]->unbind();
+        state.shaders[S_TEXTURE]->unbind();
     }
 
     if (gun_flash[1] > 0) {
@@ -339,17 +339,17 @@ void Player::draw(State &s)
         m = glm::rotate(m, glm::radians(gun_flash_rot[1]), glm::vec3(0, 0, 1.0f));
         m = glm::scale(m, glm::vec3(2.5f, 2.5f, 0));
 
-        s.shaders[S_TEXTURE]->bind();
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[1] * a));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+        state.shaders[S_TEXTURE]->bind();
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f * a, 1.0f * a, .7f * a, gun_flash[1] * a));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
 
         glDepthMask(GL_FALSE);
-        s.textures[T_GLOW]->bind();
-        s.textures[T_GLOW]->draw();
+        state.textures[T_GLOW]->bind();
+        state.textures[T_GLOW]->draw();
         glDepthMask(GL_TRUE);
 
-       s.shaders[S_TEXTURE]->unbind();
+        state.shaders[S_TEXTURE]->unbind();
     }
 
-    s.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, 1.0f));
+    state.models[e_obj]->draw(model, camera, projection, glm::vec4(c_r * a, c_g * a, c_b * a, 1.0f));
 }

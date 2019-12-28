@@ -2,7 +2,7 @@
 
 Scene::Scene(State &s) : state(s)
 {
-    player = make_shared<Player>();
+    player = make_shared<Player>(state);
     skybox = make_unique<Skybox>(state);
     overlay = make_unique<Overlay>(state);
 
@@ -298,7 +298,7 @@ bool Scene::loadLevel()
                     switch (e_obj) {
                         case OBJ_ASTEROID_1:
                             {
-                                auto asteroid = make_shared<Asteroid>();
+                                auto asteroid = make_shared<Asteroid>(state);
 
                                 asteroid->setPos(p_x, p_y, p_z);
                                 asteroid->setRot(r_x, r_y, r_z);
@@ -312,7 +312,7 @@ bool Scene::loadLevel()
 
                         case OBJ_CARGO_1:
                             {
-                                auto cargo = make_shared<Cargo>();
+                                auto cargo = make_shared<Cargo>(state);
 
                                 cargo->setPos(p_x, p_y, p_z);
                                 cargo->setRot(r_x, r_y, r_z);
@@ -349,7 +349,7 @@ bool Scene::loadLevel()
                     switch (e_obj) {
                         case OBJ_ASTEROID_1:
                             {
-                                auto asteroid = make_shared<Asteroid>();
+                                auto asteroid = make_shared<Asteroid>(state);
 
                                 asteroid->setType(E_TYPE_SCENERY);
                                 asteroid->setPos(p_x, p_y, p_z);
@@ -383,7 +383,7 @@ void Scene::updateScene()
         state.lvl_pos < float(state.lvl_length - 1000)
     ) {
         nextdebris = SDL_GetTicks() + 200 + rand() % 200;
-        state.spawn(make_shared<Debris>());
+        state.spawn(make_shared<Debris>(state));
     }
 
     player->resetTarget();
@@ -416,7 +416,7 @@ void Scene::updateScene()
     auto e = state.entities.begin();
 
     while (e != state.entities.end()) {
-        (*e)->update(state);
+        (*e)->update();
 
         if ((*e)->isGone()) {
             e = state.entities.erase(e);
@@ -424,7 +424,7 @@ void Scene::updateScene()
         }
 
         if ((*e)->isFocusable()) {
-            player->checkTarget(state, *e);
+            player->checkTarget(*e);
         }
 
         if ((*e)->isCollider()) {
@@ -434,10 +434,10 @@ void Scene::updateScene()
 
                 if (
                     (*f)->isCollider() &&
-                    (*f)->isColliding(state, *e)
+                    (*f)->isColliding(*e)
                 ) {
-                    (*e)->collide(state, *f);
-                    (*f)->collide(state, *e);
+                    (*e)->collide(*f);
+                    (*f)->collide(*e);
                 }
 
                 ++f;
@@ -548,7 +548,7 @@ void Scene::update()
             state.global_alpha = 1.0f - state.global_counter;
 
             if (state.global_counter < 1.0f) {
-                player->update(state);
+                player->update();
             } else {
                 state.set(STATE_CLOSE);
             }
@@ -601,10 +601,10 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
         auto e = state.entities.begin();
 
         while (e != state.entities.end()) {
-            (*e)->draw(state);
+            (*e)->draw();
 
             if ((*e)->isFocusable()) {
-                (*e)->drawCrosshair(state, *e);
+                (*e)->drawCrosshair(*e);
             }
 
             ++e;

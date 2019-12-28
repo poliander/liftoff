@@ -6,12 +6,12 @@
 class Explosion : public Entity
 {
     public:
-        Explosion(short int type, float x, float y, float z);
-        Explosion(short int type, float x, float y, float z, float r, float g, float b);
+        Explosion(State &s, short int type, float x, float y, float z);
+        Explosion(State &s, short int type, float x, float y, float z, float r, float g, float b);
         ~Explosion();
 
-        void                       update(State &s);
-        void                       draw(State &s);
+        void                       update();
+        void                       draw();
 
     private:
         unique_ptr<ParticleEngine> particles;

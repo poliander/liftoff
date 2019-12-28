@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-Entity::Entity()
+Entity::Entity(State &s) : state(s)
 {
     money = 0;
     life = 0;
@@ -308,7 +308,7 @@ int Entity::getLifeRegenerationEnergy()
     return life_reg_energy;
 }
 
-float Entity::calcDistanceScale(State &s)
+float Entity::calcDistanceScale()
 {
     float f = .0001f;
 
@@ -316,48 +316,48 @@ float Entity::calcDistanceScale(State &s)
         f *= .25f;
     }
 
-    return f * (10000.0f - fabs(glm::distance(s.view->getCameraPos(), getPos())));
+    return f * (10000.0f - fabs(glm::distance(state.view->getCameraPos(), getPos())));
 }
 
-float Entity::calcDistance2D(State &s, shared_ptr<Entity> e)
+float Entity::calcDistance2D(shared_ptr<Entity> e)
 {
     float x1, y1, x2, y2;
 
-    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.global_timer * v_x) - s.cam_x);
-    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.global_timer * v_y) - s.cam_y);
+    x1 = E_RELATIVE_MOVEMENT * ((p_x + state.global_timer * v_x) - state.cam_x);
+    y1 = E_RELATIVE_MOVEMENT * ((p_y + state.global_timer * v_y) - state.cam_y);
 
-    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.global_timer * e->getVelocityX()) - s.cam_x);
-    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.global_timer * e->getVelocityY()) - s.cam_y);
+    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + state.global_timer * e->getVelocityX()) - state.cam_x);
+    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + state.global_timer * e->getVelocityY()) - state.cam_y);
 
     return (1.0f / isqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
 }
 
-float Entity::calcDistance3D(State &s, shared_ptr<Entity> e)
+float Entity::calcDistance3D(shared_ptr<Entity> e)
 {
     float ds, x1, y1, z1, x2, y2, z2;
 
-    x1 = E_RELATIVE_MOVEMENT * ((p_x + s.global_timer * v_x) - s.cam_x);
-    y1 = E_RELATIVE_MOVEMENT * ((p_y + s.global_timer * v_y) - s.cam_y);
-    z1 = p_z + s.global_timer * (v_z + E_BASE_SPEED);
+    x1 = E_RELATIVE_MOVEMENT * ((p_x + state.global_timer * v_x) - state.cam_x);
+    y1 = E_RELATIVE_MOVEMENT * ((p_y + state.global_timer * v_y) - state.cam_y);
+    z1 = p_z + state.global_timer * (v_z + E_BASE_SPEED);
 
-    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + s.global_timer * e->getVelocityX()) - s.cam_x);
-    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + s.global_timer * e->getVelocityY()) - s.cam_y);
-    z2 = e->getPosZ() + s.global_timer * e->getVelocityZ();
+    x2 = E_RELATIVE_MOVEMENT * ((e->getPosX() + state.global_timer * e->getVelocityX()) - state.cam_x);
+    y2 = E_RELATIVE_MOVEMENT * ((e->getPosY() + state.global_timer * e->getVelocityY()) - state.cam_y);
+    z2 = e->getPosZ() + state.global_timer * e->getVelocityZ();
 
     return (1.0f / isqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2)));
 }
 
-bool Entity::isColliding(State &s, shared_ptr<Entity> e)
+bool Entity::isColliding(shared_ptr<Entity> e)
 {
     float r1, r2;
 
     r1 = getScale()    * (10000.0f + p_z)          * .0002f;
     r2 = e->getScale() * (10000.0f + e->getPosZ()) * .0002f;
 
-    return (calcDistance3D(s, e) < (r1 + r2));
+    return (calcDistance3D(e) < (r1 + r2));
 }
 
-void Entity::collide(State &s, shared_ptr<Entity> e)
+void Entity::collide(shared_ptr<Entity> e)
 {
 }
 
@@ -365,11 +365,11 @@ void Entity::collect(unsigned short e_obj)
 {
 }
 
-void Entity::shoot(State &s)
+void Entity::shoot()
 {
 }
 
-bool Entity::damage(State &s, int p)
+bool Entity::damage(int p)
 {
     if (isAlive()) {
         life -= p;
@@ -384,7 +384,7 @@ bool Entity::damage(State &s, int p)
     return false;
 }
 
-void Entity::update(State &s)
+void Entity::update()
 {
     float f = 1.0f;
 
@@ -392,19 +392,19 @@ void Entity::update(State &s)
         f *= .5f;
     }
 
-    p_x += f * s.global_timer * v_x;
-    p_y += f * s.global_timer * v_y;
-    p_z += f * s.global_timer * (v_z + E_BASE_SPEED);
+    p_x += f * state.global_timer * v_x;
+    p_y += f * state.global_timer * v_y;
+    p_z += f * state.global_timer * (v_z + E_BASE_SPEED);
 
-    r_x += s.global_timer * w_x * .1f;
+    r_x += state.global_timer * w_x * .1f;
     if (r_x < 0) r_x += 360.0f;
     if (r_x > 360.0f) r_x -= 360.0f;
 
-    r_y += s.global_timer * w_y * .1f;
+    r_y += state.global_timer * w_y * .1f;
     if (r_y < 0) r_y += 360.0f;
     if (r_y > 360.0f) r_y -= 360.0f;
 
-    r_z += s.global_timer * w_z * .1f;
+    r_z += state.global_timer * w_z * .1f;
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 }
@@ -414,7 +414,7 @@ void Entity::resetTarget()
     target = nullptr;
 }
 
-void Entity::checkTarget(State &s, shared_ptr<Entity> e)
+void Entity::checkTarget(shared_ptr<Entity> e)
 {
     float ax, ay, hx, hy, dx, dy, dz;
 
@@ -430,7 +430,7 @@ void Entity::checkTarget(State &s, shared_ptr<Entity> e)
 
     if (ax < .75f && ay < .75f) {
         if (target) {
-            if (calcDistance3D(s, e) < calcDistance3D(s, target)) {
+            if (calcDistance3D(e) < calcDistance3D(target)) {
                 target = e;
             }
         } else {
@@ -444,9 +444,9 @@ bool Entity::hasTarget(shared_ptr<Entity> e)
     return e == target;
 }
 
-void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
+void Entity::drawCrosshair(shared_ptr<Entity> me)
 {
-    float a = s.global_alpha;
+    float a = state.global_alpha;
     float scale = 1.25f * (150.0f + ((p_z + 12500.0f) * .00005f));
     float rot, da;
 
@@ -455,7 +455,7 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
         da = .85f;
     } else {
         if (da > .01f) {
-            da -= s.global_timer * .01f;
+            da -= state.global_timer * .01f;
         } else {
             da = .0f;
         }
@@ -468,19 +468,19 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     glDisable(GL_DEPTH_TEST);
 
-    s.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->bind();
 
-    if (s.player->hasTarget(me)) {
+    if (state.player->hasTarget(me)) {
         // target locked, auto-aiming active
 
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
-            (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-            (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(t_r, t_g, t_b, a * da));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, state.view->transform(
+            (p_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+            (p_y - state.cam_y) * E_RELATIVE_MOVEMENT,
             p_z - .1f,
 
-            s.tilt_y * -.035f,
-            s.tilt_x * -.035f,
+            state.tilt_y * -.035f,
+            state.tilt_x * -.035f,
             0,
 
             scale,
@@ -488,28 +488,28 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             0
         ));
 
-        s.textures[T_HUD_1]->bind();
-        s.textures[T_HUD_1]->draw();
+        state.textures[T_HUD_1]->bind();
+        state.textures[T_HUD_1]->draw();
     } else {
         // aiming help
 
         rot = (-180.0f / M_PI) * atan(
-            (s.player->getPosY() - getPosY()) /
-            (s.player->getPosX() - getPosX())
+            (state.player->getPosY() - getPosY()) /
+            (state.player->getPosX() - getPosX())
         );
 
-        if (s.player->getPosX() > getPosX()) {
+        if (state.player->getPosX() > getPosX()) {
             rot += 180.0f;
         }
 
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * da));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
-            (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-            (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * da));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, state.view->transform(
+            (p_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+            (p_y - state.cam_y) * E_RELATIVE_MOVEMENT,
             p_z - .1f,
 
-            s.tilt_y * -.035f,
-            s.tilt_x * -.035f,
+            state.tilt_y * -.035f,
+            state.tilt_x * -.035f,
             rot,
 
             scale,
@@ -517,17 +517,17 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
             0
         ));
 
-        s.textures[T_HUD_2]->bind();
-        s.textures[T_HUD_2]->draw();
+        state.textures[T_HUD_2]->bind();
+        state.textures[T_HUD_2]->draw();
     }
 
-    s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
-        (p_x - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (p_y - s.cam_y) * E_RELATIVE_MOVEMENT,
+    state.shaders[S_TEXTURE]->update(UNI_MVP, state.view->transform(
+        (p_x - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (p_y - state.cam_y) * E_RELATIVE_MOVEMENT,
         p_z,
 
-        s.tilt_y * -.035f,
-        s.tilt_x * -.035f,
+        state.tilt_y * -.035f,
+        state.tilt_x * -.035f,
         0,
 
         scale * 1.5f,
@@ -537,23 +537,23 @@ void Entity::drawCrosshair(State &s, shared_ptr<Entity> me)
 
     glEnable(GL_DEPTH_TEST);
 
-    s.textures[T_HUD_1]->bind();
-    s.textures[T_HUD_1]->draw();
+    state.textures[T_HUD_1]->bind();
+    state.textures[T_HUD_1]->draw();
 
-    s.shaders[S_TEXTURE]->unbind();
+    state.shaders[S_TEXTURE]->unbind();
 }
 
-void Entity::draw(State &s)
+void Entity::draw()
 {
-    float a = s.global_alpha, d = calcDistanceScale(s);
+    float a = state.global_alpha, d = calcDistanceScale();
 
     glm::vec4 color = glm::vec4(c_r * a, c_g * a, c_b * a, a);
 
-    glm::mat4 projection = s.view->getProjection();
-    glm::mat4 camera = s.view->getCamera();
-    glm::mat4 model = s.view->getModel(
-        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+    glm::mat4 projection = state.view->getProjection();
+    glm::mat4 camera = state.view->getCamera();
+    glm::mat4 model = state.view->getModel(
+        (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
 
         getRotX(),
@@ -565,5 +565,5 @@ void Entity::draw(State &s)
         getScaleZ() * d
     );
 
-    s.models[e_obj]->draw(model, camera, projection, color);
+    state.models[e_obj]->draw(model, camera, projection, color);
 }

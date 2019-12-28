@@ -3,18 +3,16 @@
 #include "entity.hpp"
 #include "explosion.hpp"
 
-class State;
-
 class Missile : public Entity
 {
     public:
-        Missile(short p);
+        Missile(State &s, short p);
         ~Missile();
 
-        void update(State &s);
-        void draw(State &s);
+        void update();
+        void draw();
 
     protected:
         int  power;
-        void collide(State &s, shared_ptr<Entity> e);
+        void collide(shared_ptr<Entity> e);
 };

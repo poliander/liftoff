@@ -1,6 +1,6 @@
 #include "particles.hpp"
 
-ParticleEngine::ParticleEngine()
+ParticleEngine::ParticleEngine(State &s) : state(s)
 {
     c_r = 1.0f;
     c_g = 1.0f;
@@ -142,10 +142,10 @@ bool ParticleEngine::done()
     return particles.size() == 0;
 }
 
-void ParticleEngine::update(State &s)
+void ParticleEngine::update()
 {
-    pvolume = pvolume * (1.0f + (pinflation * s.global_timer));
-    psize += pincrease * s.global_timer;
+    pvolume = pvolume * (1.0f + (pinflation * state.global_timer));
+    psize += pincrease * state.global_timer;
 
     if (psize < 0) {
         particles.clear();
@@ -154,11 +154,11 @@ void ParticleEngine::update(State &s)
 
     if (pemitter == EMIT_EXPLOSION) {
         for (auto p = particles.begin(); p < particles.end(); ++p) {
-            p->lifetime -= s.global_timer * p->fading;
+            p->lifetime -= state.global_timer * p->fading;
 
-            p->px += p->dx * pvolume * s.global_timer;
-            p->py += p->dy * pvolume * s.global_timer;
-            p->pz += p->dz * pvolume * s.global_timer;
+            p->px += p->dx * pvolume * state.global_timer;
+            p->py += p->dy * pvolume * state.global_timer;
+            p->pz += p->dz * pvolume * state.global_timer;
 
             if (p->lifetime < 0) {
                 if (pcontinuous) {
@@ -174,11 +174,11 @@ void ParticleEngine::update(State &s)
         }
     } else {
         for (auto p = particles.begin(); p < particles.end(); ++p) {
-            p->lifetime -= s.global_timer * p->fading;
+            p->lifetime -= state.global_timer * p->fading;
 
-            p->px += (p->dx * (.75f + .25f * p->fading)) * s.global_timer;
-            p->py += (p->dy * (.75f + .25f * p->fading)) * s.global_timer;
-            p->pz += (p->dz * (.75f + .25f * p->fading)) * s.global_timer;
+            p->px += (p->dx * (.75f + .25f * p->fading)) * state.global_timer;
+            p->py += (p->dy * (.75f + .25f * p->fading)) * state.global_timer;
+            p->pz += (p->dz * (.75f + .25f * p->fading)) * state.global_timer;
 
             if (p->lifetime < 0) {
                 if (pcontinuous) {
@@ -195,20 +195,20 @@ void ParticleEngine::update(State &s)
     }
 }
 
-void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, float ry, float rz)
+void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz)
 {
     float m[16];
-    float a = s.global_alpha;
+    float a = state.global_alpha;
 
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(blendSourceFactor, blendDestFactor);
 
-    s.shaders[S_TEXTURE]->bind();
-    s.textures[texture]->bind();
+    state.shaders[S_TEXTURE]->bind();
+    state.textures[texture]->bind();
 
     for (auto p = particles.begin(); p < particles.end(); ++p) {
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a * p->lifetime));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, s.view->transform(
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a * p->lifetime));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, state.view->transform(
             px + p->px,
             py + p->py,
             pz + p->pz,
@@ -222,10 +222,10 @@ void ParticleEngine::draw(State &s, float px, float py, float pz, float rx, floa
             0
         ));
 
-        s.textures[texture]->draw();
+        state.textures[texture]->draw();
     }
 
-    s.shaders[S_TEXTURE]->unbind();
+    state.shaders[S_TEXTURE]->unbind();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);

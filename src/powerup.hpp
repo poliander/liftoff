@@ -7,13 +7,13 @@
 class Powerup : public Entity
 {
     public:
-        Powerup(float x, float y, float z);
+        Powerup(State &s, float x, float y, float z);
         ~Powerup();
 
-        bool            damage(State &s, int p);
-        void            collide(State &s, shared_ptr<Entity> e);
-        void            update(State &s);
-        void            draw(State &s);
+        bool            damage(int p);
+        void            collide(shared_ptr<Entity> e);
+        void            update();
+        void            draw();
 
     private:
         unique_ptr<ParticleEngine> particles;

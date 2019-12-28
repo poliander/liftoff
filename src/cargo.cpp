@@ -1,6 +1,6 @@
 #include "cargo.hpp"
 
-Cargo::Cargo() : Entity()
+Cargo::Cargo(State &s) : Entity(s)
 {
     e_obj = OBJ_CARGO_1;
     e_type = E_TYPE_COLLIDER;
@@ -15,17 +15,17 @@ Cargo::~Cargo()
 {
 }
 
-bool Cargo::damage(State &s, int p)
+bool Cargo::damage(int p)
 {
-    bool damaged = Entity::damage(s, p);
+    bool damaged = Entity::damage(p);
 
     if (damaged && e_state == E_STATE_GONE && yield == false) {
-        s.audio.playSample(SFX_EXPLOSION_1, 192, 180);
+        state.audio.playSample(SFX_EXPLOSION_1, 192, 180);
 
-        s.spawn(make_shared<Explosion>(OBJ_EXPLOSION_3, p_x, p_y, p_z, .6f, .75f, 1.0f));
-        s.spawn(make_shared<Powerup>(p_x, p_y, p_z));
+        state.spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_3, p_x, p_y, p_z, .6f, .75f, 1.0f));
+        state.spawn(make_shared<Powerup>(state, p_x, p_y, p_z));
 
-        s.notify(MSG_MONEY, money);
+        state.notify(MSG_MONEY, money);
         e_state = E_STATE_FADING;
         yield = true;
     }
@@ -33,12 +33,12 @@ bool Cargo::damage(State &s, int p)
     return damaged;
 }
 
-void Cargo::update(State &s)
+void Cargo::update()
 {
-    Entity::update(s);
+    Entity::update();
 
     if (e_state == E_STATE_FADING) {
-        counter += s.global_timer * .2f;
+        counter += state.global_timer * .2f;
     }
 
     if (p_z > 0 || counter > 5.0f) {
@@ -46,16 +46,16 @@ void Cargo::update(State &s)
     }
 }
 
-void Cargo::draw(State &s)
+void Cargo::draw()
 {
-    float a = s.global_alpha, d = calcDistanceScale(s);
+    float a = state.global_alpha, d = calcDistanceScale();
 
     glm::vec4 color = glm::vec4(a, a, a, a);
-    glm::mat4 projection = s.view->getProjection();
-    glm::mat4 camera = s.view->getCamera();
-    glm::mat4 m, model = s.view->getModel(
-        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+    glm::mat4 projection = state.view->getProjection();
+    glm::mat4 camera = state.view->getCamera();
+    glm::mat4 m, model = state.view->getModel(
+        (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
         getPosZ(),
 
         getRotX(),
@@ -67,7 +67,7 @@ void Cargo::draw(State &s)
         getScaleZ() * d
     );
 
-    s.shaders[S_TEXTURE]->bind();
+    state.shaders[S_TEXTURE]->bind();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glDepthMask(GL_FALSE);
@@ -76,9 +76,9 @@ void Cargo::draw(State &s)
     if (e_state == E_STATE_FADING) {
         float scale = -1.0f / (.2f * counter + .2f) + 4.5f;
 
-        m = s.view->getModel(
-            (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-            (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+        m = state.view->getModel(
+            (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
+            (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
             (getPosZ()),
 
             0, 0, 0,
@@ -88,43 +88,43 @@ void Cargo::draw(State &s)
             0
         );
 
-        s.textures[T_HALO]->bind();
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, a * (1.0f - (counter * .2f))));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
-        s.textures[T_HALO]->draw();
+        state.textures[T_HALO]->bind();
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, a * (1.0f - (counter * .2f))));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+        state.textures[T_HALO]->draw();
     } else {
-        s.textures[T_GLOW]->bind();
+        state.textures[T_GLOW]->bind();
 
         m = model;
         m = glm::rotate(m, glm::radians(90.0f), glm::vec3(1.0f, 0, 0));
         m = glm::scale(m, glm::vec3(15.0f, 15.0f, 0));
 
-        s.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, 0.45f * a));
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
-        s.textures[T_GLOW]->draw();
+        state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.8f * a, .9f * a, 1.0f * a, 0.45f * a));
+        state.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+        state.textures[T_GLOW]->draw();
 
         m = model;
         m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
         m = glm::scale(m, glm::vec3(15.0f, 15.0f, 0));
 
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
-        s.textures[T_GLOW]->draw();
+        state.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+        state.textures[T_GLOW]->draw();
 
         m = model;
         m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 0, 1.0f));
         m = glm::scale(m, glm::vec3(15.0f, 15.0f, 0));
 
-        s.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
-        s.textures[T_GLOW]->draw();
+        state.shaders[S_TEXTURE]->update(UNI_MVP, projection * camera * m);
+        state.textures[T_GLOW]->draw();
     }
 
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    s.shaders[S_TEXTURE]->unbind();
+    state.shaders[S_TEXTURE]->unbind();
 
     if (e_state == E_STATE_ACTIVE) {
-        s.models[e_obj]->draw(model, camera, projection, color);
+        state.models[e_obj]->draw(model, camera, projection, color);
     }
 }

@@ -29,7 +29,7 @@ struct particle_t
 class ParticleEngine
 {
     public:
-        ParticleEngine();
+        ParticleEngine(State &s);
         ~ParticleEngine();
 
         void               setTexture(GLuint t);
@@ -50,10 +50,11 @@ class ParticleEngine
         void               setup(short e, short particles, float dx, float dy, float dz, float decay, float size);
         bool               done();
 
-        void               update(State &s);
-        void               draw(State &s, float px, float py, float pz, float rx, float ry, float rz);
+        void               update();
+        void               draw(float px, float py, float pz, float rx, float ry, float rz);
 
     private:
+        State              &state;
         vector<particle_t> particles;
 
         GLuint             texture;

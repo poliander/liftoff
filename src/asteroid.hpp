@@ -7,9 +7,9 @@
 class Asteroid : public Entity
 {
     public:
-        Asteroid();
+        Asteroid(State &s);
         ~Asteroid();
 
-        bool damage(State &s, int p);
-        void update(State &s);
+        bool damage(int p);
+        void update();
 };

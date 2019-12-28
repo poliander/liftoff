@@ -1,6 +1,6 @@
 #include "powerup.hpp"
 
-Powerup::Powerup(float x, float y, float z) : Entity()
+Powerup::Powerup(State &s, float x, float y, float z) : Entity(s)
 {
     e_obj = OBJ_POWERUP_1;
     e_type = E_TYPE_COLLIDER;
@@ -10,7 +10,7 @@ Powerup::Powerup(float x, float y, float z) : Entity()
     counter = 0;
     life = 1;
 
-    particles = make_unique<ParticleEngine>();
+    particles = make_unique<ParticleEngine>(s);
     particles->setup(EMIT_EXPLOSION, 15, .5f, .5f, .5f, .05f, 1.0f);
     particles->setSize(200.0f);
     particles->setTexture(T_STAR);
@@ -31,30 +31,30 @@ Powerup::~Powerup()
 {
 }
 
-bool Powerup::damage(State &s, int p)
+bool Powerup::damage(int p)
 {
     return false;
 }
 
-void Powerup::collide(State &s, shared_ptr<Entity> e)
+void Powerup::collide(shared_ptr<Entity> e)
 {
     if (e_state == E_STATE_ACTIVE && e->isPlayer()) {
-        s.audio.playSample(SFX_POWERUP_1, 192, 180);
-        s.notify(MSG_ENERGY, 500);
+        state.audio.playSample(SFX_POWERUP_1, 192, 180);
+        state.notify(MSG_ENERGY, 500);
         e->collect(e_obj);
         e_state = E_STATE_FADING;
         v_z = -.5f * E_BASE_SPEED;
     }
 }
 
-void Powerup::update(State &s)
+void Powerup::update()
 {
-    Entity::update(s);
+    Entity::update();
 
-    particles->update(s);
+    particles->update();
 
     if (e_state == E_STATE_FADING) {
-        counter += s.global_timer * .01f;
+        counter += state.global_timer * .01f;
         particles->setContinuous(false);
         particles->setIncrease(-10.0f);
     }
@@ -64,11 +64,11 @@ void Powerup::update(State &s)
     }
 }
 
-void Powerup::draw(State &s)
+void Powerup::draw()
 {
-    particles->draw(s,
-        (getPosX() - s.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - s.cam_y) * E_RELATIVE_MOVEMENT,
+    particles->draw(
+        (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
         (getPosZ()),
         (getRotX()),
         (getRotY()),
