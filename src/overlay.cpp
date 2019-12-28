@@ -66,24 +66,25 @@ void Overlay::update()
 
 void Overlay::drawMessages()
 {
-    float x, y, a;
+    float x, y, a, s;
     auto m = state.messages.begin();
 
     while (m != state.messages.end()) {
         a = 1.0f - (*m)->counter * .01f;
 
         if ((*m)->dir_x > 0) {
-            x = (*m)->dir_x * ((*m)->counter + 1.0f) * 1.8f;
+            x = (*m)->dir_x * ((*m)->counter + 1.0f) * 1.4f;
         } else {
             x = (*m)->dir_x * ((*m)->counter + 1.0f) * 2.2f;
         }
 
         y = (*m)->dir_y * pow(((*m)->counter + 1.0f) * .05f, 2) * 10.0f;
+        s = (*m)->counter * .0025f;
 
         state.fonts[F_ZEKTON]->draw(
             (*m)->text,
             x, 25.0f + y,
-            0.125f,
+            s,
             (*m)->c_r, (*m)->c_g, (*m)->c_b, a
         );
 
