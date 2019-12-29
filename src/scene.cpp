@@ -211,8 +211,8 @@ bool Scene::loadLevel() {
 
     while (!feof(fp)) {
         if (fgets(buf, 1024, fp) != NULL) {
-            strcpy(cmd, "");
-            strcpy(par, "");
+            snprintf(cmd, sizeof(cmd), "");
+            snprintf(cmd, sizeof(par), "");
 
             i = 0;
             m = 0;
@@ -259,7 +259,9 @@ bool Scene::loadLevel() {
 
             if (cmd[0] && par[0]) {
                 // music
-                if (!strcmp(cmd, "soundtrack")) strcpy(state->lvl_music, par);
+                if (!strcmp(cmd, "soundtrack")) {
+                    snprintf(state->lvl_music, sizeof(state->lvl_music), "%s", par);
+                }
 
                 // length
                 if (!strcmp(cmd, "length")) sscanf(par, "%d", &state->lvl_length);
@@ -417,7 +419,6 @@ void Scene::updateScene() {
             auto f = next(e);
 
             while (f != state->entities.end()) {
-
                 if (
                     (*f)->isCollider() &&
                     (*f)->isColliding(*e)

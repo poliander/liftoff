@@ -156,12 +156,8 @@ void Overlay::drawMenu() {
     float mfs; // font size
     float mrh; // font row height
 
-    char *mtxt[5];
+    char mtxt[5][255];
     char msg[255];
-
-    for (int i = 0; i < 5; i++) {
-        mtxt[i] = (char*)malloc(sizeof(char)*64);
-    }
 
     switch (state->menu) {
         case 1: // main menu
@@ -170,9 +166,9 @@ void Overlay::drawMenu() {
             mfo = 0.0f;
             mfs  = 0.14f;
 
-            strcpy(mtxt[0], "LAUNCH");
-            strcpy(mtxt[1], "SETTINGS");
-            strcpy(mtxt[2], "QUIT");
+            snprintf(mtxt[0], sizeof(mtxt[0]), "LAUNCH");
+            snprintf(mtxt[1], sizeof(mtxt[1]), "SETTINGS");
+            snprintf(mtxt[2], sizeof(mtxt[3]), "QUIT");
 
             if (state->menu_selected) {
                 switch (state->menu_pos) {
@@ -203,10 +199,10 @@ void Overlay::drawMenu() {
             mfo = -5.75f;
             mfs = 0.14f;
 
-            strcpy(mtxt[0], "VIDEO");
-            strcpy(mtxt[1], "AUDIO");
-            strcpy(mtxt[2], "CANCEL");
-            strcpy(mtxt[3], "ACCEPT");
+            snprintf(mtxt[0], sizeof(mtxt[0]), "VIDEO");
+            snprintf(mtxt[1], sizeof(mtxt[1]), "AUDIO");
+            snprintf(mtxt[2], sizeof(mtxt[2]), "CANCEL");
+            snprintf(mtxt[3], sizeof(mtxt[3]), "ACCEPT");
 
             if (state->menu_selected) {
                 switch (state->menu_pos) {
@@ -263,41 +259,43 @@ void Overlay::drawMenu() {
 
             switch (state->config.vid_quality) {
                 case 0:
-                    strcpy(mtxt[1], "QUALITY:\n     VERY LOW");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "QUALITY:\n     VERY LOW");
                     break;
 
                 case 1:
-                    strcpy(mtxt[1], "QUALITY:\n     LOW");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "QUALITY:\n     LOW");
                     break;
 
                 case 2:
-                    strcpy(mtxt[1], "QUALITY:\n     MEDIUM");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "QUALITY:\n     MEDIUM");
                     break;
 
                 case 3:
-                    strcpy(mtxt[1], "QUALITY:\n     HIGH");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "QUALITY:\n     HIGH");
                     break;
 
                 case 4:
-                    strcpy(mtxt[1], "QUALITY:\n     VERY HIGH");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "QUALITY:\n     VERY HIGH");
                     break;
 
                 case 5:
-                    strcpy(mtxt[1], "QUALITY:\n     ULTRA");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "QUALITY:\n     ULTRA");
                     break;
             }
 
-            if (state->config.vid_fullscreen)
-                strcpy(mtxt[2], "FULL SCREEN:\n     ENABLED");
-            else
-                strcpy(mtxt[2], "FULL SCREEN:\n     DISABLED");
+            if (state->config.vid_fullscreen) {
+                snprintf(mtxt[2], sizeof(mtxt[2]), "FULL SCREEN:\n     ENABLED");
+            } else {
+                snprintf(mtxt[2], sizeof(mtxt[2]), "FULL SCREEN:\n     DISABLED");
+            }
 
-            if (state->config.vid_vsync)
-                strcpy(mtxt[3], "VERTICAL SYNC:\n     ENABLED");
-            else
-                strcpy(mtxt[3], "VERTICAL SYNC:\n     DISABLED");
+            if (state->config.vid_vsync) {
+                snprintf(mtxt[3], sizeof(mtxt[3]), "VERTICAL SYNC:\n     ENABLED");
+            } else {
+                snprintf(mtxt[3], sizeof(mtxt[3]), "VERTICAL SYNC:\n     DISABLED");
+            }
 
-            strcpy(mtxt[4], "RETURN");
+            snprintf(mtxt[4], sizeof(mtxt[4]), "RETURN");
 
             if (state->menu_selected) {
                 switch (state->menu_pos) {
@@ -341,48 +339,48 @@ void Overlay::drawMenu() {
 
             switch(state->config.aud_sfx) {
                 case 0:
-                    strcpy(mtxt[0], "SOUND FX:\n     MUTED");
+                    snprintf(mtxt[0], sizeof(mtxt[0]), "SOUND FX:\n     MUTED");
                     break;
+
                 case 1:
-
-                    strcpy(mtxt[0], "SOUND FX:\n     MINIMUM");
+                    snprintf(mtxt[0], sizeof(mtxt[0]), "SOUND FX:\n     MINIMUM");
                     break;
+
                 case 2:
-
-                    strcpy(mtxt[0], "SOUND FX:\n     MEDIUM");
+                    snprintf(mtxt[0], sizeof(mtxt[0]), "SOUND FX:\n     MEDIUM");
                     break;
-                case 3:
 
-                    strcpy(mtxt[0], "SOUND FX:\n     MAXIMUM");
+                case 3:
+                    snprintf(mtxt[0], sizeof(mtxt[0]), "SOUND FX:\n     MAXIMUM");
                     break;
 
                 default:
-                    strcpy(mtxt[0], "SOUND FX:\n     DISABLED");
+                    snprintf(mtxt[0], sizeof(mtxt[0]), "SOUND FX:\n     DISABLED");
             }
 
             switch(state->config.aud_music) {
                 case 0:
-                    strcpy(mtxt[1], "MUSIC:\n     MUTED");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "MUSIC:\n     MUTED");
                     break;
+
                 case 1:
-
-                    strcpy(mtxt[1], "MUSIC:\n     MINIMUM");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "MUSIC:\n     MINIMUM");
                     break;
+
                 case 2:
-
-                    strcpy(mtxt[1], "MUSIC:\n     MEDIUM");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "MUSIC:\n     MEDIUM");
                     break;
-                case 3:
 
-                    strcpy(mtxt[1], "MUSIC:\n     MAXIMUM");
+                case 3:
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "MUSIC:\n     MAXIMUM");
                     break;
 
                 default:
-                    strcpy(mtxt[1], "MUSIC:\n     DISABLED");
+                    snprintf(mtxt[1], sizeof(mtxt[1]), "MUSIC:\n     DISABLED");
             }
 
             snprintf(mtxt[2], sizeof(mtxt[2]), "MIXER QUALITY:\n     %d HZ", state->config.aud_mixfreq);
-            strcpy(mtxt[3], "RETURN");
+            snprintf(mtxt[3], sizeof(mtxt[3]), "RETURN");
 
             if (state->menu_selected) {
                 switch (state->menu_pos) {

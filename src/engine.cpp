@@ -361,11 +361,11 @@ bool Engine::handleKeyboard() {
 
     switch (state.get()) {
         case STATE_GAME_LOOP:
-            if (keys[SDL_SCANCODE_ESCAPE])
+            if (keys[SDL_SCANCODE_ESCAPE]) {
                 state.set(STATE_GAME_QUIT);
+            }
 
             if (state.player->isAlive()) {
-
                 // Keyboard LEFT, RIGHT
                 if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_A]) {
                     state.player->setAccelerationX(1.0f);
