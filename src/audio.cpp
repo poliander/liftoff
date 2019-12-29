@@ -14,7 +14,7 @@ void Audio::init(char* data_dir, int vol_sfx, int vol_music, int mix_freq) {
     volume_sfx = vol_sfx;
     volume_music = vol_music;
     mixer_frequency = mix_freq;
-    sprintf(resource_dir, "%s/sounds", data_dir);
+    snprintf(resource_dir, sizeof(resource_dir), "%s/sounds", data_dir);
     Mix_AllocateChannels(32);
 }
 
@@ -23,7 +23,7 @@ Mix_Chunk* Audio::loadSample(const char *filename) {
     char f[255];
 
     if (volume_sfx > 0) {
-        sprintf(f, "%s/%s", resource_dir, filename);
+        snprintf(f, sizeof(f), "%s/%s", resource_dir, filename);
         tmp = Mix_LoadWAV(f);
     }
 
@@ -73,7 +73,7 @@ Mix_Music* Audio::loadMusic(const char* filename) {
     char f[255];
 
     if (volume_music > 0) {
-        sprintf(f, "%s/%s", resource_dir, filename);
+        snprintf(f, sizeof(f), "%s/%s", resource_dir, filename);
         tmp = Mix_LoadMUS(f);
     }
 

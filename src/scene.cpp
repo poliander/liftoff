@@ -198,10 +198,10 @@ bool Scene::loadLevel() {
     state->spawns.clear();
     state->spawn(player);
 
-    sprintf(msg, "Loading 'lvl/mission_1.dat'... ");
+    snprintf(msg, sizeof(msg), "Loading 'lvl/mission_1.dat'... ");
     state->log(msg);
 
-    sprintf(fname, "%s/levels/mission_1.dat", state->dir_resources);
+    snprintf(fname, sizeof(msg), "%s/levels/mission_1.dat", state->dir_resources);
     fp = fopen(fname, "r");
 
     if (fp == NULL) {

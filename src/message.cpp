@@ -14,7 +14,7 @@ Message::Message(uint16_t t, uint16_t v) {
             dir_x = +1;
             dir_y = +1;
 
-            sprintf(text, "-%d", value);
+            snprintf(text, sizeof(text), "-%d", value);
             break;
 
         case MSG_MONEY:
@@ -25,7 +25,7 @@ Message::Message(uint16_t t, uint16_t v) {
             dir_x = -1;
             dir_y = +1;
 
-            sprintf(text, "%d $", value);
+            snprintf(text, sizeof(text), "%d $", value);
             break;
 
         case MSG_ENERGY:
@@ -36,7 +36,7 @@ Message::Message(uint16_t t, uint16_t v) {
             dir_x = +1;
             dir_y = +1;
 
-            sprintf(text, "+%d", value);
+            snprintf(text, sizeof(text), "+%d", value);
             break;
     }
 }

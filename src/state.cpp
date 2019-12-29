@@ -6,17 +6,17 @@ State::State() {
     getcwd(cwd, 255);
 
     if (chdir(DEFAULT_GAMEDATA) == 0) {
-        sprintf(dir_resources, "%s", DEFAULT_GAMEDATA);
+        snprintf(dir_resources, sizeof(dir_resources), "%s", DEFAULT_GAMEDATA);
     } else {
-        sprintf(dir_resources, "%s", GAMEDATA);
+        snprintf(dir_resources, sizeof(dir_resources), "%s", GAMEDATA);
     }
 
     chdir(cwd);
 
 #ifdef _WIN32
-    sprintf(dir_configuration, "%s\\LiftOff", getenv("APPDATA"));
+    snprintf(dir_configuration, sizeof(dir_configuration), "%s\\LiftOff", getenv("APPDATA"));
 #else
-    sprintf(dir_configuration, "%s/.liftoff", getenv("HOME"));
+    snprintf(dir_configuration, sizeof(dir_configuration), "%s/.liftoff", getenv("HOME"));
 #endif
 
     config.vid_width        = DEFAULT_VID_WIDTH;
@@ -131,10 +131,6 @@ void State::update() {
 
 bool State::set(int s) {
     if (id == s) return false;
-
-    char msg[255];
-    sprintf(msg, "Entering state %d\n", s);
-    log(msg);
 
     global_counter = 0;
     global_counter2 = 0;

@@ -38,7 +38,7 @@ bool Engine::init(int argc, char **argv) {
     state.log("Initializing SDL... ");
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_TIMER | SDL_INIT_EVENTS)) {
-        sprintf(msg, "failed (%s)\n", SDL_GetError());
+        snprintf(msg, sizeof(msg), "failed (%s)\n", SDL_GetError());
         state.log(msg);
 
         return false;
@@ -68,7 +68,7 @@ bool Engine::init(int argc, char **argv) {
 
     for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i) {
         if (0 == SDL_GetCurrentDisplayMode(i, &current)) {
-            sprintf(msg, "\n- screen #%d is %d x %d @ %d bpp", i, current.w, current.h, SDL_BITSPERPIXEL(current.format));
+            snprintf(msg, sizeof(msg), "\n- screen #%d is %d x %d @ %d bpp", i, current.w, current.h, SDL_BITSPERPIXEL(current.format));
 
             if (state.vid_display == -1) {
                 state.vid_display = i;
@@ -108,12 +108,12 @@ bool Engine::init(int argc, char **argv) {
     }
 
     if (state.cfg_loaded) {
-        sprintf(msg, "- configuration is %d x %d", state.config.vid_width, state.config.vid_height);
+        snprintf(msg, sizeof(msg), "- configuration is %d x %d", state.config.vid_width, state.config.vid_height);
 
         if (state.config.vid_fullscreen) {
-            sprintf(msg, "%s (fullscreen mode)\n", msg);
+            snprintf(msg, sizeof(msg), "%s (fullscreen mode)\n", msg);
         } else {
-            sprintf(msg, "%s (window mode)\n", msg);
+            snprintf(msg, sizeof(msg), "%s (window mode)\n", msg);
         }
 
         state.log(msg);
@@ -184,7 +184,7 @@ bool Engine::init(int argc, char **argv) {
     // initialize audio
 
     if (state.config.aud_sfx || state.config.aud_music) {
-        sprintf(msg, "Initializing audio device at %d Hz... ", state.config.aud_mixfreq);
+        snprintf(msg, sizeof(msg), "Initializing audio device at %d Hz... ", state.config.aud_mixfreq);
         state.log(msg);
 
         if (Mix_OpenAudio(state.config.aud_mixfreq, DEFAULT_AUD_FORMAT, 2, 1024) == -1) {
@@ -218,10 +218,10 @@ bool Engine::initDisplay() {
 
     if (state.config.vid_fullscreen) {
         sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_INPUT_GRABBED;
-        sprintf(msg, "- using fullscreen mode\n");
+        snprintf(msg, sizeof(msg), "- using fullscreen mode\n");
     } else {
         sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS;
-        sprintf(msg, "- using window mode\n");
+        snprintf(msg, sizeof(msg), "- using window mode\n");
     }
 
     state.log(msg);
@@ -279,9 +279,9 @@ bool Engine::initDisplay() {
     SDL_GL_MakeCurrent(window, context);
 
     if (state.vid_multisampling == 0) {
-        sprintf(msg, "- multisampling disabled\n");
+        snprintf(msg, sizeof(msg), "- multisampling disabled\n");
     } else {
-        sprintf(msg, "- multisampling enabled (%dx)\n", state.vid_multisampling);
+        snprintf(msg, sizeof(msg), "- multisampling enabled (%dx)\n", state.vid_multisampling);
     }
 
     state.log(msg);
@@ -300,7 +300,7 @@ bool Engine::initDisplay() {
     GLint glewStatus = glewInit();
 
     if (GLEW_OK != glewStatus) {
-        sprintf(msg, "\nGLEW ERROR: %s\n", glewGetErrorString(glewStatus));
+        snprintf(msg, sizeof(msg), "\nGLEW ERROR: %s\n", glewGetErrorString(glewStatus));
         state.log(msg);
 
         return false;

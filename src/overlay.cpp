@@ -99,7 +99,7 @@ void Overlay::drawStatus() {
 
     // money
 
-    sprintf(msg, "%d $", state->player->getMoney());
+    snprintf(msg, sizeof(msg), "%d $", state->player->getMoney());
     state->fonts[F_ZEKTON]->draw(
         msg,
         -228.0f, screen_y - 52.0f,
@@ -253,8 +253,9 @@ void Overlay::drawMenu() {
             mfo = -18.25f;
             mfs = 0.075f;
 
-            sprintf(
+            snprintf(
                 mtxt[0],
+                sizeof(mtxt[0]),
                 "SCREEN SIZE:\n     %dx%d",
                 state->vid_cap_modes[state->vid_mode].w,
                 state->vid_cap_modes[state->vid_mode].h
@@ -380,7 +381,7 @@ void Overlay::drawMenu() {
                     strcpy(mtxt[1], "MUSIC:\n     DISABLED");
             }
 
-            sprintf(mtxt[2], "MIXER QUALITY:\n     %d HZ", state->config.aud_mixfreq);
+            snprintf(mtxt[2], sizeof(mtxt[2]), "MIXER QUALITY:\n     %d HZ", state->config.aud_mixfreq);
             strcpy(mtxt[3], "RETURN");
 
             if (state->menu_selected) {
@@ -557,7 +558,7 @@ void Overlay::draw() {
     if (state->fps_visible) {
         static char txt[16];
 
-        sprintf(txt, "%.01f FPS", state->fps);
+        snprintf(txt, sizeof(txt), "%.01f FPS", state->fps);
         state->fonts[F_ZEKTON]->draw(txt, -40.0f, -270.0f, 0.12f, 1.0f, 1.0f, 1.0f, .75f);
     }
 
