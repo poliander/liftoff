@@ -1,7 +1,5 @@
 #pragma once
 
-#include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -33,9 +31,6 @@ class Engine
         unique_ptr<Renderbuffer> buffer;
 
         bool                     initDisplay();
-
-        bool                     loadConfiguration();
-        bool                     writeConfiguration();
 
         bool                     handleKeyboard();
         void                     handleJoystick();

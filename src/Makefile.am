@@ -4,6 +4,7 @@ __top_builddir__liftoff_CPPFLAGS = $(CPPFLAGS)
 __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
+    configuration.cpp \
     audio.cpp \
     view.cpp \
     object.cpp \

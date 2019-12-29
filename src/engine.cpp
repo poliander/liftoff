@@ -10,68 +10,6 @@ Engine::~Engine()
 }
 
 /*
- * load video & audio settings from file
- */
-bool Engine::loadConfiguration()
-{
-    bool result = false;
-    char cwd[255];
-
-    getcwd(cwd, 255);
-
-    if (chdir(state.dir_configuration) == 0) {
-        FILE *fp = fopen(CFG_FILENAME, "rb");
-
-        if (fp) {
-            if (fread(&state.config, sizeof(Configuration), 1, fp) == 1) {
-                result = true;
-            }
-
-            fclose(fp);
-        }
-    }
-
-    chdir(cwd);
-
-    return result;
-}
-
-/*
- * store video & audio settings in file
- */
-bool Engine::writeConfiguration()
-{
-    bool result = false;
-    char cwd[255];
-
-    getcwd(cwd, 255);
-
-    if (chdir(state.dir_configuration) != 0) {
-#ifdef _WIN32
-        mkdir(state.dir_configuration);
-#else
-        mkdir(state.dir_configuration, 0755);
-#endif
-    }
-
-    if (chdir(state.dir_configuration) == 0) {
-        FILE *fp = fopen(CFG_FILENAME, "wb");
-
-        if (fp) {
-            if (fwrite(&state.config, sizeof(Configuration), 1, fp) == 1) {
-                result = true;
-            }
-
-            fclose(fp);
-        }
-    }
-
-    chdir(cwd);
-
-    return result;
-}
-
-/*
  * engine initialization
  */
 bool Engine::init(int argc, char **argv)
@@ -94,7 +32,7 @@ bool Engine::init(int argc, char **argv)
 
     state.log("Loading configuration... ");
 
-    if (loadConfiguration()) {
+    if (Configuration::load(state.dir_configuration, &state.config)) {
         state.cfg_loaded = true;
         state.log("ok\n");
     } else {
@@ -578,7 +516,7 @@ void Engine::halt()
 
     state.log("Saving configuration... ");
 
-    if (writeConfiguration()) {
+    if (Configuration::save(state.dir_configuration, &state.config)) {
         state.log("ok\n");
     } else {
         state.log("failed\n");

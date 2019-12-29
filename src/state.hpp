@@ -33,7 +33,7 @@ class State
         ~State();
 
         Audio                       audio;
-        Configuration               config;
+        config_t                    config;
 
         // resources
         map<unsigned int, Texture*> textures;
