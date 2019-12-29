@@ -1,14 +1,15 @@
 #pragma once
 
-#include <map>
-#include <cmath>
-#include <memory>
-#include <vector>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <SDL2/SDL.h>
+
+#include <map>
+#include <cmath>
+#include <memory>
+#include <vector>
 
 #include "../config.h"
 

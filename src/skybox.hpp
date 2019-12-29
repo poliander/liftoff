@@ -1,9 +1,10 @@
 #pragma once
 
+#include <stdlib.h>
+
 #include <algorithm>
 #include <cmath>
 #include <memory>
-#include <stdlib.h>
 
 #include "functions.hpp"
 #include "framebuffer.hpp"

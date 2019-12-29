@@ -1,12 +1,12 @@
 #pragma once
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 #include "texture.hpp"
 #include "shader.hpp"

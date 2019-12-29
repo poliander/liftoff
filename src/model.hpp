@@ -1,9 +1,9 @@
 #pragma once
 
+#include <GL/glew.h>
+
 #include <string>
 #include <memory>
-
-#include <GL/glew.h>
 
 #include <object.hpp>
 #include <shader.hpp>

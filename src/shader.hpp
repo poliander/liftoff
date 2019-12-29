@@ -1,9 +1,10 @@
 #pragma once
 
+#include <GL/glew.h>
+
 #include <fstream>
 #include <string>
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 using std::ifstream;

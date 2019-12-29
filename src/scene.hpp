@@ -1,25 +1,25 @@
 #pragma once
 
-#include <algorithm>
-#include <cmath>
-#include <memory>
-#include <stdlib.h>
-#include <string>
-#include <time.h>
-#include <utility>
-#include <vector>
-
 #include <SDL2/SDL.h>
 
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
 
+#include <stdlib.h>
+#include <time.h>
+
+#include <algorithm>
+#include <cmath>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "../config.h"
 
 #include "functions.hpp"
 #include "state.hpp"
-
 #include "entity.hpp"
 #include "asteroid.hpp"
 #include "cargo.hpp"

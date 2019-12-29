@@ -1,9 +1,9 @@
 #pragma once
 
+#include <GL/glew.h>
+
 #include <algorithm>
 #include <memory>
-
-#include <GL/glew.h>
 
 #include "definitions.hpp"
 #include "functions.hpp"

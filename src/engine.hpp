@@ -2,9 +2,10 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
-#include <memory>
 #include <unistd.h>
 #include <time.h>
+
+#include <memory>
 
 #include "scene.hpp"
 #include "state.hpp"
