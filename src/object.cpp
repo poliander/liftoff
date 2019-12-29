@@ -87,7 +87,7 @@ void Object::index() {
     }
 }
 
-unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* currentIndex) {
+unsigned int Object::previousVertexIndex(const vector<index_t*> &lookup, index_t* currentIndex) {
     unsigned int start = 0;
     unsigned int end = lookup.size();
     unsigned int current = (end - start) / 2 + start;

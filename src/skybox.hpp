@@ -16,7 +16,7 @@ using std::max;
 
 class Skybox {
     public:
-        explicit Skybox(State& s);
+        explicit Skybox(State* s);
         ~Skybox();
 
         void                    update();
@@ -25,7 +25,7 @@ class Skybox {
     private:
         float                   stars[SKYBOX_NUM_STARS][4];
 
-        State&                  state;
+        State*                  state;
 
         unique_ptr<View>        view;
         unique_ptr<Framebuffer> framebuffer;

@@ -1,6 +1,6 @@
 #include "powerup.hpp"
 
-Powerup::Powerup(State& s, float x, float y, float z) : Entity(s) {
+Powerup::Powerup(State* s, float x, float y, float z) : Entity(s) {
     e_obj = OBJ_POWERUP_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
@@ -35,8 +35,8 @@ bool Powerup::damage(int p) {
 
 void Powerup::collide(shared_ptr<Entity> e) {
     if (e_state == E_STATE_ACTIVE && e->isPlayer()) {
-        state.audio.playSample(SFX_POWERUP_1, 192, 180);
-        state.notify(MSG_ENERGY, 500);
+        state->audio.playSample(SFX_POWERUP_1, 192, 180);
+        state->notify(MSG_ENERGY, 500);
         e->collect(e_obj);
         e_state = E_STATE_FADING;
         v_z = -.5f * E_BASE_SPEED;
@@ -49,7 +49,7 @@ void Powerup::update() {
     particles->update();
 
     if (e_state == E_STATE_FADING) {
-        counter += state.global_timer * .01f;
+        counter += state->global_timer * .01f;
         particles->setContinuous(false);
         particles->setIncrease(-10.0f);
     }
@@ -61,8 +61,8 @@ void Powerup::update() {
 
 void Powerup::draw() {
     particles->draw(
-        (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
-        (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
+        (getPosX() - state->cam_x) * E_RELATIVE_MOVEMENT,
+        (getPosY() - state->cam_y) * E_RELATIVE_MOVEMENT,
         (getPosZ()),
         (getRotX()),
         (getRotY()),

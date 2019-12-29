@@ -202,8 +202,8 @@ bool Engine::init(int argc, char **argv) {
         }
     }
 
-    buffer = make_unique<Renderbuffer>(state);
-    scene = make_unique<Scene>(state);
+    buffer = make_unique<Renderbuffer>(&state);
+    scene = make_unique<Scene>(&state);
 
     state.set(STATE_MENU);
 
@@ -568,7 +568,7 @@ bool Engine::main() {
                         state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);
 
                         buffer.reset();
-                        buffer = make_unique<Renderbuffer>(state);
+                        buffer = make_unique<Renderbuffer>(&state);
                     }
                 }
                 break;

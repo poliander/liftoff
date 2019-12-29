@@ -1,6 +1,6 @@
 #include "debris.hpp"
 
-Debris::Debris(State& s) : Entity(s) {
+Debris::Debris(State* s) : Entity(s) {
     e_obj = OBJ_DEBRIS_1;
     e_type = E_TYPE_DECORATION;
     e_state = E_STATE_IDLE;

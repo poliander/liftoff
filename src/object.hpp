@@ -41,7 +41,7 @@ class Object {
 
         bool                 load(string filename);
         void                 index();
-        unsigned int         previousVertexIndex(vector<index_t*> &lookup, index_t* currentIndex);
+        unsigned int         previousVertexIndex(const vector<index_t*> &lookup, index_t* currentIndex);
 
         vector<string>       split(string txt, char delim);
         index_t              toIndex(const string& token);

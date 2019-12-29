@@ -11,14 +11,14 @@ using std::unique_ptr;
 
 class Overlay {
     public:
-        explicit Overlay(State& s);
+        explicit Overlay(State* s);
         ~Overlay();
 
         void update();
         void draw();
 
     private:
-        State&                  state;
+        State*                  state;
 
         unique_ptr<View>        view;
         unique_ptr<View>        perspective;

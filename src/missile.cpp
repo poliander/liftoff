@@ -1,6 +1,6 @@
 #include "missile.hpp"
 
-Missile::Missile(State& s, uint16_t p) : Entity(s) {
+Missile::Missile(State* s, uint16_t p) : Entity(s) {
     e_obj = OBJ_MISSILE_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
@@ -29,8 +29,8 @@ void Missile::collide(shared_ptr<Entity> e) {
     }
 
     if (e->damage(power)) {
-        state.audio.playSample(SFX_GUN_IMPACT, 192, 180);
-        state.spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_1, getPosX(), getPosY(), getPosZ()));
+        state->audio.playSample(SFX_GUN_IMPACT, 192, 180);
+        state->spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_1, getPosX(), getPosY(), getPosZ()));
 
         e_state = E_STATE_GONE;
     }
@@ -39,7 +39,7 @@ void Missile::collide(shared_ptr<Entity> e) {
 void Missile::update() {
     Entity::update();
 
-    c_a = (state.global_alpha * .5f) + ((getPosZ() + 200.0f) * .00002f);
+    c_a = (state->global_alpha * .5f) + ((getPosZ() + 200.0f) * .00002f);
 
     if (c_a < 0 || getPosZ() < -10000.0f) {
         e_state = E_STATE_GONE;
@@ -47,20 +47,20 @@ void Missile::update() {
 }
 
 void Missile::draw() {
-    float a = state.global_alpha;
+    float a = state->global_alpha;
 
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-    state.shaders[S_TEXTURE]->bind();
-    state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a));
+    state->shaders[S_TEXTURE]->bind();
+    state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(c_r * a, c_g * a, c_b * a, c_a * a));
 
-    state.textures[T_MISSILE_1]->bind();
+    state->textures[T_MISSILE_1]->bind();
 
     for (int i = 0; i < 5; i++) {
-        state.shaders[S_TEXTURE]->update(UNI_MVP, state.view->transform(
-            (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
-            (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,
+        state->shaders[S_TEXTURE]->update(UNI_MVP, state->view->transform(
+            (getPosX() - state->cam_x) * E_RELATIVE_MOVEMENT,
+            (getPosY() - state->cam_y) * E_RELATIVE_MOVEMENT,
             getPosZ(),
 
             getRotX(),
@@ -72,10 +72,10 @@ void Missile::draw() {
             0
         ));
 
-        state.textures[T_MISSILE_1]->draw();
+        state->textures[T_MISSILE_1]->draw();
     }
 
-    state.shaders[S_TEXTURE]->unbind();
+    state->shaders[S_TEXTURE]->unbind();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);

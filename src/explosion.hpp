@@ -7,8 +7,8 @@
 
 class Explosion : public Entity {
     public:
-        Explosion(State& s, uint16_t t, float x, float y, float z);
-        Explosion(State& s, uint16_t t, float x, float y, float z, float r, float g, float b);
+        Explosion(State* s, uint16_t t, float x, float y, float z);
+        Explosion(State* s, uint16_t t, float x, float y, float z, float r, float g, float b);
         ~Explosion();
 
         void                       update();

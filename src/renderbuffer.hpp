@@ -7,7 +7,7 @@
 
 class Renderbuffer {
     public:
-        explicit Renderbuffer(State& s);
+        explicit Renderbuffer(State* s);
         ~Renderbuffer();
 
         void bind();
@@ -17,7 +17,7 @@ class Renderbuffer {
         void draw();
 
     protected:
-        State&                  state;
+        State*                  state;
 
         unique_ptr<View>        view;
         unique_ptr<Framebuffer> framebuffer;

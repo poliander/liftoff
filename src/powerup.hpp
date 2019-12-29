@@ -8,7 +8,7 @@
 
 class Powerup : public Entity {
     public:
-        Powerup(State& s, float x, float y, float z);
+        Powerup(State* s, float x, float y, float z);
         ~Powerup();
 
         bool                       damage(int p);

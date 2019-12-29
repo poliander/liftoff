@@ -8,7 +8,7 @@
 
 class Cargo : public Entity {
     public:
-        explicit Cargo(State& s);
+        explicit Cargo(State* s);
         ~Cargo();
 
         bool  damage(int p);

@@ -35,7 +35,7 @@ using std::unique_ptr;
 
 class Scene {
     public:
-        explicit Scene(State& s);
+        explicit Scene(State* s);
         ~Scene();
 
         void                load();
@@ -43,7 +43,7 @@ class Scene {
         void                draw(const unique_ptr<Renderbuffer> &b);
 
     private:
-        State&              state;
+        State*              state;
 
         shared_ptr<Player>  player;
         unique_ptr<Skybox>  skybox;
