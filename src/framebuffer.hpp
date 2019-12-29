@@ -22,7 +22,7 @@ class Framebuffer : public Quad {
 
         operator GLuint() {
             return framebuffer;
-        };
+        }
 
     protected:
         GLuint width;

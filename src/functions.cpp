@@ -1,3 +1,5 @@
+#include "functions.hpp"
+
 float isqrt(float f) {
     float fhalf = 0.5f * f;
 

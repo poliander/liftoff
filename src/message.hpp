@@ -1,7 +1,8 @@
 #pragma once
 
-#include <stdint.h>
 #include <stdio.h>
+
+#include <cstdint>
 
 enum message_types_e {
     MSG_MONEY,

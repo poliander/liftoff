@@ -1,10 +1,7 @@
 #pragma once
 
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <time.h>
-
+#include <cstdlib>
+#include <ctime>
 #include <memory>
 
 #include "scene.hpp"
@@ -25,8 +22,6 @@ class Engine {
 
         SDL_Window*              window;
         SDL_GLContext            context;
-
-        Uint32                   timer;
 
         unique_ptr<Scene>        scene;
         unique_ptr<Renderbuffer> buffer;

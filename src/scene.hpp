@@ -7,7 +7,6 @@
 #include <GL/glext.h>
 
 #include <stdlib.h>
-#include <time.h>
 
 #include <algorithm>
 #include <cmath>
