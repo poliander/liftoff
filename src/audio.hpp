@@ -2,8 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 
-class Audio
-{
+class Audio {
     public:
         Audio();
         ~Audio();

@@ -1,42 +1,25 @@
 #include "view.hpp"
 
-View::View(uint8_t t, glm::mat4 p)
-{
+View::View(uint8_t t, glm::mat4 p) {
     type = t;
     projection = p;
 }
 
-View::~View()
-{
+View::~View() {
 }
 
-/*
- * Create a perspective projection view
- */
-unique_ptr<View> View::createPerspective(float f, float a, float zNear, float zFar)
-{
+unique_ptr<View> View::createPerspective(float f, float a, float zNear, float zFar) {
     return make_unique<View>(P_PERSPECTIVE, glm::perspective(glm::radians(f), a, zNear, zFar));
 }
 
-/*
- * Create a orthographic projection view
- */
-unique_ptr<View> View::createOrthographic(float x1, float x2, float y1, float y2)
-{
+unique_ptr<View> View::createOrthographic(float x1, float x2, float y1, float y2) {
     return make_unique<View>(P_ORTHOGRAPHIC, glm::ortho(x1, x2, y1, y2));
 }
 
-/*
- * Get projection matrix
- */
-glm::mat4 View::getProjection()
-{
+glm::mat4 View::getProjection() {
     return projection;
 }
 
-/*
- * Update camera (view)
- */
 void View::setCamera(
     float camera_pos_x,    float camera_pos_y,    float camera_pos_z,
     float camera_target_x, float camera_target_y, float camera_target_z,
@@ -57,22 +40,14 @@ void View::setCamera(
     view = glm::lookAt(camera_pos, camera_pos + camera_target, camera_up);
 }
 
-glm::mat4 View::getCamera()
-{
+glm::mat4 View::getCamera() {
     return view;
 }
 
-/*
- * Get camera position
- */
-glm::vec3 View::getCameraPos()
-{
+glm::vec3 View::getCameraPos() {
     return camera_pos;
 }
 
-/*
- * Perspective transformation (3D)
- */
 glm::mat4 View::transform(
     float px, float py, float pz,
     float rx, float ry, float rz,
@@ -99,9 +74,6 @@ glm::mat4 View::getModel(
     return model;
 }
 
-/*
- * Orthographic transformation (2D)
- */
 glm::mat4 View::transform(
     float px, float py,
     float sx, float sy

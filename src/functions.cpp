@@ -1,5 +1,4 @@
-float isqrt(float f)
-{
+float isqrt(float f) {
     float fhalf = 0.5f * f;
 
     asm(

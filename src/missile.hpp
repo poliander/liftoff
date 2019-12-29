@@ -5,8 +5,7 @@
 #include "entity.hpp"
 #include "explosion.hpp"
 
-class Missile : public Entity
-{
+class Missile : public Entity {
     public:
         Missile(State &s, uint16_t p);
         ~Missile();

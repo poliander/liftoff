@@ -1,18 +1,15 @@
 #include "asteroid.hpp"
 
-Asteroid::Asteroid(State &s) : Entity(s)
-{
+Asteroid::Asteroid(State &s) : Entity(s) {
     e_obj = OBJ_ASTEROID_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_IDLE;
 }
 
-Asteroid::~Asteroid()
-{
+Asteroid::~Asteroid() {
 }
 
-bool Asteroid::damage(int p)
-{
+bool Asteroid::damage(int p) {
     bool damaged = Entity::damage(p);
 
     if (damaged && !isAlive()) {
@@ -42,8 +39,7 @@ bool Asteroid::damage(int p)
     return damaged;
 }
 
-void Asteroid::update()
-{
+void Asteroid::update() {
     Entity::update();
 
     if (p_z > 0) {

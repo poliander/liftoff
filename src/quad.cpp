@@ -1,7 +1,6 @@
 #include "quad.hpp"
 
-Quad::Quad()
-{
+Quad::Quad() {
     glGenBuffers(1, &vertexArrayBuffer);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexArrayBuffer);
@@ -21,24 +20,20 @@ Quad::Quad()
     update();
 }
 
-Quad::~Quad()
-{
+Quad::~Quad() {
 }
 
-void Quad::setPosition(glm::vec4 p)
-{
+void Quad::setPosition(glm::vec4 p) {
     pos = p;
     changed = true;
 }
 
-void Quad::setTextureCoordinates(glm::vec4 u)
-{
+void Quad::setTextureCoordinates(glm::vec4 u) {
     uv = u;
     changed = true;
 }
 
-void Quad::update()
-{
+void Quad::update() {
     GLfloat vertices[6][4] = {
         { pos[0], pos[3], uv[0], uv[1] },
         { pos[0], pos[1], uv[0], uv[3] },
@@ -56,8 +51,7 @@ void Quad::update()
     changed = false;
 }
 
-void Quad::draw()
-{
+void Quad::draw() {
     if (changed) update();
 
     glBindVertexArray(vertexArray);

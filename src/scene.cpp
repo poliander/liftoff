@@ -1,7 +1,6 @@
 #include "scene.hpp"
 
-Scene::Scene(State &s) : state(s)
-{
+Scene::Scene(State &s) : state(s) {
     player = make_shared<Player>(state);
     skybox = make_unique<Skybox>(state);
     overlay = make_unique<Overlay>(state);
@@ -11,8 +10,7 @@ Scene::Scene(State &s) : state(s)
     load();
 }
 
-Scene::~Scene()
-{
+Scene::~Scene() {
     if (state.audio.volume_music) {
         Mix_HaltMusic();
         Mix_FreeMusic(state.audio.music[0]);
@@ -40,11 +38,7 @@ Scene::~Scene()
     state.textures.clear();
 }
 
-/*
- * load game data
- */
-void Scene::load()
-{
+void Scene::load() {
     state.log("Loading 'title.tga'\n");
     state.textures.insert(make_pair(T_TITLE, new Texture(
         string(state.dir_resources).append("/textures/title.tga")
@@ -189,11 +183,7 @@ void Scene::load()
     state.audio.music[0]   = state.audio.loadMusic("music_title.ogg");
 }
 
-/*
- * load level data file
- */
-bool Scene::loadLevel()
-{
+bool Scene::loadLevel() {
     FILE *fp = NULL;
     char msg[255], fname[255], buf[1024], cmd[16], par[255];
 
@@ -372,11 +362,7 @@ bool Scene::loadLevel()
     return true;
 }
 
-/*
- * update game scene
- */
-void Scene::updateScene()
-{
+void Scene::updateScene() {
     static GLuint nextdebris = SDL_GetTicks();
 
     if (SDL_GetTicks() > nextdebris &&
@@ -450,11 +436,7 @@ void Scene::updateScene()
     sort(state.entities.begin(), state.entities.end(), Entity::sort);
 }
 
-/*
- * update everything
- */
-void Scene::update()
-{
+void Scene::update() {
     skybox->update();
     overlay->update();
 
@@ -556,11 +538,7 @@ void Scene::update()
     }
 }
 
-/*
- * draw everything
- */
-void Scene::draw(const unique_ptr<Renderbuffer> &buffer)
-{
+void Scene::draw(const unique_ptr<Renderbuffer> &buffer) {
     float p_x = 0;
     float p_y = -90.0f;
 

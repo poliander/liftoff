@@ -6,8 +6,7 @@
 #include "explosion.hpp"
 #include "powerup.hpp"
 
-class Cargo : public Entity
-{
+class Cargo : public Entity {
     public:
         Cargo(State &s);
         ~Cargo();

@@ -11,8 +11,7 @@ using std::ifstream;
 using std::string;
 using std::vector;
 
-struct index_t
-{
+struct index_t {
     unsigned int vertex;
     unsigned int uv;
     unsigned int normal;
@@ -20,8 +19,7 @@ struct index_t
     bool operator < (const index_t& r) const { return vertex < r.vertex; }
 };
 
-class Object
-{
+class Object {
     public:
         Object(string filename);
         ~Object();

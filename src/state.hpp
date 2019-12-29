@@ -30,8 +30,7 @@ using std::vector;
 
 class Entity;
 
-class State
-{
+class State {
     public:
         State();
         ~State();

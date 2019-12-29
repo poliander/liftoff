@@ -1,19 +1,13 @@
 #include "engine.hpp"
 
-Engine::Engine()
-{
+Engine::Engine() {
     srand((int)time(NULL));
 }
 
-Engine::~Engine()
-{
+Engine::~Engine() {
 }
 
-/*
- * engine initialization
- */
-bool Engine::init(int argc, char **argv)
-{
+bool Engine::init(int argc, char **argv) {
     char *msg = new char[255];
     SDL_DisplayMode current;
 
@@ -216,11 +210,7 @@ bool Engine::init(int argc, char **argv)
     return true;
 }
 
-/*
- * OpenGL screen initalization
- */
-bool Engine::initDisplay()
-{
+bool Engine::initDisplay() {
     int cfg_multisampling = -1, sdl_mode;
     char msg[255];
 
@@ -334,11 +324,7 @@ bool Engine::initDisplay()
     return true;
 }
 
-/*
- * keyboard handler
- */
-bool Engine::handleKeyboard()
-{
+bool Engine::handleKeyboard() {
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
 
     static GLuint timer = SDL_GetTicks() - 51;
@@ -469,11 +455,7 @@ bool Engine::handleKeyboard()
     return moved;
 }
 
-/*
- * joystick handler
- */
-void Engine::handleJoystick()
-{
+void Engine::handleJoystick() {
     float v;
 
     if (state.player->isAlive() == false) {
@@ -499,11 +481,7 @@ void Engine::handleJoystick()
     }
 }
 
-/*
- * engine shutdown
- */
-void Engine::halt()
-{
+void Engine::halt() {
     state.set(STATE_QUIT);
 
     if (state.config.vid_fullscreen == 0) {
@@ -541,11 +519,7 @@ void Engine::halt()
     SDL_Quit();
 }
 
-/*
- * main game loop
- */
-bool Engine::main()
-{
+bool Engine::main() {
     SDL_Event event;
 
     state.update();

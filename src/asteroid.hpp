@@ -6,8 +6,7 @@
 #include "entity.hpp"
 #include "explosion.hpp"
 
-class Asteroid : public Entity
-{
+class Asteroid : public Entity {
     public:
         Asteroid(State &s);
         ~Asteroid();

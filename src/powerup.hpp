@@ -6,8 +6,7 @@
 #include "message.hpp"
 #include "particles.hpp"
 
-class Powerup : public Entity
-{
+class Powerup : public Entity {
     public:
         Powerup(State &s, float x, float y, float z);
         ~Powerup();

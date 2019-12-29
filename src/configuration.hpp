@@ -6,8 +6,7 @@
 
 #include "definitions.hpp"
 
-struct config_t
-{
+struct config_t {
     uint16_t        vid_width;
     uint16_t        vid_height;
 
@@ -20,8 +19,7 @@ struct config_t
     uint16_t        aud_mixfreq;
 };
 
-class Configuration
-{
+class Configuration {
     public:
         static bool load(const char* dir, config_t* c);
         static bool save(const char* dir, config_t* c);

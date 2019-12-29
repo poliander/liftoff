@@ -10,8 +10,7 @@
 using std::make_unique;
 using std::unique_ptr;
 
-class View
-{
+class View {
     public:
         View(uint8_t t, glm::mat4 p);
         virtual ~View();

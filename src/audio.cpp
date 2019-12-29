@@ -1,22 +1,16 @@
 #include "audio.hpp"
 
-Audio::Audio()
-{
+Audio::Audio() {
     volume_sfx = 0;
     volume_music = 0;
 
     state_background_sound = -1;
 }
 
-Audio::~Audio()
-{
+Audio::~Audio() {
 }
 
-/*
- * init
- */
-void Audio::init(char *data_dir, int vol_sfx, int vol_music, int mix_freq)
-{
+void Audio::init(char* data_dir, int vol_sfx, int vol_music, int mix_freq) {
     volume_sfx = vol_sfx;
     volume_music = vol_music;
     mixer_frequency = mix_freq;
@@ -24,11 +18,7 @@ void Audio::init(char *data_dir, int vol_sfx, int vol_music, int mix_freq)
     Mix_AllocateChannels(32);
 }
 
-/*
- * load sample
- */
-Mix_Chunk *Audio::loadSample(const char *filename)
-{
+Mix_Chunk* Audio::loadSample(const char *filename) {
     Mix_Chunk *tmp = NULL;
     char f[255];
 
@@ -40,11 +30,7 @@ Mix_Chunk *Audio::loadSample(const char *filename)
     return(tmp);
 }
 
-/*
- * play sample
- */
-void Audio::playSample(int id, int v, int pos)
-{
+void Audio::playSample(int id, int v, int pos) {
     int res;
     float vol;
 
@@ -57,33 +43,20 @@ void Audio::playSample(int id, int v, int pos)
     }
 }
 
-/*
- * play looping background sound
- */
-void Audio::playSampleLoop(int id, int ms)
-{
-    if (volume_sfx) {
+void Audio::playSampleLoop(int id, int ms) {
+    if (volume_sfx > 0) {
         state_background_sound = Mix_FadeInChannel(-1, sample[id], -1, ms);
     }
 }
 
-/*
- * stop looping background sound
- */
-void Audio::stopSampleLoop(int fadetime)
-{
+void Audio::stopSampleLoop(int fadetime) {
     if (state_background_sound != -1) {
         Mix_FadeOutChannel(state_background_sound, fadetime);
         state_background_sound = -1;
     }
 }
 
-/*
- * update sound position
- */
-void Audio::updatePosition(float player_x)
-{
-    // player's ship engine
+void Audio::updatePosition(float player_x) {
     if (state_background_sound != -1) {
         int angle = static_cast<int>(.75f * player_x);
 
@@ -95,30 +68,22 @@ void Audio::updatePosition(float player_x)
     }
 }
 
-/*
- * load background music
- */
-Mix_Music *Audio::loadMusic(const char *filename)
-{
-    Mix_Music *tmp = NULL;
+Mix_Music* Audio::loadMusic(const char* filename) {
+    Mix_Music* tmp = NULL;
     char f[255];
 
-    if (volume_music) {
+    if (volume_music > 0) {
         sprintf(f, "%s/%s", resource_dir, filename);
         tmp = Mix_LoadMUS(f);
     }
 
-    return(tmp);
+    return tmp;
 }
 
-/*
- * play background music
- */
-void Audio::playMusic(int id, int fadetime)
-{
+void Audio::playMusic(int id, int fadetime) {
     float vol;
 
-    if (volume_music) {
+    if (volume_music > 0) {
         vol = static_cast<float>(volume_music) * static_cast<float>(MIX_MAX_VOLUME) * .125f;
         Mix_VolumeMusic(static_cast<int>(vol));
 
@@ -130,12 +95,8 @@ void Audio::playMusic(int id, int fadetime)
     }
 }
 
-/*
- * stop music playback
- */
-void Audio::stopMusic(int fadetime)
-{
-    if (volume_music) {
+void Audio::stopMusic(int fadetime) {
+    if (volume_music > 0) {
         Mix_FadeOutMusic(fadetime);
     }
 }

@@ -1,7 +1,6 @@
 #include "font.hpp"
 
-Font::Font(const string& filename, shared_ptr<Shader> s, uint8_t q) : Quad()
-{
+Font::Font(const string& filename, shared_ptr<Shader> s, uint8_t q) : Quad() {
     FT_Library ft;
     FT_Face face;
 
@@ -43,7 +42,7 @@ Font::Font(const string& filename, shared_ptr<Shader> s, uint8_t q) : Quad()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        Glyph glyph = {
+        glyph_t glyph = {
             texture,
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
@@ -51,22 +50,20 @@ Font::Font(const string& filename, shared_ptr<Shader> s, uint8_t q) : Quad()
             face->glyph->metrics.vertAdvance >> 6
         };
 
-        glyphs.insert(std::pair<GLchar, Glyph>(c, glyph));
+        glyphs.insert(std::pair<GLchar, glyph_t>(c, glyph));
     }
 
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
 }
 
-Font::~Font()
-{
+Font::~Font() {
     for (auto i = glyphs.begin(); i != glyphs.end(); i++) {
         glDeleteTextures(1, &i->second.texture);
     }
 }
 
-void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a)
-{
+void Font::draw(const string& txt, float x, float y, float s, float r, float g, float b, float a) {
     x *= .5f;
     y *= .5f;
     s *= .5f * scale;
@@ -80,7 +77,7 @@ void Font::draw(const string& txt, float x, float y, float s, float r, float g, 
     glBindVertexArray(vertexArray);
 
     for (string::const_iterator c = txt.begin(); c != txt.end(); c++) {
-        Glyph g = glyphs[*c];
+        glyph_t g = glyphs[*c];
 
         GLfloat xp = x + g.bearing.x * s;
         GLfloat yp = y - g.bearing.y * s;

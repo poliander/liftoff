@@ -11,8 +11,7 @@
 
 using std::shared_ptr;
 
-class Entity
-{
+class Entity {
     public:
         Entity(State &s);
         virtual ~Entity();

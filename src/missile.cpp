@@ -1,7 +1,6 @@
 #include "missile.hpp"
 
-Missile::Missile(State &s, uint16_t p) : Entity(s)
-{
+Missile::Missile(State &s, uint16_t p) : Entity(s) {
     e_obj = OBJ_MISSILE_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
@@ -21,12 +20,10 @@ Missile::Missile(State &s, uint16_t p) : Entity(s)
     power = p;
 }
 
-Missile::~Missile()
-{
+Missile::~Missile() {
 }
 
-void Missile::collide(shared_ptr<Entity> e)
-{
+void Missile::collide(shared_ptr<Entity> e) {
     if (e->isPlayer()) {
         return;
     }
@@ -39,8 +36,7 @@ void Missile::collide(shared_ptr<Entity> e)
     }
 }
 
-void Missile::update()
-{
+void Missile::update() {
     Entity::update();
 
     c_a = (state.global_alpha * .5f) + ((getPosZ() + 200.0f) * .00002f);
@@ -50,8 +46,7 @@ void Missile::update()
     }
 }
 
-void Missile::draw()
-{
+void Missile::draw() {
     float a = state.global_alpha;
 
     glDisable(GL_DEPTH_TEST);

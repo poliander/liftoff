@@ -14,8 +14,7 @@ enum emitters_e {
     EMIT_EXPLOSION
 };
 
-struct particle_t
-{
+struct particle_t {
     float lifetime;
     float fading;
 
@@ -28,8 +27,7 @@ struct particle_t
     float dz;
 };
 
-class ParticleEngine
-{
+class ParticleEngine {
     public:
         ParticleEngine(State &s);
         ~ParticleEngine();

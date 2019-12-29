@@ -1,7 +1,6 @@
 #include "framebuffer.hpp"
 
-Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint s) : Quad()
-{
+Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint s) : Quad() {
     width = w;
     height = h;
     samples = s;
@@ -36,15 +35,13 @@ Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint s) : Quad()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-Framebuffer::~Framebuffer()
-{
+Framebuffer::~Framebuffer() {
     glDeleteTextures(1, &buffers[FB_BUFFER_COLOR]);
     glDeleteRenderbuffers(1, &buffers[FB_BUFFER_DEPTH]);
     glDeleteFramebuffers(1, &framebuffer);
 }
 
-void Framebuffer::bind()
-{
+void Framebuffer::bind() {
     glGetIntegerv(GL_VIEWPORT, originalViewport);
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &originalFramebuffer);
 
@@ -52,20 +49,17 @@ void Framebuffer::bind()
     glViewport(0, 0, width, height);
 }
 
-void Framebuffer::unbind()
-{
+void Framebuffer::unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, originalFramebuffer);
     glViewport(originalViewport[0], originalViewport[1], originalViewport[2], originalViewport[3]);
 }
 
-void Framebuffer::clear()
-{
+void Framebuffer::clear() {
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Framebuffer::draw()
-{
+void Framebuffer::draw() {
     glBindTexture(GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR]);
 
     if (samples > 0) {

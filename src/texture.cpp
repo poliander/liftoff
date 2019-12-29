@@ -1,7 +1,6 @@
 #include "texture.hpp"
 
-Texture::Texture(string filename) : Quad()
-{
+Texture::Texture(string filename) : Quad() {
     t_image* image = (t_image*)malloc(sizeof(t_image));
 
     if (load(filename, image)) {
@@ -22,13 +21,11 @@ Texture::Texture(string filename) : Quad()
     free(image);
 }
 
-Texture::~Texture()
-{
+Texture::~Texture() {
     glDeleteTextures(1, &texColorBuffer);
 }
 
-bool Texture::load(string filename, t_image *image)
-{
+bool Texture::load(string filename, t_image *image) {
     t_tga_header header;
     unsigned char raw[4], trans[4];
     int rle_count = 0, rle_repeat = 0, read_next = 1, pixels, r;
@@ -108,7 +105,6 @@ bool Texture::load(string filename, t_image *image)
     return true;
 }
 
-void Texture::bind()
-{
+void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 }

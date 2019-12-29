@@ -9,8 +9,7 @@
 using std::make_pair;
 using std::unique_ptr;
 
-class Overlay
-{
+class Overlay {
     public:
         Overlay(State& s);
         ~Overlay();

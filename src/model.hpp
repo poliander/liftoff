@@ -11,8 +11,7 @@
 
 using std::shared_ptr;
 
-enum vbo_buffer_indices_e
-{
+enum vbo_buffer_indices_e {
     VAB_INDICES,
     VAB_POSITIONS,
     VAB_TEXCOORDS,
@@ -21,8 +20,7 @@ enum vbo_buffer_indices_e
 
 class State;
 
-class Model
-{
+class Model {
     public:
         Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s);
         ~Model();

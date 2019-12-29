@@ -14,8 +14,7 @@
 
 using std::max;
 
-class Skybox
-{
+class Skybox {
     public:
         Skybox(State& s);
         ~Skybox();

@@ -1,7 +1,6 @@
 #include "configuration.hpp"
 
-bool Configuration::load(const char* dir, config_t* c)
-{
+bool Configuration::load(const char* dir, config_t* c) {
     bool result = false;
     char cwd[255];
 
@@ -24,8 +23,7 @@ bool Configuration::load(const char* dir, config_t* c)
     return result;
 }
 
-bool Configuration::save(const char* dir, config_t* c)
-{
+bool Configuration::save(const char* dir, config_t* c) {
     bool result = false;
     char cwd[255];
 

@@ -33,8 +33,7 @@
 
 using std::unique_ptr;
 
-class Scene
-{
+class Scene {
     public:
         Scene(State& s);
         ~Scene();

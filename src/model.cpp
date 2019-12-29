@@ -1,10 +1,6 @@
 #include "model.hpp"
 
-Model::Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s) :
-    object(o),
-    texture(t),
-    shader(s)
-{
+Model::Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s) : object(o), texture(t), shader(s) {
     glGenVertexArrays(1, &vertexArrayObject);
     glBindVertexArray(vertexArrayObject);
 
@@ -35,14 +31,12 @@ Model::Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s) 
     glBindVertexArray(0);
 }
 
-Model::~Model()
-{
+Model::~Model() {
     glDeleteBuffers(4, vertexArrayBuffers);
     glDeleteVertexArrays(1, &vertexArrayObject);
 }
 
-void Model::draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec4 color)
-{
+void Model::draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec4 color) {
     shader->bind();
     texture->bind();
 

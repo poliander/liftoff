@@ -1,7 +1,6 @@
 #include "particles.hpp"
 
-ParticleEngine::ParticleEngine(State &s) : state(s)
-{
+ParticleEngine::ParticleEngine(State &s) : state(s) {
     c_r = 1.0f;
     c_g = 1.0f;
     c_b = 1.0f;
@@ -14,12 +13,10 @@ ParticleEngine::ParticleEngine(State &s) : state(s)
     blendDestFactor = GL_ONE;
 }
 
-ParticleEngine::~ParticleEngine()
-{
+ParticleEngine::~ParticleEngine() {
 }
 
-void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz, float decay, float size)
-{
+void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz, float decay, float size) {
     particles.clear();
 
     psize = size;
@@ -79,71 +76,58 @@ void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz,
     }
 }
 
-void ParticleEngine::setTexture(GLuint t)
-{
+void ParticleEngine::setTexture(GLuint t) {
     texture = t;
 }
 
-void ParticleEngine::setBlendFunc(GLenum s, GLenum d)
-{
+void ParticleEngine::setBlendFunc(GLenum s, GLenum d) {
     blendSourceFactor = s;
     blendDestFactor = d;
 }
 
-void ParticleEngine::setColor(float r, float g, float b)
-{
+void ParticleEngine::setColor(float r, float g, float b) {
     c_r = r;
     c_g = g;
     c_b = b;
 }
 
-void ParticleEngine::setAlpha(float a)
-{
+void ParticleEngine::setAlpha(float a) {
     c_a = a;
 }
 
-void ParticleEngine::setSize(float s)
-{
+void ParticleEngine::setSize(float s) {
     psize = s;
 }
 
-void ParticleEngine::setVolume(float v)
-{
+void ParticleEngine::setVolume(float v) {
     pvolume = v;
 }
 
-void ParticleEngine::setInflation(float i)
-{
+void ParticleEngine::setInflation(float i) {
     pinflation = i;
 }
 
-float ParticleEngine::getInflation()
-{
+float ParticleEngine::getInflation() {
     return pinflation;
 }
 
-void ParticleEngine::setIncrease(float i)
-{
+void ParticleEngine::setIncrease(float i) {
     pincrease = i;
 }
 
-float ParticleEngine::getIncrease()
-{
+float ParticleEngine::getIncrease() {
     return pincrease;
 }
 
-void ParticleEngine::setContinuous(bool c)
-{
+void ParticleEngine::setContinuous(bool c) {
     pcontinuous = c;
 }
 
-bool ParticleEngine::done()
-{
+bool ParticleEngine::done() {
     return particles.size() == 0;
 }
 
-void ParticleEngine::update()
-{
+void ParticleEngine::update() {
     pvolume = pvolume * (1.0f + (pinflation * state.global_timer));
     psize += pincrease * state.global_timer;
 
@@ -195,8 +179,7 @@ void ParticleEngine::update()
     }
 }
 
-void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz)
-{
+void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz) {
     float m[16];
     float a = state.global_alpha;
 

@@ -1,7 +1,6 @@
 #include "state.hpp"
 
-State::State()
-{
+State::State() {
     char cwd[255];
 
     getcwd(cwd, 255);
@@ -64,12 +63,10 @@ State::State()
     messages.clear();
 }
 
-State::~State()
-{
+State::~State() {
 }
 
-void State::log(const char *msg)
-{
+void State::log(const char *msg) {
     if (log_file) {
         FILE *fp;
 
@@ -81,25 +78,21 @@ void State::log(const char *msg)
     }
 }
 
-void State::tilt(float t)
-{
+void State::tilt(float t) {
     if (tilt_factor < fabs(t)) {
         tilt_factor = fabs(t);
     }
 }
 
-void State::spawn(shared_ptr<Entity> e)
-{
+void State::spawn(shared_ptr<Entity> e) {
     spawns.push_back(e);
 }
 
-void State::notify(uint8_t t, int16_t v)
-{
+void State::notify(uint8_t t, int16_t v) {
     messages.push_back(make_unique<Message>(t, v));
 }
 
-void State::update()
-{
+void State::update() {
     global_timer = static_cast<float>(SDL_GetTicks() - timer) * .05f;
 
     if (global_counter < 1.0f) {
@@ -136,8 +129,7 @@ void State::update()
     timer = SDL_GetTicks();
 }
 
-bool State::set(int s)
-{
+bool State::set(int s) {
     if (id == s) return false;
 
     char msg[255];
@@ -227,7 +219,6 @@ bool State::set(int s)
     return true;
 }
 
-int State::get()
-{
+int State::get() {
     return id;
 }

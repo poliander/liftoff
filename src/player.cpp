@@ -1,7 +1,6 @@
 #include "player.hpp"
 
-Player::Player(State &s) : Entity(s)
-{
+Player::Player(State &s) : Entity(s) {
     e_obj = OBJ_PLAYER;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;
@@ -9,12 +8,10 @@ Player::Player(State &s) : Entity(s)
     init();
 }
 
-Player::~Player()
-{
+Player::~Player() {
 }
 
-void Player::init()
-{
+void Player::init() {
     setPos(0, -90.0f, 50.0f);
     setRot(90.0f, 0, 270.0f);
     setScale(22.5f, 22.5f, 22.5f);
@@ -50,8 +47,7 @@ void Player::init()
     collect(OBJ_POWERUP_0);
 }
 
-void Player::collect(uint16_t e_obj)
-{
+void Player::collect(uint16_t e_obj) {
     powerup_timer = SDL_GetTicks();
 
     switch (e_obj) {
@@ -65,12 +61,10 @@ void Player::collect(uint16_t e_obj)
     }
 }
 
-void Player::collide(shared_ptr<Entity> e)
-{
+void Player::collide(shared_ptr<Entity> e) {
 }
 
-void Player::shoot()
-{
+void Player::shoot() {
     float ax, ay, dx, dy, dz, hx, hy;
     Sint16 angle;
 
@@ -128,8 +122,7 @@ void Player::shoot()
     state.audio.playSample(2, 255, angle);
 }
 
-void Player::update()
-{
+void Player::update() {
     // check boundary
     if (p_x < -600.0f) {
         p_x = -600.0f;
@@ -289,8 +282,7 @@ void Player::update()
     }
 }
 
-void Player::draw()
-{
+void Player::draw() {
     float a = state.global_alpha;
 
     glm::mat4 projection = state.view->getProjection();

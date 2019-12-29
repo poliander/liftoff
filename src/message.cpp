@@ -1,7 +1,6 @@
 #include <message.hpp>
 
-Message::Message(uint16_t t, uint16_t v)
-{
+Message::Message(uint16_t t, uint16_t v) {
     counter = 0;
     type = t;
     value = v;
@@ -42,6 +41,5 @@ Message::Message(uint16_t t, uint16_t v)
     }
 }
 
-Message::~Message()
-{
+Message::~Message() {
 }

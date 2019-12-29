@@ -10,8 +10,7 @@
 #include "state.hpp"
 #include "renderbuffer.hpp"
 
-class Engine
-{
+class Engine {
     public:
         Engine();
         ~Engine();

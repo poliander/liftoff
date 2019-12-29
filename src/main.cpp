@@ -2,8 +2,7 @@
 
 Engine *engine;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     Engine engine;
 
     if (engine.init(argc, argv)) {

@@ -8,8 +8,7 @@
 #include "entity.hpp"
 #include "missile.hpp"
 
-class Player : public Entity
-{
+class Player : public Entity {
     public:
         Player(State &s);
         ~Player();

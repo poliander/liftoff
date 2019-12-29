@@ -1,7 +1,6 @@
 #include "explosion.hpp"
 
-Explosion::Explosion(State& s, uint16_t t, float x, float y, float z) : Entity(s)
-{
+Explosion::Explosion(State& s, uint16_t t, float x, float y, float z) : Entity(s) {
     e_obj = t;
     e_type = E_TYPE_DECORATION;
     e_state = E_STATE_ACTIVE;
@@ -55,17 +54,14 @@ Explosion::Explosion(State& s, uint16_t t, float x, float y, float z) : Entity(s
     }
 }
 
-Explosion::Explosion(State& s, uint16_t t, float x, float y, float z, float r, float g, float b) : Explosion(s, t, x, y, z)
-{
+Explosion::Explosion(State& s, uint16_t t, float x, float y, float z, float r, float g, float b) : Explosion(s, t, x, y, z) {
     particles->setColor(r, g, b);
 }
 
-Explosion::~Explosion()
-{
+Explosion::~Explosion() {
 }
 
-void Explosion::update()
-{
+void Explosion::update() {
     Entity::update();
 
     particles->update();
@@ -75,8 +71,7 @@ void Explosion::update()
     }
 }
 
-void Explosion::draw()
-{
+void Explosion::draw() {
     particles->draw(
         (getPosX() - state.cam_x) * E_RELATIVE_MOVEMENT,
         (getPosY() - state.cam_y) * E_RELATIVE_MOVEMENT,

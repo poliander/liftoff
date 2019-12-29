@@ -1,18 +1,15 @@
 #include "object.hpp"
 
-Object::Object(string filename)
-{
+Object::Object(string filename) {
     if (load(filename)) {
         index();
     }
 }
 
-Object::~Object()
-{
+Object::~Object() {
 }
 
-bool Object::load(string filename)
-{
+bool Object::load(string filename) {
     ifstream file;
     string line;
 
@@ -59,8 +56,7 @@ bool Object::load(string filename)
     return true;
 }
 
-void Object::index()
-{
+void Object::index() {
     std::vector<index_t*> lookup;
 
     for (unsigned int i = 0; i < objIndices.size(); i++) {
@@ -91,8 +87,7 @@ void Object::index()
     }
 }
 
-unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* currentIndex)
-{
+unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* currentIndex) {
     unsigned int start = 0;
     unsigned int end = lookup.size();
     unsigned int current = (end - start) / 2 + start;
@@ -163,8 +158,7 @@ unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* curr
     return -1;
 }
 
-glm::vec2 Object::toVec2(const string& line)
-{
+glm::vec2 Object::toVec2(const string& line) {
     float x, y;
 
     sscanf(line.c_str(), "%*s %f %f", &x, &y);
@@ -172,8 +166,7 @@ glm::vec2 Object::toVec2(const string& line)
     return glm::vec2(x, y);
 }
 
-glm::vec3 Object::toVec3(const string& line)
-{
+glm::vec3 Object::toVec3(const string& line) {
     float x, y, z;
 
     sscanf(line.c_str(), "%*s %f %f %f", &x, &y, &z);
@@ -181,8 +174,7 @@ glm::vec3 Object::toVec3(const string& line)
     return glm::vec3(x, y, z);
 }
 
-index_t Object::toIndex(const string& line)
-{
+index_t Object::toIndex(const string& line) {
     unsigned int v, u, n;
 
     sscanf(line.c_str(), "%d/%d/%d", &v, &u, &n);
@@ -190,8 +182,7 @@ index_t Object::toIndex(const string& line)
     return index_t { --v, --u, --n };
 }
 
-vector<string> Object::split(string line, char delim)
-{
+vector<string> Object::split(string line, char delim) {
     vector<string> result;
 
     while (line.size()) {

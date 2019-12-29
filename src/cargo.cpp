@@ -1,7 +1,6 @@
 #include "cargo.hpp"
 
-Cargo::Cargo(State &s) : Entity(s)
-{
+Cargo::Cargo(State &s) : Entity(s) {
     e_obj = OBJ_CARGO_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_IDLE;
@@ -11,12 +10,10 @@ Cargo::Cargo(State &s) : Entity(s)
     money = 50;
 }
 
-Cargo::~Cargo()
-{
+Cargo::~Cargo() {
 }
 
-bool Cargo::damage(int p)
-{
+bool Cargo::damage(int p) {
     bool damaged = Entity::damage(p);
 
     if (damaged && e_state == E_STATE_GONE && yield == false) {
@@ -33,8 +30,7 @@ bool Cargo::damage(int p)
     return damaged;
 }
 
-void Cargo::update()
-{
+void Cargo::update() {
     Entity::update();
 
     if (e_state == E_STATE_FADING) {
@@ -46,8 +42,7 @@ void Cargo::update()
     }
 }
 
-void Cargo::draw()
-{
+void Cargo::draw() {
     float a = state.global_alpha, d = calcDistanceScale();
 
     glm::vec4 color = glm::vec4(a, a, a, a);

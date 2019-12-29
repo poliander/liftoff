@@ -1,7 +1,6 @@
 #include "skybox.hpp"
 
-Skybox::Skybox(State& s) : state(s)
-{
+Skybox::Skybox(State& s) : state(s) {
     view = View::createPerspective(65.0f, 1.0f, 1.0f, 10000.0f);
     framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, 0);
 
@@ -26,12 +25,10 @@ Skybox::Skybox(State& s) : state(s)
     }
 }
 
-Skybox::~Skybox()
-{
+Skybox::~Skybox() {
 }
 
-void Skybox::update()
-{
+void Skybox::update() {
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
             stars[i][2] += state.global_timer * state.stars_speed * 1.25f;
@@ -47,8 +44,7 @@ void Skybox::update()
     state.stars_rotation_pos -= state.global_timer * state.stars_rotation_speed;
 }
 
-void Skybox::draw()
-{
+void Skybox::draw() {
     float a, c, s = max(static_cast<float>(state.vid_height) / static_cast<float>(state.vid_width), state.vid_aspect);
 
     glDepthMask(GL_FALSE);

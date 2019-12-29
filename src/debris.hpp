@@ -2,8 +2,7 @@
 
 #include "entity.hpp"
 
-class Debris : public Entity
-{
+class Debris : public Entity {
     public:
         Debris(State &s);
         ~Debris();

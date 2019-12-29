@@ -9,8 +9,7 @@ enum message_types_e {
     MSG_ENERGY
 };
 
-class Message
-{
+class Message {
     public:
         Message(uint16_t t, uint16_t v);
         virtual ~Message();

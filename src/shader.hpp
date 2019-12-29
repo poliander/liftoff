@@ -9,8 +9,7 @@
 using std::ifstream;
 using std::string;
 
-enum uniforms_e
-{
+enum uniforms_e {
     UNI_MODEL,
     UNI_VIEW,
     UNI_PROJECTION,
@@ -18,8 +17,7 @@ enum uniforms_e
     UNI_COLOR
 };
 
-class Shader
-{
+class Shader {
     public:
         Shader(const string vsFilename, const string fsFilename);
         ~Shader();

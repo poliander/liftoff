@@ -3,8 +3,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-class Quad
-{
+class Quad {
     public:
         Quad();
         virtual ~Quad();

@@ -1,18 +1,15 @@
 #include "overlay.hpp"
 
-Overlay::Overlay(State& s) : state(s)
-{
+Overlay::Overlay(State& s) : state(s) {
     view = View::createOrthographic(-400.0f, 400.0f, -300.0f, 300.0f);
     perspective = View::createPerspective(45.0f, 4.0f / 3.0f, .01f, 100.0f);
     framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, s.vid_multisampling);
 }
 
-Overlay::~Overlay()
-{
+Overlay::~Overlay() {
 }
 
-void Overlay::update()
-{
+void Overlay::update() {
     auto m = state.messages.begin();
 
     while (m != state.messages.end()) {
@@ -64,8 +61,7 @@ void Overlay::update()
     }
 }
 
-void Overlay::drawMessages()
-{
+void Overlay::drawMessages() {
     float x, y, a, s;
     auto m = state.messages.begin();
 
@@ -98,8 +94,7 @@ void Overlay::drawMessages()
     }
 }
 
-void Overlay::drawStatus()
-{
+void Overlay::drawStatus() {
     char msg[16];
 
     // money
@@ -139,8 +134,7 @@ void Overlay::drawStatus()
     }
 }
 
-void Overlay::drawScreen()
-{
+void Overlay::drawScreen() {
     state.shaders[S_TEXTURE]->bind();
 
     state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -153,8 +147,7 @@ void Overlay::drawScreen()
     state.textures[T_MENU_1]->draw();
 }
 
-void Overlay::drawMenu()
-{
+void Overlay::drawMenu() {
     int numentries;
     float s;
     static float p_rot = 0;
@@ -541,8 +534,7 @@ void Overlay::drawMenu()
     glDisable(GL_DEPTH_TEST);
 }
 
-void Overlay::draw()
-{
+void Overlay::draw() {
     float alpha = state.global_alpha;
 
     glDisable(GL_DEPTH_TEST);

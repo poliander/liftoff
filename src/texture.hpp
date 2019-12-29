@@ -36,8 +36,7 @@ struct t_image {
     GLubyte*  data;
 };
 
-class Texture : public Quad
-{
+class Texture : public Quad {
     public:
         Texture(string filename);
         ~Texture();

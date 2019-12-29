@@ -5,8 +5,7 @@
 #include "state.hpp"
 #include "framebuffer.hpp"
 
-class Renderbuffer
-{
+class Renderbuffer {
     public:
         Renderbuffer(State& s);
         ~Renderbuffer();

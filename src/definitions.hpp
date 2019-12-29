@@ -78,17 +78,17 @@
 #define S_OBJECT                2
 
 // objects
-#define OBJ_PLAYER              101 // player
-#define OBJ_CARGO_1             201 // cargo
-#define OBJ_ASTEROID_1          301 // asteroid
-#define OBJ_DEBRIS_1            311 // space debris
-#define OBJ_MISSILE_1           401 // green laser
-#define OBJ_EXPLOSION_1         501 // explosion (gun)
-#define OBJ_EXPLOSION_2         502 // explosion (smoke)
-#define OBJ_EXPLOSION_3         503 // explosion (sparks)
-#define OBJ_EXPLOSION_4         504 // explosion (fireball)
-#define OBJ_POWERUP_0           601 // energy and life boost at level start
-#define OBJ_POWERUP_1           602 // energy and life boost
+#define OBJ_PLAYER              101  // player
+#define OBJ_CARGO_1             201  // cargo
+#define OBJ_ASTEROID_1          301  // asteroid
+#define OBJ_DEBRIS_1            311  // space debris
+#define OBJ_MISSILE_1           401  // green laser
+#define OBJ_EXPLOSION_1         501  // explosion (gun)
+#define OBJ_EXPLOSION_2         502  // explosion (smoke)
+#define OBJ_EXPLOSION_3         503  // explosion (sparks)
+#define OBJ_EXPLOSION_4         504  // explosion (fireball)
+#define OBJ_POWERUP_0           601  // energy and life boost at level start
+#define OBJ_POWERUP_1           602  // energy and life boost
 
 // sound fx ids
 #define SFX_GUN_IMPACT          4

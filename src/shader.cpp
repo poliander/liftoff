@@ -1,7 +1,6 @@
 #include "shader.hpp"
 
-Shader::Shader(const string vsFilename, const string fsFilename)
-{
+Shader::Shader(const string vsFilename, const string fsFilename) {
     GLint success;
     GLchar error[1024];
 
@@ -40,8 +39,7 @@ Shader::Shader(const string vsFilename, const string fsFilename)
     uniforms[UNI_COLOR] = glGetUniformLocation(program, "color");
 }
 
-Shader::~Shader()
-{
+Shader::~Shader() {
     glDetachShader(program, shaders[1]);
     glDeleteShader(shaders[1]);
 
@@ -51,33 +49,27 @@ Shader::~Shader()
     glDeleteProgram(program);
 }
 
-void Shader::bind()
-{
+void Shader::bind() {
     glUseProgram(program);
 }
 
-void Shader::unbind()
-{
+void Shader::unbind() {
     glUseProgram(0);
 }
 
-void Shader::update(uint8_t id, glm::vec2 v)
-{
+void Shader::update(uint8_t id, glm::vec2 v) {
     glUniform2fv(uniforms[id], 1, &v[0]);
 }
 
-void Shader::update(uint8_t id, glm::vec4 v)
-{
+void Shader::update(uint8_t id, glm::vec4 v) {
     glUniform4fv(uniforms[id], 1, &v[0]);
 }
 
-void Shader::update(uint8_t id, glm::mat4 m)
-{
+void Shader::update(uint8_t id, glm::mat4 m) {
     glUniformMatrix4fv(uniforms[id], 1, GL_FALSE, &m[0][0]);
 }
 
-GLuint Shader::create(const string& text, unsigned int type)
-{
+GLuint Shader::create(const string& text, unsigned int type) {
     GLuint shader = glCreateShader(type);
 
     if (shader) {
@@ -94,8 +86,7 @@ GLuint Shader::create(const string& text, unsigned int type)
     return shader;
 }
 
-string Shader::load(const string& filename)
-{
+string Shader::load(const string& filename) {
     string line, output;
     ifstream file;
 

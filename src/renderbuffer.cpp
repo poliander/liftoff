@@ -1,7 +1,6 @@
 #include "renderbuffer.hpp"
 
-Renderbuffer::Renderbuffer(State& s) : state(s)
-{
+Renderbuffer::Renderbuffer(State& s) : state(s) {
     view = View::createOrthographic(-s.vid_width * .5f, s.vid_width * .5f, s.vid_height * .5f, -s.vid_height * .5f);
     framebuffer = make_unique<Framebuffer>(s.vid_fb_size, s.vid_fb_size, s.vid_multisampling);
 
@@ -22,33 +21,28 @@ Renderbuffer::Renderbuffer(State& s) : state(s)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-Renderbuffer::~Renderbuffer()
-{
+Renderbuffer::~Renderbuffer() {
     glDeleteFramebuffers(1, &renderbuffer);
     glDeleteRenderbuffers(1, &renderbufferDepth);
     glDeleteRenderbuffers(1, &renderbufferColor);
 }
 
-void Renderbuffer::bind()
-{
+void Renderbuffer::bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, renderbuffer);
     glViewport(0, 0, state.vid_fb_size, state.vid_fb_size);
 }
 
-void Renderbuffer::unbind()
-{
+void Renderbuffer::unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, state.vid_width, state.vid_height);
 }
 
-void Renderbuffer::clear()
-{
+void Renderbuffer::clear() {
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderbuffer::blit()
-{
+void Renderbuffer::blit() {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, renderbuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *framebuffer);
     glBlitFramebuffer(
@@ -59,8 +53,7 @@ void Renderbuffer::blit()
     );
 }
 
-void Renderbuffer::draw()
-{
+void Renderbuffer::draw() {
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
