@@ -29,7 +29,7 @@
 #include "renderbuffer.hpp"
 #include "skybox.hpp"
 
-using namespace std;
+using std::unique_ptr;
 
 class Scene
 {

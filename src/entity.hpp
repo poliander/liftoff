@@ -8,7 +8,7 @@
 #include "functions.hpp"
 #include "state.hpp"
 
-using namespace std;
+using std::shared_ptr;
 
 class Entity
 {

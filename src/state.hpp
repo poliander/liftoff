@@ -22,7 +22,11 @@
 #include "texture.hpp"
 #include "view.hpp"
 
-using namespace std;
+using std::make_shared;
+using std::make_unique;
+using std::shared_ptr;
+using std::unique_ptr;
+using std::vector;
 
 class Entity;
 

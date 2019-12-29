@@ -11,7 +11,8 @@
 #include "shader.hpp"
 #include "view.hpp"
 
-using namespace std;
+using std::map;
+using std::shared_ptr;
 
 struct Glyph
 {

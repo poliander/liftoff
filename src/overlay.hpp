@@ -4,7 +4,8 @@
 #include "player.hpp"
 #include "state.hpp"
 
-using namespace std;
+using std::make_pair;
+using std::unique_ptr;
 
 class Overlay
 {

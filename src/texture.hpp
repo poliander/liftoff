@@ -7,7 +7,7 @@
 
 #include "quad.hpp"
 
-using namespace std;
+using std::string;
 
 #pragma pack(push, 1)
 

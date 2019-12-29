@@ -7,7 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-using namespace std;
+using std::make_unique;
+using std::unique_ptr;
 
 class View
 {

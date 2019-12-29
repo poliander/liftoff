@@ -7,7 +7,9 @@
 
 #include <glm/glm.hpp>
 
-using namespace std;
+using std::ifstream;
+using std::string;
+using std::vector;
 
 struct index_t
 {

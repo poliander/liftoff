@@ -6,7 +6,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-using namespace std;
+using std::ifstream;
+using std::string;
 
 enum uniforms_e
 {

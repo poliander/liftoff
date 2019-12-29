@@ -10,6 +10,8 @@
 #define SKYBOX_NUM_STARS      3000
 #define SKYBOX_NUM_STARS_WARP 500
 
+using std::max;
+
 class Skybox
 {
     public:

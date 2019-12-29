@@ -2,7 +2,7 @@
 
 Texture::Texture(string filename) : Quad()
 {
-    t_image *image = (t_image *)malloc(sizeof(t_image));
+    t_image* image = (t_image*)malloc(sizeof(t_image));
 
     if (load(filename, image)) {
         glGenTextures(1, &texColorBuffer);
