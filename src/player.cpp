@@ -237,7 +237,7 @@ void Player::update() {
     } else {
         state->tilt_factor = 0;
         state->tilt_dx = 0;
-        state->tilt_dy =0;
+        state->tilt_dy = 0;
 
         if (fabs(state->tilt_x) > .05f) {
             state->tilt_x += (.025f + (state->tilt_dx - state->tilt_x)) * state->global_timer * .15f;

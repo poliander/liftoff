@@ -98,11 +98,11 @@ class State {
         bool                        stars_warp;
 
         // frames per second
-        float                       fps;         // calculated fps rate
-        bool                        fps_visible; // toggle display
-        int                         fps_counter; // frames counter
-        Uint32                      fps_timer;   // measuring timer
-        Uint32                      fps_timer_l; // previous frame measuring time
+        float                       fps;          // actual FPS rate
+        bool                        fps_visible;  // toggle display
+        int                         fps_counter;  // frames counter
+        Uint32                      fps_timer;    // measuring timer
+        Uint32                      fps_timer_l;  // previous frame measuring time
 
         // input
         SDL_Joystick*               joystick;

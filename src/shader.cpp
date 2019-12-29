@@ -20,7 +20,11 @@ Shader::Shader(const string vsFilename, const string fsFilename) {
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (success == GL_FALSE) {
         glGetProgramInfoLog(program, sizeof(error), NULL, error);
-        FILE *fp = fopen("shader.log", "a");fprintf(fp,"%s\n", error);fclose(fp);
+
+        FILE *fp = fopen("shader.log", "a");
+        fprintf(fp, "%s\n", error);
+        fclose(fp);
+
         exit(-1);
     }
 
@@ -28,7 +32,11 @@ Shader::Shader(const string vsFilename, const string fsFilename) {
     glGetProgramiv(program, GL_VALIDATE_STATUS, &success);
     if (success == GL_FALSE) {
         glGetProgramInfoLog(program, sizeof(error), NULL, error);
-        FILE *fp = fopen("shader.log", "a");fprintf(fp,"%s\n", error);fclose(fp);
+
+        FILE *fp = fopen("shader.log", "a");
+        fprintf(fp, "%s\n", error);
+        fclose(fp);
+
         exit(-1);
     }
 

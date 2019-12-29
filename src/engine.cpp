@@ -12,7 +12,7 @@ bool Engine::init(int argc, char **argv) {
     SDL_DisplayMode current;
 
     if (argc >= 0) {
-        for (int i=0; i<argc; i++) {
+        for (int i = 0; i < argc; i++) {
             if (strcmp(argv[i], "/d") == 0 ||
                 strcmp(argv[i], "-d") == 0
             ) {
@@ -347,7 +347,7 @@ bool Engine::handleKeyboard() {
     // F12: toggle FPS display
     if (keys[SDL_SCANCODE_F12]) {
         if (SDL_GetTicks() > nextrelease) {
-            state.fps_visible =! state.fps_visible;
+            state.fps_visible = !state.fps_visible;
 
             if (state.fps_visible) {
                 state.fps_counter = 0;
@@ -408,7 +408,7 @@ bool Engine::handleKeyboard() {
                         state.menu_pos = 4;
                         state.menu_selected = true;
 
-                        for (int i=0; i<state.vid_cap_modes_num; i++) {
+                        for (int i = 0; i < state.vid_cap_modes_num; i++) {
                             if ( (state.vid_width  == state.vid_cap_modes[i].w) &&
                                  (state.vid_height == state.vid_cap_modes[i].h) ) {
                                  state.vid_mode = i;
