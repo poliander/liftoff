@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 
 #include <GL/glew.h>
@@ -107,7 +108,7 @@ class Entity
         uint16_t           e_state;
 
         State              &state;
- 
+
         float              p_x;                  // position
         float              p_y;
         float              p_z;

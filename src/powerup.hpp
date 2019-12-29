@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "entity.hpp"
 #include "message.hpp"
 #include "particles.hpp"

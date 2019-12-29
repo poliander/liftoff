@@ -4,7 +4,9 @@
 #include <cmath>
 #include <memory>
 #include <stdlib.h>
+#include <string>
 #include <time.h>
+#include <utility>
 #include <vector>
 
 #include <SDL2/SDL.h>

@@ -62,11 +62,11 @@ bool Object::load(string filename)
 void Object::index()
 {
     std::vector<index_t*> lookup;
-    
+
     for (unsigned int i = 0; i < objIndices.size(); i++) {
         lookup.push_back(&objIndices[i]);
     }
-    
+
     sort(lookup.begin(), lookup.end(), Object::compareIndex);
 
     positions.clear();
@@ -97,34 +97,34 @@ unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* curr
     unsigned int end = lookup.size();
     unsigned int current = (end - start) / 2 + start;
     unsigned int previous = start;
-    
+
     while (current != previous) {
         index_t* testIndex = lookup[current];
-        
+
         if (testIndex->vertex == currentIndex->vertex) {
             unsigned int countStart = current;
-        
+
             for (unsigned int i = 0; i < current; i++) {
                 index_t* possibleIndex = lookup[current - i];
-                
+
                 if (possibleIndex == currentIndex) {
                     continue;
                 }
-                    
+
                 if (possibleIndex->vertex != currentIndex->vertex) {
                     break;
                 }
-                    
+
                 countStart--;
             }
-            
+
             for (unsigned int i = countStart; i < lookup.size() - countStart; i++) {
                 index_t* possibleIndex = lookup[current + i];
-                
+
                 if (possibleIndex == currentIndex) {
                     continue;
                 }
-                    
+
                 if (possibleIndex->vertex != currentIndex->vertex) {
                     break;
                 } else if (
@@ -134,7 +134,7 @@ unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* curr
                     glm::vec3 currentPosition = objVertices[currentIndex->vertex];
                     glm::vec2 currentTexCoord = objTexCoords[currentIndex->uv];
                     glm::vec3 currentNormal = objNormals[currentIndex->normal];
-                    
+
                     for (unsigned int j = 0; j < positions.size(); j++) {
                         if (
                             currentPosition == positions[j] &&
@@ -146,7 +146,7 @@ unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* curr
                     }
                 }
             }
-        
+
             return -1;
         } else {
             if (testIndex->vertex < currentIndex->vertex) {
@@ -155,11 +155,11 @@ unsigned int Object::previousVertexIndex(vector<index_t*> &lookup, index_t* curr
                 end = current;
             }
         }
-    
+
         previous = current;
         current = (end - start) / 2 + start;
     }
-    
+
     return -1;
 }
 

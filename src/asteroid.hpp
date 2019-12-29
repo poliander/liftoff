@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "debris.hpp"
 #include "entity.hpp"
 #include "explosion.hpp"

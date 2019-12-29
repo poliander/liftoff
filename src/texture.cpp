@@ -60,7 +60,7 @@ bool Texture::load(string filename, t_image *image)
             fclose(fd);
             return false;
     }
-    
+
     for (int i = 0; i < pixels; ++i) {
         if (header.data_type == 10) {
             if (rle_count == 0) {
@@ -104,7 +104,7 @@ bool Texture::load(string filename, t_image *image)
     }
 
     fclose(fd);
-    
+
     return true;
 }
 

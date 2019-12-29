@@ -366,7 +366,7 @@ bool Scene::loadLevel()
             }
         }
     }
-    
+
     state.log("ok\n");
 
     return true;
@@ -379,7 +379,7 @@ void Scene::updateScene()
 {
     static GLuint nextdebris = SDL_GetTicks();
 
-    if (SDL_GetTicks() > nextdebris && 
+    if (SDL_GetTicks() > nextdebris &&
         state.lvl_pos < float(state.lvl_length - 1000)
     ) {
         nextdebris = SDL_GetTicks() + 200 + rand() % 200;

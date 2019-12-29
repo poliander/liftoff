@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <memory>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GL/glu.h>

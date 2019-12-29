@@ -1,6 +1,8 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
+#include <memory>
 #include <stdlib.h>
 
 #include "functions.hpp"

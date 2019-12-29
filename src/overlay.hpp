@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "framebuffer.hpp"
 #include "player.hpp"
 #include "state.hpp"

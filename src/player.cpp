@@ -333,7 +333,7 @@ void Player::draw()
 
     if (gun_flash[1] > 0) {
         glm::mat4 m;
-        
+
         m = glm::translate(model, glm::vec3(0.5f, 1.25f, 0.5f));
         m = glm::rotate(m, glm::radians(90.0f), glm::vec3(0, 1.0f, 0));
         m = glm::rotate(m, glm::radians(gun_flash_rot[1]), glm::vec3(0, 0, 1.0f));

@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
