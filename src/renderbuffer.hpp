@@ -7,7 +7,7 @@
 
 class Renderbuffer {
     public:
-        Renderbuffer(State& s);
+        explicit Renderbuffer(State& s);
         ~Renderbuffer();
 
         void bind();

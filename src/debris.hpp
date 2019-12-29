@@ -4,7 +4,7 @@
 
 class Debris : public Entity {
     public:
-        Debris(State &s);
+        explicit Debris(State& s);
         ~Debris();
 
         void update();

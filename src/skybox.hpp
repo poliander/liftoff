@@ -16,7 +16,7 @@ using std::max;
 
 class Skybox {
     public:
-        Skybox(State& s);
+        explicit Skybox(State& s);
         ~Skybox();
 
         void                    update();

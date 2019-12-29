@@ -1,6 +1,6 @@
 #include "cargo.hpp"
 
-Cargo::Cargo(State &s) : Entity(s) {
+Cargo::Cargo(State& s) : Entity(s) {
     e_obj = OBJ_CARGO_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_IDLE;

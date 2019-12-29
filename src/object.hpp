@@ -21,7 +21,7 @@ struct index_t {
 
 class Object {
     public:
-        Object(string filename);
+        explicit Object(string filename);
         ~Object();
 
         vector<glm::vec3>    positions;

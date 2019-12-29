@@ -13,7 +13,7 @@ using std::shared_ptr;
 
 class Entity {
     public:
-        Entity(State &s);
+        explicit Entity(State& s);
         virtual ~Entity();
 
         void               setType(uint16_t t);
@@ -106,7 +106,7 @@ class Entity {
         uint16_t           e_type;
         uint16_t           e_state;
 
-        State              &state;
+        State&             state;
 
         float              p_x;                  // position
         float              p_y;

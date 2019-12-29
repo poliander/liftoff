@@ -1,6 +1,6 @@
 #include "powerup.hpp"
 
-Powerup::Powerup(State &s, float x, float y, float z) : Entity(s) {
+Powerup::Powerup(State& s, float x, float y, float z) : Entity(s) {
     e_obj = OBJ_POWERUP_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;

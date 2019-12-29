@@ -11,7 +11,7 @@ using std::unique_ptr;
 
 class Overlay {
     public:
-        Overlay(State& s);
+        explicit Overlay(State& s);
         ~Overlay();
 
         void update();

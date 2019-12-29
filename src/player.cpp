@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-Player::Player(State &s) : Entity(s) {
+Player::Player(State& s) : Entity(s) {
     e_obj = OBJ_PLAYER;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;

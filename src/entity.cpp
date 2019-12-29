@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-Entity::Entity(State &s) : state(s) {
+Entity::Entity(State& s) : state(s) {
     money = 0;
     life = 0;
     focusable = false;

@@ -35,7 +35,7 @@ using std::unique_ptr;
 
 class Scene {
     public:
-        Scene(State& s);
+        explicit Scene(State& s);
         ~Scene();
 
         void                load();

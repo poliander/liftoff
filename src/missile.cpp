@@ -1,6 +1,6 @@
 #include "missile.hpp"
 
-Missile::Missile(State &s, uint16_t p) : Entity(s) {
+Missile::Missile(State& s, uint16_t p) : Entity(s) {
     e_obj = OBJ_MISSILE_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_ACTIVE;

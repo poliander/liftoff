@@ -1,6 +1,6 @@
 #include "scene.hpp"
 
-Scene::Scene(State &s) : state(s) {
+Scene::Scene(State& s) : state(s) {
     player = make_shared<Player>(state);
     skybox = make_unique<Skybox>(state);
     overlay = make_unique<Overlay>(state);

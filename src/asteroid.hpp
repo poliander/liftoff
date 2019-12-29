@@ -8,7 +8,7 @@
 
 class Asteroid : public Entity {
     public:
-        Asteroid(State &s);
+        explicit Asteroid(State& s);
         ~Asteroid();
 
         bool damage(int p);

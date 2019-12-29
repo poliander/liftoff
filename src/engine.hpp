@@ -15,7 +15,7 @@ class Engine {
         Engine();
         ~Engine();
 
-        bool                     init(int argc, char **argv);
+        bool                     init(int argc, char** argv);
         bool                     main();
         void                     halt();
 

@@ -10,7 +10,7 @@
 
 class Player : public Entity {
     public:
-        Player(State &s);
+        explicit Player(State& s);
         ~Player();
 
         void            init();

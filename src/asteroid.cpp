@@ -1,6 +1,6 @@
 #include "asteroid.hpp"
 
-Asteroid::Asteroid(State &s) : Entity(s) {
+Asteroid::Asteroid(State& s) : Entity(s) {
     e_obj = OBJ_ASTEROID_1;
     e_type = E_TYPE_COLLIDER;
     e_state = E_STATE_IDLE;

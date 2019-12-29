@@ -135,7 +135,7 @@ class State {
         void                        tilt(float t);
         void                        spawn(shared_ptr<Entity> e);
         void                        notify(uint8_t t, int16_t v);
-        void                        log(const char *msg);
+        void                        log(const char* msg);
 
     private:
         int                         id;

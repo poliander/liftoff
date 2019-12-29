@@ -1,6 +1,6 @@
 #include "particles.hpp"
 
-ParticleEngine::ParticleEngine(State &s) : state(s) {
+ParticleEngine::ParticleEngine(State& s) : state(s) {
     c_r = 1.0f;
     c_g = 1.0f;
     c_b = 1.0f;

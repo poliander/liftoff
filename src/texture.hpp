@@ -38,7 +38,7 @@ struct t_image {
 
 class Texture : public Quad {
     public:
-        Texture(string filename);
+        explicit Texture(string filename);
         ~Texture();
 
         void bind();
@@ -46,5 +46,5 @@ class Texture : public Quad {
     protected:
         GLuint texColorBuffer;
 
-        bool load(string filename, t_image *image);
+        bool load(string filename, t_image* image);
 };
