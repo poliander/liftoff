@@ -6,13 +6,13 @@
 class Missile : public Entity
 {
     public:
-        Missile(State &s, short p);
+        Missile(State &s, uint16_t p);
         ~Missile();
 
-        void update();
-        void draw();
+        void     collide(shared_ptr<Entity> e);
+        void     update();
+        void     draw();
 
     protected:
-        int  power;
-        void collide(shared_ptr<Entity> e);
+        uint16_t power;
 };

@@ -25,9 +25,9 @@ class Shader
 
         void   bind();
         void   unbind();
-        void   update(unsigned short u, glm::mat4 m);
-        void   update(unsigned short u, glm::vec2 v);
-        void   update(unsigned short u, glm::vec4 v);
+        void   update(uint8_t id, glm::mat4 m);
+        void   update(uint8_t id, glm::vec2 v);
+        void   update(uint8_t id, glm::vec4 v);
 
     private:
         GLuint program;

@@ -61,19 +61,19 @@ void Shader::unbind()
     glUseProgram(0);
 }
 
-void Shader::update(unsigned short u, glm::vec2 v)
+void Shader::update(uint8_t id, glm::vec2 v)
 {
-    glUniform2fv(uniforms[u], 1, &v[0]);
+    glUniform2fv(uniforms[id], 1, &v[0]);
 }
 
-void Shader::update(unsigned short u, glm::vec4 v)
+void Shader::update(uint8_t id, glm::vec4 v)
 {
-    glUniform4fv(uniforms[u], 1, &v[0]);
+    glUniform4fv(uniforms[id], 1, &v[0]);
 }
 
-void Shader::update(unsigned short u, glm::mat4 m)
+void Shader::update(uint8_t id, glm::mat4 m)
 {
-    glUniformMatrix4fv(uniforms[u], 1, GL_FALSE, &m[0][0]);
+    glUniformMatrix4fv(uniforms[id], 1, GL_FALSE, &m[0][0]);
 }
 
 GLuint Shader::create(const string& text, unsigned int type)

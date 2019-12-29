@@ -56,7 +56,6 @@ State::State()
     tilt_dy                 = 0;
 
     id                      = 0;
-    lvl_id                  = 1;
 
     timer                   = SDL_GetTicks();
 
@@ -69,9 +68,6 @@ State::~State()
 {
 }
 
-/*
- * log output
- */
 void State::log(const char *msg)
 {
     if (log_file) {
@@ -85,9 +81,6 @@ void State::log(const char *msg)
     }
 }
 
-/*
- * camera shaking ("tilt")
- */
 void State::tilt(float t)
 {
     if (tilt_factor < fabs(t)) {
@@ -100,17 +93,11 @@ void State::spawn(shared_ptr<Entity> e)
     spawns.push_back(e);
 }
 
-/*
- * add notification
- */
-void State::notify(short type, short value)
+void State::notify(uint8_t t, int16_t v)
 {
-    messages.push_back(make_unique<Message>(type, value));
+    messages.push_back(make_unique<Message>(t, v));
 }
 
-/*
- * update global_*, fps_*
- */
 void State::update()
 {
     global_timer = float(SDL_GetTicks() - timer) * .05f;
@@ -149,9 +136,6 @@ void State::update()
     timer = SDL_GetTicks();
 }
 
-/*
- * set or change engine state
- */
 bool State::set(int s)
 {
     if (id == s) return false;
@@ -243,11 +227,7 @@ bool State::set(int s)
     return true;
 }
 
-/*
- * return current state id
- */
-int State::get(void)
+int State::get()
 {
     return id;
 }
-

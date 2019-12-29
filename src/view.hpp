@@ -12,7 +12,7 @@ using namespace std;
 class View
 {
     public:
-        View(unsigned short t, glm::mat4 p);
+        View(uint8_t t, glm::mat4 p);
         virtual ~View();
 
         glm::mat4 getProjection();
@@ -57,7 +57,7 @@ class View
         );
 
     private:
-        unsigned short type;
+        uint8_t type;
 
         glm::mat4 projection;
         glm::mat4 view;

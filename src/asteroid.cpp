@@ -16,8 +16,6 @@ bool Asteroid::damage(int p)
     bool damaged = Entity::damage(p);
 
     if (damaged && !isAlive()) {
-        unsigned short m = int(getScale() * .5f);
-
         state.audio.playSample(SFX_EXPLOSION_2, 192, 180);
 
         state.spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_2, p_x, p_y, p_z));
@@ -38,7 +36,7 @@ bool Asteroid::damage(int p)
             state.spawn(debris);
         }
 
-        state.notify(MSG_MONEY, m);
+        state.notify(MSG_MONEY, static_cast<int16_t>(getScale() * .5f));
     }
 
     return damaged;

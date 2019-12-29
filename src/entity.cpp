@@ -66,7 +66,7 @@ void Entity::activate()
     e_state = E_STATE_ACTIVE;
 }
 
-void Entity::setType(unsigned short t)
+void Entity::setType(uint16_t t)
 {
     e_type = t;
 }
@@ -248,19 +248,14 @@ void Entity::setSpin(float x, float y, float z)
     w_z = z;
 }
 
-void Entity::setMoney(unsigned short m)
+void Entity::setMoney(int32_t m)
 {
     money = m;
 }
 
-unsigned short Entity::getMoney()
+int32_t Entity::getMoney()
 {
     return money;
-}
-
-void Entity::addMoney(unsigned short m)
-{
-    money += m;
 }
 
 int Entity::getLife()
@@ -361,7 +356,7 @@ void Entity::collide(shared_ptr<Entity> e)
 {
 }
 
-void Entity::collect(unsigned short e_obj)
+void Entity::collect(uint16_t e_obj)
 {
 }
 

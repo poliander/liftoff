@@ -1,8 +1,8 @@
 #include "explosion.hpp"
 
-Explosion::Explosion(State &s, short int type, float x, float y, float z) : Entity(s)
+Explosion::Explosion(State& s, uint16_t t, float x, float y, float z) : Entity(s)
 {
-    e_obj = type;
+    e_obj = t;
     e_type = E_TYPE_DECORATION;
     e_state = E_STATE_ACTIVE;
 
@@ -11,7 +11,7 @@ Explosion::Explosion(State &s, short int type, float x, float y, float z) : Enti
 
     particles = make_unique<ParticleEngine>(s);
 
-    switch (type) {
+    switch (e_obj) {
         // green laser gun impact
         case OBJ_EXPLOSION_1:
             particles->setup(EMIT_EXPLOSION, 20, .25f, .25f, .25f, .1f, 20.0f);
@@ -51,7 +51,7 @@ Explosion::Explosion(State &s, short int type, float x, float y, float z) : Enti
     }
 }
 
-Explosion::Explosion(State &s, short int type, float x, float y, float z, float r, float g, float b) : Explosion(s, type, x, y, z)
+Explosion::Explosion(State& s, uint16_t t, float x, float y, float z, float r, float g, float b) : Explosion(s, t, x, y, z)
 {
     particles->setColor(r, g, b);
 }

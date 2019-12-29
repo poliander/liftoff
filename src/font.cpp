@@ -1,6 +1,6 @@
 #include "font.hpp"
 
-Font::Font(const string& filename, shared_ptr<Shader> s, unsigned short q) : Quad()
+Font::Font(const string& filename, shared_ptr<Shader> s, uint8_t q) : Quad()
 {
     FT_Library ft;
     FT_Face face;

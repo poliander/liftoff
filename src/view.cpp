@@ -1,6 +1,6 @@
 #include "view.hpp"
 
-View::View(unsigned short t, glm::mat4 p)
+View::View(uint8_t t, glm::mat4 p)
 {
     type = t;
     projection = p;

@@ -1,6 +1,6 @@
 #include <message.hpp>
 
-Message::Message(short t, short v)
+Message::Message(uint16_t t, uint16_t v)
 {
     counter = 0;
     type = t;

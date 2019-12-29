@@ -50,7 +50,7 @@ void Player::init()
     collect(OBJ_POWERUP_0);
 }
 
-void Player::collect(unsigned short e_obj)
+void Player::collect(uint16_t e_obj)
 {
     powerup_timer = SDL_GetTicks();
 

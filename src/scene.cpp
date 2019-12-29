@@ -198,7 +198,7 @@ bool Scene::loadLevel()
     char msg[255], fname[255], buf[1024], cmd[16], par[255];
 
     int i, money, life, m, p = 0;
-    unsigned short e_obj;
+    uint16_t e_obj;
     float p_x, p_y, p_z;
     float r_x, r_y, r_z;
     float s_x, s_y, s_z;
@@ -208,10 +208,10 @@ bool Scene::loadLevel()
     state.spawns.clear();
     state.spawn(player);
 
-    sprintf(msg, "Loading 'lvl/mission_%d.dat'... ", state.lvl_id);
+    sprintf(msg, "Loading 'lvl/mission_1.dat'... ");
     state.log(msg);
 
-    sprintf(fname, "%s/levels/mission_%d.dat", state.dir_resources, state.lvl_id);
+    sprintf(fname, "%s/levels/mission_1.dat", state.dir_resources);
     fp = fopen(fname, "r");
 
     if (fp == NULL) {

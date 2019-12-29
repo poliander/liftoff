@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #include <stdio.h>
 
 enum message_types_e {
@@ -11,16 +12,16 @@ enum message_types_e {
 class Message
 {
     public:
-        Message(short t, short v);
+        Message(uint16_t t, uint16_t v);
         virtual ~Message();
 
-        char  text[64];
-        short type;
-        short value;
-        float counter;
+        char     text[64];
+        uint16_t type;
+        uint16_t value;
+        float    counter;
 
-        short dir_x;
-        short dir_y;
+        int8_t dir_x;
+        int8_t dir_y;
 
         float c_r;
         float c_g;

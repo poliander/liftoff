@@ -25,7 +25,7 @@ struct Glyph
 class Font : public Quad
 {
     public:
-        Font(const string& filename, shared_ptr<Shader> s, unsigned short q);
+        Font(const string& filename, shared_ptr<Shader> s, uint8_t q);
         ~Font();
 
         void               draw(const string& txt, float x, float y, float s, float r, float g, float b, float a);

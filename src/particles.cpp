@@ -18,12 +18,12 @@ ParticleEngine::~ParticleEngine()
 {
 }
 
-void ParticleEngine::setup(short emitter, short num, float dx, float dy, float dz, float decay, float size)
+void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz, float decay, float size)
 {
     particles.clear();
 
     psize = size;
-    pemitter = emitter;
+    pemitter = e;
     pcontinuous = false;
     pvolume = 1.0f;
 
@@ -32,7 +32,7 @@ void ParticleEngine::setup(short emitter, short num, float dx, float dy, float d
             pcontinuous = true;
             c_a = .5f;
 
-            for (int i = 0; i < num; i++) {
+            for (int i = 0; i < n; i++) {
                 particles.push_back({
                     1.0f,
                     float(10 + rand() % 10) / 80.0f,
@@ -49,7 +49,7 @@ void ParticleEngine::setup(short emitter, short num, float dx, float dy, float d
             break;
 
         case EMIT_EXPLOSION:
-            for (int i = 0; i < num; i++) {
+            for (int i = 0; i < n; i++) {
                 float pdx = -dx * .5f + float(rand() % int(dx * 100)) * .01f;
                 float pdy = -dy * .5f + float(rand() % int(dy * 100)) * .01f;
                 float pdz = -dz * .5f + float(rand() % int(dz * 100)) * .01f;

@@ -1,21 +1,23 @@
 #pragma once
 
 #include <fcntl.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include "definitions.hpp"
 
 struct config_t
 {
-    short           vid_width;
-    short           vid_height;
-    unsigned short  vid_quality;
-    unsigned short  vid_fullscreen;
-    unsigned short  vid_vsync;
+    uint16_t        vid_width;
+    uint16_t        vid_height;
 
-    short           aud_sfx;
-    short           aud_music;
-    int             aud_mixfreq;
+    uint8_t         vid_quality;
+    uint8_t         vid_fullscreen;
+    uint8_t         vid_vsync;
+
+    uint8_t         aud_sfx;
+    uint8_t         aud_music;
+    uint16_t        aud_mixfreq;
 };
 
 class Configuration

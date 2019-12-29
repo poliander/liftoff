@@ -18,10 +18,10 @@ class Player : public Entity
         void            draw();
         void            shoot();
         void            collide(shared_ptr<Entity> e);
-        void            collect(unsigned short e_obj);
+        void            collect(uint16_t e_obj);
 
     private:
-        unsigned short  m_alt;
+        uint8_t         m_alt;
         Uint32          m_next_shot_timer;
         Uint32          powerup_timer;
 

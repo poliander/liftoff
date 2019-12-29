@@ -47,7 +47,7 @@ class ParticleEngine
         void               setIncrease(float i);
         float              getIncrease();
 
-        void               setup(short e, short particles, float dx, float dy, float dz, float decay, float size);
+        void               setup(uint16_t e, uint16_t n, float dx, float dy, float dz, float decay, float size);
         bool               done();
 
         void               update();
@@ -61,7 +61,7 @@ class ParticleEngine
         GLenum             blendSourceFactor;
         GLenum             blendDestFactor;
 
-        short              pemitter;    // emitter type
+        uint16_t           pemitter;    // emitter type
         bool               pcontinuous; // continuously respawn every particle
 
         float              pvolume;     // volume

@@ -89,7 +89,7 @@ void Overlay::drawMessages()
         );
 
         if (a < 0) {
-            if ((*m)->type == MSG_MONEY) state.player->addMoney((*m)->value);
+            if ((*m)->type == MSG_MONEY) state.player->setMoney(state.player->getMoney() + (*m)->value);
             m = state.messages.erase(m);
             continue;
         }

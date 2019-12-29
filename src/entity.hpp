@@ -16,7 +16,7 @@ class Entity
         Entity(State &s);
         virtual ~Entity();
 
-        void               setType(unsigned short t);
+        void               setType(uint16_t t);
 
         bool               isCollectable();
         bool               isCollider();
@@ -81,14 +81,13 @@ class Entity
         int                getLifeRegeneration();
         int                getLifeRegenerationEnergy();
 
-        void               addMoney(unsigned short m);
-        void               setMoney(unsigned short m);
-        unsigned short     getMoney();
+        void               setMoney(int32_t m);
+        int32_t            getMoney();
 
         void               init();
         void               activate();
         virtual bool       damage(int p);
-        virtual void       collect(unsigned short e_obj);
+        virtual void       collect(uint16_t e_obj);
         virtual void       collide(shared_ptr<Entity> e);
         virtual void       shoot();
 
@@ -103,9 +102,9 @@ class Entity
         static bool        sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2);
 
     protected:
-        unsigned short     e_obj;
-        unsigned short     e_type;
-        unsigned short     e_state;
+        uint16_t           e_obj;
+        uint16_t           e_type;
+        uint16_t           e_state;
 
         State              &state;
  
@@ -144,14 +143,14 @@ class Entity
 
         shared_ptr<Entity> target;
 
-        int                money;
+        uint32_t           money;
         int                life;
         bool               focusable;
         float              acceleration;
         float              deceleration;
-        short              gun_power;
+        uint16_t           gun_power;
 
-        short              powerup;
+        uint8_t            powerup;
 
         int                energy;
         int                energy_max;

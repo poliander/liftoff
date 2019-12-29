@@ -69,19 +69,19 @@ class State
         int                         vid_cap_modes_num;
         int                         vid_mode;
         int                         vid_display;
-        int                         vid_width;
-        int                         vid_height;
+
+        uint16_t                    vid_width;
+        uint16_t                    vid_height;
+        uint8_t                     vid_quality;
+        uint8_t                     vid_fullscreen;
+        uint8_t                     vid_vsync;
+
         int                         vid_refresh_rate;
         int                         vid_format;
-
         float                       vid_aspect;
-        unsigned short              vid_fullscreen;
-        unsigned short              vid_vsync;
-
-        unsigned short              vid_quality;
-        unsigned short              vid_fb_size;
-        unsigned short              vid_multisampling;
-        unsigned short              vid_font_resolution;
+        uint8_t                     vid_multisampling;
+        uint16_t                    vid_fb_size;
+        uint8_t                     vid_font_resolution;
 
         // game menu
         int                         menu;
@@ -105,7 +105,6 @@ class State
         SDL_Joystick*               joystick;
 
         // level
-        unsigned short              lvl_id;
         bool                        lvl_loaded;
         char                        lvl_music[32];
         float                       lvl_pos;
@@ -132,7 +131,7 @@ class State
 
         void                        tilt(float t);
         void                        spawn(shared_ptr<Entity> e);
-        void                        notify(short t, short v);
+        void                        notify(uint8_t t, int16_t v);
         void                        log(const char *msg);
 
     private:
