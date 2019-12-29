@@ -482,16 +482,16 @@ void Engine::handleJoystick()
 
     SDL_JoystickUpdate();
 
-    v = float(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
+    v = static_cast<float>(SDL_JoystickGetAxis(state.joystick, 0) * .00003f);
 
     if (fabs(v) > .01f) {
-        state.player->setAccelerationX(float(state.player->getAcceleration()) * -.0075f * v);
+        state.player->setAccelerationX(static_cast<float>(state.player->getAcceleration()) * -.0075f * v);
     }
 
-    v = float(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
+    v = static_cast<float>(SDL_JoystickGetAxis(state.joystick, 1) * .00003f);
 
     if (fabs(v) > .01f) {
-        state.player->setAccelerationY(float(state.player->getAcceleration()) * .0075f * v);
+        state.player->setAccelerationY(static_cast<float>(state.player->getAcceleration()) * .0075f * v);
     }
 
     if (SDL_JoystickGetButton(state.joystick, 0) != 0) {
@@ -588,7 +588,7 @@ bool Engine::main()
                     ) {
                         state.vid_width = event.window.data1;
                         state.vid_height = event.window.data2;
-                        state.vid_aspect = float(state.vid_width) / float(state.vid_height);
+                        state.vid_aspect = static_cast<float>(state.vid_width) / static_cast<float>(state.vid_height);
 
                         state.view.reset();
                         state.view = View::createPerspective(65, state.vid_aspect, .1f, 10000.0f);

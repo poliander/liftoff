@@ -7,7 +7,11 @@ Explosion::Explosion(State& s, uint16_t t, float x, float y, float z) : Entity(s
     e_state = E_STATE_ACTIVE;
 
     setPos(x, y, z);
-    setRot(float(rand() % 360), float(rand() % 360), float(rand() % 360));
+    setRot(
+        static_cast<float>(rand() % 360),
+        static_cast<float>(rand() % 360),
+        static_cast<float>(rand() % 360)
+    );
 
     particles = make_unique<ParticleEngine>(s);
 

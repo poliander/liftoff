@@ -35,11 +35,11 @@ void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz,
             for (int i = 0; i < n; i++) {
                 particles.push_back({
                     1.0f,
-                    float(10 + rand() % 10) / 80.0f,
+                    static_cast<float>(10 + rand() % 10) / 80.0f,
 
                     0,
                     0,
-                    float(rand() % 1000) * .001f,
+                    static_cast<float>(rand() % 1000) * .001f,
 
                     dx,
                     dy,
@@ -50,25 +50,25 @@ void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz,
 
         case EMIT_EXPLOSION:
             for (int i = 0; i < n; i++) {
-                float pdx = -dx * .5f + float(rand() % int(dx * 100)) * .01f;
-                float pdy = -dy * .5f + float(rand() % int(dy * 100)) * .01f;
-                float pdz = -dz * .5f + float(rand() % int(dz * 100)) * .01f;
+                float pdx = -dx * .5f + static_cast<float>(rand() % static_cast<int>(dx * 100.0f)) * .01f;
+                float pdy = -dy * .5f + static_cast<float>(rand() % static_cast<int>(dy * 100.0f)) * .01f;
+                float pdz = -dz * .5f + static_cast<float>(rand() % static_cast<int>(dz * 100.0f)) * .01f;
 
                 if ((pdx < -dx) || (pdx > dx)) pdx *= .5f;
                 if ((pdy < -dy) || (pdy > dy)) pdy *= .5f;
                 if ((pdz < -dz) || (pdz > dz)) pdz *= .5f;
 
-                if ((pdx > -.05f) && (pdx < .05f)) pdx += -.05f + float(rand() % 20) * .01f;
-                if ((pdy > -.05f) && (pdy < .05f)) pdy += -.05f + float(rand() % 20) * .01f;
-                if ((pdz > -.05f) && (pdz < .05f)) pdz += -.05f + float(rand() % 20) * .01f;
+                if ((pdx > -.05f) && (pdx < .05f)) pdx += -.05f + static_cast<float>(rand() % 20) * .01f;
+                if ((pdy > -.05f) && (pdy < .05f)) pdy += -.05f + static_cast<float>(rand() % 20) * .01f;
+                if ((pdz > -.05f) && (pdz < .05f)) pdz += -.05f + static_cast<float>(rand() % 20) * .01f;
 
                 particles.push_back({
                     1.0f,
-                    decay * (float(50 + rand() % 100) * .01f),
+                    decay * (static_cast<float>(50 + rand() % 100) * .01f),
 
-                    -psize * .5f + float(rand() % int(psize * 100)) * .01f,
-                    -psize * .5f + float(rand() % int(psize * 100)) * .01f,
-                    -psize * .5f + float(rand() % int(psize * 100)) * .01f,
+                    -psize * .5f + static_cast<float>(rand() % static_cast<int>(psize * 100.0f)) * .01f,
+                    -psize * .5f + static_cast<float>(rand() % static_cast<int>(psize * 100.0f)) * .01f,
+                    -psize * .5f + static_cast<float>(rand() % static_cast<int>(psize * 100.0f)) * .01f,
 
                     pdx,
                     pdy,

@@ -69,7 +69,7 @@ void Missile::draw()
             getPosZ(),
 
             getRotX(),
-            getRotY() + float(i) * 30.0f,
+            getRotY() + static_cast<float>(i) * 30.0f,
             getRotZ(),
 
             20.0f,

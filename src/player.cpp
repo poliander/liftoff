@@ -95,7 +95,7 @@ void Player::shoot()
     m_alt = 1 - m_alt;
 
     gun_flash[m_alt] = 1.0f;
-    gun_flash_rot[m_alt] = float(rand() % 360);
+    gun_flash_rot[m_alt] = static_cast<float>(rand() % 360);
 
     auto missile = make_shared<Missile>(state, gun_power);
 
@@ -119,7 +119,7 @@ void Player::shoot()
 
     state.spawn(missile);
 
-    angle = int(.5f * (p_x - state.cam_x));
+    angle = static_cast<int>(.5f * (p_x - state.cam_x));
 
     if (angle < 0) {
         angle += 360;
@@ -233,8 +233,8 @@ void Player::update()
         if (next_tilt_impulse < SDL_GetTicks()) {
             next_tilt_impulse = SDL_GetTicks() + 100 + rand() % 50;
 
-            state.tilt_dx = -state.tilt_factor + float(rand() % int(state.tilt_factor * 200.0f)) * .0075f;
-            state.tilt_dy = -state.tilt_factor + float(rand() % int(state.tilt_factor * 200.0f)) * .0075f;
+            state.tilt_dx = -state.tilt_factor + static_cast<float>(rand() % static_cast<int>(state.tilt_factor * 200.0f)) * .0075f;
+            state.tilt_dy = -state.tilt_factor + static_cast<float>(rand() % static_cast<int>(state.tilt_factor * 200.0f)) * .0075f;
         }
 
         state.tilt_factor -= state.global_timer * .35f;
@@ -269,7 +269,7 @@ void Player::update()
 
         if (powerup > 0) {
             powerup--;
-            energy += int(ceil((float)energy_max * .1f));
+            energy += static_cast<int>(ceil(static_cast<float>(energy_max) * .1f));
         }
 
         energy += energy_reg;

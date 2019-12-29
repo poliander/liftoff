@@ -276,9 +276,9 @@ bool Scene::loadLevel()
 
                 // colliding object, obstacle
                 if (!strcmp(cmd, "collider")) {
-                    r_x = float(rand() % 3600) * .1f;
-                    r_y = float(rand() % 3600) * .1f;
-                    r_z = float(rand() % 3600) * .1f;
+                    r_x = static_cast<float>(rand() % 3600) * .1f;
+                    r_y = static_cast<float>(rand() % 3600) * .1f;
+                    r_z = static_cast<float>(rand() % 3600) * .1f;
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u,%u",
                         (float *) &p_z,
@@ -328,9 +328,9 @@ bool Scene::loadLevel()
 
                 // scenery object
                 if (!strcmp(cmd, "scenery")) {
-                    r_x = float(rand() % 360);
-                    r_y = float(rand() % 360);
-                    r_z = float(rand() % 360);
+                    r_x = static_cast<float>(rand() % 360);
+                    r_y = static_cast<float>(rand() % 360);
+                    r_z = static_cast<float>(rand() % 360);
 
                     sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
                         (float *) &p_z,
@@ -380,7 +380,7 @@ void Scene::updateScene()
     static GLuint nextdebris = SDL_GetTicks();
 
     if (SDL_GetTicks() > nextdebris &&
-        state.lvl_pos < float(state.lvl_length - 1000)
+        state.lvl_pos < static_cast<float>(state.lvl_length - 1000)
     ) {
         nextdebris = SDL_GetTicks() + 200 + rand() % 200;
         state.spawn(make_shared<Debris>(state));

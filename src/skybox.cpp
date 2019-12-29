@@ -49,7 +49,7 @@ void Skybox::update()
 
 void Skybox::draw()
 {
-    float a, c, s = max(float(state.vid_height) / float(state.vid_width), state.vid_aspect);
+    float a, c, s = max(static_cast<float>(state.vid_height) / static_cast<float>(state.vid_width), state.vid_aspect);
 
     glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);

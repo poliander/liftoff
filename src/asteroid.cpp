@@ -28,9 +28,9 @@ bool Asteroid::damage(int p)
             debris->activate();
             debris->setPos(p_x, p_y, p_z);
             debris->setVelocity(
-                .1f * float(rand() % 80) - 4.0f,
-                .1f * float(rand() % 80) - 4.0f,
-                .1f * float(rand() % 80) - 4.0f
+                .1f * static_cast<float>(rand() % 80) - 4.0f,
+                .1f * static_cast<float>(rand() % 80) - 4.0f,
+                .1f * static_cast<float>(rand() % 80) - 4.0f
             );
 
             state.spawn(debris);

@@ -100,7 +100,7 @@ void State::notify(uint8_t t, int16_t v)
 
 void State::update()
 {
-    global_timer = float(SDL_GetTicks() - timer) * .05f;
+    global_timer = static_cast<float>(SDL_GetTicks() - timer) * .05f;
 
     if (global_counter < 1.0f) {
         global_counter += global_timer * .02f;
@@ -124,7 +124,7 @@ void State::update()
         fps_timer += timer - fps_timer_l;
 
         if (fps_timer > 1000) {
-            fps = float(fps_counter) / (float(fps_timer) * .001f);
+            fps = static_cast<float>(fps_counter) / (static_cast<float>(fps_timer) * .001f);
             fps_counter = 0;
             fps_timer = 0;
         }

@@ -114,7 +114,7 @@ void Overlay::drawStatus()
 
     // life bar
 
-    int s = int(80.0f / ((float(state.player->getLifeMaximum() + 1) / float(state.player->getLife() + 1))));
+    int s = static_cast<int>(80.0f / ((static_cast<float>(state.player->getLifeMaximum() + 1) / static_cast<float>(state.player->getLife() + 1))));
 
     for (int i = 0; i < s; i++) {
         state.fonts[F_ZEKTON]->draw(
@@ -127,7 +127,7 @@ void Overlay::drawStatus()
 
     // energy bar
 
-    int e = int(80.0f / (((float)state.player->getEnergyMaximum() + 1) / (float(state.player->getEnergy() + 1))));
+    int e = static_cast<int>(80.0f / ((static_cast<float>(state.player->getEnergyMaximum() + 1) / static_cast<float>(state.player->getEnergy() + 1))));
 
     for (int i = 0; i < e; i++) {
         state.fonts[F_ZEKTON]->draw(
@@ -447,7 +447,7 @@ void Overlay::drawMenu()
         state.menu_pos = 0;
     }
 
-    mrh = 150.0f * (1.0f / float(numentries));
+    mrh = 150.0f * (1.0f / static_cast<float>(numentries));
 
     // menu cursor
 
@@ -455,7 +455,7 @@ void Overlay::drawMenu()
         state.shaders[S_TEXTURE]->bind();
         state.shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(.5f, .5f, .5f, .35f * menu_alpha));
         state.shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
-            -146.5f, -25.0f + (mrh * float(state.menu_pos) + mrh * 0.5f),
+            -146.5f, -25.0f + (mrh * static_cast<float>(state.menu_pos) + mrh * 0.5f),
             200.0f, mrh
         ));
 
