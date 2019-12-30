@@ -542,27 +542,6 @@ bool Engine::main() {
 
     state.update();
 
-    // complete restart of game engine
-    if (state.engine_restart) {
-        state.log("Restarting game engine.\n");
-
-        state.config.vid_width = state.vid_cap_modes[state.vid_mode].w;
-        state.config.vid_height = state.vid_cap_modes[state.vid_mode].h;
-
-        halt();
-
-        if (init(-1, NULL)) {
-            state.timer = SDL_GetTicks();
-            state.fps_timer = 0;
-            state.fps_timer_l = 0;
-            state.fps_counter = 0;
-
-            return true;
-        }
-
-        return false;
-    }
-
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
@@ -606,6 +585,14 @@ bool Engine::main() {
     scene->draw(buffer);
 
     SDL_GL_SwapWindow(window);
+
+    if (state.get() == STATE_RESTART) {
+        halt();
+
+        if (init(-1, NULL) == false) {
+            state.set(STATE_CLOSE);
+        }
+    }
 
     return (state.get() != STATE_CLOSE);
 }

@@ -241,9 +241,10 @@ void Overlay::drawMenu() {
                         state->config.aud_music = state->audio.volume_music;
                         state->config.aud_mixfreq = state->audio.mixer_frequency;
                         for (int i = 0; i < state->vid_cap_modes_num; i++) {
-                            if ( (state->vid_width  == state->vid_cap_modes[i].w) &&
-                                 (state->vid_height == state->vid_cap_modes[i].h) ) {
-                                 state->vid_mode = i;
+                            if (state->vid_width  == state->vid_cap_modes[i].w &&
+                                state->vid_height == state->vid_cap_modes[i].h
+                            ) {
+                                state->vid_mode = i;
                             }
                         }
                         state->config.vid_quality = state->vid_quality;
@@ -252,9 +253,9 @@ void Overlay::drawMenu() {
                         break;
 
                     case 3: // accept
-                        state->menu = 1;
-                        state->menu_pos = 1;
-                        state->engine_restart = true;
+                        state->config.vid_width  = state->vid_cap_modes[state->vid_mode].w;
+                        state->config.vid_height = state->vid_cap_modes[state->vid_mode].h;
+                        state->set(STATE_RESTART);
                         break;
                 }
             }

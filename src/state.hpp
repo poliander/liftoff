@@ -76,7 +76,6 @@ class State {
 
         bool                        log_file;
         bool                        cfg_loaded;
-        bool                        engine_restart;
         Uint32                      timer;
 
         char                        dir_configuration[255];

@@ -57,7 +57,6 @@ State::State() {
 
     log_file                = false;
     cfg_loaded              = false;
-    engine_restart          = false;
 
     fps_visible             = false;
     fps_counter             = 0;
@@ -173,8 +172,6 @@ bool State::set(int s) {
             cam_x = 0;
             cam_y = 0;
 
-            engine_restart = false;
-
             audio.playMusic(0, 1000);
             audio.stopSampleLoop(0);
             break;
@@ -225,6 +222,14 @@ bool State::set(int s) {
 
         case STATE_QUIT:
             audio.stopMusic(1000);
+            break;
+
+        case STATE_RESTART:
+            log("Restarting game...\n");
+
+            fps_timer = 0;
+            fps_timer_l = 0;
+            fps_counter = 0;
             break;
     }
 

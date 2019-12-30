@@ -56,6 +56,7 @@
 #define STATE_GAME_LOOP         11
 #define STATE_GAME_NEXTLEVEL    12
 #define STATE_GAME_QUIT         13
+#define STATE_RESTART           97
 #define STATE_QUIT              98
 #define STATE_CLOSE             99
 
