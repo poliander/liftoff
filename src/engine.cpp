@@ -91,15 +91,14 @@ bool Engine::init(int argc, char **argv) {
                 state.vid_refresh_rate = current.refresh_rate;
                 state.vid_width = current.w;
                 state.vid_height = current.h;
+                break;
             }
         }
     }
 
     if (state.vid_display == -1) {
-        state.log("failed, no screen found\n");
+        state.log(" failed (no screen found)\n");
         return false;
-    } else {
-        state.log("\n");
     }
 
     SDL_DisplayMode mode;
@@ -126,11 +125,16 @@ bool Engine::init(int argc, char **argv) {
         state.vid_modes.insert(make_pair(m++, mode));
     }
 
+    if (state.vid_mode == -1) {
+        state.log(" failed (no valid screen mode found)\n");
+        return false;
+    }
+
     state.vid_quality = state.config.vid_quality;
     state.vid_vsync = state.config.vid_vsync;
     state.vid_fullscreen = state.config.vid_fullscreen;
 
-    snprintf(msg, sizeof(msg), "- screen size %d x %d selected\n", state.config.vid_width, state.config.vid_height);
+    snprintf(msg, sizeof(msg), "\n- screen size %d x %d selected\n", state.config.vid_width, state.config.vid_height);
     state.log(msg);
 
     switch (state.vid_quality) {
@@ -170,17 +174,7 @@ bool Engine::init(int argc, char **argv) {
             state.vid_font_resolution = 4;
     }
 
-    state.vid_mode = -1;
-
-    for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
-        if (i->second.w == state.vid_width &&
-            i->second.h == state.vid_height
-        ) {
-            state.vid_mode = i->first;
-            initDisplay();
-            break;
-        }
-    }
+    initDisplay();
 
     // initialize audio
 
