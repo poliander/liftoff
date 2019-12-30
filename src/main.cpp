@@ -18,8 +18,6 @@
 
 #include "engine.hpp"
 
-Engine *engine;
-
 int main(int argc, char *argv[]) {
     Engine engine;
 

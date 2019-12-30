@@ -26,7 +26,7 @@ Engine::~Engine() {
 }
 
 bool Engine::init(int argc, char **argv) {
-    char *msg = new char[255];
+    char msg[255];
     SDL_DisplayMode current;
 
     if (argc >= 0) {
