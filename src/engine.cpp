@@ -27,7 +27,8 @@ Engine::~Engine() {
 
 bool Engine::init(int argc, char **argv) {
     char msg[255];
-    SDL_DisplayMode current;
+    SDL_DisplayMode mode, current;
+    int flags;
 
     if (argc >= 0) {
         for (int i = 0; i < argc; i++) {
@@ -97,11 +98,9 @@ bool Engine::init(int argc, char **argv) {
     }
 
     if (state.vid_display == -1) {
-        state.log(" failed (no screen found)\n");
+        state.log(" failed (no display found)\n");
         return false;
     }
-
-    SDL_DisplayMode mode;
 
     for (int m = 0, i = 0; i < SDL_GetNumDisplayModes(state.vid_display); i++) {
         SDL_GetDisplayMode(state.vid_display, i, &mode);
@@ -130,51 +129,73 @@ bool Engine::init(int argc, char **argv) {
         return false;
     }
 
-    state.vid_quality = state.config.vid_quality;
-    state.vid_vsync = state.config.vid_vsync;
-    state.vid_fullscreen = state.config.vid_fullscreen;
-
     snprintf(msg, sizeof(msg), "\n- screen size %d x %d selected\n", state.config.vid_width, state.config.vid_height);
     state.log(msg);
 
+    state.vid_quality = state.config.vid_quality;
+    state.vid_vsync = state.config.vid_vsync;
+    state.vid_fullscreen = state.config.vid_fullscreen;
+    state.vid_aspect = (float)state.vid_width / (float)state.vid_height;
+
     switch (state.vid_quality) {
         case QL_ULTRA:
+            state.log("- multisampling enabled (8x)\n");
             state.vid_multisampling = 8;
             state.vid_fb_size = 4096;
             state.vid_font_resolution = 7;
             break;
 
         case QL_VERY_HIGH:
+            state.log("- multisampling enabled (4x)\n");
             state.vid_multisampling = 4;
             state.vid_fb_size = 4096;
             state.vid_font_resolution = 6;
             break;
 
         case QL_HIGH:
+            state.log("- multisampling enabled (4x)\n");
             state.vid_multisampling = 4;
             state.vid_fb_size = 2048;
             state.vid_font_resolution = 6;
             break;
 
         case QL_MEDIUM:
+            state.log("- multisampling enabled (2x)\n");
             state.vid_multisampling = 2;
             state.vid_fb_size = 2048;
             state.vid_font_resolution = 5;
             break;
 
         case QL_LOW:
+            state.log("- multisampling enabled (2x)\n");
             state.vid_multisampling = 2;
             state.vid_fb_size = 1024;
             state.vid_font_resolution = 5;
             break;
 
         default:
+            state.log("- multisampling disabled\n");
             state.vid_multisampling = 0;
             state.vid_fb_size = 1024;
             state.vid_font_resolution = 4;
     }
 
-    initDisplay();
+    if (state.vid_fullscreen) {
+        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_INPUT_GRABBED;
+        state.log("- fullscreen mode\n");
+    } else {
+        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS;
+        state.log("- window mode\n");
+    }
+
+    state.log("Initializing OpenGL context... ");
+
+    if (initDisplay(flags) == false) {
+        state.log("failed\n");
+        return false;
+    } else {
+        state.log("ok\n");
+    }
 
     // initialize audio
 
@@ -200,46 +221,18 @@ bool Engine::init(int argc, char **argv) {
     buffer = make_unique<Renderbuffer>(&state);
     scene = make_unique<Scene>(&state);
 
+    state.view = View::createPerspective(65, state.vid_aspect, 1.0f, 10000.0f);
     state.set(STATE_MENU);
 
     return true;
 }
 
-bool Engine::initDisplay() {
-    int cfg_multisampling = -1, sdl_mode;
-    char msg[255];
-
-    state.vid_aspect = (float)state.vid_width / (float)state.vid_height;
-
-    if (state.config.vid_fullscreen) {
-        sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_INPUT_GRABBED;
-        snprintf(msg, sizeof(msg), "- fullscreen mode\n");
-    } else {
-        sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS;
-        snprintf(msg, sizeof(msg), "- window mode\n");
-    }
-
-    state.log(msg);
-
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
+bool Engine::initDisplay(int mode) {
     window = NULL;
     context = NULL;
 
     do {
-        if (state.vid_multisampling > 0) {
-            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
-        } else {
-            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-        }
+        int multisampling;
 
         if (context != NULL) {
             SDL_GL_DeleteContext(context);
@@ -249,20 +242,43 @@ bool Engine::initDisplay() {
             SDL_DestroyWindow(window);
         }
 
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+        if (state.vid_multisampling > 0) {
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, state.vid_multisampling);
+        } else {
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+            SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+        }
+
         window = SDL_CreateWindow(
             "Lift Off: Beyond Glaxium",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             state.vid_width,
             state.vid_height,
-            sdl_mode
+            mode
         );
 
         context = SDL_GL_CreateContext(window);
 
-        SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &cfg_multisampling);
+        SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &multisampling);
 
-        if (state.vid_multisampling == cfg_multisampling) {
+        if (state.vid_multisampling == multisampling) {
+            SDL_GL_MakeCurrent(window, context);
+
+            if (state.vid_vsync) {
+                SDL_GL_SetSwapInterval(1);
+            } else {
+                SDL_GL_SetSwapInterval(0);
+            }
             break;
         }
 
@@ -271,21 +287,7 @@ bool Engine::initDisplay() {
         }
     } while (true);
 
-    SDL_GL_MakeCurrent(window, context);
-
-    if (state.vid_multisampling == 0) {
-        snprintf(msg, sizeof(msg), "- multisampling disabled\n");
-    } else {
-        snprintf(msg, sizeof(msg), "- multisampling enabled (%dx)\n", state.vid_multisampling);
-    }
-
-    state.log(msg);
-
-    if (state.config.vid_vsync) {
-        SDL_GL_SetSwapInterval(1);
-    } else {
-        SDL_GL_SetSwapInterval(0);
-    }
+    // SDL
 
     SDL_ShowWindow(window);
     SDL_ShowCursor(0);
@@ -295,11 +297,10 @@ bool Engine::initDisplay() {
     GLint glewStatus = glewInit();
 
     if (GLEW_OK != glewStatus) {
-        snprintf(msg, sizeof(msg), "\nGLEW ERROR: %s\n", glewGetErrorString(glewStatus));
-        state.log(msg);
-
         return false;
     }
+
+    // OpenGL
 
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_TEXTURE_2D);
@@ -307,14 +308,6 @@ bool Engine::initDisplay() {
     glDepthFunc(GL_TRUE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    state.view = View::createPerspective(65, state.vid_aspect, 1.0f, 10000.0f);
-
-    state.vid_width = state.config.vid_width;
-    state.vid_height = state.config.vid_height;
-    state.vid_quality = state.config.vid_quality;
-    state.vid_fullscreen = state.config.vid_fullscreen;
-    state.vid_vsync = state.config.vid_vsync;
 
     return true;
 }

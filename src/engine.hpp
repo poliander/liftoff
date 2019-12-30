@@ -44,7 +44,7 @@ class Engine {
         unique_ptr<Scene>        scene;
         unique_ptr<Renderbuffer> buffer;
 
-        bool                     initDisplay();
+        bool                     initDisplay(int flags);
 
         bool                     handleKeyboard();
         void                     handleJoystick();
