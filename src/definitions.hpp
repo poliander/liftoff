@@ -25,11 +25,11 @@
 #define CFG_FILENAME            "liftoff.cfg"
 
 // video/audio defaults
-#define DEFAULT_VID_FULLSCREEN  true
 #define DEFAULT_VID_WIDTH       -1
 #define DEFAULT_VID_HEIGHT      -1
-#define DEFAULT_VID_VSYNC       false
-#define DEFAULT_VID_MSAA        4
+#define DEFAULT_VID_VSYNC       true
+#define DEFAULT_VID_FULLSCREEN  true
+#define DEFAULT_VID_QUALITY     0
 #define DEFAULT_AUD_MIXFREQ     MIX_DEFAULT_FREQUENCY
 #define DEFAULT_AUD_FORMAT      MIX_DEFAULT_FORMAT
 

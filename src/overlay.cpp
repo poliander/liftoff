@@ -240,11 +240,11 @@ void Overlay::drawMenu() {
                         state->config.aud_sfx = state->audio.volume_sfx;
                         state->config.aud_music = state->audio.volume_music;
                         state->config.aud_mixfreq = state->audio.mixer_frequency;
-                        for (int i = 0; i < state->vid_cap_modes_num; i++) {
-                            if (state->vid_width  == state->vid_cap_modes[i].w &&
-                                state->vid_height == state->vid_cap_modes[i].h
+                        for (auto i = state->vid_modes.begin(); i != state->vid_modes.end(); i++) {
+                            if (state->vid_width  == i->second.w &&
+                                state->vid_height == i->second.h
                             ) {
-                                state->vid_mode = i;
+                                state->vid_mode = i->first;
                             }
                         }
                         state->config.vid_quality = state->vid_quality;
@@ -253,8 +253,8 @@ void Overlay::drawMenu() {
                         break;
 
                     case 3: // accept
-                        state->config.vid_width  = state->vid_cap_modes[state->vid_mode].w;
-                        state->config.vid_height = state->vid_cap_modes[state->vid_mode].h;
+                        state->config.vid_width  = state->vid_modes[state->vid_mode].w;
+                        state->config.vid_height = state->vid_modes[state->vid_mode].h;
                         state->set(STATE_RESTART);
                         break;
                 }
@@ -272,8 +272,8 @@ void Overlay::drawMenu() {
                 mtxt[0],
                 sizeof(mtxt[0]),
                 "SCREEN SIZE:\n     %dx%d",
-                state->vid_cap_modes[state->vid_mode].w,
-                state->vid_cap_modes[state->vid_mode].h
+                state->vid_modes[state->vid_mode].w,
+                state->vid_modes[state->vid_mode].h
             );
 
             switch (state->config.vid_quality) {
@@ -322,7 +322,7 @@ void Overlay::drawMenu() {
                         state->vid_mode--;
 
                         if (state->vid_mode < 0) {
-                            state->vid_mode = state->vid_cap_modes_num - 1;
+                            state->vid_mode = state->vid_modes.size() - 1;
                         }
                         break;
 

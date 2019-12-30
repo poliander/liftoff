@@ -75,23 +75,20 @@ class State {
         float                       global_transition2;
 
         bool                        log_file;
-        bool                        cfg_loaded;
         Uint32                      timer;
 
         char                        dir_configuration[255];
         char                        dir_resources[255];
 
         // display
-        SDL_DisplayMode             vid_cap_modes[128];
-        int                         vid_cap_modes_num;
-        int                         vid_mode;
-        int                         vid_display;
-
+        map<int, SDL_DisplayMode>   vid_modes;
         uint16_t                    vid_width;
         uint16_t                    vid_height;
         uint8_t                     vid_quality;
         uint8_t                     vid_fullscreen;
         uint8_t                     vid_vsync;
+        int                         vid_mode;
+        int                         vid_display;
 
         int                         vid_refresh_rate;
         int                         vid_format;

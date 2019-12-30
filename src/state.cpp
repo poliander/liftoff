@@ -41,22 +41,23 @@ State::State() {
     config.vid_height       = DEFAULT_VID_HEIGHT;
     config.vid_fullscreen   = DEFAULT_VID_FULLSCREEN;
     config.vid_vsync        = DEFAULT_VID_VSYNC;
-    config.vid_quality      = 0;
+    config.vid_quality      = DEFAULT_VID_QUALITY;
 
     config.aud_mixfreq      = DEFAULT_AUD_MIXFREQ;
     config.aud_sfx          = 2;
     config.aud_music        = 2;
 
-    vid_multisampling       = DEFAULT_VID_MSAA;
     vid_width               = DEFAULT_VID_WIDTH;
     vid_height              = DEFAULT_VID_HEIGHT;
     vid_fullscreen          = DEFAULT_VID_FULLSCREEN;
     vid_vsync               = DEFAULT_VID_VSYNC;
+    vid_quality             = DEFAULT_VID_QUALITY;
+    vid_multisampling       = 0;
     vid_aspect              = 0;
+    vid_mode                = -1;
     vid_display             = -1;
 
     log_file                = false;
-    cfg_loaded              = false;
 
     fps_visible             = false;
     fps_counter             = 0;

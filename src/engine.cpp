@@ -45,7 +45,6 @@ bool Engine::init(int argc, char **argv) {
     state.log("Loading configuration... ");
 
     if (Configuration::load(state.dir_configuration, &state.config)) {
-        state.cfg_loaded = true;
         state.log("ok\n");
     } else {
         state.log("failed (using defaults)\n");
@@ -82,12 +81,10 @@ bool Engine::init(int argc, char **argv) {
 
     // initialize screen
 
-    state.log("Initializing display... ");
+    state.log("Initializing display...");
 
     for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i) {
         if (0 == SDL_GetCurrentDisplayMode(i, &current)) {
-            snprintf(msg, sizeof(msg), "\n- screen #%d is %d x %d @ %d bpp", i, current.w, current.h, SDL_BITSPERPIXEL(current.format));
-
             if (state.vid_display == -1) {
                 state.vid_display = i;
                 state.vid_format = current.format;
@@ -95,8 +92,6 @@ bool Engine::init(int argc, char **argv) {
                 state.vid_width = current.w;
                 state.vid_height = current.h;
             }
-
-            state.log(msg);
         }
     }
 
@@ -107,11 +102,9 @@ bool Engine::init(int argc, char **argv) {
         state.log("\n");
     }
 
-    state.vid_cap_modes_num = 0;
-
     SDL_DisplayMode mode;
 
-    for (int i = 0; i < SDL_GetNumDisplayModes(state.vid_display); i++) {
+    for (int m = 0, i = 0; i < SDL_GetNumDisplayModes(state.vid_display); i++) {
         SDL_GetDisplayMode(state.vid_display, i, &mode);
 
         if (mode.format != state.vid_format) {
@@ -122,33 +115,23 @@ bool Engine::init(int argc, char **argv) {
             continue;
         }
 
-        state.vid_cap_modes[state.vid_cap_modes_num++] = mode;
-    }
-
-    if (state.cfg_loaded) {
-        snprintf(msg, sizeof(msg), "- configuration is %d x %d", state.config.vid_width, state.config.vid_height);
-
-        if (state.config.vid_fullscreen) {
-            snprintf(msg, sizeof(msg), "%s (fullscreen mode)\n", msg);
-        } else {
-            snprintf(msg, sizeof(msg), "%s (window mode)\n", msg);
+        if (mode.w == state.config.vid_width &&
+            mode.h == state.config.vid_height
+        ) {
+            state.vid_width = state.config.vid_width;
+            state.vid_height = state.config.vid_height;
+            state.vid_mode = m;
         }
 
-        state.log(msg);
-
-        for (int i = 0; i < state.vid_cap_modes_num; i++) {
-            if (state.vid_cap_modes[i].w == state.config.vid_width &&
-                state.vid_cap_modes[i].h == state.config.vid_height
-            ) {
-                state.vid_width = state.config.vid_width;
-                state.vid_height = state.config.vid_height;
-                state.vid_fullscreen = state.config.vid_fullscreen;
-                state.vid_quality = state.config.vid_quality;
-                state.vid_vsync = state.config.vid_vsync;
-                break;
-            }
-        }
+        state.vid_modes.insert(make_pair(m++, mode));
     }
+
+    state.vid_quality = state.config.vid_quality;
+    state.vid_vsync = state.config.vid_vsync;
+    state.vid_fullscreen = state.config.vid_fullscreen;
+
+    snprintf(msg, sizeof(msg), "- screen size %d x %d selected\n", state.config.vid_width, state.config.vid_height);
+    state.log(msg);
 
     switch (state.vid_quality) {
         case QL_ULTRA:
@@ -189,11 +172,11 @@ bool Engine::init(int argc, char **argv) {
 
     state.vid_mode = -1;
 
-    for (int i = 0; i < state.vid_cap_modes_num; i++) {
-        if (state.vid_cap_modes[i].w == state.vid_width &&
-            state.vid_cap_modes[i].h == state.vid_height
+    for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
+        if (i->second.w == state.vid_width &&
+            i->second.h == state.vid_height
         ) {
-            state.vid_mode = i;
+            state.vid_mode = i->first;
             initDisplay();
             break;
         }
@@ -236,10 +219,10 @@ bool Engine::initDisplay() {
 
     if (state.config.vid_fullscreen) {
         sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_INPUT_GRABBED;
-        snprintf(msg, sizeof(msg), "- using fullscreen mode\n");
+        snprintf(msg, sizeof(msg), "- fullscreen mode\n");
     } else {
         sdl_mode = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS;
-        snprintf(msg, sizeof(msg), "- using window mode\n");
+        snprintf(msg, sizeof(msg), "- window mode\n");
     }
 
     state.log(msg);
@@ -426,10 +409,11 @@ bool Engine::handleKeyboard() {
                         state.menu_pos = 4;
                         state.menu_selected = true;
 
-                        for (int i = 0; i < state.vid_cap_modes_num; i++) {
-                            if ( (state.vid_width  == state.vid_cap_modes[i].w) &&
-                                 (state.vid_height == state.vid_cap_modes[i].h) ) {
-                                 state.vid_mode = i;
+                        for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
+                            if (state.vid_width  == i->second.w &&
+                                state.vid_height == i->second.h
+                            ) {
+                                 state.vid_mode = i->first;
                             }
                         }
 
