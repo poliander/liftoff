@@ -23,9 +23,9 @@
 #include <string>
 #include <memory>
 
-#include <object.hpp>
-#include <shader.hpp>
-#include <texture.hpp>
+#include <resources/object.hpp>
+#include <resources/shader.hpp>
+#include <resources/texture.hpp>
 
 using std::shared_ptr;
 

@@ -30,12 +30,12 @@
 #include "audio.hpp"
 #include "configuration.hpp"
 #include "definitions.hpp"
-#include "font.hpp"
 #include "model.hpp"
 #include "message.hpp"
-#include "shader.hpp"
-#include "texture.hpp"
 #include "view.hpp"
+#include "resources/font.hpp"
+#include "resources/shader.hpp"
+#include "resources/texture.hpp"
 
 using std::make_shared;
 using std::make_unique;

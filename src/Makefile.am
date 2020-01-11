@@ -7,17 +7,17 @@ __top_builddir__liftoff_SOURCES = \
     configuration.cpp \
     state.cpp \
     view.cpp \
-    object.cpp \
     audio.cpp \
     message.cpp \
-    shader.cpp \
     quad.cpp \
-    font.cpp \
-    texture.cpp \
-    model.cpp \
     particles.cpp \
     framebuffer.cpp \
     renderbuffer.cpp \
+    model.cpp \
+    resources/font.cpp \
+    resources/object.cpp \
+    resources/shader.cpp \
+    resources/texture.cpp \
     entities/entity.cpp \
     entities/asteroid.cpp \
     entities/cargo.cpp \
