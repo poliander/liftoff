@@ -17,7 +17,7 @@ AC_PREREQ(2.61)
 AC_INIT(liftoff, [2019/06/10], poliander@mailbox.org)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 AC_PROG_CXX
 AC_LANG([C++])

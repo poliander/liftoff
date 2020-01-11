@@ -5,29 +5,29 @@ __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     functions.cpp \
     configuration.cpp \
-    audio.cpp \
+    state.cpp \
     view.cpp \
     object.cpp \
+    audio.cpp \
     message.cpp \
     shader.cpp \
     quad.cpp \
-    framebuffer.cpp \
-    renderbuffer.cpp \
     font.cpp \
     texture.cpp \
     model.cpp \
-    entity.cpp \
-    debris.cpp \
-    asteroid.cpp \
-    missile.cpp \
+    particles.cpp \
+    framebuffer.cpp \
+    renderbuffer.cpp \
+    entities/entity.cpp \
+    entities/asteroid.cpp \
+    entities/cargo.cpp \
+    entities/debris.cpp \
+    entities/explosion.cpp \
+    entities/missile.cpp \
+    entities/player.cpp \
+    entities/powerup.cpp \
     skybox.cpp \
-    state.cpp \
     overlay.cpp \
-    powerup.cpp \
-    player.cpp \
-    cargo.cpp \
     scene.cpp \
     engine.cpp \
-    particles.cpp \
-    explosion.cpp \
     main.cpp

@@ -21,8 +21,8 @@
 #include <memory>
 
 #include "framebuffer.hpp"
-#include "player.hpp"
 #include "state.hpp"
+#include "entities/player.hpp"
 
 using std::make_pair;
 using std::unique_ptr;

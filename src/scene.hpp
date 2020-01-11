@@ -37,16 +37,16 @@
 
 #include "functions.hpp"
 #include "state.hpp"
-#include "entity.hpp"
-#include "asteroid.hpp"
-#include "cargo.hpp"
-#include "debris.hpp"
-#include "explosion.hpp"
 #include "overlay.hpp"
-#include "player.hpp"
-#include "powerup.hpp"
 #include "renderbuffer.hpp"
 #include "skybox.hpp"
+#include "entities/entity.hpp"
+#include "entities/asteroid.hpp"
+#include "entities/cargo.hpp"
+#include "entities/debris.hpp"
+#include "entities/explosion.hpp"
+#include "entities/player.hpp"
+#include "entities/powerup.hpp"
 
 using std::unique_ptr;
 
