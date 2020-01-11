@@ -22,7 +22,7 @@
 
 #include "entity.hpp"
 #include "message.hpp"
-#include "particles.hpp"
+#include "particle.hpp"
 
 class Powerup : public Entity {
     public:

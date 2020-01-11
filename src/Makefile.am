@@ -10,7 +10,7 @@ __top_builddir__liftoff_SOURCES = \
     audio.cpp \
     message.cpp \
     quad.cpp \
-    particles.cpp \
+    particle.cpp \
     framebuffer.cpp \
     renderbuffer.cpp \
     model.cpp \

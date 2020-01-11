@@ -110,7 +110,7 @@ am___top_builddir__liftoff_OBJECTS =  \
 	__top_builddir__liftoff-audio.$(OBJEXT) \
 	__top_builddir__liftoff-message.$(OBJEXT) \
 	__top_builddir__liftoff-quad.$(OBJEXT) \
-	__top_builddir__liftoff-particles.$(OBJEXT) \
+	__top_builddir__liftoff-particle.$(OBJEXT) \
 	__top_builddir__liftoff-framebuffer.$(OBJEXT) \
 	__top_builddir__liftoff-renderbuffer.$(OBJEXT) \
 	__top_builddir__liftoff-model.$(OBJEXT) \
@@ -160,7 +160,7 @@ am__depfiles_remade = ./$(DEPDIR)/__top_builddir__liftoff-audio.Po \
 	./$(DEPDIR)/__top_builddir__liftoff-message.Po \
 	./$(DEPDIR)/__top_builddir__liftoff-model.Po \
 	./$(DEPDIR)/__top_builddir__liftoff-overlay.Po \
-	./$(DEPDIR)/__top_builddir__liftoff-particles.Po \
+	./$(DEPDIR)/__top_builddir__liftoff-particle.Po \
 	./$(DEPDIR)/__top_builddir__liftoff-quad.Po \
 	./$(DEPDIR)/__top_builddir__liftoff-renderbuffer.Po \
 	./$(DEPDIR)/__top_builddir__liftoff-scene.Po \
@@ -345,7 +345,7 @@ __top_builddir__liftoff_SOURCES = \
     audio.cpp \
     message.cpp \
     quad.cpp \
-    particles.cpp \
+    particle.cpp \
     framebuffer.cpp \
     renderbuffer.cpp \
     model.cpp \
@@ -503,7 +503,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-message.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-model.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-overlay.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-particles.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-particle.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-quad.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-renderbuffer.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/__top_builddir__liftoff-scene.Po@am__quote@ # am--include-marker
@@ -643,19 +643,19 @@ __top_builddir__liftoff-quad.obj: quad.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-quad.obj `if test -f 'quad.cpp'; then $(CYGPATH_W) 'quad.cpp'; else $(CYGPATH_W) '$(srcdir)/quad.cpp'; fi`
 
-__top_builddir__liftoff-particles.o: particles.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-particles.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-particles.Tpo -c -o __top_builddir__liftoff-particles.o `test -f 'particles.cpp' || echo '$(srcdir)/'`particles.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-particles.Tpo $(DEPDIR)/__top_builddir__liftoff-particles.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='particles.cpp' object='__top_builddir__liftoff-particles.o' libtool=no @AMDEPBACKSLASH@
+__top_builddir__liftoff-particle.o: particle.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-particle.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-particle.Tpo -c -o __top_builddir__liftoff-particle.o `test -f 'particle.cpp' || echo '$(srcdir)/'`particle.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-particle.Tpo $(DEPDIR)/__top_builddir__liftoff-particle.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='particle.cpp' object='__top_builddir__liftoff-particle.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-particles.o `test -f 'particles.cpp' || echo '$(srcdir)/'`particles.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-particle.o `test -f 'particle.cpp' || echo '$(srcdir)/'`particle.cpp
 
-__top_builddir__liftoff-particles.obj: particles.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-particles.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-particles.Tpo -c -o __top_builddir__liftoff-particles.obj `if test -f 'particles.cpp'; then $(CYGPATH_W) 'particles.cpp'; else $(CYGPATH_W) '$(srcdir)/particles.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-particles.Tpo $(DEPDIR)/__top_builddir__liftoff-particles.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='particles.cpp' object='__top_builddir__liftoff-particles.obj' libtool=no @AMDEPBACKSLASH@
+__top_builddir__liftoff-particle.obj: particle.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-particle.obj -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-particle.Tpo -c -o __top_builddir__liftoff-particle.obj `if test -f 'particle.cpp'; then $(CYGPATH_W) 'particle.cpp'; else $(CYGPATH_W) '$(srcdir)/particle.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/__top_builddir__liftoff-particle.Tpo $(DEPDIR)/__top_builddir__liftoff-particle.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='particle.cpp' object='__top_builddir__liftoff-particle.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-particles.obj `if test -f 'particles.cpp'; then $(CYGPATH_W) 'particles.cpp'; else $(CYGPATH_W) '$(srcdir)/particles.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o __top_builddir__liftoff-particle.obj `if test -f 'particle.cpp'; then $(CYGPATH_W) 'particle.cpp'; else $(CYGPATH_W) '$(srcdir)/particle.cpp'; fi`
 
 __top_builddir__liftoff-framebuffer.o: framebuffer.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT __top_builddir__liftoff-framebuffer.o -MD -MP -MF $(DEPDIR)/__top_builddir__liftoff-framebuffer.Tpo -c -o __top_builddir__liftoff-framebuffer.o `test -f 'framebuffer.cpp' || echo '$(srcdir)/'`framebuffer.cpp
@@ -1078,7 +1078,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-message.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-model.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-overlay.Po
-	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-particles.Po
+	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-particle.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-quad.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-renderbuffer.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-scene.Po
@@ -1151,7 +1151,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-message.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-model.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-overlay.Po
-	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-particles.Po
+	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-particle.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-quad.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-renderbuffer.Po
 	-rm -f ./$(DEPDIR)/__top_builddir__liftoff-scene.Po

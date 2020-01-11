@@ -21,7 +21,7 @@
 #include <memory>
 
 #include "entity.hpp"
-#include "particles.hpp"
+#include "particle.hpp"
 
 class Explosion : public Entity {
     public:

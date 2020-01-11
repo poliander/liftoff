@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "particles.hpp"
+#include "particle.hpp"
 
 ParticleEngine::ParticleEngine(State* s) : state(s) {
     c_r = 1.0f;
