@@ -421,8 +421,8 @@ void Entity::drawCrosshair(shared_ptr<Entity> me) {
             (p_y - state->cam_y) * E_RELATIVE_MOVEMENT,
             p_z - .1f,
 
-            state->tilt_y * -.035f,
-            state->tilt_x * -.035f,
+            0,
+            0,
             0,
 
             scale,
@@ -450,8 +450,8 @@ void Entity::drawCrosshair(shared_ptr<Entity> me) {
             (p_y - state->cam_y) * E_RELATIVE_MOVEMENT,
             p_z - .1f,
 
-            state->tilt_y * -.035f,
-            state->tilt_x * -.035f,
+            0,
+            0,
             rot,
 
             scale,
@@ -468,8 +468,8 @@ void Entity::drawCrosshair(shared_ptr<Entity> me) {
         (p_y - state->cam_y) * E_RELATIVE_MOVEMENT,
         p_z,
 
-        state->tilt_y * -.035f,
-        state->tilt_x * -.035f,
+        0,
+        0,
         0,
 
         scale * 1.5f,

@@ -573,8 +573,8 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer) {
     }
 
     state->view->setCamera(
-        p_x * -.01f + state->tilt_x * .333f,
-        p_y * -.01f + state->tilt_y * .333f + player->getVelocityY() * 5.0f,
+        p_x * -.01f,
+        p_y * -.01f + player->getVelocityY() * 5.0f,
         0,
 
         0, 0, -1.0f,

@@ -65,15 +65,7 @@ State::State() {
     fps_timer_l             = 0;
 
     joystick                = NULL;
-
-    tilt_factor             = 0;
-    tilt_x                  = 0;
-    tilt_y                  = 0;
-    tilt_dx                 = 0;
-    tilt_dy                 = 0;
-
     id                      = 0;
-
     timer                   = SDL_GetTicks();
 
     entities.clear();
@@ -93,12 +85,6 @@ void State::log(const char *msg) {
         fclose(fp);
     } else {
         printf("%s", msg);
-    }
-}
-
-void State::tilt(float t) {
-    if (tilt_factor < fabs(t)) {
-        tilt_factor = fabs(t);
     }
 }
 

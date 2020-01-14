@@ -129,13 +129,6 @@ class State {
         float                       cam_y_offset;
         float                       cam_speed;
 
-        // camera tilt
-        float                       tilt_x;
-        float                       tilt_y;
-        float                       tilt_dx;
-        float                       tilt_dy;
-        float                       tilt_factor;
-
         // state
         bool                        set(int s);
         int                         get();

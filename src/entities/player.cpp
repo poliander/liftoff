@@ -237,39 +237,6 @@ void Player::update() {
     if (r_z < 0) r_z += 360.0f;
     if (r_z > 360.0f) r_z -= 360.0f;
 
-    // camera tilt
-    if (state->tilt_factor > .05f) {
-        static GLuint next_tilt_impulse = SDL_GetTicks();
-
-        if (next_tilt_impulse < SDL_GetTicks()) {
-            next_tilt_impulse = SDL_GetTicks() + 100 + rand() % 50;
-
-            state->tilt_dx = -state->tilt_factor + static_cast<float>(rand() % static_cast<int>(state->tilt_factor * 200.0f)) * .0075f;
-            state->tilt_dy = -state->tilt_factor + static_cast<float>(rand() % static_cast<int>(state->tilt_factor * 200.0f)) * .0075f;
-        }
-
-        state->tilt_factor -= state->global_timer * .35f;
-
-        state->tilt_x += (.025f + (state->tilt_dx - state->tilt_x)) * state->global_timer * .15f;
-        state->tilt_y += (.025f + (state->tilt_dy - state->tilt_y)) * state->global_timer * .15f;
-    } else {
-        state->tilt_factor = 0;
-        state->tilt_dx = 0;
-        state->tilt_dy = 0;
-
-        if (fabs(state->tilt_x) > .05f) {
-            state->tilt_x += (.025f + (state->tilt_dx - state->tilt_x)) * state->global_timer * .15f;
-        } else {
-            state->tilt_x = 0;
-        }
-
-        if (fabs(state->tilt_y) > .05f) {
-            state->tilt_y += (.025f + (state->tilt_dy - state->tilt_y)) * state->global_timer * .15f;
-        } else {
-            state->tilt_y = 0;
-        }
-    }
-
     // gun flash animation
     if (gun_flash[0] > 0) gun_flash[0] -= state->global_timer * .15f;
     if (gun_flash[1] > 0) gun_flash[1] -= state->global_timer * .15f;
