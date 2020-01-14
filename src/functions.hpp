@@ -19,3 +19,20 @@
 #pragma once
 
 float isqrt(float f);
+
+float mix(float v1, float v2, float b);
+
+float ease_start2(float v);
+float ease_start3(float v);
+float ease_start4(float v);
+float ease_start5(float v);
+
+float ease_stop2(float v);
+float ease_stop3(float v);
+float ease_stop4(float v);
+float ease_stop5(float v);
+
+float ease_step2(float v);
+float ease_step3(float v);
+float ease_step4(float v);
+float ease_step5(float v);

@@ -36,3 +36,55 @@ float isqrt(float f) {
 
     return f;
 }
+
+float mix(float v1, float v2, float b) {
+    return v1 + b * (v2 - v1);
+}
+
+float ease_start2(float v) {
+    return v * v;
+}
+
+float ease_start3(float v) {
+    return v * v * v;
+}
+
+float ease_start4(float v) {
+    return v * v * v * v;
+}
+
+float ease_start5(float v) {
+    return v * v * v * v * v;
+}
+
+float ease_stop2(float v) {
+    return 1.0f - ((1.0f - v) * (1.0f - v));
+}
+
+float ease_stop3(float v) {
+    return 1.0f - ((1.0f - v) * (1.0f - v) * (1.0f - v));
+}
+
+float ease_stop4(float v) {
+    return 1.0f - ((1.0f - v) * (1.0f - v) * (1.0f - v) * (1.0f - v));
+}
+
+float ease_stop5(float v) {
+    return 1.0f - ((1.0f - v) * (1.0f - v) * (1.0f - v) * (1.0f - v) * (1.0f - v));
+}
+
+float ease_step2(float t) {
+    return (t * t) / ((t * t) + ((1.0f - t) * (1.0f - t)));
+}
+
+float ease_step3(float t) {
+    return (t * t * t) / ((t * t * t) + ((1.0f - t) * (1.0f - t) * (1.0f - t)));
+}
+
+float ease_step4(float t) {
+    return (t * t * t * t) / ((t * t * t * t) + ((1.0f - t) * (1.0f - t) * (1.0f - t) * (1.0f - t)));
+}
+
+float ease_step5(float t) {
+    return (t * t * t * t * t) / ((t * t * t * t * t) + ((1.0f - t) * (1.0f - t) * (1.0f - t) * (1.0f - t) * (1.0f - t)));
+}

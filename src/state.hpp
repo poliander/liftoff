@@ -69,10 +69,8 @@ class State {
         // globals
         float                       global_timer;
         float                       global_alpha;
-        float                       global_counter;
-        float                       global_counter2;
-        float                       global_transition1;
-        float                       global_transition2;
+        float                       global_transition;
+        float                       global_transition_speed;
 
         bool                        log_file;
         Uint32                      timer;

@@ -113,20 +113,12 @@ void State::notify(uint8_t t, int16_t v) {
 void State::update() {
     global_timer = static_cast<float>(SDL_GetTicks() - timer) * .05f;
 
-    if (global_counter < 1.0f) {
-        global_counter += global_timer * .02f;
-        global_transition1 = 0.5f + 0.5f * cos(M_PI + global_counter * M_PI);
-    } else {
-        global_counter = 1.0f;
-        global_transition1 = 1.0f;
+    if (global_transition < 1.0f) {
+        global_transition += global_timer * global_transition_speed;
     }
 
-    if (global_counter2 < 1.0f) {
-        global_counter2 += global_timer * .01f;
-        global_transition2 = -pow(-global_counter2 + 1.0f, 3) + 1.0f;
-    } else {
-        global_counter2 = 1.0f;
-        global_transition2 = 1.0f;
+    if (global_transition > 1.0f) {
+        global_transition = 1.0f;
     }
 
     // frames per second
@@ -150,10 +142,8 @@ void State::update() {
 bool State::set(int s) {
     if (id == s) return false;
 
-    global_counter = 0;
-    global_counter2 = 0;
-    global_transition1 = 0;
-    global_transition2 = 0;
+    global_transition = 0;
+    global_transition_speed = .02f;
 
     switch (s) {
         case STATE_MENU:
@@ -161,6 +151,7 @@ bool State::set(int s) {
 
             global_alpha = 0;
             global_timer = 0;
+            global_transition_speed = .01f;
 
             stars_warp = true;
             stars_speed = 1.75f;

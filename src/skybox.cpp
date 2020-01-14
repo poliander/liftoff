@@ -101,7 +101,7 @@ void Skybox::draw() {
     if (state->stars_warp) {
         for (int i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
             a = (1000.0f + stars[i][2]) / 1250.0f;
-            float sl = pow(a * 1.45f, 2) * (1.0f / isqrt(pow(stars[i][0], 2) + pow(stars[i][1], 2)));
+            float sl = 2.0f * a * a * (1.0f / isqrt((stars[i][0] * stars[i][0]) + (stars[i][1] * stars[i][1])));
 
             state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (state->stars_speed - .3f)));
             state->shaders[S_TEXTURE]->update(UNI_MVP, view->getProjection() * view->getModel(

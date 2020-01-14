@@ -35,6 +35,8 @@ void Overlay::update() {
         ++m;
     }
 
+    float t = state->global_transition;
+
     switch (state->get()) {
         case STATE_MENU:
             status_visible      = false;
@@ -44,7 +46,7 @@ void Overlay::update() {
             screen_y            = 50.0f;
             ship_y              = -1.5f;
             logo1_x             = 0;
-            logo1_y             = state->global_transition2 * 100.0f - 300.0f;
+            logo1_y             = ease_stop3(t) * 200.0f - 400.0f;
             logo2_x             = 0;
             logo2_y             = -150.0f;
             break;
@@ -53,12 +55,12 @@ void Overlay::update() {
             status_visible      = true;
             menu_visible        = true;
             menu_cursor_visible = false;
-            menu_alpha          = pow(state->global_transition1, 3) * -1.0f + 1.0f;
-            status_alpha        = pow(state->global_transition1, 3);
-            screen_y            = pow(state->global_transition1, 3) * 290.0f + 50.0f;
-            ship_y              = pow(state->global_transition1, 3) * -15.0f - 1.5f;
-            logo1_x             = pow(state->global_transition1, 2) * 500.0f * -1.0f;
-            logo2_x             = pow(state->global_transition1, 2) * 500.0f;
+            menu_alpha          = 1.0f - ease_stop2(t);
+            status_alpha        = ease_start2(t);
+            screen_y            = ease_step3(t) * 290.0f + 50.0f;
+            ship_y              = ease_step3(t) * -15.0f - 1.5f;
+            logo1_x             = ease_start3(t) * 500.0f * -1.0f;
+            logo2_x             = ease_start3(t) * 500.0f;
             break;
 
         case STATE_GAME_LOOP:
@@ -69,12 +71,12 @@ void Overlay::update() {
             break;
 
         case STATE_GAME_QUIT:
-            screen_y            = state->global_transition2 * 100.0f + 350.0f;
+            screen_y            = ease_start2(t) * 200.0f + 340.0f;
             break;
 
         case STATE_QUIT:
-            logo1_x             = pow(state->global_transition1, 2) * 500.0f * -1.0f;
-            logo2_x             = pow(state->global_transition1, 2) * 500.0f;
+            logo1_x             = ease_start3(t) * 500.0f * -1.0f;
+            logo2_x             = ease_start3(t) * 500.0f;
             break;
     }
 }
@@ -92,7 +94,7 @@ void Overlay::drawMessages() {
             x = (*m)->dir_x * ((*m)->counter + 1.0f) * 2.2f;
         }
 
-        y = (*m)->dir_y * pow(((*m)->counter + 1.0f) * .05f, 2) * 10.0f;
+        y = (*m)->dir_y * 10.0f * (((*m)->counter + 1.0f) * .05f * ((*m)->counter + 1.0f) * .05f);
         s = (*m)->counter * .0025f;
 
         state->fonts[F_ZEKTON]->draw(
@@ -502,7 +504,7 @@ void Overlay::drawMenu() {
     }
 
     if (state->get() == STATE_MENU) {
-        s = 1.5f * state->global_transition2;
+        s = 1.5f * ease_stop2(state->global_transition);
     } else {
         s = 1.5f;
     }

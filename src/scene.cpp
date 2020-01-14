@@ -461,7 +461,7 @@ void Scene::update() {
 
     switch (state->get()) {
         case STATE_MENU:
-            state->global_alpha = state->global_counter;
+            state->global_alpha = state->global_transition;
             break;
 
         case STATE_GAME_START:
@@ -475,9 +475,9 @@ void Scene::update() {
                 }
             }
 
-            if (state->global_counter2 < 1.0f) {
-                state->stars_speed = 1.75f - state->global_counter2 * 1.4f;
-                state->stars_rotation_speed = 0.05f - state->global_counter2 * 0.05f;
+            if (state->global_transition < 1.0f) {
+                state->stars_speed = 1.75f - state->global_transition * 1.4f;
+                state->stars_rotation_speed = 0.05f - state->global_transition * 0.05f;
             } else {
                 state->set(STATE_GAME_LOOP);
             }
@@ -525,8 +525,7 @@ void Scene::update() {
         case STATE_GAME_NEXTLEVEL:
             updateScene();
 
-            if (state->global_counter < 1.0f) {
-            } else {
+            if (state->global_transition >= 1.0f) {
                 state->set(STATE_MENU);
             }
             break;
@@ -534,21 +533,21 @@ void Scene::update() {
         case STATE_GAME_QUIT:
             updateScene();
 
-            if (state->global_counter < 1.0f) {
+            if (state->global_transition < 1.0f) {
                 if (player->isAlive()) {
                     player->setAccelerationZ(-25.0f);
                 }
 
-                state->global_alpha = 1.0f - state->global_counter;
+                state->global_alpha = 1.0f - state->global_transition;
             } else {
                 state->set(STATE_MENU);
             }
             break;
 
         case STATE_QUIT:
-            state->global_alpha = 1.0f - state->global_counter;
+            state->global_alpha = 1.0f - state->global_transition;
 
-            if (state->global_counter < 1.0f) {
+            if (state->global_transition < 1.0f) {
                 player->update();
             } else {
                 state->set(STATE_CLOSE);
