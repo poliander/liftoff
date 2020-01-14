@@ -34,11 +34,12 @@ Skybox::Skybox(State* s) : state(s) {
         stars[i][0] = x;
         stars[i][1] = y;
         stars[i][2] = -1000.0f + (rand() % 1000);
+        stars[i][3] = 1.0f / isqrt((stars[i][0] * stars[i][0]) + (stars[i][1] * stars[i][1]));
 
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
-            stars[i][3] = 90.0f + (atan(stars[i][1] / stars[i][0]) * 180.0f/ M_PI);
+            stars[i][4] = 90.0f + (atan(stars[i][1] / stars[i][0]) * 180.0f/ M_PI);
         } else  {
-            stars[i][3] = 0.35f + (((float)(rand() % 100)) * .005f);
+            stars[i][4] = 0.35f + (((float)(rand() % 100)) * .005f);
         }
     }
 }
@@ -63,7 +64,7 @@ void Skybox::update() {
 }
 
 void Skybox::draw() {
-    float a, c, s = max(static_cast<float>(state->vid_height) / static_cast<float>(state->vid_width), state->vid_aspect);
+    float s = max(static_cast<float>(state->vid_height) / static_cast<float>(state->vid_width), state->vid_aspect);
 
     glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);
@@ -90,7 +91,7 @@ void Skybox::draw() {
         state->shaders[S_TEXTURE]->update(UNI_MVP, view->getProjection() * view->getModel(
             stars[i][0], stars[i][1], stars[i][2],
             0, 0, 0,
-            stars[i][3], stars[i][3], 0
+            stars[i][4], stars[i][4], 0
         ));
 
         state->textures[T_STAR]->draw();
@@ -100,14 +101,13 @@ void Skybox::draw() {
 
     if (state->stars_warp) {
         for (int i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
-            a = (1000.0f + stars[i][2]) / 1250.0f;
-            float sl = 2.0f * a * a * (1.0f / isqrt((stars[i][0] * stars[i][0]) + (stars[i][1] * stars[i][1])));
+            float a = (1000.0f + stars[i][2]) / 1250.0f;
 
             state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (state->stars_speed - .3f)));
             state->shaders[S_TEXTURE]->update(UNI_MVP, view->getProjection() * view->getModel(
                 stars[i][0], stars[i][1], stars[i][2],
-                90.0f, stars[i][3], 0,
-                .9f, sl * (state->stars_speed - .3f), 0
+                90.0f, 2.0f * a * a * stars[i][4], 0,
+                .9f, stars[i][3] * (state->stars_speed - .3f), 0
             ));
 
             state->textures[T_STAR]->draw();

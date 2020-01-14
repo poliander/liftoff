@@ -42,7 +42,7 @@ class Skybox {
         void                    draw();
 
     private:
-        float                   stars[SKYBOX_NUM_STARS][4];
+        float                   stars[SKYBOX_NUM_STARS][5];
 
         State*                  state;
 
