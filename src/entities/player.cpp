@@ -98,12 +98,12 @@ void Player::shoot() {
 
     m_next_shot_timer = SDL_GetTicks() + 90 + rand() % 60;
 
-    if (energy < 25) {
+    if (energy < 20) {
         // low energy
         return;
     }
 
-    energy -= 25;
+    energy -= 20;
     m_alt = 1 - m_alt;
 
     gun_flash[m_alt] = 1.0f;
@@ -127,6 +127,9 @@ void Player::shoot() {
 
         missile->setVelocityX(-ax * E_BASE_SPEED * 5.0f);
         missile->setVelocityY(-ay * E_BASE_SPEED * 5.0f);
+    } else {
+        missile->setVelocityX(getVelocityX() * -5.0f);
+        missile->setVelocityY(getVelocityY() * -5.0f);
     }
 
     state->spawn(missile);
