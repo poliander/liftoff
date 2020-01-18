@@ -456,6 +456,7 @@ void Scene::updateScene() {
 }
 
 void Scene::update() {
+    state->update();
     skybox->update();
     overlay->update();
 

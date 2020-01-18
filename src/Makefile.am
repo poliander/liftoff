@@ -3,17 +3,6 @@ bin_PROGRAMS = $(top_builddir)/liftoff
 __top_builddir__liftoff_CPPFLAGS = $(CPPFLAGS)
 __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
-    functions.cpp \
-    configuration.cpp \
-    state.cpp \
-    view.cpp \
-    audio.cpp \
-    message.cpp \
-    quad.cpp \
-    particle.cpp \
-    framebuffer.cpp \
-    renderbuffer.cpp \
-    model.cpp \
     resources/font.cpp \
     resources/object.cpp \
     resources/shader.cpp \
@@ -26,8 +15,20 @@ __top_builddir__liftoff_SOURCES = \
     entities/missile.cpp \
     entities/player.cpp \
     entities/powerup.cpp \
-    skybox.cpp \
-    overlay.cpp \
-    scene.cpp \
+    audio.cpp \
+    configuration.cpp \
     engine.cpp \
-    main.cpp
+    framebuffer.cpp \
+    functions.cpp \
+    input.cpp \
+    main.cpp \
+    message.cpp \
+    model.cpp \
+    overlay.cpp \
+    particle.cpp \
+    quad.cpp \
+    renderbuffer.cpp \
+    scene.cpp \
+    skybox.cpp \
+    state.cpp \
+    view.cpp

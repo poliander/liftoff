@@ -18,31 +18,20 @@
 
 #pragma once
 
-#include <cstdlib>
-#include <memory>
-
-#include "input.hpp"
-#include "scene.hpp"
 #include "state.hpp"
 
-class Engine {
-    public:
-        Engine() {}
-        ~Engine() {}
+#include "entities/entity.hpp"
 
-        bool                     init(int argc, char** argv);
-        bool                     main();
-        void                     halt();
+class Input {
+    public:
+        explicit Input(State* s);
+        ~Input() {};
+
+        void handle();
 
     private:
-        State                    state;
+        State* state;
 
-        SDL_Window*              window;
-        SDL_GLContext            context;
-
-        unique_ptr<Input>        input;
-        unique_ptr<Renderbuffer> buffer;
-        unique_ptr<Scene>        scene;
-
-        bool                     initDisplay(int flags);
+        bool handleKeyboard();
+        void handleJoystick();
 };
