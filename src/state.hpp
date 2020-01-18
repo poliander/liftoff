@@ -134,7 +134,6 @@ class State {
         int                         get();
         void                        update();
 
-        void                        tilt(float t);
         void                        spawn(shared_ptr<Entity> e);
         void                        notify(uint8_t t, int16_t v);
         void                        log(const char* msg);

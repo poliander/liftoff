@@ -127,9 +127,6 @@ void Player::shoot() {
 
         missile->setVelocityX(-ax * E_BASE_SPEED * 5.0f);
         missile->setVelocityY(-ay * E_BASE_SPEED * 5.0f);
-    } else {
-        missile->setVelocityX(getVelocityX() * -5.0f);
-        missile->setVelocityY(getVelocityY() * -5.0f);
     }
 
     state->spawn(missile);
