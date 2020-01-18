@@ -19,7 +19,6 @@
 #pragma once
 
 #include <cstdlib>
-#include <ctime>
 #include <memory>
 
 #include "scene.hpp"
@@ -28,8 +27,8 @@
 
 class Engine {
     public:
-        Engine();
-        ~Engine();
+        Engine() {}
+        ~Engine() {}
 
         bool                     init(int argc, char** argv);
         bool                     main();

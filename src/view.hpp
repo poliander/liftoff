@@ -31,7 +31,7 @@ using std::unique_ptr;
 class View {
     public:
         View(uint8_t t, glm::mat4 p);
-        virtual ~View();
+        ~View() {}
 
         glm::mat4 getProjection();
 

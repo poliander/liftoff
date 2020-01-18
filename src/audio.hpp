@@ -23,7 +23,7 @@
 class Audio {
     public:
         Audio();
-        ~Audio();
+        ~Audio() {}
 
         int         volume_sfx;
         int         volume_music;

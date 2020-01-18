@@ -30,7 +30,7 @@ using std::unique_ptr;
 class Overlay {
     public:
         explicit Overlay(State* s);
-        ~Overlay();
+        ~Overlay() {}
 
         void update();
         void draw();

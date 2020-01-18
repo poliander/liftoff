@@ -24,9 +24,6 @@ Overlay::Overlay(State* s) : state(s) {
     framebuffer = make_unique<Framebuffer>(state->vid_fb_size, state->vid_fb_size, state->vid_multisampling);
 }
 
-Overlay::~Overlay() {
-}
-
 void Overlay::update() {
     auto m = state->messages.begin();
 

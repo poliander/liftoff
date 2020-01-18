@@ -31,9 +31,6 @@ ParticleEngine::ParticleEngine(State* s) : state(s) {
     blendDestFactor = GL_ONE;
 }
 
-ParticleEngine::~ParticleEngine() {
-}
-
 void ParticleEngine::setup(uint16_t e, uint16_t n, float dx, float dy, float dz, float decay, float size) {
     particles.clear();
 

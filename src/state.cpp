@@ -37,6 +37,8 @@ State::State() {
     snprintf(dir_configuration, sizeof(dir_configuration), "%s/.liftoff", getenv("HOME"));
 #endif
 
+    srand((int)time(NULL));
+
     config.vid_width        = DEFAULT_VID_WIDTH;
     config.vid_height       = DEFAULT_VID_HEIGHT;
     config.vid_fullscreen   = DEFAULT_VID_FULLSCREEN;
@@ -67,13 +69,6 @@ State::State() {
     joystick                = NULL;
     id                      = 0;
     timer                   = SDL_GetTicks();
-
-    entities.clear();
-    spawns.clear();
-    messages.clear();
-}
-
-State::~State() {
 }
 
 void State::log(const char *msg) {

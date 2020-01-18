@@ -24,7 +24,7 @@
 class Quad {
     public:
         Quad();
-        virtual ~Quad();
+        virtual ~Quad() {};
 
         void setPosition(glm::vec4 p);
         void setTextureCoordinates(glm::vec4 t);

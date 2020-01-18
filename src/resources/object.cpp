@@ -24,9 +24,6 @@ Object::Object(string filename) {
     }
 }
 
-Object::~Object() {
-}
-
 bool Object::load(string filename) {
     ifstream file;
     string line;

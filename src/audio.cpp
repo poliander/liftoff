@@ -25,9 +25,6 @@ Audio::Audio() {
     state_background_sound = -1;
 }
 
-Audio::~Audio() {
-}
-
 void Audio::init(char* data_dir, int vol_sfx, int vol_music, int mix_freq) {
     volume_sfx = vol_sfx;
     volume_music = vol_music;

@@ -44,9 +44,6 @@ Skybox::Skybox(State* s) : state(s) {
     }
 }
 
-Skybox::~Skybox() {
-}
-
 void Skybox::update() {
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {

@@ -36,7 +36,7 @@ using std::max;
 class Skybox {
     public:
         explicit Skybox(State* s);
-        ~Skybox();
+        ~Skybox() {};
 
         void                    update();
         void                    draw();

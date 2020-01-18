@@ -38,9 +38,6 @@ Quad::Quad() {
     update();
 }
 
-Quad::~Quad() {
-}
-
 void Quad::setPosition(glm::vec4 p) {
     pos = p;
     changed = true;

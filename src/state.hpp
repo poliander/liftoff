@@ -22,6 +22,7 @@
 
 #include <map>
 #include <cmath>
+#include <ctime>
 #include <memory>
 #include <vector>
 
@@ -48,7 +49,7 @@ class Entity;
 class State {
     public:
         State();
-        ~State();
+        ~State() {};
 
         Audio                       audio;
         config_t                    config;

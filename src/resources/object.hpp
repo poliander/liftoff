@@ -40,7 +40,7 @@ struct index_t {
 class Object {
     public:
         explicit Object(string filename);
-        ~Object();
+        ~Object() {}
 
         vector<glm::vec3>    positions;
         vector<glm::vec2>    texCoords;

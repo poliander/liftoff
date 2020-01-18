@@ -48,7 +48,7 @@ struct particle_t {
 class ParticleEngine {
     public:
         explicit ParticleEngine(State* s);
-        ~ParticleEngine();
+        ~ParticleEngine() {}
 
         void               setTexture(GLuint t);
         void               setBlendFunc(GLenum s, GLenum d);

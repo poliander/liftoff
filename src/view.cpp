@@ -23,9 +23,6 @@ View::View(uint8_t t, glm::mat4 p) {
     projection = p;
 }
 
-View::~View() {
-}
-
 unique_ptr<View> View::createPerspective(float f, float a, float zNear, float zFar) {
     return make_unique<View>(P_PERSPECTIVE, glm::perspective(glm::radians(f), a, zNear, zFar));
 }

@@ -19,13 +19,13 @@
 #include "engine.hpp"
 
 int main(int argc, char *argv[]) {
-    Engine engine;
+    auto engine = make_unique<Engine>();
 
-    if (engine.init(argc, argv)) {
-        while (engine.main()) {
+    if (engine->init(argc, argv)) {
+        while (engine->main()) {
         }
 
-        engine.halt();
+        engine->halt();
     }
 
     return 0;

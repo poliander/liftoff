@@ -18,13 +18,6 @@
 
 #include "engine.hpp"
 
-Engine::Engine() {
-    srand((int)time(NULL));
-}
-
-Engine::~Engine() {
-}
-
 bool Engine::init(int argc, char **argv) {
     char msg[255];
     SDL_DisplayMode mode, current;
