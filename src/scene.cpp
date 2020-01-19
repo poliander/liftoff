@@ -22,6 +22,7 @@ Scene::Scene(State* s) : state(s) {
     player = make_shared<Player>(state);
     skybox = make_unique<Skybox>(state);
     overlay = make_unique<Overlay>(state);
+    level = make_unique<Level>(state);
 
     state->player = player;
 
@@ -47,10 +48,6 @@ Scene::~Scene() {
         Mix_FreeChunk(state->audio.sample[1]);
         Mix_FreeChunk(state->audio.sample[0]);
     }
-
-    overlay.reset();
-    skybox.reset();
-    player.reset();
 
     state->fonts.clear();
     state->textures.clear();
@@ -201,188 +198,7 @@ void Scene::load() {
     state->audio.music[0]   = state->audio.loadMusic("music_title.ogg");
 }
 
-bool Scene::loadLevel() {
-    FILE *fp = NULL;
-    char msg[255], fname[255], buf[1024], cmd[16], par[255];
-
-    int i, money, life, m, p = 0;
-    uint16_t e_obj;
-    float p_x, p_y, p_z;
-    float r_x, r_y, r_z;
-    float s_x, s_y, s_z;
-    float w_x, w_y, w_z;
-
-    state->entities.clear();
-    state->spawns.clear();
-    state->spawn(player);
-
-    snprintf(msg, sizeof(msg), "Loading 'lvl/mission_1.dat'... ");
-    state->log(msg);
-
-    snprintf(fname, sizeof(msg), "%s/levels/mission_1.dat", state->dir_resources);
-    fp = fopen(fname, "r");
-
-    if (fp == NULL) {
-        state->log("failed\n");
-        return false;
-    }
-
-    while (!feof(fp)) {
-        if (fgets(buf, 1024, fp) != NULL) {
-            snprintf(cmd, sizeof(cmd), "");
-            snprintf(cmd, sizeof(par), "");
-
-            i = 0;
-            m = 0;
-
-            while ((i < strlen(buf)) && (m < 4)) {
-                // forget the rest of the line
-                if (buf[i] == ';') break;
-
-                // remove unnecessary characters
-                if (buf[i] < 33) {
-                    if (m == 0) { i++; continue; }
-                    if (m == 1) { m++; continue; }
-                    if (m == 2) { i++; continue; }
-                    if (m == 3) { m++; continue; }
-                } else {
-                    if (m == 0) { p = 0; m = 1; }
-                    if (m == 2) { p = 0; m = 3; }
-                }
-
-                if (m == 1) {
-                    cmd[p] = buf[i];
-                    p++;
-                    cmd[p] = 0;
-                }
-
-                if (m == 3) {
-                    if (buf[i] == '{') {
-                        i++;
-                        while ((buf[i] != '}') && (i < strlen(buf))) {
-                            par[p] = buf[i];
-                            p++;
-                            par[p] = 0;
-                            i++;
-                        }
-                    } else {
-                        par[p] = buf[i];
-                        p++;
-                        par[p] = 0;
-                    }
-                }
-
-                i++;
-            }
-
-            if (cmd[0] && par[0]) {
-                // music
-                if (!strcmp(cmd, "soundtrack")) {
-                    snprintf(state->lvl_music, sizeof(state->lvl_music), "%s", par);
-                }
-
-                // length
-                if (!strcmp(cmd, "length")) sscanf(par, "%d", &state->lvl_length);
-
-                // colliding object, obstacle
-                if (!strcmp(cmd, "collider")) {
-                    r_x = static_cast<float>(rand() % 3600) * .1f;
-                    r_y = static_cast<float>(rand() % 3600) * .1f;
-                    r_z = static_cast<float>(rand() % 3600) * .1f;
-
-                    sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u,%u",
-                        (float *) &p_z,
-                        (int *)   &e_obj,
-                        (float *) &p_x,
-                        (float *) &p_y,
-                        (float *) &s_x,
-                        (float *) &s_y,
-                        (float *) &s_z,
-                        (float *) &w_x,
-                        (float *) &w_y,
-                        (float *) &w_z,
-                        (int *)   &life,
-                        (int *)   &money
-                    );
-
-                    switch (e_obj) {
-                        case OBJ_ASTEROID_1:
-                            {
-                                auto asteroid = make_shared<Asteroid>(state);
-
-                                asteroid->setPos(p_x, p_y, p_z);
-                                asteroid->setRot(r_x, r_y, r_z);
-                                asteroid->setScale(s_x, s_y, s_z);
-                                asteroid->setSpin(w_x, w_y, w_z);
-                                asteroid->setLife(life);
-
-                                state->spawn(asteroid);
-                            }
-                            break;
-
-                        case OBJ_CARGO_1:
-                            {
-                                auto cargo = make_shared<Cargo>(state);
-
-                                cargo->setPos(p_x, p_y, p_z);
-                                cargo->setRot(r_x, r_y, r_z);
-                                cargo->setScale(s_x, s_y, s_z);
-                                cargo->setSpin(w_x, w_y, w_z);
-                                cargo->setLife(life);
-
-                                state->spawn(cargo);
-                            }
-                            break;
-                    }
-                }
-
-                // scenery object
-                if (!strcmp(cmd, "scenery")) {
-                    r_x = static_cast<float>(rand() % 360);
-                    r_y = static_cast<float>(rand() % 360);
-                    r_z = static_cast<float>(rand() % 360);
-
-                    sscanf(par, "%f,%u,%f,%f,%f,%f,%f,%f,%f,%f,%u",
-                        (float *) &p_z,
-                        (int *)   &e_obj,
-                        (float *) &p_x,
-                        (float *) &p_y,
-                        (float *) &s_x,
-                        (float *) &s_y,
-                        (float *) &s_z,
-                        (float *) &w_x,
-                        (float *) &w_y,
-                        (float *) &w_z,
-                        (int *)   &life
-                    );
-
-                    switch (e_obj) {
-                        case OBJ_ASTEROID_1:
-                            {
-                                auto asteroid = make_shared<Asteroid>(state);
-
-                                asteroid->setType(E_TYPE_SCENERY);
-                                asteroid->setPos(p_x, p_y, p_z);
-                                asteroid->setRot(r_x, r_y, r_z);
-                                asteroid->setScale(s_x, s_y, s_z);
-                                asteroid->setSpin(w_x, w_y, w_z);
-                                asteroid->setLife(life);
-
-                                state->spawn(asteroid);
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
-    state->log("ok\n");
-
-    return true;
-}
-
-void Scene::updateScene() {
+void Scene::updateEntities() {
     static GLuint nextdebris = SDL_GetTicks();
 
     if (SDL_GetTicks() > nextdebris &&
@@ -467,7 +283,7 @@ void Scene::update() {
 
         case STATE_GAME_START:
             if (state->lvl_loaded == false) {
-                state->lvl_loaded = loadLevel();
+                state->lvl_loaded = level->load(string(state->dir_resources).append("/levels/mission_1.dat"));
 
                 if (state->lvl_loaded == false) {
                     state->set(STATE_QUIT);
@@ -493,7 +309,7 @@ void Scene::update() {
                 state->set(STATE_GAME_NEXTLEVEL);
             }
 
-            updateScene();
+            updateEntities();
 
             if (player->getPosZ() > -225.0f) {
                 player->setAccelerationZ(17.5f);
@@ -524,7 +340,7 @@ void Scene::update() {
             break;
 
         case STATE_GAME_NEXTLEVEL:
-            updateScene();
+            updateEntities();
 
             if (state->global_transition >= 1.0f) {
                 state->set(STATE_MENU);
@@ -532,7 +348,7 @@ void Scene::update() {
             break;
 
         case STATE_GAME_QUIT:
-            updateScene();
+            updateEntities();
 
             if (state->global_transition < 1.0f) {
                 if (player->isAlive()) {

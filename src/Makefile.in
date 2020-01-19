@@ -104,6 +104,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am___top_builddir__liftoff_OBJECTS =  \
 	resources/__top_builddir__liftoff-font.$(OBJEXT) \
+	resources/__top_builddir__liftoff-level.$(OBJEXT) \
 	resources/__top_builddir__liftoff-object.$(OBJEXT) \
 	resources/__top_builddir__liftoff-shader.$(OBJEXT) \
 	resources/__top_builddir__liftoff-texture.$(OBJEXT) \
@@ -178,6 +179,7 @@ am__depfiles_remade = ./$(DEPDIR)/__top_builddir__liftoff-audio.Po \
 	entities/$(DEPDIR)/__top_builddir__liftoff-player.Po \
 	entities/$(DEPDIR)/__top_builddir__liftoff-powerup.Po \
 	resources/$(DEPDIR)/__top_builddir__liftoff-font.Po \
+	resources/$(DEPDIR)/__top_builddir__liftoff-level.Po \
 	resources/$(DEPDIR)/__top_builddir__liftoff-object.Po \
 	resources/$(DEPDIR)/__top_builddir__liftoff-shader.Po \
 	resources/$(DEPDIR)/__top_builddir__liftoff-texture.Po
@@ -341,6 +343,7 @@ __top_builddir__liftoff_CPPFLAGS = $(CPPFLAGS)
 __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     resources/font.cpp \
+    resources/level.cpp \
     resources/object.cpp \
     resources/shader.cpp \
     resources/texture.cpp \
@@ -453,6 +456,8 @@ resources/$(DEPDIR)/$(am__dirstamp):
 	@: > resources/$(DEPDIR)/$(am__dirstamp)
 resources/__top_builddir__liftoff-font.$(OBJEXT):  \
 	resources/$(am__dirstamp) resources/$(DEPDIR)/$(am__dirstamp)
+resources/__top_builddir__liftoff-level.$(OBJEXT):  \
+	resources/$(am__dirstamp) resources/$(DEPDIR)/$(am__dirstamp)
 resources/__top_builddir__liftoff-object.$(OBJEXT):  \
 	resources/$(am__dirstamp) resources/$(DEPDIR)/$(am__dirstamp)
 resources/__top_builddir__liftoff-shader.$(OBJEXT):  \
@@ -523,6 +528,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@entities/$(DEPDIR)/__top_builddir__liftoff-player.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@entities/$(DEPDIR)/__top_builddir__liftoff-powerup.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resources/$(DEPDIR)/__top_builddir__liftoff-font.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@resources/$(DEPDIR)/__top_builddir__liftoff-level.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resources/$(DEPDIR)/__top_builddir__liftoff-object.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resources/$(DEPDIR)/__top_builddir__liftoff-shader.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@resources/$(DEPDIR)/__top_builddir__liftoff-texture.Po@am__quote@ # am--include-marker
@@ -562,6 +568,20 @@ resources/__top_builddir__liftoff-font.obj: resources/font.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='resources/font.cpp' object='resources/__top_builddir__liftoff-font.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o resources/__top_builddir__liftoff-font.obj `if test -f 'resources/font.cpp'; then $(CYGPATH_W) 'resources/font.cpp'; else $(CYGPATH_W) '$(srcdir)/resources/font.cpp'; fi`
+
+resources/__top_builddir__liftoff-level.o: resources/level.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT resources/__top_builddir__liftoff-level.o -MD -MP -MF resources/$(DEPDIR)/__top_builddir__liftoff-level.Tpo -c -o resources/__top_builddir__liftoff-level.o `test -f 'resources/level.cpp' || echo '$(srcdir)/'`resources/level.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) resources/$(DEPDIR)/__top_builddir__liftoff-level.Tpo resources/$(DEPDIR)/__top_builddir__liftoff-level.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='resources/level.cpp' object='resources/__top_builddir__liftoff-level.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o resources/__top_builddir__liftoff-level.o `test -f 'resources/level.cpp' || echo '$(srcdir)/'`resources/level.cpp
+
+resources/__top_builddir__liftoff-level.obj: resources/level.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT resources/__top_builddir__liftoff-level.obj -MD -MP -MF resources/$(DEPDIR)/__top_builddir__liftoff-level.Tpo -c -o resources/__top_builddir__liftoff-level.obj `if test -f 'resources/level.cpp'; then $(CYGPATH_W) 'resources/level.cpp'; else $(CYGPATH_W) '$(srcdir)/resources/level.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) resources/$(DEPDIR)/__top_builddir__liftoff-level.Tpo resources/$(DEPDIR)/__top_builddir__liftoff-level.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='resources/level.cpp' object='resources/__top_builddir__liftoff-level.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o resources/__top_builddir__liftoff-level.obj `if test -f 'resources/level.cpp'; then $(CYGPATH_W) 'resources/level.cpp'; else $(CYGPATH_W) '$(srcdir)/resources/level.cpp'; fi`
 
 resources/__top_builddir__liftoff-object.o: resources/object.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(__top_builddir__liftoff_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT resources/__top_builddir__liftoff-object.o -MD -MP -MF resources/$(DEPDIR)/__top_builddir__liftoff-object.Tpo -c -o resources/__top_builddir__liftoff-object.o `test -f 'resources/object.cpp' || echo '$(srcdir)/'`resources/object.cpp
@@ -1113,6 +1133,7 @@ distclean: distclean-am
 	-rm -f entities/$(DEPDIR)/__top_builddir__liftoff-player.Po
 	-rm -f entities/$(DEPDIR)/__top_builddir__liftoff-powerup.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-font.Po
+	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-level.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-object.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-shader.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-texture.Po
@@ -1187,6 +1208,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f entities/$(DEPDIR)/__top_builddir__liftoff-player.Po
 	-rm -f entities/$(DEPDIR)/__top_builddir__liftoff-powerup.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-font.Po
+	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-level.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-object.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-shader.Po
 	-rm -f resources/$(DEPDIR)/__top_builddir__liftoff-texture.Po

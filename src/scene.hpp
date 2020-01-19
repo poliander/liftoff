@@ -40,13 +40,8 @@
 #include "overlay.hpp"
 #include "renderbuffer.hpp"
 #include "skybox.hpp"
-#include "entities/entity.hpp"
-#include "entities/asteroid.hpp"
-#include "entities/cargo.hpp"
-#include "entities/debris.hpp"
-#include "entities/explosion.hpp"
-#include "entities/player.hpp"
-#include "entities/powerup.hpp"
+
+#include "resources/level.hpp"
 
 using std::unique_ptr;
 
@@ -63,9 +58,9 @@ class Scene {
         State*              state;
 
         shared_ptr<Player>  player;
+        unique_ptr<Level>   level;
         unique_ptr<Skybox>  skybox;
         unique_ptr<Overlay> overlay;
 
-        void                updateScene();
-        bool                loadLevel();
+        void                updateEntities();
 };

@@ -4,6 +4,7 @@ __top_builddir__liftoff_CPPFLAGS = $(CPPFLAGS)
 __top_builddir__liftoff_LDFLAGS = $(LIBS)
 __top_builddir__liftoff_SOURCES = \
     resources/font.cpp \
+    resources/level.cpp \
     resources/object.cpp \
     resources/shader.cpp \
     resources/texture.cpp \
