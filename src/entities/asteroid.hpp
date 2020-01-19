@@ -27,7 +27,7 @@
 class Asteroid : public Entity {
     public:
         explicit Asteroid(State* s);
-        ~Asteroid();
+        ~Asteroid() {}
 
         bool damage(int p);
         void update();

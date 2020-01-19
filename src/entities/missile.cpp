@@ -38,9 +38,6 @@ Missile::Missile(State* s, uint16_t p) : Entity(s) {
     power = p;
 }
 
-Missile::~Missile() {
-}
-
 void Missile::collide(shared_ptr<Entity> e) {
     if (e->isPlayer()) {
         return;

@@ -76,9 +76,6 @@ Explosion::Explosion(State* s, uint16_t t, float x, float y, float z, float r, f
     particles->setColor(r, g, b);
 }
 
-Explosion::~Explosion() {
-}
-
 void Explosion::update() {
     Entity::update();
 

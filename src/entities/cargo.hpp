@@ -27,7 +27,7 @@
 class Cargo : public Entity {
     public:
         explicit Cargo(State* s);
-        ~Cargo();
+        ~Cargo() {}
 
         bool  damage(int p);
         void  update();

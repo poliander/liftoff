@@ -27,7 +27,7 @@
 class Powerup : public Entity {
     public:
         Powerup(State* s, float x, float y, float z);
-        ~Powerup();
+        ~Powerup() {}
 
         bool                       damage(int p);
         void                       collide(shared_ptr<Entity> e);

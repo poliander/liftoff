@@ -40,9 +40,6 @@ Debris::Debris(State* s) : Entity(s) {
     c_b = .6f;
 }
 
-Debris::~Debris() {
-}
-
 void Debris::update() {
     Entity::update();
 

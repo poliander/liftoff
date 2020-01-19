@@ -26,9 +26,6 @@ Player::Player(State* s) : Entity(s) {
     init();
 }
 
-Player::~Player() {
-}
-
 void Player::init() {
     setPos(0, -90.0f, 50.0f);
     setRot(90.0f, 0, 270.0f);
@@ -46,12 +43,14 @@ void Player::init() {
 
     // player stats
 
-    acceleration = 120;
-    deceleration = 0.00035f;
+    agility = 0.5f;
+    inertness = 0.1f;
 
     powerup = 0;
     money = 0;
-    gun_power = 25;
+
+    gun_power = 30;
+    gun_energy = 15;
 
     energy = -200;
     energy_max = 1500;
@@ -98,12 +97,12 @@ void Player::shoot() {
 
     m_next_shot_timer = SDL_GetTicks() + 90 + rand() % 60;
 
-    if (energy < 20) {
+    if (energy < gun_energy) {
         // low energy
         return;
     }
 
-    energy -= 20;
+    energy -= gun_energy;
     m_alt = 1 - m_alt;
 
     gun_flash[m_alt] = 1.0f;
@@ -175,28 +174,28 @@ void Player::update() {
     }
 
     // limit horizontal acceleration
-    if (fabs(a_x) > acceleration * .005f) {
+    if (fabs(a_x) > agility) {
         if (a_x > 0) {
-            a_x = acceleration * .005f;
+            a_x = agility;
         } else {
-            a_x = acceleration * -.005f;
+            a_x = -agility;
         }
     }
 
     // limit vertical acceleration
-    if (fabs(a_y) > acceleration * .005f) {
+    if (fabs(a_y) > agility) {
         if (a_y > 0) {
-            a_y = acceleration * .005f;
+            a_y = agility;
         } else {
-            a_y = acceleration * -.005f;
+            a_y = -agility;
         }
     }
 
     // accelerate horizontally
     if ((a_x - v_x) > .0005f) {
-        v_x += (a_x - v_x) * state->global_timer * acceleration * deceleration;
+        v_x += (a_x - v_x) * state->global_timer * agility * inertness;
     } else if ((v_x - a_x) > .0005f) {
-        v_x -= (v_x - a_x) * state->global_timer * acceleration * deceleration;
+        v_x -= (v_x - a_x) * state->global_timer * agility * inertness;
     }
 
     // move horizontally
@@ -204,9 +203,9 @@ void Player::update() {
 
     // accelerate vertically
     if ((a_y - v_y) > .0005f) {
-        v_y += (a_y - v_y) * state->global_timer * acceleration * deceleration;
+        v_y += (a_y - v_y) * state->global_timer * agility * inertness;
     } else if ((v_y - a_y) > .0005f) {
-        v_y -= (v_y - a_y) * state->global_timer * acceleration * deceleration;
+        v_y -= (v_y - a_y) * state->global_timer * agility * inertness;
     }
 
     // move vertically

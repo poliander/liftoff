@@ -32,7 +32,7 @@ using std::shared_ptr;
 class Entity {
     public:
         explicit Entity(State* s);
-        virtual ~Entity();
+        virtual ~Entity() {}
 
         void               setType(uint16_t t);
 
@@ -86,7 +86,7 @@ class Entity {
 
         void               setSpin(float x, float y, float z);
 
-        float              getAcceleration();
+        float              getAgility();
         void               setLife(int l);
         int                getLife();
 
@@ -164,8 +164,11 @@ class Entity {
         uint32_t           money;
         int                life;
         bool               focusable;
-        float              acceleration;
-        float              deceleration;
+
+        float              agility;
+        float              inertness;
+
+        uint16_t           gun_energy;
         uint16_t           gun_power;
 
         uint8_t            powerup;

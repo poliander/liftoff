@@ -24,9 +24,6 @@ Asteroid::Asteroid(State* s) : Entity(s) {
     e_state = E_STATE_IDLE;
 }
 
-Asteroid::~Asteroid() {
-}
-
 bool Asteroid::damage(int p) {
     bool damaged = Entity::damage(p);
 

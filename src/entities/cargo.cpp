@@ -28,9 +28,6 @@ Cargo::Cargo(State* s) : Entity(s) {
     money = 50;
 }
 
-Cargo::~Cargo() {
-}
-
 bool Cargo::damage(int p) {
     bool damaged = Entity::damage(p);
 

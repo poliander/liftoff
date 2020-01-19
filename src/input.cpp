@@ -65,19 +65,19 @@ bool Input::handleKeyboard() {
             if (state->player->isAlive()) {
                 // Keyboard LEFT, RIGHT
                 if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_A]) {
-                    state->player->setAccelerationX(1.0f);
+                    state->player->setAccelerationX(state->player->getAgility());
                     moved = true;
                 } else if (keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_D]) {
-                    state->player->setAccelerationX(-1.0f);
+                    state->player->setAccelerationX(-state->player->getAgility());
                     moved = true;
                 }
 
                 // Keyboard UP, DOWN
                 if (keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_W]) {
-                    state->player->setAccelerationY(-1.0f);
+                    state->player->setAccelerationY(-state->player->getAgility());
                     moved = true;
                 } else if (keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_S]) {
-                    state->player->setAccelerationY(1.0f);
+                    state->player->setAccelerationY(state->player->getAgility());
                     moved = true;
                 }
 
@@ -164,13 +164,13 @@ void Input::handleJoystick() {
     v = static_cast<float>(SDL_JoystickGetAxis(state->joystick, 0) * .00003f);
 
     if (fabs(v) > .01f) {
-        state->player->setAccelerationX(static_cast<float>(state->player->getAcceleration()) * -.0075f * v);
+        state->player->setAccelerationX(static_cast<float>(state->player->getAgility()) * -v);
     }
 
     v = static_cast<float>(SDL_JoystickGetAxis(state->joystick, 1) * .00003f);
 
     if (fabs(v) > .01f) {
-        state->player->setAccelerationY(static_cast<float>(state->player->getAcceleration()) * .0075f * v);
+        state->player->setAccelerationY(static_cast<float>(state->player->getAgility()) * v);
     }
 
     if (SDL_JoystickGetButton(state->joystick, 0) != 0) {

@@ -356,11 +356,6 @@ bool Engine::main() {
         buffer = make_unique<Renderbuffer>(&state);
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glViewport(0, 0, state.vid_width, state.vid_height);
-
     scene->update();
     scene->draw(buffer);
 

@@ -44,9 +44,6 @@ Powerup::Powerup(State* s, float x, float y, float z) : Entity(s) {
     t_b = 1.0f;
 }
 
-Powerup::~Powerup() {
-}
-
 bool Powerup::damage(int p) {
     return false;
 }

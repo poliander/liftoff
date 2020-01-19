@@ -23,7 +23,7 @@
 class Debris : public Entity {
     public:
         explicit Debris(State* s);
-        ~Debris();
+        ~Debris() {}
 
         void update();
 };

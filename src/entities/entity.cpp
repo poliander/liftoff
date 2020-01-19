@@ -24,9 +24,6 @@ Entity::Entity(State* s) : state(s) {
     focusable = false;
 }
 
-Entity::~Entity() {
-}
-
 bool Entity::sort(const shared_ptr<Entity> &e1, const shared_ptr<Entity> &e2) {
     return (e1->getPosZ() < e2->getPosZ());
 }
@@ -109,8 +106,8 @@ float Entity::getPosZ() {
     return p_z;
 }
 
-float Entity::getAcceleration() {
-    return acceleration;
+float Entity::getAgility() {
+    return agility;
 }
 
 void Entity::setVelocity(float x, float y, float z) {

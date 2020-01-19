@@ -26,7 +26,7 @@
 class Missile : public Entity {
     public:
         Missile(State* s, uint16_t p);
-        ~Missile();
+        ~Missile() {}
 
         void     collide(shared_ptr<Entity> e);
         void     update();

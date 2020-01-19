@@ -389,6 +389,11 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer) {
         if (p_y >  400.0f) p_y =  400.0f;
     }
 
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0, 0, state->vid_width, state->vid_height);
+
     state->view->setCamera(
         p_x * -.01f,
         p_y * -.01f + player->getVelocityY() * 5.0f,

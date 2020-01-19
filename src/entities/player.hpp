@@ -29,7 +29,7 @@
 class Player : public Entity {
     public:
         explicit Player(State* s);
-        ~Player();
+        ~Player() {}
 
         void            init();
         void            update();
