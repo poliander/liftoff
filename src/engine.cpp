@@ -73,7 +73,7 @@ bool Engine::init(int argc, char **argv) {
         state.log("none found\n");
     }
 
-    // initialize screen
+    // look for valid display modes
 
     state.log("Initializing display...");
 
@@ -95,6 +95,8 @@ bool Engine::init(int argc, char **argv) {
         return false;
     }
 
+    state.log("\n");
+
     for (int m = 0, i = 0; i < SDL_GetNumDisplayModes(state.vid_display); i++) {
         SDL_GetDisplayMode(state.vid_display, i, &mode);
 
@@ -102,33 +104,52 @@ bool Engine::init(int argc, char **argv) {
             continue;
         }
 
+        snprintf(msg, sizeof(msg), "- found mode %d x %d @ %d Hz", mode.w, mode.h, mode.refresh_rate);
+        state.log(msg);
+
         if (mode.refresh_rate != state.vid_refresh_rate) {
+            state.log(" (ignored)\n");
             continue;
         }
 
         if (mode.w == state.config.vid_width &&
-            mode.h == state.config.vid_height
+            mode.h == state.config.vid_height &&
+            state.vid_mode == -1
         ) {
             state.vid_width = state.config.vid_width;
             state.vid_height = state.config.vid_height;
             state.vid_mode = m;
+
+            state.log(" (ok, selected by configuration)\n");
+        } else {
+            state.log(" (ok)\n");
         }
 
         state.vid_modes.insert(make_pair(m++, mode));
     }
 
-    if (state.vid_mode == -1) {
-        state.log(" failed (no valid screen mode found)\n");
+    if (state.vid_modes.size() == 0) {
+        state.log("No valid display mode found.\n");
         return false;
     }
 
-    snprintf(msg, sizeof(msg), "\n- screen size %d x %d selected\n", state.config.vid_width, state.config.vid_height);
-    state.log(msg);
+    if (state.vid_mode == -1) {
+        auto m = state.vid_modes.begin();
+
+        state.vid_mode = m->first;
+        state.vid_width = m->second.w;
+        state.vid_height = m->second.h;
+    }
 
     state.vid_quality = state.config.vid_quality;
     state.vid_vsync = state.config.vid_vsync;
     state.vid_fullscreen = state.config.vid_fullscreen;
     state.vid_aspect = 0;
+
+    state.log("Initializing OpenGL context...\n");
+
+    snprintf(msg, sizeof(msg), "- using mode %d x %d\n", state.vid_width, state.vid_height);
+    state.log(msg);
 
     switch (state.vid_quality) {
         case QL_ULTRA:
@@ -174,20 +195,16 @@ bool Engine::init(int argc, char **argv) {
     }
 
     if (state.vid_fullscreen) {
-        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_INPUT_GRABBED;
+        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP;
         state.log("- fullscreen mode\n");
     } else {
-        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_FOCUS;
+        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
         state.log("- window mode\n");
     }
 
-    state.log("Initializing OpenGL context... ");
-
     if (initDisplay(flags) == false) {
-        state.log("failed\n");
+        state.log("Failed to initialize OpenGL context.\n");
         return false;
-    } else {
-        state.log("ok\n");
     }
 
     // initialize audio
