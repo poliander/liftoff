@@ -1,4 +1,5 @@
 .deps/
+.vscode/
 autom4te.cache/
 .dirstamp
 *.o
