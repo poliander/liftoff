@@ -2355,12 +2355,7 @@ program_transform_name=`$as_echo "$program_transform_name" | sed "$ac_script"`
 am_aux_dir=`cd "$ac_aux_dir" && pwd`
 
 if test x"${MISSING+set}" != xset; then
-  case $am_aux_dir in
-  *\ * | *\	*)
-    MISSING="\${SHELL} \"$am_aux_dir/missing\"" ;;
-  *)
-    MISSING="\${SHELL} $am_aux_dir/missing" ;;
-  esac
+  MISSING="\${SHELL} '$am_aux_dir/missing'"
 fi
 # Use eval to expand $SHELL
 if eval "$MISSING --is-lightweight"; then
@@ -4371,8 +4366,8 @@ esac
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL2" >&5
-$as_echo_n "checking for SDL2... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sdl2 >= 2.0.0" >&5
+$as_echo_n "checking for sdl2 >= 2.0.0... " >&6; }
 
 if test -n "$SDL2_CFLAGS"; then
     pkg_cv_SDL2_CFLAGS="$SDL2_CFLAGS"
@@ -4412,7 +4407,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -4432,7 +4427,7 @@ fi
 $as_echo "$as_me: SDL2 not located by pkg-config" >&6;}
 
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL2 not located by pkg-config" >&5
 $as_echo "$as_me: SDL2 not located by pkg-config" >&6;}
@@ -4452,8 +4447,8 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL2_mixer" >&5
-$as_echo_n "checking for SDL2_mixer... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL2_mixer >= 2.0.0" >&5
+$as_echo_n "checking for SDL2_mixer >= 2.0.0... " >&6; }
 
 if test -n "$SDL2_mixer_CFLAGS"; then
     pkg_cv_SDL2_mixer_CFLAGS="$SDL2_mixer_CFLAGS"
@@ -4493,7 +4488,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -4513,7 +4508,7 @@ fi
 $as_echo "$as_me: SDL2_mixer not located by pkg-config" >&6;}
 
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL2_mixer not located by pkg-config" >&5
 $as_echo "$as_me: SDL2_mixer not located by pkg-config" >&6;}
@@ -4533,8 +4528,8 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libvorbisfile" >&5
-$as_echo_n "checking for libvorbisfile... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for vorbisfile >= 1.3.0" >&5
+$as_echo_n "checking for vorbisfile >= 1.3.0... " >&6; }
 
 if test -n "$libvorbisfile_CFLAGS"; then
     pkg_cv_libvorbisfile_CFLAGS="$libvorbisfile_CFLAGS"
@@ -4574,7 +4569,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -4594,7 +4589,7 @@ fi
 $as_echo "$as_me: libvorbisfile not located by pkg-config" >&6;}
 
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: libvorbisfile not located by pkg-config" >&5
 $as_echo "$as_me: libvorbisfile not located by pkg-config" >&6;}
@@ -4622,8 +4617,8 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libogg" >&5
-$as_echo_n "checking for libogg... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ogg >= 1.3.0" >&5
+$as_echo_n "checking for ogg >= 1.3.0... " >&6; }
 
 if test -n "$libogg_CFLAGS"; then
     pkg_cv_libogg_CFLAGS="$libogg_CFLAGS"
@@ -4663,7 +4658,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -4683,7 +4678,7 @@ fi
 $as_echo "$as_me: libogg not located by pkg-config" >&6;}
 
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: libogg not located by pkg-config" >&5
 $as_echo "$as_me: libogg not located by pkg-config" >&6;}
@@ -4711,8 +4706,8 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for freetype2" >&5
-$as_echo_n "checking for freetype2... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for freetype2 >= 2.8.0" >&5
+$as_echo_n "checking for freetype2 >= 2.8.0... " >&6; }
 
 if test -n "$freetype2_CFLAGS"; then
     pkg_cv_freetype2_CFLAGS="$freetype2_CFLAGS"
@@ -4752,7 +4747,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -4772,7 +4767,7 @@ fi
 $as_echo "$as_me: FreeType2 not located by pkg-config" >&6;}
 
 elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: FreeType2 not located by pkg-config" >&5
 $as_echo "$as_me: FreeType2 not located by pkg-config" >&6;}
@@ -6210,7 +6205,9 @@ $as_echo X/"$am_mf" |
     { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "Something went wrong bootstrapping makefile fragments
-    for automatic dependency tracking.  Try re-running configure with the
+    for automatic dependency tracking.  If GNU make was not used, consider
+    re-running the configure script with MAKE=\"gmake\" (or whatever is
+    necessary).  You can also try re-running configure with the
     '--disable-dependency-tracking' option to at least be able to build
     the package (albeit without support for automatic dependency tracking).
 See \`config.log' for more details" "$LINENO" 5; }

@@ -36,11 +36,12 @@ Shader::Shader(const string vsFilename, const string fsFilename) {
 
     glLinkProgram(program);
     glGetProgramiv(program, GL_LINK_STATUS, &success);
+
     if (success == GL_FALSE) {
         glGetProgramInfoLog(program, sizeof(error), NULL, error);
 
-        FILE *fp = fopen("shader.log", "a");
-        fprintf(fp, "%s\n", error);
+        FILE *fp = fopen("shader.log", "w");
+        fprintf(fp, "glLinkProgram failed\n\n%s\n%s\n\n%s\n\n", (vsFilename).c_str(), (fsFilename).c_str(), error);
         fclose(fp);
 
         exit(-1);
@@ -48,11 +49,12 @@ Shader::Shader(const string vsFilename, const string fsFilename) {
 
     glValidateProgram(program);
     glGetProgramiv(program, GL_VALIDATE_STATUS, &success);
+
     if (success == GL_FALSE) {
         glGetProgramInfoLog(program, sizeof(error), NULL, error);
 
-        FILE *fp = fopen("shader.log", "a");
-        fprintf(fp, "%s\n", error);
+        FILE *fp = fopen("shader.log", "w");
+        fprintf(fp, "glValidateProgram failed\n\n%s\n%s\n\n%s\n\n", (vsFilename).c_str(), (fsFilename).c_str(), error);
         fclose(fp);
 
         exit(-1);
