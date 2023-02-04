@@ -1,4 +1,4 @@
-<img src="https://github.com/poliander/liftoff/blob/master/resources/screenshot.png" width="100%">
+<img src="https://github.com/poliander/liftoff/blob/main/resources/screenshot.png" width="100%">
 
 This game somehow happened when I looked at the source code of [Xavier Hosxe's "Glaxium"](http://xhosxe.free.fr/glaxium/) and decided to try writing a small screensaver in OpenGL.
 
