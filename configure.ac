@@ -66,7 +66,7 @@ PKG_CHECK_MODULES(
         CPPFLAGS="$CPPFLAGS $SDL2_CFLAGS"
         LIBS="$LIBS $SDL2_LIBS"
     ],
-    [AC_MSG_NOTICE([SDL2 not located by pkg-config])]
+    [AC_MSG_ERROR([SDL2 not located by pkg-config])]
 )
 
 # SDL2_mixer ------------------------------------------------------------------
@@ -78,7 +78,7 @@ PKG_CHECK_MODULES(
         CPPFLAGS="$CPPFLAGS $SDL2_mixer_CFLAGS"
         LIBS="$LIBS $SDL2_mixer_LIBS"
     ],
-    [AC_MSG_NOTICE([SDL2_mixer not located by pkg-config])]
+    [AC_MSG_ERROR([SDL2_mixer not located by pkg-config])]
 )
 
 # libvorbisfile ---------------------------------------------------------------
@@ -92,7 +92,7 @@ PKG_CHECK_MODULES(
         AC_CHECK_HEADER([vorbis/vorbisfile.h],,
             [AC_MSG_ERROR([vorbis/vorbisfile.h not found, install libvorbis-dev])])
     ],
-    [AC_MSG_NOTICE([libvorbisfile not located by pkg-config])]
+    [AC_MSG_ERROR([libvorbisfile not located by pkg-config])]
 )
 
 # libogg ----------------------------------------------------------------------
@@ -106,7 +106,7 @@ PKG_CHECK_MODULES(
         AC_CHECK_HEADER([ogg/ogg.h],,
             [AC_MSG_ERROR([ogg/ogg.h not found, install libogg-dev])])
     ],
-    [AC_MSG_NOTICE([libogg not located by pkg-config])]
+    [AC_MSG_ERROR([libogg not located by pkg-config])]
 )
 
 # FreeType2 -------------------------------------------------------------------

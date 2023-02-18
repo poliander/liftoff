@@ -4423,14 +4423,12 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$SDL2_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL2 not located by pkg-config" >&5
-$as_echo "$as_me: SDL2 not located by pkg-config" >&6;}
+	as_fn_error $? "SDL2 not located by pkg-config" "$LINENO" 5
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL2 not located by pkg-config" >&5
-$as_echo "$as_me: SDL2 not located by pkg-config" >&6;}
+	as_fn_error $? "SDL2 not located by pkg-config" "$LINENO" 5
 
 else
 	SDL2_CFLAGS=$pkg_cv_SDL2_CFLAGS
@@ -4504,14 +4502,12 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$SDL2_mixer_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL2_mixer not located by pkg-config" >&5
-$as_echo "$as_me: SDL2_mixer not located by pkg-config" >&6;}
+	as_fn_error $? "SDL2_mixer not located by pkg-config" "$LINENO" 5
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: SDL2_mixer not located by pkg-config" >&5
-$as_echo "$as_me: SDL2_mixer not located by pkg-config" >&6;}
+	as_fn_error $? "SDL2_mixer not located by pkg-config" "$LINENO" 5
 
 else
 	SDL2_mixer_CFLAGS=$pkg_cv_SDL2_mixer_CFLAGS
@@ -4585,14 +4581,12 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$libvorbisfile_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: libvorbisfile not located by pkg-config" >&5
-$as_echo "$as_me: libvorbisfile not located by pkg-config" >&6;}
+	as_fn_error $? "libvorbisfile not located by pkg-config" "$LINENO" 5
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: libvorbisfile not located by pkg-config" >&5
-$as_echo "$as_me: libvorbisfile not located by pkg-config" >&6;}
+	as_fn_error $? "libvorbisfile not located by pkg-config" "$LINENO" 5
 
 else
 	libvorbisfile_CFLAGS=$pkg_cv_libvorbisfile_CFLAGS
@@ -4674,14 +4668,12 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$libogg_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: libogg not located by pkg-config" >&5
-$as_echo "$as_me: libogg not located by pkg-config" >&6;}
+	as_fn_error $? "libogg not located by pkg-config" "$LINENO" 5
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: libogg not located by pkg-config" >&5
-$as_echo "$as_me: libogg not located by pkg-config" >&6;}
+	as_fn_error $? "libogg not located by pkg-config" "$LINENO" 5
 
 else
 	libogg_CFLAGS=$pkg_cv_libogg_CFLAGS
