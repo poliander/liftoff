@@ -20,12 +20,6 @@
 
 #include "quad.hpp"
 
-enum fbo_buffer_indices_e {
-    FB_BUFFER_COLOR,
-    FB_MSAA_BUFFER_COLOR,
-    FB_MSAA_BUFFER_DEPTH
-};
-
 class Framebuffer : public Quad {
     public:
         Framebuffer(GLuint w, GLuint h, GLuint s);
