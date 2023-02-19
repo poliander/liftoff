@@ -20,8 +20,15 @@
 
 Overlay::Overlay(State* s) : state(s) {
     buffer = make_unique<Renderbuffer>(state);
-    view = View::createOrthographic(-400.0f, 400.0f, -300.0f, 300.0f);
+
     perspective = View::createPerspective(65, 4.0f / 3.0f, .1f, 100.0f);
+    perspective->setCamera(
+        0, 0, 0,
+        0, 0, -1.0f,
+        0, 1.0f, -0
+    );
+
+    view = View::createOrthographic(-400.0f, 400.0f, -300.0f, 300.0f);
 }
 
 void Overlay::update() {
@@ -41,7 +48,7 @@ void Overlay::update() {
             menu_cursor_visible = true;
             menu_alpha          = 1.0f;
             screen_y            = 50.0f;
-            ship_y              = -1.5f;
+            ship_y              = -3.0f;
             logo1_x             = 0;
             logo1_y             = ease_stop3(t) * 200.0f - 400.0f;
             logo2_x             = 0;
@@ -55,7 +62,7 @@ void Overlay::update() {
             menu_alpha          = 1.0f - ease_stop2(t);
             status_alpha        = ease_start2(t);
             screen_y            = ease_step3(t) * 290.0f + 50.0f;
-            ship_y              = ease_step3(t) * -15.0f - 1.5f;
+            ship_y              = ease_step3(t) * -25.0f - 3.0f;
             logo1_x             = ease_start3(t) * 500.0f * -1.0f;
             logo2_x             = ease_start3(t) * 500.0f;
             break;
@@ -167,7 +174,6 @@ void Overlay::drawScreen() {
 void Overlay::drawMenu() {
     int numentries;
     float s;
-    static float p_rot = 0;
 
     float mfo; // font y-offset
     float mfs; // font size
@@ -529,24 +535,31 @@ void Overlay::drawMenu() {
 
     state->fonts[F_ZEKTON]->draw(
         "VECTOR ZERO MK. IX \"REDUX\"",
-        23.0f, screen_y + 70.0f, 0.075f,
+        15.0f, screen_y + 70.0f, 0.075f,
         1.0f, 0.9f, 0.85f, .45f * menu_alpha
     );
+}
+
+void Overlay::drawShip() {
+    static float rotation = 0;
+
+    rotation -= state->global_timer * 0.3f;
+    if (rotation < 0) rotation += 360.0f;
 
     glEnable(GL_DEPTH_TEST);
 
-    p_rot -= state->global_timer * 0.3f;
-    if (p_rot < 0) p_rot += 360.0f;
-
-    glm::mat4 projection = perspective->getProjection();
-    glm::mat4 camera = perspective->getCamera();
     glm::mat4 model = perspective->getModel(
-        -5.0f, ship_y, -35.0f,
-        -75.0f, 180.0f, p_rot,
-        1.0f, 1.0f, 1.0f
+        -7.5f, ship_y, -35.0f,
+        -85.0f, 180.0f, rotation,
+        1.5f, 1.5f, 1.5f
     );
 
-    state->models[OBJ_PLAYER]->draw(model, camera, projection, glm::vec4(1.0f, 1.0f, 1.0f, menu_alpha));
+    state->models[OBJ_PLAYER]->draw(
+        model,
+        perspective->getCamera(),
+        perspective->getProjection(),
+        glm::vec4(1.0f, 1.0f, 1.0f, menu_alpha)
+    );
 
     glDisable(GL_DEPTH_TEST);
 }
@@ -559,6 +572,10 @@ void Overlay::draw() {
 
     buffer->bind();
     buffer->clear();
+
+    if (menu_visible) {
+        drawShip();
+    }
 
     drawScreen();
 

@@ -43,6 +43,7 @@ class Overlay {
         unique_ptr<View>         perspective;
 
         void                     drawScreen();
+        void                     drawShip();
         void                     drawMenu();
         void                     drawStatus();
         void                     drawMessages();
