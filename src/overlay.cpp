@@ -19,9 +19,9 @@
 #include "overlay.hpp"
 
 Overlay::Overlay(State* s) : state(s) {
+    buffer = make_unique<Renderbuffer>(state);
     view = View::createOrthographic(-400.0f, 400.0f, -300.0f, 300.0f);
-    perspective = View::createPerspective(45.0f, 4.0f / 3.0f, .01f, 100.0f);
-    framebuffer = make_unique<Framebuffer>(state->vid_fb_size, state->vid_fb_size, state->vid_multisampling);
+    perspective = View::createPerspective(65, 4.0f / 3.0f, .1f, 100.0f);
 }
 
 void Overlay::update() {
@@ -536,7 +536,7 @@ void Overlay::drawMenu() {
     glEnable(GL_DEPTH_TEST);
 
     p_rot -= state->global_timer * 0.3f;
-    if (p_rot > 360.0f) p_rot -= 360.0f;
+    if (p_rot < 0) p_rot += 360.0f;
 
     glm::mat4 projection = perspective->getProjection();
     glm::mat4 camera = perspective->getCamera();
@@ -557,8 +557,8 @@ void Overlay::draw() {
     glDisable(GL_DEPTH_TEST);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    framebuffer->bind();
-    framebuffer->clear();
+    buffer->bind();
+    buffer->clear();
 
     drawScreen();
 
@@ -578,16 +578,13 @@ void Overlay::draw() {
         state->fonts[F_ZEKTON]->draw(txt, -40.0f, -270.0f, 0.12f, 1.0f, 1.0f, 1.0f, .75f);
     }
 
-    framebuffer->unbind();
-
-    state->shaders[S_TEXTURE]->bind();
-    state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(alpha, alpha, alpha, alpha));
-    state->shaders[S_TEXTURE]->update(UNI_MVP, view->transform(0, 0, 1000.0f / state->vid_aspect, 600.0f));
-
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    framebuffer->draw();
+    buffer->blit();
+    buffer->unbind();
+    buffer->draw(
+        view->transform(0, 0, 1000.0f / state->vid_aspect, 600.0f),
+        glm::vec4(alpha, alpha, alpha, alpha)
+    );
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     glEnable(GL_DEPTH_TEST);
 }

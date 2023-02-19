@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "framebuffer.hpp"
+#include "renderbuffer.hpp"
 #include "state.hpp"
 #include "entities/player.hpp"
 
@@ -36,29 +36,29 @@ class Overlay {
         void draw();
 
     private:
-        State*                  state;
+        State*                   state;
 
-        unique_ptr<View>        view;
-        unique_ptr<View>        perspective;
-        unique_ptr<Framebuffer> framebuffer;
+        unique_ptr<Renderbuffer> buffer;
+        unique_ptr<View>         view;
+        unique_ptr<View>         perspective;
 
-        void                    drawScreen();
-        void                    drawMenu();
-        void                    drawStatus();
-        void                    drawMessages();
+        void                     drawScreen();
+        void                     drawMenu();
+        void                     drawStatus();
+        void                     drawMessages();
 
-        float                   screen_y;
-        float                   ship_y;
+        float                    screen_y;
+        float                    ship_y;
 
-        float                   logo1_x;
-        float                   logo1_y;
-        float                   logo2_x;
-        float                   logo2_y;
+        float                    logo1_x;
+        float                    logo1_y;
+        float                    logo2_x;
+        float                    logo2_y;
 
-        bool                    menu_visible;
-        bool                    menu_cursor_visible;
-        float                   menu_alpha;
+        bool                     menu_visible;
+        bool                     menu_cursor_visible;
+        float                    menu_alpha;
 
-        bool                    status_visible;
-        float                   status_alpha;
+        bool                     status_visible;
+        float                    status_alpha;
 };

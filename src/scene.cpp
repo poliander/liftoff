@@ -24,6 +24,13 @@ Scene::Scene(State* s) : state(s) {
     overlay = make_unique<Overlay>(state);
     level = make_unique<Level>(state);
 
+    view = View::createOrthographic(
+        state->vid_width * -.5f,
+        state->vid_width * .5f,
+        state->vid_height * .5f,
+        state->vid_height * -.5f
+    );
+
     state->player = player;
 
     load();
@@ -430,7 +437,10 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer) {
 
         buffer->blit();
         buffer->unbind();
-        buffer->draw();
+        buffer->draw(
+            view->transform(0, 0, state->vid_width, state->vid_height),
+            glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
+        );
     }
 
     // overlay

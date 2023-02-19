@@ -22,8 +22,6 @@
 
 enum fbo_buffer_indices_e {
     FB_BUFFER_COLOR,
-    FB_BUFFER_DEPTH,
-
     FB_MSAA_BUFFER_COLOR,
     FB_MSAA_BUFFER_DEPTH
 };
@@ -33,10 +31,10 @@ class Framebuffer : public Quad {
         Framebuffer(GLuint w, GLuint h, GLuint s);
         ~Framebuffer();
 
-        void   bind();
-        void   unbind();
-        void   clear();
-        void   draw();
+        void bind();
+        void unbind();
+        void clear();
+        void draw();
 
         operator GLuint() {
             return framebuffer;
@@ -50,6 +48,6 @@ class Framebuffer : public Quad {
         GLint  originalViewport[4];
         GLint  originalFramebuffer;
 
-        GLuint buffers[4];
+        GLuint texture;
         GLuint framebuffer;
 };

@@ -19,13 +19,6 @@
 #include "renderbuffer.hpp"
 
 Renderbuffer::Renderbuffer(State* s) : state(s) {
-    view = View::createOrthographic(
-        state->vid_width * -.5f,
-        state->vid_width * .5f,
-        state->vid_height * .5f,
-        state->vid_height * -.5f
-    );
-
     framebuffer = make_unique<Framebuffer>(state->vid_fb_size, state->vid_fb_size, state->vid_multisampling);
 
     glGenRenderbuffers(1, &renderbufferColor);
@@ -77,15 +70,13 @@ void Renderbuffer::blit() {
     );
 }
 
-void Renderbuffer::draw() {
+void Renderbuffer::draw(glm::mat4 mvp, glm::vec4 color) {
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
     state->shaders[S_TEXTURE]->bind();
-    state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    state->shaders[S_TEXTURE]->update(UNI_MVP, view->transform(
-        0, 0, state->vid_width, state->vid_height
-    ));
+    state->shaders[S_TEXTURE]->update(UNI_COLOR, color);
+    state->shaders[S_TEXTURE]->update(UNI_MVP, mvp);
 
     framebuffer->draw();
 

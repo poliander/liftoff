@@ -23,39 +23,32 @@ Framebuffer::Framebuffer(GLuint w, GLuint h, GLuint s) : Quad() {
     height = h;
     samples = s;
 
-    // color
-    glGenTextures(1, &buffers[FB_BUFFER_COLOR]);
-    glBindTexture(GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR]);
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     if (s == 0) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     } else {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    // depth
-    glGenRenderbuffers(1, &buffers[FB_BUFFER_DEPTH]);
-    glBindRenderbuffer(GL_RENDERBUFFER, buffers[FB_BUFFER_DEPTH]);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, w, h);
-
-    // framebuffer
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR], 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffers[FB_BUFFER_DEPTH]);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 Framebuffer::~Framebuffer() {
-    glDeleteTextures(1, &buffers[FB_BUFFER_COLOR]);
-    glDeleteRenderbuffers(1, &buffers[FB_BUFFER_DEPTH]);
+    glDeleteTextures(1, &texture);
     glDeleteFramebuffers(1, &framebuffer);
 }
 
@@ -74,11 +67,11 @@ void Framebuffer::unbind() {
 
 void Framebuffer::clear() {
     glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Framebuffer::draw() {
-    glBindTexture(GL_TEXTURE_2D, buffers[FB_BUFFER_COLOR]);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     if (samples > 0) {
         glGenerateMipmap(GL_TEXTURE_2D);

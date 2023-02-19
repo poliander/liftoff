@@ -61,6 +61,7 @@ class Scene {
         unique_ptr<Level>   level;
         unique_ptr<Skybox>  skybox;
         unique_ptr<Overlay> overlay;
+        unique_ptr<View>    view;
 
         void                updateEntities();
 };

@@ -32,12 +32,11 @@ class Renderbuffer {
         void unbind();
         void clear();
         void blit();
-        void draw();
+        void draw(glm::mat4 mvp, glm::vec4 color);
 
     protected:
         State*                  state;
 
-        unique_ptr<View>        view;
         unique_ptr<Framebuffer> framebuffer;
 
         GLuint                  renderbuffer;
