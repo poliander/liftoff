@@ -204,14 +204,17 @@ bool Engine::init(int argc, char **argv) {
         return false;
     }
 
-    SDL_GetCurrentDisplayMode(state.vid_display, &current);
-    for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
-        if (current.w == i->second.w &&
-            current.h == i->second.h
-        ) {
-            state.vid_mode = i->first;
-            state.vid_width = i->second.w;
-            state.vid_height = i->second.h;
+    if (state.vid_fullscreen) {
+        SDL_GetCurrentDisplayMode(state.vid_display, &current);
+
+        for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
+            if (current.w == i->second.w &&
+                current.h == i->second.h
+            ) {
+                state.vid_mode = i->first;
+                state.vid_width = i->second.w;
+                state.vid_height = i->second.h;
+            }
         }
     }
 
