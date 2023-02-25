@@ -76,17 +76,17 @@ bool Engine::init(int argc, char **argv) {
     // look for valid display modes
 
     state.log("Initializing display...");
+    state.vid_display = -1;
+    state.vid_mode = -1;
 
     for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i) {
         if (0 == SDL_GetCurrentDisplayMode(i, &current)) {
-            if (state.vid_display == -1) {
-                state.vid_display = i;
-                state.vid_format = current.format;
-                state.vid_refresh_rate = current.refresh_rate;
-                state.vid_width = current.w;
-                state.vid_height = current.h;
-                break;
-            }
+            state.vid_display = i;
+            state.vid_format = current.format;
+            state.vid_refresh_rate = current.refresh_rate;
+            state.vid_width = current.w;
+            state.vid_height = current.h;
+            break;
         }
     }
 
