@@ -1,29 +1,35 @@
 FROM debian:bullseye-slim
 
-ENV TARGET="x86_64-w64-mingw32"
-ENV PREFIX="/usr/${TARGET}"
-ENV PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
-
-RUN echo 'deb-src http://deb.debian.org/debian bullseye main contrib non-free' >>/etc/apt/sources.list
-
 RUN apt-get update && \
     apt-get install -y \
-        automake \
         binutils-mingw-w64-x86-64 \
-        dpkg-dev \
+        gcc \
         g++-mingw-w64-x86-64-win32 \
+        make \
         pkg-config \
         upx \
         wget
 
+ENV TARGET="x86_64-w64-mingw32"
+ENV PREFIX="/usr/${TARGET}"
+ENV PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
+
+ENV CC="${TARGET}-gcc"
+ENV CXX="${TARGET}-g++"
+ENV LD="${TARGET}-ld"
+ENV CPP="${TARGET}-cpp"
+ENV AR="${TARGET}-ar"
+ENV AS="${TARGET}-as"
+ENV STRIP="${TARGET}-strip"
+
 WORKDIR ${PREFIX}/src
 
 # glew
-RUN apt-get source -y libglew2.1 && \
-    cd glew-2.1.0 && \
+RUN wget https://sourceforge.net/projects/glew/files/glew/2.2.0/glew-2.2.0.tgz/download -O - | tar -zxf - && \
+    cd glew-2.2.0 && \
     make clean install GLEW_DEST=${PREFIX} HOST=${TARGET} SYSTEM=linux-mingw64 && \
     cd .. && \
-    rm -rf glew-2.1.0 glew_*
+    rm -rf glew-2.2.0
 
 # glm headers
 RUN wget https://github.com/g-truc/glm/archive/refs/tags/0.9.9.8.tar.gz -O - | tar -zxf - && \
@@ -127,8 +133,11 @@ RUN wget https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.6.3
     cd .. && \
     rm -rf SDL2_mixer-2.6.3
 
-WORKDIR /build
+# clean up
+RUN apt-get -y remove gcc && \
+    apt-get -y autoremove
 
+WORKDIR /build
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

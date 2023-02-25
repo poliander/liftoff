@@ -33,7 +33,7 @@ This game somehow happened when I looked at the source code of [Xavier Hosxe's "
 - FreeType2 >= 2.8 (no zlib/libpng support required)
 - SDL 2.0
 - SDL\_mixer 2.0 (with ogg vorbis support)
-- glm.hpp (GL math headers)
+- glm 0.9.9 (GL math headers)
 
 ### How to compile
 
