@@ -198,7 +198,7 @@ bool Engine::init(int argc, char **argv) {
         flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP;
         state.log("- fullscreen mode\n");
     } else {
-        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+        flags = SDL_WINDOW_OPENGL;
         state.log("- window mode\n");
     }
 
