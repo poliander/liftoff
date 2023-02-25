@@ -120,7 +120,7 @@ bool Engine::init(int argc, char **argv) {
             state.vid_height = state.config.vid_height;
             state.vid_mode = m;
 
-            state.log(" (ok, selected by configuration)\n");
+            state.log(" (ok, prefered by configuration)\n");
         } else {
             state.log(" (ok)\n");
         }
@@ -147,9 +147,6 @@ bool Engine::init(int argc, char **argv) {
     state.vid_aspect = 0;
 
     state.log("Initializing OpenGL context...\n");
-
-    snprintf(msg, sizeof(msg), "- using mode %d x %d\n", state.vid_width, state.vid_height);
-    state.log(msg);
 
     switch (state.vid_quality) {
         case QL_ULTRA:
@@ -206,6 +203,20 @@ bool Engine::init(int argc, char **argv) {
         state.log("Failed to initialize OpenGL context.\n");
         return false;
     }
+
+    SDL_GetCurrentDisplayMode(state.vid_display, &current);
+    for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
+        if (current.w == i->second.w &&
+            current.h == i->second.h
+        ) {
+            state.vid_mode = i->first;
+            state.vid_width = i->second.w;
+            state.vid_height = i->second.h;
+        }
+    }
+
+    snprintf(msg, sizeof(msg), "- screen size %d x %d\n", state.vid_width, state.vid_height);
+    state.log(msg);
 
     // initialize audio
 
