@@ -138,7 +138,7 @@ void Overlay::drawStatus() {
     for (int i = 0; i < s; i++) {
         state->fonts[F_ZEKTON]->draw(
             "I",
-            225.0f - i * 4.0f, screen_y - 65.0f,
+            -95.0f + i * 4.0f, screen_y - 65.0f,
             0.1f,
             1.0f, 0.4f, 0.2f, 0.85f * status_alpha
         );
@@ -151,7 +151,7 @@ void Overlay::drawStatus() {
     for (int i = 0; i < e; i++) {
         state->fonts[F_ZEKTON]->draw(
             "I",
-            225.0f - i * 4.0f, screen_y - 50.0f,
+            -95.0f + i * 4.0f, screen_y - 50.0f,
             0.1f,
             0.2f, 0.65f, 1.0f, 0.85f * status_alpha
         );
@@ -531,7 +531,7 @@ void Overlay::drawMenu() {
 
     state->shaders[S_TEXTURE]->unbind();
 
-    // Player's ship
+    // Caption
 
     state->fonts[F_ZEKTON]->draw(
         "VECTOR ZERO MK. IX \"REDUX\"",
