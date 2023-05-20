@@ -95,7 +95,7 @@ RUN wget https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2
     make && \
     make install && \
     cd .. && \
-    rm -rf SDL2-2.26.4
+    rm -rf SDL2-2.26.5
 
 # SDL2_mixer
 RUN wget https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.6.3/SDL2_mixer-2.6.3.tar.gz -O - | tar -zxf - && \
