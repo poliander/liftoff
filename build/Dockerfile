@@ -77,8 +77,8 @@ RUN wget https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz -O - 
     rm -rf libvorbis-1.3.7
 
 # SDL2
-RUN wget https://github.com/libsdl-org/SDL/releases/download/release-2.26.4/SDL2-2.26.4.tar.gz -O - | tar -zxf - && \
-    cd SDL2-2.26.4 && \
+RUN wget https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2-2.26.5.tar.gz -O - | tar -zxf - && \
+    cd SDL2-2.26.5 && \
     ./configure \
         --prefix=${PREFIX} \
         --host=${TARGET} \
