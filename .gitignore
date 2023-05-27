@@ -11,3 +11,4 @@ liftoff.cfg
 config.h*
 config.status
 Makefile
+**/.cpp-linter_cache
