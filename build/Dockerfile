@@ -2,6 +2,7 @@ FROM debian:bullseye-slim
 
 RUN apt-get update && \
     apt-get install -y \
+        autoconf \
         binutils-mingw-w64-x86-64 \
         gcc \
         g++-mingw-w64-x86-64-win32 \
@@ -77,8 +78,8 @@ RUN wget https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz -O - 
     rm -rf libvorbis-1.3.7
 
 # SDL2
-RUN wget https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2-2.26.5.tar.gz -O - | tar -zxf - && \
-    cd SDL2-2.26.5 && \
+RUN wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz -O - | tar -zxf - && \
+    cd SDL2-2.30.0 && \
     ./configure \
         --prefix=${PREFIX} \
         --host=${TARGET} \
@@ -95,7 +96,7 @@ RUN wget https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2
     make && \
     make install && \
     cd .. && \
-    rm -rf SDL2-2.26.5
+    rm -rf SDL2-2.30.0
 
 # SDL2_mixer
 RUN wget https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.6.3/SDL2_mixer-2.6.3.tar.gz -O - | tar -zxf - && \
