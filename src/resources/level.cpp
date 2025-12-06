@@ -40,7 +40,7 @@ bool Level::load(string filename) {
     while (!feof(fp)) {
         if (fgets(buf, 1024, fp) != NULL) {
             snprintf(cmd, sizeof(cmd), "");
-            snprintf(cmd, sizeof(par), "");
+            snprintf(par, sizeof(par), "");
 
             i = 0;
             m = 0;
