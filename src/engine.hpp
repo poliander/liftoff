@@ -40,6 +40,8 @@ class Engine {
         SDL_Window*              window;
         SDL_GLContext            context;
 
+        double                   frame_next;
+
         unique_ptr<Input>        input;
         unique_ptr<Renderbuffer> buffer;
         unique_ptr<Scene>        scene;

@@ -49,6 +49,7 @@
 #define E_RELATIVE_MOVEMENT     2.5
 #define E_BASE_SPEED            25.0
 #define E_TICK_TIMING           250
+#define E_MAX_FPS               144
 
 // engine states
 #define STATE_MENU              1

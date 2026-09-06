@@ -247,6 +247,8 @@ bool Engine::init(int argc, char **argv) {
 
     state.set(STATE_MENU);
 
+    frame_next = static_cast<double>(SDL_GetTicks());
+
     return true;
 }
 
@@ -391,6 +393,19 @@ bool Engine::main() {
     scene->draw(buffer);
 
     SDL_GL_SwapWindow(window);
+
+    // limit frame rate to E_MAX_FPS
+
+    frame_next += 1000.0 / static_cast<double>(E_MAX_FPS);
+
+    double now = static_cast<double>(SDL_GetTicks());
+
+    if (now < frame_next) {
+        SDL_Delay(static_cast<Uint32>(frame_next - now));
+    } else {
+        // running behind: resync instead of accumulating debt
+        frame_next = now;
+    }
 
     if (state.get() == STATE_RESTART) {
         halt();
