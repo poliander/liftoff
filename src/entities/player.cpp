@@ -126,8 +126,6 @@ void Player::collide(shared_ptr<Entity> e) {
         state->notify(MSG_DAMAGE, static_cast<int16_t>(impact));
         state->audio.playSample(SFX_EXPLOSION_1, 192, angle);
         state->spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_4, p_x, p_y, p_z - 20.0f));
-
-        v_z -= 3.0f;
     }
 
     e->damage(e->getLife() > 0 ? e->getLife() : 1);
