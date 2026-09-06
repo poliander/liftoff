@@ -22,7 +22,9 @@ bool Configuration::load(const char* dir, config_t* c) {
     bool result = false;
     char cwd[255];
 
-    getcwd(cwd, 255);
+    if (getcwd(cwd, sizeof(cwd)) == nullptr) {
+        return result;
+    }
 
     if (chdir(dir) == 0) {
         FILE *fp = fopen(CFG_FILENAME, "rb");
@@ -36,7 +38,9 @@ bool Configuration::load(const char* dir, config_t* c) {
         }
     }
 
-    chdir(cwd);
+    if (chdir(cwd) != 0) {
+        // best-effort restore of the previous working directory
+    }
 
     return result;
 }
@@ -45,7 +49,9 @@ bool Configuration::save(const char* dir, config_t* c) {
     bool result = false;
     char cwd[255];
 
-    getcwd(cwd, 255);
+    if (getcwd(cwd, sizeof(cwd)) == nullptr) {
+        return result;
+    }
 
     if (chdir(dir) != 0) {
 #ifdef _WIN32
@@ -67,7 +73,9 @@ bool Configuration::save(const char* dir, config_t* c) {
         }
     }
 
-    chdir(cwd);
+    if (chdir(cwd) != 0) {
+        // best-effort restore of the previous working directory
+    }
 
     return result;
 }

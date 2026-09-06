@@ -78,11 +78,11 @@ void Player::collect(uint16_t e_obj) {
     }
 }
 
-void Player::collide(shared_ptr<Entity> e) {
+void Player::collide(shared_ptr<Entity>) {
 }
 
 void Player::shoot() {
-    float ax, ay, dx, dy, dz, hx, hy;
+    float ax, ay, dx, dy, dz;
     Sint16 angle;
 
     if (life <= 0) {

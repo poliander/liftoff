@@ -45,15 +45,18 @@ Texture::~Texture() {
 
 bool Texture::load(string filename, t_image *image) {
     t_tga_header header;
-    unsigned char raw[4], trans[4];
-    int rle_count = 0, rle_repeat = 0, read_next = 1, pixels, r;
+    unsigned char raw[4];
+    int rle_count = 0, rle_repeat = 0, read_next = 1, pixels;
     FILE *fd = fopen(filename.c_str(), "rb");
 
     if (!fd) {
         return false;
     }
 
-    fread(&header, sizeof(header), 1, fd);
+    if (fread(&header, sizeof(header), 1, fd) != 1) {
+        fclose(fd);
+        return false;
+    }
 
     pixels = header.width * header.height;
 

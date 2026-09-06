@@ -90,7 +90,7 @@ void Object::index() {
 
         unsigned int vertexIndex = previousVertexIndex(lookup, currentIndex);
 
-        if (vertexIndex == -1) {
+        if (vertexIndex == static_cast<unsigned int>(-1)) {
             vertexIndex = positions.size();
 
             positions.push_back(objVertices[currentIndex->vertex]);
@@ -201,7 +201,7 @@ vector<string> Object::split(string line, char delim) {
     vector<string> result;
 
     while (line.size()) {
-        int i = line.find(delim);
+        string::size_type i = line.find(delim);
 
         if (i != string::npos) {
             result.push_back(line.substr(0, i));

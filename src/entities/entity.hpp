@@ -158,6 +158,7 @@ class Entity {
         float              t_r = 1.0f;           // crosshair color
         float              t_g = .55f;
         float              t_b = .3f;
+        float              t_a = .85f;           // crosshair alpha
 
         shared_ptr<Entity> target;
 

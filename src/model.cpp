@@ -18,7 +18,7 @@
 
 #include "model.hpp"
 
-Model::Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s) : object(o), texture(t), shader(s) {
+Model::Model(shared_ptr<Object> o, shared_ptr<Texture> t, shared_ptr<Shader> s) : object(o), shader(s), texture(t) {
     glGenVertexArrays(1, &vertexArrayObject);
     glBindVertexArray(vertexArrayObject);
 

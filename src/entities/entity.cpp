@@ -283,7 +283,7 @@ float Entity::calcDistance2D(shared_ptr<Entity> e) {
 }
 
 float Entity::calcDistance3D(shared_ptr<Entity> e) {
-    float ds, x1, y1, z1, x2, y2, z2;
+    float x1, y1, z1, x2, y2, z2;
 
     x1 = E_RELATIVE_MOVEMENT * ((p_x + state->global_timer * v_x) - state->cam_x);
     y1 = E_RELATIVE_MOVEMENT * ((p_y + state->global_timer * v_y) - state->cam_y);
@@ -305,10 +305,10 @@ bool Entity::isColliding(shared_ptr<Entity> e) {
     return (calcDistance3D(e) < (r1 + r2));
 }
 
-void Entity::collide(shared_ptr<Entity> e) {
+void Entity::collide(shared_ptr<Entity>) {
 }
 
-void Entity::collect(uint16_t e_obj) {
+void Entity::collect(uint16_t) {
 }
 
 void Entity::shoot() {
@@ -391,14 +391,14 @@ void Entity::drawCrosshair(shared_ptr<Entity> me) {
 
     // let cross-hair fade out when player dies
     if (isAlive()) {
-        da = .85f;
+        t_a = .85f;
+    } else if (t_a > .01f) {
+        t_a -= state->global_timer * .01f;
     } else {
-        if (da > .01f) {
-            da -= state->global_timer * .01f;
-        } else {
-            da = .0f;
-        }
+        t_a = .0f;
     }
+
+    da = t_a;
 
     // let cross-hair fade out when too near
     if (p_z > -1000.0f) {

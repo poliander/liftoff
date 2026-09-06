@@ -21,7 +21,9 @@
 State::State() {
     char cwd[255];
 
-    getcwd(cwd, 255);
+    if (getcwd(cwd, sizeof(cwd)) == nullptr) {
+        cwd[0] = '\0';
+    }
 
     if (chdir(DEFAULT_GAMEDATA) == 0) {
         snprintf(dir_resources, sizeof(dir_resources), "%s", DEFAULT_GAMEDATA);
@@ -29,7 +31,9 @@ State::State() {
         snprintf(dir_resources, sizeof(dir_resources), "%s", GAMEDATA);
     }
 
-    chdir(cwd);
+    if (cwd[0] != '\0' && chdir(cwd) != 0) {
+        // best-effort restore of the previous working directory
+    }
 
 #ifdef _WIN32
     snprintf(dir_configuration, sizeof(dir_configuration), "%s\\LiftOff", getenv("APPDATA"));

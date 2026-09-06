@@ -356,8 +356,8 @@ void Engine::halt() {
         state.log("failed\n");
     }
 
-    if (state.config.aud_sfx   != -1 ||
-        state.config.aud_music != -1
+    if (static_cast<int8_t>(state.config.aud_sfx)   != -1 ||
+        static_cast<int8_t>(state.config.aud_music) != -1
     ) {
         state.log("Closing audio device\n");
 

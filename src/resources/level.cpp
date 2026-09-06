@@ -25,8 +25,9 @@ bool Level::load(string filename) {
         return false;
     }
 
-    char msg[255], buf[1024], cmd[16], par[255];
-    int i, money, life, m, p = 0;
+    char buf[1024], cmd[16], par[255];
+    int money, life, m, p = 0;
+    size_t i;
     uint16_t e_obj;
     float p_x, p_y, p_z;
     float r_x, r_y, r_z;
@@ -39,8 +40,8 @@ bool Level::load(string filename) {
 
     while (!feof(fp)) {
         if (fgets(buf, 1024, fp) != NULL) {
-            snprintf(cmd, sizeof(cmd), "");
-            snprintf(par, sizeof(par), "");
+            cmd[0] = '\0';
+            par[0] = '\0';
 
             i = 0;
             m = 0;

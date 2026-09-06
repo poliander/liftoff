@@ -90,7 +90,7 @@ class State {
         int                         vid_display;
 
         int                         vid_refresh_rate;
-        int                         vid_format;
+        Uint32                      vid_format;
         float                       vid_aspect;
         uint8_t                     vid_multisampling;
         uint16_t                    vid_fb_size;
@@ -119,7 +119,7 @@ class State {
 
         // level
         bool                        lvl_loaded;
-        char                        lvl_music[32];
+        char                        lvl_music[256];
         float                       lvl_pos;
         int                         lvl_length;
         int                         lvl_entities;

@@ -180,7 +180,6 @@ void Overlay::drawMenu() {
     float mrh; // font row height
 
     char mtxt[5][255];
-    char msg[255];
 
     switch (state->menu) {
         case 1: // main menu
@@ -409,7 +408,7 @@ void Overlay::drawMenu() {
             if (state->menu_selected) {
                 switch (state->menu_pos) {
                     case 0: // toggle SFX volume
-                        if (state->config.aud_sfx != -1) {
+                        if (static_cast<int8_t>(state->config.aud_sfx) != -1) {
                             state->config.aud_sfx++;
 
                             if (state->config.aud_sfx > 3) {
@@ -419,7 +418,7 @@ void Overlay::drawMenu() {
                         break;
 
                     case 1: // toggle music volume
-                        if (state->config.aud_music != -1) {
+                        if (static_cast<int8_t>(state->config.aud_music) != -1) {
                             state->config.aud_music++;
 
                             if (state->config.aud_music > 3) {

@@ -35,7 +35,7 @@ void Audio::init(char* data_dir, int vol_sfx, int vol_music, int mix_freq) {
 
 Mix_Chunk* Audio::loadSample(const char *filename) {
     Mix_Chunk *tmp = NULL;
-    char f[255];
+    char f[sizeof(resource_dir) + 256];
 
     if (volume_sfx > 0) {
         snprintf(f, sizeof(f), "%s/%s", resource_dir, filename);
@@ -85,7 +85,7 @@ void Audio::updatePosition(float player_x) {
 
 Mix_Music* Audio::loadMusic(const char* filename) {
     Mix_Music* tmp = NULL;
-    char f[255];
+    char f[sizeof(resource_dir) + 256];
 
     if (volume_music > 0) {
         snprintf(f, sizeof(f), "%s/%s", resource_dir, filename);

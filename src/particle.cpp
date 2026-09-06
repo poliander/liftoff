@@ -194,8 +194,7 @@ void ParticleEngine::update() {
     }
 }
 
-void ParticleEngine::draw(float px, float py, float pz, float rx, float ry, float rz) {
-    float m[16];
+void ParticleEngine::draw(float px, float py, float pz, float, float, float) {
     float a = state->global_alpha;
 
     glDisable(GL_DEPTH_TEST);
