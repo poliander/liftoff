@@ -413,13 +413,13 @@ void Scene::draw(const unique_ptr<Renderbuffer> &buffer) {
     glViewport(0, 0, state->vid_width, state->vid_height);
 
     state->view->setCamera(
-        p_x * -.01f,
-        p_y * -.01f + player->getVelocityY() * 5.0f,
+        p_x * -.01f + state->shake_x * .18f,
+        p_y * -.01f + player->getVelocityY() * 5.0f + state->shake_y * .18f,
         0,
 
         0, 0, -1.0f,
 
-        player->getVelocityX() * .15f, -1.0f, 0
+        player->getVelocityX() * .15f + state->shake_r * .06f, -1.0f, 0
     );
 
     // background

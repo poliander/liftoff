@@ -131,6 +131,12 @@ class State {
         float                       cam_y_offset;
         float                       cam_speed;
 
+        // screen shake
+        float                       shake;
+        float                       shake_x;
+        float                       shake_y;
+        float                       shake_r;
+
         // state
         bool                        set(int s);
         int                         get();

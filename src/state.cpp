@@ -73,6 +73,11 @@ State::State() {
     joystick                = NULL;
     id                      = 0;
     timer                   = SDL_GetTicks();
+
+    shake                   = 0;
+    shake_x                 = 0;
+    shake_y                 = 0;
+    shake_r                 = 0;
 }
 
 void State::log(const char *msg) {
@@ -104,6 +109,24 @@ void State::update() {
 
     if (global_transition > 1.0f) {
         global_transition = 1.0f;
+    }
+
+    if (shake > 0) {
+        shake -= global_timer * .02f;
+
+        if (shake < 0) {
+            shake = 0;
+        }
+
+        float a = shake * shake;
+
+        shake_x = a * static_cast<float>((rand() % 200) - 100) * .01f;
+        shake_y = a * static_cast<float>((rand() % 200) - 100) * .01f;
+        shake_r = a * static_cast<float>((rand() % 200) - 100) * .01f;
+    } else {
+        shake_x = 0;
+        shake_y = 0;
+        shake_r = 0;
     }
 
     // frames per second

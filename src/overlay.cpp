@@ -666,7 +666,7 @@ void Overlay::draw() {
     buffer->blit();
     buffer->unbind();
     buffer->draw(
-        view->transform(0, 0, 1000.0f / state->vid_aspect, 600.0f),
+        view->transform(state->shake_x * 18.0f, state->shake_y * 18.0f, 1000.0f / state->vid_aspect, 600.0f),
         glm::vec4(alpha, alpha, alpha, alpha)
     );
 

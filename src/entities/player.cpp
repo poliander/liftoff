@@ -120,6 +120,8 @@ void Player::collide(shared_ptr<Entity> e) {
 
     state->audio.playSample(SFX_COLLISION_1, 192, angle);
 
+    state->shake = 1.0f;
+
     if (damage(impact)) {
         state->notify(MSG_DAMAGE, static_cast<int16_t>(impact));
         state->audio.playSample(SFX_EXPLOSION_1, 192, angle);
