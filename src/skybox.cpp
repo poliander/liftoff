@@ -37,7 +37,7 @@ Skybox::Skybox(State* s) : state(s) {
         stars[i][3] = 1.0f / isqrt((stars[i][0] * stars[i][0]) + (stars[i][1] * stars[i][1]));
 
         if (i >= (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
-            stars[i][4] = 90.0f + (atan(stars[i][1] / stars[i][0]) * 180.0f/ M_PI);
+            stars[i][4] = 90.0f + (atan2(stars[i][1], stars[i][0]) * 180.0f/ M_PI);
         } else  {
             stars[i][4] = 0.35f + (((float)(rand() % 100)) * .005f);
         }
