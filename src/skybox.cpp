@@ -20,7 +20,15 @@
 
 Skybox::Skybox(State* s) : state(s) {
     view = View::createPerspective(65.0f, 1.0f, 1.0f, 10000.0f);
-    framebuffer = make_unique<Framebuffer>(state->vid_fb_size, state->vid_fb_size, 0);
+
+    // the skybox is a square texture mapped onto a rotating quad, so it must
+    // stay square - but there is no point allocating it larger than the screen
+    GLuint fb = std::min<GLuint>(
+        state->vid_fb_size,
+        std::max<GLuint>(state->vid_width, state->vid_height)
+    );
+
+    framebuffer = make_unique<Framebuffer>(fb, fb, 0);
 
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         float x = 0;

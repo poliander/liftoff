@@ -19,16 +19,19 @@
 #include "renderbuffer.hpp"
 
 Renderbuffer::Renderbuffer(State* s) : state(s) {
-    framebuffer = make_unique<Framebuffer>(state->vid_fb_size, state->vid_fb_size, state->vid_multisampling);
+    // the offscreen target matches the window, not a fixed square: rendering a
+    // widescreen perspective into a square buffer only to stretch it back on
+    // composite wastes fill rate (multiplied by the MSAA sample count)
+    framebuffer = make_unique<Framebuffer>(state->vid_width, state->vid_height, state->vid_multisampling);
 
     glGenRenderbuffers(1, &renderbufferColor);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbufferColor);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, state->vid_multisampling, GL_RGBA8, state->vid_fb_size, state->vid_fb_size);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, state->vid_multisampling, GL_RGBA8, state->vid_width, state->vid_height);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glGenRenderbuffers(1, &renderbufferDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbufferDepth);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, state->vid_multisampling, GL_DEPTH_COMPONENT, state->vid_fb_size, state->vid_fb_size);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, state->vid_multisampling, GL_DEPTH_COMPONENT, state->vid_width, state->vid_height);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glGenFramebuffers(1, &renderbuffer);
@@ -46,7 +49,7 @@ Renderbuffer::~Renderbuffer() {
 
 void Renderbuffer::bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, renderbuffer);
-    glViewport(0, 0, state->vid_fb_size, state->vid_fb_size);
+    glViewport(0, 0, state->vid_width, state->vid_height);
 }
 
 void Renderbuffer::unbind() {
@@ -63,8 +66,8 @@ void Renderbuffer::blit() {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, renderbuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *framebuffer);
     glBlitFramebuffer(
-        0, 0, state->vid_fb_size, state->vid_fb_size,
-        0, 0, state->vid_fb_size, state->vid_fb_size,
+        0, 0, state->vid_width, state->vid_height,
+        0, 0, state->vid_width, state->vid_height,
         GL_COLOR_BUFFER_BIT,
         GL_NEAREST
     );
