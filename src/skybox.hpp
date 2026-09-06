@@ -44,8 +44,6 @@ class Skybox {
     private:
         float                   stars[SKYBOX_NUM_STARS][5];
 
-        // all star quads are batched into a single dynamic vertex buffer and
-        // issued as one draw call per frame instead of one draw call per star
         GLuint                  starVertexArray;
         GLuint                  starVertexBuffer;
         std::vector<float>      starVertices;

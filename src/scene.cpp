@@ -200,7 +200,7 @@ void Scene::load() {
     state->audio.sample[4]  = state->audio.loadSample("explosion_1.wav");
     state->audio.sample[5]  = state->audio.loadSample("explosion_2.wav");
     state->audio.sample[6]  = state->audio.loadSample("explosion_3.wav");
-    state->audio.sample[7]  = state->audio.loadSample("shield_1.wav");
+    state->audio.sample[7]  = state->audio.loadSample("collision_1.wav");
     state->audio.sample[8]  = state->audio.loadSample("engine_2.wav");
     state->audio.sample[9]  = state->audio.loadSample("powerup_1.wav");
     state->audio.sample[10] = state->audio.loadSample("engine_3.wav");
@@ -268,7 +268,7 @@ void Scene::updateEntities() {
             while (f != state->entities.end()) {
                 if (
                     (*f)->isCollider() &&
-                    (*f)->isColliding(*e)
+                    ((*e)->isColliding(*f) || (*f)->isColliding(*e))
                 ) {
                     (*e)->collide(*f);
                     (*f)->collide(*e);
@@ -323,6 +323,11 @@ void Scene::update() {
             }
 
             updateEntities();
+
+            if (player->isAlive() == false) {
+                state->set(STATE_GAME_QUIT);
+                break;
+            }
 
             if (player->getPosZ() > -225.0f) {
                 player->setAccelerationZ(17.5f);

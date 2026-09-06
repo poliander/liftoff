@@ -38,6 +38,7 @@ class Entity {
 
         bool               isCollectable();
         bool               isCollider();
+        bool               isObstacle();
         bool               isScenery();
         bool               isFocusable();
         bool               isIdle();
@@ -45,7 +46,7 @@ class Entity {
         bool               isGone();
         bool               isAlive();
         bool               isPlayer();
-        bool               isColliding(shared_ptr<Entity> e);
+        virtual bool       isColliding(shared_ptr<Entity> e);
 
         void               setPos(float x, float y, float z);
         void               setPosX(float x);

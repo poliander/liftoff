@@ -28,8 +28,6 @@ Framebuffer::Framebuffer(GLuint w, GLuint h) : Quad() {
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // the target is allocated at (near) screen resolution and only ever sampled
-    // at ~1:1 on composite, so plain linear filtering is enough - no mip chain
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

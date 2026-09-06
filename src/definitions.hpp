@@ -115,4 +115,5 @@
 #define SFX_GUN_IMPACT          4
 #define SFX_EXPLOSION_1         5
 #define SFX_EXPLOSION_2         6
+#define SFX_COLLISION_1         7
 #define SFX_POWERUP_1           9

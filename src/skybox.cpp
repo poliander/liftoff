@@ -21,8 +21,6 @@
 Skybox::Skybox(State* s) : state(s) {
     view = View::createPerspective(65.0f, 1.0f, 1.0f, 10000.0f);
 
-    // the skybox is a square texture mapped onto a rotating quad, so it must
-    // stay square - but there is no point allocating it larger than the screen
     GLuint fb = std::min<GLuint>(
         state->vid_fb_size,
         std::max<GLuint>(state->vid_width, state->vid_height)
@@ -51,8 +49,6 @@ Skybox::Skybox(State* s) : state(s) {
         }
     }
 
-    // one dynamic buffer holding every star quad; 6 vertices per star,
-    // 9 floats per vertex (vec3 position, vec2 texcoord, vec4 tint)
     starVertices.reserve(SKYBOX_NUM_STARS * 6 * 9);
 
     glGenVertexArrays(1, &starVertexArray);
@@ -79,7 +75,6 @@ Skybox::~Skybox() {
 }
 
 void Skybox::pushStar(const glm::mat4& model, const glm::vec4& tint) {
-    // local quad corners / uv, matching the winding used by Quad
     static const float corners[6][4] = {
         { -0.5f,  0.5f, 0.0f, 0.0f },
         { -0.5f, -0.5f, 0.0f, 1.0f },
@@ -139,8 +134,7 @@ void Skybox::draw() {
     state->textures[T_BACKGROUND_1]->bind();
     state->textures[T_BACKGROUND_1]->draw();
 
-    // stars: every quad is transformed on the CPU into one shared vertex
-    // buffer and drawn with a single call instead of one call per star
+    // stars
 
     starVertices.clear();
 

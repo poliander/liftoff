@@ -35,6 +35,8 @@ class Player : public Entity {
         void            update();
         void            draw();
         void            shoot();
+        bool            damage(int p);
+        bool            isColliding(shared_ptr<Entity> e);
         void            collide(shared_ptr<Entity> e);
         void            collect(uint16_t e_obj);
 

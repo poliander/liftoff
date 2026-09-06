@@ -36,6 +36,10 @@ bool Entity::isScenery() {
     return e_type == E_TYPE_SCENERY;
 }
 
+bool Entity::isObstacle() {
+    return e_obj == OBJ_ASTEROID_1 || e_obj == OBJ_CARGO_1;
+}
+
 bool Entity::isIdle() {
     return e_state == E_STATE_IDLE;
 }

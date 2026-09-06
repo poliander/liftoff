@@ -78,7 +78,57 @@ void Player::collect(uint16_t e_obj) {
     }
 }
 
-void Player::collide(shared_ptr<Entity>) {
+bool Player::damage(int p) {
+    if (life <= 0) {
+        return false;
+    }
+
+    life -= p;
+
+    if (life < 0) {
+        life = 0;
+    }
+
+    return true;
+}
+
+bool Player::isColliding(shared_ptr<Entity> e) {
+    if (e->isObstacle()) {
+        float dx = p_x - e->getPosX();
+        float dy = p_y - e->getPosY();
+        float dz = p_z - e->getPosZ();
+        float r  = getScale() * .6f + e->getScale() * .8f;
+
+        return (dx * dx + dy * dy + dz * dz) < (r * r);
+    }
+
+    return Entity::isColliding(e);
+}
+
+void Player::collide(shared_ptr<Entity> e) {
+    if (state->get() != STATE_GAME_LOOP || !isAlive() || !e->isObstacle() || !e->isAlive()) {
+        return;
+    }
+
+    int impact = 20 + static_cast<int>(e->getScale() * .5f);
+
+    Sint16 angle = static_cast<int>(.5f * (p_x - state->cam_x));
+
+    if (angle < 0) {
+        angle += 360;
+    }
+
+    state->audio.playSample(SFX_COLLISION_1, 192, angle);
+
+    if (damage(impact)) {
+        state->notify(MSG_DAMAGE, static_cast<int16_t>(impact));
+        state->audio.playSample(SFX_EXPLOSION_1, 192, angle);
+        state->spawn(make_shared<Explosion>(state, OBJ_EXPLOSION_4, p_x, p_y, p_z - 20.0f));
+
+        v_z -= 3.0f;
+    }
+
+    e->damage(e->getLife() > 0 ? e->getLife() : 1);
 }
 
 void Player::shoot() {
