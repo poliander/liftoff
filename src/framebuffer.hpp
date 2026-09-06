@@ -22,7 +22,7 @@
 
 class Framebuffer : public Quad {
     public:
-        Framebuffer(GLuint w, GLuint h, GLuint s);
+        Framebuffer(GLuint w, GLuint h);
         ~Framebuffer();
 
         void bind();
@@ -37,7 +37,6 @@ class Framebuffer : public Quad {
     protected:
         GLuint width;
         GLuint height;
-        GLuint samples;
 
         GLint  originalViewport[4];
         GLint  originalFramebuffer;

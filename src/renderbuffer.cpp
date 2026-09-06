@@ -22,7 +22,7 @@ Renderbuffer::Renderbuffer(State* s) : state(s) {
     // the offscreen target matches the window, not a fixed square: rendering a
     // widescreen perspective into a square buffer only to stretch it back on
     // composite wastes fill rate (multiplied by the MSAA sample count)
-    framebuffer = make_unique<Framebuffer>(state->vid_width, state->vid_height, state->vid_multisampling);
+    framebuffer = make_unique<Framebuffer>(state->vid_width, state->vid_height);
 
     glGenRenderbuffers(1, &renderbufferColor);
     glBindRenderbuffer(GL_RENDERBUFFER, renderbufferColor);

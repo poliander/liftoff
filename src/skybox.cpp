@@ -28,7 +28,7 @@ Skybox::Skybox(State* s) : state(s) {
         std::max<GLuint>(state->vid_width, state->vid_height)
     );
 
-    framebuffer = make_unique<Framebuffer>(fb, fb, 0);
+    framebuffer = make_unique<Framebuffer>(fb, fb);
 
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
         float x = 0;
