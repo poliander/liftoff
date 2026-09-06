@@ -36,7 +36,7 @@ Skybox::Skybox(State* s) : state(s) {
         stars[i][2] = -1000.0f + (rand() % 1000);
         stars[i][3] = 1.0f / isqrt((stars[i][0] * stars[i][0]) + (stars[i][1] * stars[i][1]));
 
-        if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
+        if (i >= (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
             stars[i][4] = 90.0f + (atan(stars[i][1] / stars[i][0]) * 180.0f/ M_PI);
         } else  {
             stars[i][4] = 0.35f + (((float)(rand() % 100)) * .005f);
@@ -46,7 +46,7 @@ Skybox::Skybox(State* s) : state(s) {
 
 void Skybox::update() {
     for (int i = 0; i < SKYBOX_NUM_STARS; i++) {
-        if (i > (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
+        if (i >= (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP)) {
             stars[i][2] += state->global_timer * state->stars_speed * 1.25f;
         } else {
             stars[i][2] += state->global_timer * state->stars_speed * 0.25f;
