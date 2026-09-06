@@ -147,6 +147,26 @@ bool Input::handleKeyboard() {
                 state->menu_pos++;
                 return moved;
             }
+
+            if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_A]) {
+                state->menu_adjust = -1;
+
+                if (state->menu == 3 || state->menu == 4) {
+                    state->audio.playSample(0, 128, 0);
+                }
+
+                return moved;
+            }
+
+            if (keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_D]) {
+                state->menu_adjust = 1;
+
+                if (state->menu == 3 || state->menu == 4) {
+                    state->audio.playSample(0, 128, 0);
+                }
+
+                return moved;
+            }
     }
 
     return moved;

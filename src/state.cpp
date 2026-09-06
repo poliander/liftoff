@@ -144,6 +144,7 @@ bool State::set(int s) {
 
             menu = 1;
             menu_pos = 0;
+            menu_adjust = 0;
             menu_selected = false;
 
             cam_x = 0;

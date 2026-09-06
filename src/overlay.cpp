@@ -181,6 +181,11 @@ void Overlay::drawMenu() {
 
     char mtxt[5][255];
 
+    // menu option adjustment via left/right cursor keys
+    // (-1 = left/previous, +1 = right/next, 0 = none)
+    int adjust = state->menu_adjust;
+    state->menu_adjust = 0;
+
     switch (state->menu) {
         case 1: // main menu
             numentries = 3;
@@ -351,6 +356,36 @@ void Overlay::drawMenu() {
                         state->menu = 2;
                         break;
                 }
+            } else if (adjust != 0) {
+                switch (state->menu_pos) {
+                    case 0: // cycle video mode (inverted: left = larger, right = smaller)
+                        state->vid_mode -= adjust;
+
+                        if (state->vid_mode < 0) {
+                            state->vid_mode = state->vid_modes.size() - 1;
+                        } else if (state->vid_mode >= static_cast<int>(state->vid_modes.size())) {
+                            state->vid_mode = 0;
+                        }
+                        break;
+
+                    case 1: // cycle display quality
+                        if (adjust < 0) {
+                            state->config.vid_quality = (state->config.vid_quality == 0)
+                                ? 5 : state->config.vid_quality - 1;
+                        } else {
+                            state->config.vid_quality = (state->config.vid_quality >= 5)
+                                ? 0 : state->config.vid_quality + 1;
+                        }
+                        break;
+
+                    case 2: // toggle fullscreen on/off
+                        state->config.vid_fullscreen = !state->config.vid_fullscreen;
+                        break;
+
+                    case 3: // toggle vsync on/off
+                        state->config.vid_vsync = !state->config.vid_vsync;
+                        break;
+                }
             }
             break;
 
@@ -438,6 +473,40 @@ void Overlay::drawMenu() {
                     case 3: // return
                         state->menu = 2;
                         state->menu_pos = 1;
+                        break;
+                }
+            } else if (adjust != 0) {
+                switch (state->menu_pos) {
+                    case 0: // cycle SFX volume
+                        if (static_cast<int8_t>(state->config.aud_sfx) != -1) {
+                            if (adjust < 0) {
+                                state->config.aud_sfx = (state->config.aud_sfx == 0)
+                                    ? 3 : state->config.aud_sfx - 1;
+                            } else {
+                                state->config.aud_sfx = (state->config.aud_sfx >= 3)
+                                    ? 0 : state->config.aud_sfx + 1;
+                            }
+                        }
+                        break;
+
+                    case 1: // cycle music volume
+                        if (static_cast<int8_t>(state->config.aud_music) != -1) {
+                            if (adjust < 0) {
+                                state->config.aud_music = (state->config.aud_music == 0)
+                                    ? 3 : state->config.aud_music - 1;
+                            } else {
+                                state->config.aud_music = (state->config.aud_music >= 3)
+                                    ? 0 : state->config.aud_music + 1;
+                            }
+                        }
+                        break;
+
+                    case 2: // toggle mixer frequency
+                        if (state->config.aud_mixfreq == 22050) {
+                            state->config.aud_mixfreq = 44100;
+                        } else {
+                            state->config.aud_mixfreq = 22050;
+                        }
                         break;
                 }
             }

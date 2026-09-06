@@ -99,6 +99,7 @@ class State {
         // game menu
         int                         menu;
         int                         menu_pos;
+        int                         menu_adjust;
         bool                        menu_selected;
 
         // stars
