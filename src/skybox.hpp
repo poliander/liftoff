@@ -36,13 +36,21 @@ using std::max;
 class Skybox {
     public:
         explicit Skybox(State* s);
-        ~Skybox() {};
+        ~Skybox();
 
         void                    update();
         void                    draw();
 
     private:
         float                   stars[SKYBOX_NUM_STARS][5];
+
+        // all star quads are batched into a single dynamic vertex buffer and
+        // issued as one draw call per frame instead of one draw call per star
+        GLuint                  starVertexArray;
+        GLuint                  starVertexBuffer;
+        std::vector<float>      starVertices;
+
+        void                    pushStar(const glm::mat4& model, const glm::vec4& tint);
 
         State*                  state;
 

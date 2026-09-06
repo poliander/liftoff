@@ -96,6 +96,7 @@
 #define S_FONT                  0
 #define S_TEXTURE               1
 #define S_OBJECT                2
+#define S_STAR                  3
 
 // objects
 #define OBJ_PLAYER              101  // player

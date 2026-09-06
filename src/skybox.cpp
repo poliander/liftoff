@@ -42,6 +42,58 @@ Skybox::Skybox(State* s) : state(s) {
             stars[i][4] = 0.35f + (((float)(rand() % 100)) * .005f);
         }
     }
+
+    // one dynamic buffer holding every star quad; 6 vertices per star,
+    // 9 floats per vertex (vec3 position, vec2 texcoord, vec4 tint)
+    starVertices.reserve(SKYBOX_NUM_STARS * 6 * 9);
+
+    glGenVertexArrays(1, &starVertexArray);
+    glBindVertexArray(starVertexArray);
+
+    glGenBuffers(1, &starVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, starVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * SKYBOX_NUM_STARS * 6 * 9, nullptr, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 9, (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 9, (void*)(sizeof(GLfloat) * 3));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 9, (void*)(sizeof(GLfloat) * 5));
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+Skybox::~Skybox() {
+    glDeleteBuffers(1, &starVertexBuffer);
+    glDeleteVertexArrays(1, &starVertexArray);
+}
+
+void Skybox::pushStar(const glm::mat4& model, const glm::vec4& tint) {
+    // local quad corners / uv, matching the winding used by Quad
+    static const float corners[6][4] = {
+        { -0.5f,  0.5f, 0.0f, 0.0f },
+        { -0.5f, -0.5f, 0.0f, 1.0f },
+        {  0.5f, -0.5f, 1.0f, 1.0f },
+        { -0.5f,  0.5f, 0.0f, 0.0f },
+        {  0.5f, -0.5f, 1.0f, 1.0f },
+        {  0.5f,  0.5f, 1.0f, 0.0f }
+    };
+
+    for (int v = 0; v < 6; ++v) {
+        glm::vec4 p = model * glm::vec4(corners[v][0], corners[v][1], 0.0f, 1.0f);
+
+        starVertices.push_back(p.x);
+        starVertices.push_back(p.y);
+        starVertices.push_back(p.z);
+        starVertices.push_back(corners[v][2]);
+        starVertices.push_back(corners[v][3]);
+        starVertices.push_back(tint.r);
+        starVertices.push_back(tint.g);
+        starVertices.push_back(tint.b);
+        starVertices.push_back(tint.a);
+    }
 }
 
 void Skybox::update() {
@@ -79,40 +131,54 @@ void Skybox::draw() {
     state->textures[T_BACKGROUND_1]->bind();
     state->textures[T_BACKGROUND_1]->draw();
 
-    // far stars
+    // stars: every quad is transformed on the CPU into one shared vertex
+    // buffer and drawn with a single call instead of one call per star
 
-    state->textures[T_STAR]->bind();
+    starVertices.clear();
 
     for (int i = 0; i < (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); ++i) {
-        state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        state->shaders[S_TEXTURE]->update(UNI_MVP, view->getProjection() * view->getModel(
-            stars[i][0], stars[i][1], stars[i][2],
-            0, 0, 0,
-            stars[i][4], stars[i][4], 0
-        ));
-
-        state->textures[T_STAR]->draw();
+        pushStar(
+            view->getModel(
+                stars[i][0], stars[i][1], stars[i][2],
+                0, 0, 0,
+                stars[i][4], stars[i][4], 0
+            ),
+            glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
+        );
     }
-
-    // warp stars
 
     if (state->stars_warp) {
         for (int i = (SKYBOX_NUM_STARS - SKYBOX_NUM_STARS_WARP); i < SKYBOX_NUM_STARS; ++i) {
             float a = (1000.0f + stars[i][2]) / 1250.0f;
 
-            state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(1.0f, 1.0f, 1.0f, a * (state->stars_speed - .3f)));
-            state->shaders[S_TEXTURE]->update(UNI_MVP, view->getProjection() * view->getModel(
-                stars[i][0], stars[i][1], stars[i][2],
-                90.0f, 2.0f * a * a * stars[i][4], 0,
-                .9f, stars[i][3] * (state->stars_speed - .3f), 0
-            ));
-
-            state->textures[T_STAR]->draw();
+            pushStar(
+                view->getModel(
+                    stars[i][0], stars[i][1], stars[i][2],
+                    90.0f, 2.0f * a * a * stars[i][4], 0,
+                    .9f, stars[i][3] * (state->stars_speed - .3f), 0
+                ),
+                glm::vec4(1.0f, 1.0f, 1.0f, a * (state->stars_speed - .3f))
+            );
         }
     }
 
+    state->shaders[S_STAR]->bind();
+    state->shaders[S_STAR]->update(UNI_MVP, view->getProjection());
+
+    state->textures[T_STAR]->bind();
+
+    glBindVertexArray(starVertexArray);
+    glBindBuffer(GL_ARRAY_BUFFER, starVertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * starVertices.size(), starVertices.data());
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(starVertices.size() / 9));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    state->shaders[S_STAR]->unbind();
+
     framebuffer->unbind();
 
+    state->shaders[S_TEXTURE]->bind();
     state->shaders[S_TEXTURE]->update(UNI_COLOR, glm::vec4(
         state->global_alpha,
         state->global_alpha,

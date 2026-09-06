@@ -146,6 +146,12 @@ void Scene::load() {
         string(state->dir_resources).append("/shaders/object.frag.glsl")
     )));
 
+    state->log("Loading shader 'star'\n");
+    state->shaders.insert(make_pair(S_STAR, new Shader(
+        string(state->dir_resources).append("/shaders/star.vert.glsl"),
+        string(state->dir_resources).append("/shaders/star.frag.glsl")
+    )));
+
     // fonts
 
     state->log("Loading font 'zekton'\n");
