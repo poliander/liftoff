@@ -192,7 +192,7 @@ bool Engine::init(int argc, char **argv) {
     }
 
     if (state.vid_fullscreen) {
-        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP;
+        flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN;
         state.log("- fullscreen mode\n");
     } else {
         flags = SDL_WINDOW_OPENGL;
@@ -205,15 +205,19 @@ bool Engine::init(int argc, char **argv) {
     }
 
     if (state.vid_fullscreen) {
-        SDL_GetCurrentDisplayMode(state.vid_display, &current);
+        // adopt whatever mode actually got set (normally the requested one),
+        // instead of forcing the resolution back to the desktop mode
+        if (SDL_GetWindowDisplayMode(window, &current) == 0) {
+            state.vid_width = current.w;
+            state.vid_height = current.h;
 
-        for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
-            if (current.w == i->second.w &&
-                current.h == i->second.h
-            ) {
-                state.vid_mode = i->first;
-                state.vid_width = i->second.w;
-                state.vid_height = i->second.h;
+            for (auto i = state.vid_modes.begin(); i != state.vid_modes.end(); i++) {
+                if (current.w == i->second.w &&
+                    current.h == i->second.h
+                ) {
+                    state.vid_mode = i->first;
+                    break;
+                }
             }
         }
     }
@@ -283,14 +287,36 @@ bool Engine::initDisplay(int mode) {
             SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
         }
 
+        // create the window in windowed mode first, then request the exact
+        // display mode and switch to real (mode-changing) fullscreen; passing
+        // the fullscreen flag straight to SDL_CreateWindow leaves the choice of
+        // resolution up to SDL and is unreliable
         window = SDL_CreateWindow(
             "Lift Off: Beyond Glaxium",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             state.vid_width,
             state.vid_height,
-            mode
+            mode & ~(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP)
         );
+
+        if (state.vid_fullscreen && window != NULL) {
+            SDL_DisplayMode target;
+            auto m = state.vid_modes.find(state.vid_mode);
+
+            if (m != state.vid_modes.end()) {
+                target = m->second;
+            } else {
+                target.format       = state.vid_format;
+                target.w            = state.vid_width;
+                target.h            = state.vid_height;
+                target.refresh_rate = state.vid_refresh_rate;
+                target.driverdata   = nullptr;
+            }
+
+            SDL_SetWindowDisplayMode(window, &target);
+            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+        }
 
         context = SDL_GL_CreateContext(window);
 
