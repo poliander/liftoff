@@ -38,7 +38,6 @@ class Entity {
 
         bool               isCollectable();
         bool               isCollider();
-        bool               isObstacle();
         bool               isScenery();
         bool               isFocusable();
         bool               isIdle();

@@ -93,7 +93,7 @@ bool Player::damage(int p) {
 }
 
 bool Player::isColliding(shared_ptr<Entity> e) {
-    if (e->isObstacle()) {
+    if (e->isCollider() && !e->isCollectable()) {
         float dx = p_x - e->getPosX();
         float dy = p_y - e->getPosY();
         float dz = p_z - e->getPosZ();
@@ -106,7 +106,7 @@ bool Player::isColliding(shared_ptr<Entity> e) {
 }
 
 void Player::collide(shared_ptr<Entity> e) {
-    if (state->get() != STATE_GAME_LOOP || !isAlive() || !e->isObstacle() || !e->isAlive()) {
+    if (state->get() != STATE_GAME_LOOP || !isAlive() || !e->isCollider() || !e->isAlive() || e->isCollectable()) {
         return;
     }
 
